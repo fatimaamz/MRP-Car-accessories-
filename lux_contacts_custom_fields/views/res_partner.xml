@@ -7,8 +7,7 @@
 
             <xpath expr="//group[1]" position="after">
                 <group>
-                        <field name="invoice_ids" invisible="1"/>
-                        <field name="supplier_invoice_count" invisible="1"/>
+                        
                         <field name="type_client"/>
                         <field name="type_fournisseur"/>
                         <field name="region"/>
