@@ -5,7 +5,8 @@ from odoo import api, fields, models
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
-
+    
+    dealer_Code=fields.Integer(string='Code du concessionnaire')
     type_client = fields.Selection([
         ('Concessionnaires Régulier', 'Concessionnaires Régulier'),
         ('Concessionnaires Programme nationaux', 'Concessionnaires Programme nationaux'),
