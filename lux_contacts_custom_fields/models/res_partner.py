@@ -10,11 +10,11 @@ class ResPartner(models.Model):
     type_client = fields.Selection([
         ('Concessionnaires Régulier', 'Concessionnaires Régulier'),
         ('Concessionnaires Programme nationaux', 'Concessionnaires Programme nationaux'),
-        ('Distributeurs', 'Distributeurs'),
+        ('Distributeur', 'Distributeur'),
         ('Particulier', 'Particulier'),
         ('Fabriquant majeur', 'Fabriquant majeur'),
         ('E-comm Distributeur', 'E-comm Distributeur'),
-        ('Carrosseries', 'Carrosseries'),
+        ('Carrosserie', 'Carrosserie'),
     ], string='Type client')
     type_fournisseur = fields.Selection([
         ('Service', 'Service'),
