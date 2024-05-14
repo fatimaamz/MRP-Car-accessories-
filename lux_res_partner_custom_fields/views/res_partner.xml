@@ -7,7 +7,6 @@
 
             <xpath expr="//group[1]" position="inside">
 
-                 <group>
                         <field name="type_client" invisible="not invoice_ids"/>
                         <field name="type_fournisseur" invisible="not supplier_invoice_count"/>
                         <field name="region"/>
@@ -15,7 +14,7 @@
                         <field name="oem"/>
                         <field name="installation"/>
                         <field name="prov"/>
-                    </group>
+                    
             </xpath>
         </field>
     </record>
