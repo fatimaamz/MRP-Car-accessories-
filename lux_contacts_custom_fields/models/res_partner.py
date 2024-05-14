@@ -19,6 +19,7 @@ class ResPartner(models.Model):
     type_fournisseur = fields.Selection([
         ('Service', 'Service'),
         ('Matériel', 'Matériel'),
+        ('Service / Matériel','service_materiel'),
     ], string='Type de fournisseur')
 
     region = fields.Selection([
