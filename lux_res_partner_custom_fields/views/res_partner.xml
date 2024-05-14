@@ -6,8 +6,8 @@
         <field name="arch" type="xml">
 
             <xpath expr="//group[1]" position="inside">
-                        <field name="invoice_ids" invisible=1/>
-                        <field name="supplier_invoice_count" invisible=1/>
+                        <field name="invoice_ids" invisible="1"/>
+                        <field name="supplier_invoice_count" invisible="1"/>
                         <field name="type_client" invisible="not invoice_ids"/>
                         <field name="type_fournisseur" invisible="not supplier_invoice_count"/>
                         <field name="region"/>
