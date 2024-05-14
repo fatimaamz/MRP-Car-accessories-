@@ -6,7 +6,7 @@ from odoo import api, fields, models
 class ResPartner(models.Model):
     _inherit = "res.partner"
     
-    dealer_Code=fields.Integer(string='Code du concessionnaire')
+    dealer_Code=fields.Char(string='Code du concessionnaire')
     type_client = fields.Selection([
         ('Concessionnaires Régulier', 'Concessionnaires Régulier'),
         ('Concessionnaires Programme nationaux', 'Concessionnaires Programme nationaux'),
@@ -25,13 +25,13 @@ class ResPartner(models.Model):
         ('MTL', 'MTL'),
         ('GTA', 'GTA'),
         ('LUX', 'LUX'),
-    ], string='Region')
+    ], string='Région')
 
     type_paiement = fields.Selection([
-        ('Per Order', 'Per Order'),
-        ('OEM', 'OEM'),
-        ('45 days', '45 days'),
-        ('Monthly', 'Monthly'),
+        ('Per Order','Per Order'),
+        ('OEM','OEM'),
+        ('45 days','45 days'),
+        ('Monthly','Monthly'),
     ], string='Type de paiement')
 
     oem = fields.Selection([
