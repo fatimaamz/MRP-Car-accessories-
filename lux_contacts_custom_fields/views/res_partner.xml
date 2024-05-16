@@ -5,11 +5,11 @@
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
 
-            <xpath expr="//group[1]" position="after">
+            <xpath expr="//group[1]" position="inside">
                 <group>
                         
-                        <field name="type_client"/>
-                        <field name="type_fournisseur"/>
+                        <field name="type_client" invisible="supplier_rank &gt;= 1" />
+                        <field name="type_fournisseur" invisible="customer_rank &gt;= 1" />
                         <field name="region"/>
                         <field name="type_paiement"/>
                         <field name="oem"/>
