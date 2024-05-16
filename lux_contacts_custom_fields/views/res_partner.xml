@@ -7,7 +7,8 @@
 
             <xpath expr="//group[1]" position="inside">
                 <group>
-                        
+                        <field name="supplier_rank" invisible="1"/>
+                        <field name="customer_rank" invisible="1"/>
                         <field name="type_client" invisible="supplier_rank &gt;= 1" />
                         <field name="type_fournisseur" invisible="customer_rank &gt;= 1" />
                         <field name="region"/>
