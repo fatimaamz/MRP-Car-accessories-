@@ -9,8 +9,8 @@
     "category": "Contacts",
     "license": "AGPL-3",
     "depends": ['base'],
-    "data": [#"views/res_partner.xml",
-             "views/res_partner_inherit.xml",
+    "data": ["views/res_partner.xml",
+             #"views/res_partner_inherit.xml",
             ],
     "installable": True,
 }
