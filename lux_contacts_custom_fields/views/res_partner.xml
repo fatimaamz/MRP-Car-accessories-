@@ -8,8 +8,8 @@
             <xpath expr="//group[1]" position="after">
                 <group>
                         
-                        <field name="type_client"/>
-                        <field name="type_fournisseur" invisible="supplier_rank &gt;= 0"/>
+                        <field name="type_client" invisible="supplier_rank &gt;= 1" />
+                        <field name="type_fournisseur" invisible="customer_rank &gt;= 1" />
                         <field name="region"/>
                         <field name="type_paiement"/>
                         <field name="oem"/>
