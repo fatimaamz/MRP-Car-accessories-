@@ -6,12 +6,11 @@
         <field name="arch" type="xml">
 
             <xpath expr="//group[1]" position="inside">
-                <field name="supplier_rank" invisible="1"/>
-                 <field name="customer_rank" invisible="1"/>
+                
                 <group>
                         
-                        <field name="type_client" invisible="supplier_rank != 0" />
-                        <field name="type_fournisseur" invisible="customer_rank != 0" />
+                        <field name="type_client"  />
+                        <field name="type_fournisseur" />
                         <field name="region"/>
                         <field name="type_paiement"/>
                         <field name="oem"/>
