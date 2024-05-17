@@ -8,7 +8,7 @@
     "website": "",
     "category": "Contacts",
     "license": "AGPL-3",
-    "depends": ['base'],
+    "depends": ['base','sale','purchase'],
     "data": ["views/res_partner.xml",
              #"views/res_partner_inherit.xml",
             ],
