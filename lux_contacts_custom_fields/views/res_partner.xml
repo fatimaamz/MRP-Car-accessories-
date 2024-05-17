@@ -24,4 +24,19 @@
         </field>
     </record>
 
+    <record id="inherit_res_partner_search" model="ir.ui.view">
+		<field name="name">res.partner.searchview</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="base.view_res_partner_filter"/>
+		<field name="arch" type="xml">
+
+			<filter name="type_person" position="before">
+				<field name="type_fournisseur" string="Type Fournisseur" filter_domain="[('type_fournisseur', 'ilike', self)]"/>
+                <field name="type_client" string="Type Client" filter_domain="[('type_client', 'ilike', self)]"/>
+			
+			</filter>
+
+		</field>
+	</record>
+
 </odoo>
