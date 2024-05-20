@@ -68,10 +68,25 @@
         </field>
     </record>
 
+    <record id="view_year_model_tree" model="ir.ui.view">
+        <field name="name">year.model.tree</field>
+        <field name="model">year.model</field>
+        <field name="arch" type="xml">
+            <tree string="Années" editable="bottom" sample="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
 
     <record id="action_style_view" model="ir.actions.act_window">
         <field name="name">Styles</field>
         <field name="res_model">product.style</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <record id="action_year_view" model="ir.actions.act_window">
+        <field name="name">Années</field>
+        <field name="res_model">year.model</field>
         <field name="view_mode">tree</field>
     </record>
       <record id="action_marque_view" model="ir.actions.act_window">
@@ -98,5 +113,7 @@
               sequence="13" action="action_sous_modele_view"/>
     <menuitem id="menu_action_marque_configuration_view" name="Marques" parent="sale.menu_sale_config"
               sequence="13" action="action_marque_view"/>
+    <menuitem id="menu_action_annes_configuration_view" name="Années" parent="sale.menu_sale_config"
+              sequence="13" action="action_year_view"/>
 
 </odoo>
