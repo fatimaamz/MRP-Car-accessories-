@@ -22,7 +22,6 @@
     </record>
 
 
-    <!-- Tree View for Product Styles -->
     <record id="view_product_style_tree" model="ir.ui.view">
         <field name="name">product.style.tree</field>
         <field name="model">product.style</field>
@@ -33,7 +32,6 @@
         </field>
     </record>
 
-    <!-- Form View for Product Styles -->
     <record id="view_product_modele_tree" model="ir.ui.view">
         <field name="name">product.modele.tree</field>
         <field name="model">product.modele</field>
