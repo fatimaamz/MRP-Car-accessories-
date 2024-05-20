@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_year_model,year.model,model_year_model,,1,1,1,1
+access_product_modele,product.modele,model_product_modele,,1,1,1,1
+access_product_style,product.style,model_product_style,,1,1,1,1
+access_product_sousmodele,product.sousmodele,model_product_sousmodele,,1,1,1,1
+

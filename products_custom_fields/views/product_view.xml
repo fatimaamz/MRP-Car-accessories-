@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_template_form_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']" position="inside">
+                <group string="Détails">
+                    <field name="year_ids" widget="many2many_tags"/>
+                    <field name="product_type"/>
+                    <field name="priceA"/>
+                    <field name="priceB"/>
+                    <field name="priceC"/>
+                    <field name="priceD"/>
+                    <field name="model_id"/>
+                    <field name="sous_model_id"/>
+                    <field name="style_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- Tree View for Product Styles -->
+    <record id="view_product_style_tree" model="ir.ui.view">
+        <field name="name">product.style.tree</field>
+        <field name="model">product.style</field>
+        <field name="arch" type="xml">
+            <tree string="Styles" editable="bottom" sample="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Product Styles -->
+    <record id="view_product_modele_tree" model="ir.ui.view">
+        <field name="name">product.modele.tree</field>
+        <field name="model">product.modele</field>
+        <field name="arch" type="xml">
+            <tree string="Modèles" editable="bottom" sample="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_product_sousmodele_tree" model="ir.ui.view">
+        <field name="name">product.sousmodele.tree</field>
+        <field name="model">product.sousmodele</field>
+        <field name="arch" type="xml">
+            <tree string="Sous Modèles" editable="bottom" sample="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_style_view" model="ir.actions.act_window">
+		<field name="name">Styles</field>
+        <field name="res_model">product.style</field>
+        <field name="view_mode">tree</field>
+	</record>
+     <record id="action_modele_view" model="ir.actions.act_window">
+		<field name="name">Modèles</field>
+        <field name="res_model">product.modele</field>
+        <field name="view_mode">tree</field>
+	</record>
+    <record id="action_sous_modele_view" model="ir.actions.act_window">
+		<field name="name">Modèles</field>
+        <field name="res_model">product.sousmodele</field>
+        <field name="view_mode">tree</field>
+	</record>
+
+        <menuitem id="menu_action_styles_configuration_view" name="Styles" parent="sale.menu_sale_config" sequence="11" action="action_style_view" />
+        <menuitem id="menu_action_modele_configuration_view" name="Modèles" parent="sale.menu_sale_config" sequence="12" action="action_modele_view"/>
+        <menuitem id="menu_action_sous_modele_configuration_view" name="Sous Modèles" parent="sale.menu_sale_config" sequence="13" action="action_sous_modele_view"/>
+
+</odoo>
