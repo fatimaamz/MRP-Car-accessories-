@@ -26,7 +26,11 @@ class ProductStyle(models.Model):
     _description = 'Product Style'
 
     name = fields.Char(string='Name', required=True)
+class ProductMarque(models.Model):
+    _name = 'product.marque'
+    _description = 'Product Brand'
 
+    name = fields.Char(string='Name', required=True)
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
@@ -46,3 +50,4 @@ class ProductTemplate(models.Model):
     modele_id = fields.Many2one('product.modele', string='Modèle')
     sous_model_id = fields.Many2one('product.sousmodele', string='Sous modèle')
     style_id = fields.Many2one('product.style', string='Style')
+    marque_id = fields.Many2one('product.marque', string='Marque')
