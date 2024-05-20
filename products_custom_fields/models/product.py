@@ -32,17 +32,17 @@ class ProductTemplate(models.Model):
 
     year_ids = fields.Many2many('year.model', string='Année')
     product_type = fields.Selection([
-        ('exterior', 'Exterior'),
-        ('moulding', 'Moulding'),
-        ('interior', 'Interior'),
-        ('grill', 'Grill')
+        ('Exterior', 'Exterior'),
+        ('Moulding', 'Moulding'),
+        ('Interior', 'Interior'),
+        ('Grill', 'Grill')
     ], string='Product Type')
 
-    priceA = fields.Float(string='Price A')
-    priceB = fields.Float(string='Price B')
-    priceC = fields.Float(string='Price C')
-    priceD = fields.Float(string='Price D')
+    priceA = fields.Float(string='Prix A')
+    priceB = fields.Float(string='Prix B')
+    priceC = fields.Float(string='Prix C')
+    priceD = fields.Float(string='Prix D')
 
-    modele_id = fields.Many2one('product.mark', string='Mark')
+    modele_id = fields.Many2one('product.modele', string='Mark')
     sous_model_id = fields.Many2one('product.sousmodele', string='Sous modèle')
     style_id = fields.Many2one('product.style', string='Style')
