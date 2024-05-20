@@ -21,6 +21,7 @@
                         <field name="modele_id"/>
                         <field name="sous_model_id"/>
                         <field name="style_id"/>
+                        <field name="marque_id"/>
                     </group>
                 </group>
             </xpath>
