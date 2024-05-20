@@ -7,7 +7,7 @@ class YearModel(models.Model):
     _name = 'year.model'
     _description = 'Year Model'
 
-    name = fields.Integer(string='Year', required=True, unique=True)
+    name = fields.Integer(string='Année', required=True, unique=True)
 
 
 class ProductMark(models.Model):
