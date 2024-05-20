@@ -36,13 +36,13 @@ class ProductTemplate(models.Model):
         ('Moulding', 'Moulding'),
         ('Interior', 'Interior'),
         ('Grill', 'Grill')
-    ], string='Product Type')
+    ], string='Type')
 
     priceA = fields.Float(string='Prix A')
     priceB = fields.Float(string='Prix B')
     priceC = fields.Float(string='Prix C')
     priceD = fields.Float(string='Prix D')
 
-    modele_id = fields.Many2one('product.modele', string='Mark')
+    modele_id = fields.Many2one('product.modele', string='Modèle')
     sous_model_id = fields.Many2one('product.sousmodele', string='Sous modèle')
     style_id = fields.Many2one('product.style', string='Style')
