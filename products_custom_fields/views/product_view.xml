@@ -21,6 +21,7 @@
                         <field name="modele_id"/>
                         <field name="sous_model_id"/>
                         <field name="style_id"/>
+                        <field name="marque_id"/>
                     </group>
                 </group>
             </xpath>
@@ -47,6 +48,15 @@
             </tree>
         </field>
     </record>
+    <record id="view_product_marque_tree" model="ir.ui.view">
+        <field name="name">product.marque.tree</field>
+        <field name="model">product.marque</field>
+        <field name="arch" type="xml">
+            <tree string="Marques" editable="bottom" sample="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
 
     <record id="view_product_sousmodele_tree" model="ir.ui.view">
         <field name="name">product.sousmodele.tree</field>
@@ -58,10 +68,30 @@
         </field>
     </record>
 
+    <record id="view_year_model_tree" model="ir.ui.view">
+        <field name="name">year.model.tree</field>
+        <field name="model">year.model</field>
+        <field name="arch" type="xml">
+            <tree string="Années" editable="bottom" sample="1">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
 
     <record id="action_style_view" model="ir.actions.act_window">
         <field name="name">Styles</field>
         <field name="res_model">product.style</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <record id="action_year_view" model="ir.actions.act_window">
+        <field name="name">Années</field>
+        <field name="res_model">year.model</field>
+        <field name="view_mode">tree</field>
+    </record>
+      <record id="action_marque_view" model="ir.actions.act_window">
+        <field name="name">Marques</field>
+        <field name="res_model">product.marque</field>
         <field name="view_mode">tree</field>
     </record>
     <record id="action_modele_view" model="ir.actions.act_window">
@@ -81,5 +111,9 @@
               action="action_modele_view"/>
     <menuitem id="menu_action_sous_modele_configuration_view" name="Sous Modèles" parent="sale.menu_sale_config"
               sequence="13" action="action_sous_modele_view"/>
+    <menuitem id="menu_action_marque_configuration_view" name="Marques" parent="sale.menu_sale_config"
+              sequence="13" action="action_marque_view"/>
+    <menuitem id="menu_action_annes_configuration_view" name="Années" parent="sale.menu_sale_config"
+              sequence="13" action="action_year_view"/>
 
 </odoo>
