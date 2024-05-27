@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+
+  <record id="view_mrp_bom_form_inherit" model="ir.ui.view">
+    <field name="name">mrp.bom.form.inherit</field>
+    <field name="model">mrp.bom</field>
+    <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+    <field name="arch" type="xml">
+       
+        <xpath expr="//page[3]" position="after">
+            <page string="Dessins">
+                <field name="design_ids">
+                    <tree>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="pdf_file"/>
+                        <field name="upload_date"/>
+                        <field name="create_uid"/>
+                    </tree>
+                </field>
+            </page>
+        </xpath>
+
+      
+    </field>
+</record>
+ <!--  <record id="view_mrp_production_controle_qualite_wizard_form" model="ir.ui.view">
+        <field name="name">mrp.production.controle.qualite.wizard.form</field>
+        <field name="model">mrp.production.controle.qualite.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Contrôle Qualité">
+                <group>
+                    <field name="is_conforme"/>
+                    <field name="remarque"/>
+                </group>
+                <footer>
+                    <button name="action_save" string="Sauvegarder" type="object" class="btn-primary"/>
+                    <button string="Annuler" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>-->
+
+   <record id="view_mrp_production_form_inherit" model="ir.ui.view">
+    <field name="name">mrp.production.form.inherit</field>
+    <field name="model">mrp.production</field>
+    <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+    <field name="arch" type="xml">
+       
+        <xpath expr="//div[@name='bom_div']" position="after">
+            <field name="design_ids"/>
+        </xpath>
+       <xpath expr="//group[1]" position="after" >
+         <group name="product_image_group" string="Détails du Produit" invisible="not product_id" >
+            <field name="product_image" widget="image"/>
+            <field name="product_variant_ids"  widget="many2many_tags"/>
+            <field name="product_tag_ids"  widget="many2many_tags"/>
+         </group>
+         <group name="product_icontrol_group" string="Contrôle produits" invisible="state !='done'" >
+            <field name="product_finalized"/>
+            <field name="is_conforme"/>
+           <field name="remarque_controle_qualite"/>
+         </group>
+        </xpath>
+       
+    </field>
+</record>
+
+   <record id="view_mrp_production_tree_inherit" model="ir.ui.view">
+    <field name="name">mrp.production.tree.inherit</field>
+    <field name="model">mrp.production</field>
+    <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+    <field name="arch" type="xml">
+     <xpath expr="//field[@name='state']" position="after">
+      <field name="finalization_status" invisible="state !='done'"  widget="badge" decoration-success="finalization_status == 'finalise'"  decoration-danger="finalization_status== 'non_finalise'" />
+       <field name="conform_status" invisible="state !='done'"  widget="badge" decoration-success="conform_status == 'conforme'"  decoration-danger="conform_status == 'non_conforme'" />
+        </xpath>
+       
+    </field>
+</record>
+
+</odoo>
