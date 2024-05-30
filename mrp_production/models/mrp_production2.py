@@ -29,7 +29,7 @@ class MrpProduction(models.Model):
             else:
                 production.conform_status = 'non_conforme'
 
-
+"""
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
@@ -48,7 +48,7 @@ class SaleOrder(models.Model):
                     })
                     manufacturing_order.action_confirm()
         return res
-
+"""
 
   
            
