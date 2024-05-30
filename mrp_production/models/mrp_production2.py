@@ -29,7 +29,6 @@ class MrpProduction(models.Model):
             else:
                 production.conform_status = 'non_conforme'
                 
-from odoo import models, fields, api
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
