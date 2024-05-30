@@ -29,6 +29,25 @@ class MrpProduction(models.Model):
             else:
                 production.conform_status = 'non_conforme'
                 
-        
+from odoo import models, fields, api
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    def action_confirm(self):
+        res = super(SaleOrder, self).action_confirm()
+        for order in self:
+            for line in order.order_line:
+                if line.product_id.type == 'product' and line.product_id.bom_ids:
+                    manufacturing_order = self.env['mrp.production'].create({
+                        'product_id': line.product_id.id,
+                        'product_qty': line.product_uom_qty,
+                        'product_uom_id': line.product_uom.id,
+                        'origin': order.name,
+                        'bom_id': line.product_id.bom_ids[0].id,
+                    })
+                    manufacturing_order.action_confirm()
+        return res
+  
            
                 
