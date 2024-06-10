@@ -52,7 +52,8 @@ class ProductTemplate(models.Model):
     sous_model_id = fields.Many2one('product.sousmodele', string='Sous modèle')
     style_id = fields.Many2one('product.style', string='Style')
     marque_id = fields.Many2one('product.marque', string='Marque')
-    
+class ProductTemplate(models.Model):
+    _inherit ='product.template.attribute.line'
     color_option = fields.Selection([
         ('paint_match', 'Paint Match'),
         ('carbon', 'Carbon'),
