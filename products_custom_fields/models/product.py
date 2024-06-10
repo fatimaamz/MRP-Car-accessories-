@@ -2,7 +2,8 @@
 
 from odoo import models,fields,api
 
-
+    
+        
 class YearModel(models.Model):
     _name = 'year.model'
     _description = 'Year Model'
@@ -51,3 +52,8 @@ class ProductTemplate(models.Model):
     sous_model_id = fields.Many2one('product.sousmodele', string='Sous modèle')
     style_id = fields.Many2one('product.style', string='Style')
     marque_id = fields.Many2one('product.marque', string='Marque')
+    
+    color_option = fields.Selection([
+        ('paint_match', 'Paint Match'),
+        ('carbon', 'Carbon'),
+    ], string="Color Option")
