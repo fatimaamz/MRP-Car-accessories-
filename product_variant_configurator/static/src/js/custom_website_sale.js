@@ -1,34 +1,32 @@
-odoo.define('filter_non_auto.custom_website_sale', function (require) {
-    'use strict';
+/** @odoo-module **/
 
-    const publicWidget = require('web.public.widget');
+import { registry } from "@web/core/registry";
+import { SaleProductConfigurator } from "sale_product_configurator.SaleProductConfigurator";
 
-    publicWidget.registry.multirangePriceSelector = publicWidget.Widget.extend({
-        selector: '#o_wsale_price_range_option',
-        events: {
-            'newRangeValue input[type="range"]': '_onPriceRangeSelected',
-        },
+class CustomSaleProductConfigurator extends SaleProductConfigurator {
+    setup() {
+        super.setup();
+        if (!this.state.color_option) {
+            this.state.color_option = 'paint_match';
+        }
+    }
 
-        //----------------------------------------------------------------------
-        // Handlers
-        //----------------------------------------------------------------------
+    getPayload() {
+        const payload = super.getPayload();
+        payload.color_option = this.state.color_option;
+        return payload;
+    }
 
-        /**
-         * @private
-         * @param {Event} ev
-         */
-        _onPriceRangeSelected(ev) {
-            const range = ev.currentTarget;
-            const search = $.deparam(window.location.search.substring(1));
-            delete search.min_price;
-            delete search.max_price;
-            if (parseFloat(range.min) !== range.valueLow) {
-                search['min_price'] = range.valueLow;
-            }
-            if (parseFloat(range.max) !== range.valueHigh) {
-                search['max_price'] = range.valueHigh;
-            }
-            window.location.search = $.param(search);
-        },
-    });
-});
+    onColorOptionChange(event) {
+        this.state.color_option = event.target.value;
+        // Re-render to apply the filter
+        this.render();
+    }
+
+    getFilteredProducts() {
+        return this.props.products.filter(product => 
+            product.product_tmpl_id.color_option === this.state.color_option);
+    }
+}
+
+registry.category("actionHandlers").add("sale_product_configurator_custom", CustomSaleProductConfigurator);
