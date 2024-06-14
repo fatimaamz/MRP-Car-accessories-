@@ -26,9 +26,9 @@
                 </group>
             </xpath>
 
-            <!-- <xpath expr="//field[@name='attribute_line_ids']//tree" position="inside">
+            <xpath expr="//field[@name='attribute_line_ids']//tree" position="inside">
                   <field name="color_option"/>
-             </xpath>-->
+             </xpath>
         </field>
     </record>
 
