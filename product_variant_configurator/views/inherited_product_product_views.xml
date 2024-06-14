@@ -17,7 +17,7 @@
                 <!--<attribute>readonly="[('id', '!=', False)], 'required': [('id', '!=', False)]"</attribute>-->
             </field>
             <xpath expr="//field[@name='product_tmpl_id']/.." position="after">
-                <p class="oe_grey" invisible="id != False">
+                <p class="oe_grey">
                     Select a template for a variant. Keep empty for a new full product.
                 </p>
             </xpath>
