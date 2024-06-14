@@ -8,7 +8,7 @@
     "license": "AGPL-3",
     "author": "AvanzOSC, Tecnativa, ACSONE SA/NV, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/product-variant",
-    "depends": ["product"],
+    "depends": ["product","sale_product_configurator"],
     "data": [
         
         "views/product_configurator_attribute.xml",
