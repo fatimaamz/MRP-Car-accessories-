@@ -65,7 +65,7 @@
                         for="product_id"
                         string="This product already exists."
                         style="color: red;"
-                        invisible="product_id = False"
+                        invisible="product_id != True"
                     />
                 </group>
             </xpath>
