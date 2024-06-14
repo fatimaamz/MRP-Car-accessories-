@@ -16,7 +16,7 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'my_module/static/src/js/sale_product_configurator_custom.js',
+            'product_variant_configurator/static/src/js/sale_product_configurator_custom.js',
         ],
     },
 }
