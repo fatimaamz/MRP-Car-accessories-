@@ -5,11 +5,11 @@
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view" />
         <field name="arch" type="xml">
-            <field name="name" position="attributes">
+           <!-- <field name="name" position="attributes">
                 <attribute
                     
                 >invisible="['|', ('id', '!=', False), ('product_tmpl_id', '!=', False)], 'readonly': [('product_tmpl_id', '!=', False)]"</attribute>
-            </field>
+            </field>-->
             <field name="product_tmpl_id" position="attributes">
                 <attribute name="placeholder">Product Template</attribute>
                 <attribute name="invisible">0</attribute>
