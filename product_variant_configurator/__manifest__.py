@@ -1,22 +1,15 @@
-
-
 {
-    "name": "Product Variant Configurator",
-    "summary": "Provides an abstract model for product variant configuration.",
-    "category": "Product Variant",
-    "development_status": "Production/Stable",
-    "license": "AGPL-3",
-    "author": "AvanzOSC, Tecnativa, ACSONE SA/NV, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/product-variant",
-    "depends": ["product","sale_product_configurator"],
-    "data": [
-        
-        "views/product_configurator_attribute.xml",
-       
+    'name': 'Sale Product Configurator Customizations',
+    'version': '1.0',
+    'category': 'Sales',
+    'depends': ['sale_product_configurator', 'web'],
+    'data': [
+        'views/sale_product_configurator_custom.xml',
     ],
     'assets': {
         'web.assets_backend': [
             'product_variant_configurator/static/src/js/sale_product_configurator_custom.js',
         ],
     },
+    'installable': True,
 }
