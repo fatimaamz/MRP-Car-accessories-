@@ -12,6 +12,16 @@ class MrpProduction(models.Model):
     is_conforme = fields.Boolean('Conforme')
     conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Statut Contrôle Qualité', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
+    color = fields.Char(string='Couleur', default='No couleur')
+    
+    
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        if self.product_id:
+            for variant in self.product_id.product_template_attribute_value_ids:
+                if variant.attribute_id.name.lower() == 'interior colors':
+                    color_attribute = variant.name
+                    self.color = color_attribute
     
     def _compute_finalization_status(self):
         for production in self:
