@@ -45,13 +45,10 @@
                                     
                                     
                                     <p>
-                                        <t t-foreach="move_line.product_variant_ids" t-as="variant">
-                                            <span t-field="variant.name"/>
-                                            <t t-if="not variant._is_last"><t t-set="_sep" t-value=", "/></t>
-                                            <t t-if="variant._is_last"><t t-set="_sep" t-value="."/></t>
-                                            <t t-if="not variant._is_last"><t t-out="_sep"/></t>
-                                        </t>
                                         
+                                            <span t-field="move_line.product_variant_ids[0]"/>
+                                           
+                                      
                                     </p>
                                     <p>
                                         <strong><span t-field="move_line.product_image"/></strong>
