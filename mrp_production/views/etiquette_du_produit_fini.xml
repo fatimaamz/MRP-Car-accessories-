@@ -53,12 +53,12 @@
                                         
                                             <span t-field="docs.product_variant_ids[0]"/>
                                     </p>-->
-                                     <div class="row">
+                                    
                             
                                             <div class="col-xs-3">
                                                 <img t-att-src="docs.product_image and 'data:image/png;base64,%s' % docs.product_image or ''"/>
                                             </div>
-                                        </div>
+                                        
 
                                     <p>
                                          <t t-if="docs.product_id.tracking != 'none' and (docs.lot_name or move_line.lot_id)">
