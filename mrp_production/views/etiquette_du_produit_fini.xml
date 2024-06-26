@@ -56,9 +56,8 @@
                                     
                                   
                                     <div>
-                                            <img t-att-src="'data:image/png;base64,' + docs.product_image" 
-                                                 t-att-alt="docs.product_id.name" 
-                                                 style="width: 150px; height: 150px;"/>
+                                            
+                                        <img  t-att-src="image_data_uri(docs.product_image)" />
                                         </div>
                                                 
                                             
