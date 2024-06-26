@@ -55,7 +55,7 @@
                                     </p>-->
                                     
                                   
-                                    <div>
+                                   <div class="col-xs-3">
                                             
                                         <img  t-att-src="image_data_uri(docs.product_image)" />
                                         </div>
