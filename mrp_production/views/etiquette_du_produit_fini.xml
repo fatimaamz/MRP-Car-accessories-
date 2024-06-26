@@ -43,11 +43,13 @@
                                         
                                     </p>
                                     
-                                    
-                                    <p  t-if="docs.product_variant_ids">
+                                    <t t-foreach="docs.product_variant_ids" t-as="product">
+                                        <p><span t-field="product.name"/></p><br/>
+                                    </t>
+                                   <!-- <p  t-if="docs.product_variant_ids">
                                         
                                             <span t-field="docs.product_variant_ids[0]"/>
-                                    </p>
+                                    </p>-->
                                      <p>
                                         <img t-att-src="'/web/image/mrp.production/%s/product_image' % docs.id" style="width: 100%; height: auto; border-radius: 12px 12px 0 0;"/>
                                         
