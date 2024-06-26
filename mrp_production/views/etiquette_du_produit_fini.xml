@@ -55,9 +55,9 @@
                                     </p>-->
                                     
                                   
-                                   <div class="col-xs-3">
+                                   <div>
                                             
-                                        <img  t-att-src="image_data_uri(docs.product_image)" />
+                                        <img  t-att-src="image_data_uri(docs.product_image)" style="width:100%;height:45%"/>
                                         </div>
                                                 
                                             
