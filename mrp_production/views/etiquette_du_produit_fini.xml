@@ -42,6 +42,10 @@
                                         <strong><span t-field="docs.product_id"/></strong>
                                         
                                     </p>
+                                      <p>
+                                        <strong>Style:<span t-field="docs.product_style"/></strong>
+                                        
+                                    </p>
                                     
                                     <t t-foreach="docs.product_variant_ids" t-as="product">
                                         <p><span t-field="product.attribute_id.name"/>:<span t-field="product.name"/></p><br/>
