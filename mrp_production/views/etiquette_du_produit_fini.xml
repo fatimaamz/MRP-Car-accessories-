@@ -44,7 +44,7 @@
                                     </p>
                                     
                                     <t t-foreach="docs.product_variant_ids" t-as="product">
-                                        <p><span t-field="product"/></p><br/>
+                                        <p><span t-field="product.attribute_id.name"/>:<span t-field="product.name"/></p><br/>
                                     </t>
                                    <!-- <p  t-if="docs.product_variant_ids">
                                         
