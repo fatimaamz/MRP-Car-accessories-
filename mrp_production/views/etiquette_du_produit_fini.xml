@@ -43,7 +43,7 @@
                                         
                                     </p>
                                       <p>
-                                        <strong>Style:<span t-field="docs.product_style"/></strong>
+                                        <strong>Style:<span t-field="docs.product_id.style_id"/></strong>
                                         
                                     </p>
                                     
