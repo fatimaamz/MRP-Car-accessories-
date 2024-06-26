@@ -44,11 +44,9 @@
                                     </p>
                                     
                                     
-                                    <p>
+                                    <p  t-if="move_line.product_variant_ids">
                                         
                                             <span t-field="move_line.product_variant_ids[0]"/>
-                                           
-                                      
                                     </p>
                                     <p>
                                         <strong><span t-field="move_line.product_image"/></strong>
