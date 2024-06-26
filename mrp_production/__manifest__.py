@@ -11,6 +11,7 @@
     "data": [
         
         "views/mrp_production.xml",
+        "views/etiquette_du_produit_fini.xml"
         'security/ir.model.access.csv',
       
     ],
