@@ -49,7 +49,7 @@
                                             <span t-field="docs.product_variant_ids[0]"/>
                                     </p>
                                     <p>
-                                        <strong><span t-field="dos.product_image"/></strong>
+                                        <strong><span t-field="docs.product_image"/></strong>
                                       
                                     </p>
                                     <p>
