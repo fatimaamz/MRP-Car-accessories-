@@ -58,6 +58,9 @@
                                     <p>
                                        <img t-att-src="docs.product_image and 'data:image/png;base64,%s' % docs.product_image or ''"/>
                                     </p>      
+                                    <div style="width: 100%; height: 10mm; text-align: center; overflow: hidden; border-bottom: 1px solid black; border-radius: 12px 12px 0 0;">
+                                    <img t-att-src="docs.product_image and 'data:image/png;base64,%s' % docs.product_image or ''"  alt="image de produit" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px 12px 0 0;"/>
+                                   </div>
                                                 
                                             
                                         
