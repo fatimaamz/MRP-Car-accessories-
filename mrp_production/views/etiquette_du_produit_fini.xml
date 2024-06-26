@@ -44,7 +44,6 @@
                                     </p>
                                       <p>
                                         <strong>Style:<span t-field="docs.product_id.style_id"/></strong>
-                                        
                                     </p>
                                     
                                     <t t-foreach="docs.product_variant_ids" t-as="product">
