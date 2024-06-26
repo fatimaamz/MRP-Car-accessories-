@@ -45,12 +45,26 @@
                                     
                                     
                                     <p>
-                                        <strong>Color:<span t-field="move_line.product_variant_ids"/></strong>
+                                        <t t-foreach="move_line.product_variant_ids" t-as="variant">
+                                            <span t-field="variant.name"/>
+                                            <t t-if="not variant._is_last"><t t-set="_sep" t-value=", "/></t>
+                                            <t t-if="variant._is_last"><t t-set="_sep" t-value="."/></t>
+                                            <t t-if="not variant._is_last"><t t-out="_sep"/></t>
+                                        </t>
                                         
                                     </p>
                                     <p>
                                         <strong><span t-field="move_line.product_image"/></strong>
                                       
+                                    </p>
+                                    <p>
+                                        <t t-elif="move_line.product_id.tracking == 'none' and move_line.product_id.barcode">
+                                                            <div t-field="move_line.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:35%'}"/>
+                                                            <div class="o_label_4x12 text-center"><span t-out="move_line.product_id.barcode">12345678901</span></div>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <span class="text-muted">No barcode available</span>
+                                                        </t>
                                     </p>
                                 </div>
 
