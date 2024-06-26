@@ -56,7 +56,7 @@
                                     
                                   
                                     <div >
-                                    <img t-att-src="docs.product_image" t-field-options='{"widget": "image", "style":"width: 150px;height: 150px"}'/>
+                                    <span t-field="docs.product_image" t-field-options='{"widget": "image", "style":"width: 150px;height: 150px"}'/>
                                    </div>
                                                 
                                             
