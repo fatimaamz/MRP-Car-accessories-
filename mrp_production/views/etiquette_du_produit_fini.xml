@@ -29,7 +29,7 @@
                         <div class="page" style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm;">
 
                             <!-- Cadre intérieur -->
-                            <div style="width: 90mm; height: 130mm; border: 1px solid black; margin: auto; position: relative; padding: 0; border-radius: 12px; overflow: hidden;">
+                            <div style="width: 50mm; height: 90mm; border: 1px solid black; margin: auto; position: relative; padding: 0; border-radius: 12px; overflow: hidden;">
 
                                 <!-- Logo de la société -->
                                  <div style="width: 100%; height: 40mm; text-align: center; overflow: hidden; border-bottom: 1px solid black; border-radius: 12px 12px 0 0;">
@@ -53,10 +53,12 @@
                                         
                                             <span t-field="docs.product_variant_ids[0]"/>
                                     </p>-->
-                                     <div class="col-xs-3">
-                                        <img t-att-src="'/web/image/mrp.production/%s/product_image' % docs.id"/>
-                                        
-                                     </div>
+                                     <div class="row">
+                            
+                                            <div class="col-xs-3">
+                                                <img t-att-src="o.product_image and 'data:image/png;base64,%s' % o.product_image or ''"/>
+                                            </div>
+                                        </div>
 
                                     <p>
                                          <t t-if="docs.product_id.tracking != 'none' and (docs.lot_name or move_line.lot_id)">
