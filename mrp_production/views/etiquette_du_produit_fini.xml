@@ -51,7 +51,7 @@
                                             <span t-field="docs.product_variant_ids[0]"/>
                                     </p>-->
                                      <p>
-                                        <img t-att-src="'/web/image/mrp.production/%s/product_image' % docs.id" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px 12px 0 0;"/>
+                                        <img t-att-src="'/web/image/mrp.production/%s/product_image' % docs.id" style="width: 100%; height: 100%; object-fit: cover;"/>
                                         
                                     </p>
 
