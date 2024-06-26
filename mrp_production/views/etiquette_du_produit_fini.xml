@@ -67,7 +67,7 @@
                                                             <div class="o_label_4x12 text-center"><span t-out="docs.lot_name or docs.lot_id.name">Demo Barcode</span></div>
                                                         </t>
                                                         <t t-elif="docs.product_id.tracking == 'none' and docs.product_id.barcode">
-                                                            <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:35%'}"/>
+                                                            <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:50%;height:25%'}"/>
                                                             <div class="o_label_4x12 text-center"><span t-out="docs.product_id.barcode">12345678901</span></div>
                                                         </t>
                                     </p>
