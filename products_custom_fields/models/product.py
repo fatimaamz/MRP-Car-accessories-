@@ -32,8 +32,10 @@ class CustomProductProduct(models.Model):
                 if len(values) == 1:
                     single_value_attributes.append(f"{attribute.name}: {values[0].name}")
                 else:
-                    values_str = ", ".join(v.name for v in values)
-                    multiple_value_attributes.append(f"{attribute.name}: {values_str}")
+                    # Only include if the product has this specific value set
+                    if attribute_values[attribute] == product.product_template_attribute_value_ids.filtered(lambda v: v.attribute_id == attribute):
+                        values_str = ", ".join(v.name for v in values)
+                        multiple_value_attributes.append(f"{attribute.name}: {values_str}")
 
             # Combine the names of single and multiple value attributes
             name = product.name
@@ -63,6 +65,7 @@ class CustomProductProduct(models.Model):
                 product.display_name = ", ".join(set(temp))  # Ensure uniqueness in the list
             else:
                 product.display_name = get_display_name(name, product.default_code)
+
 
 class YearModel(models.Model):
     _name = 'year.model'
