@@ -8,8 +8,7 @@ class ProductTemplateAttributeValue(models.Model):
     def _filter_single_value_lines(self):
       
         only_active = all(ptav.ptav_active for ptav in self)
-        
-        # Include values from single value lines
+      
         return self.filtered(lambda ptav: ptav._is_from_single_value_line(only_active))
 
 
