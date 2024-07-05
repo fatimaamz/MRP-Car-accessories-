@@ -1,9 +1,25 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models,fields,api
-class ProductProduct(models.Model):
-    _inherit = 'product.product'
-    product_template_variant_value_ids = fields.Many2many('product.template.attribute.value', relation='product_variant_combination',string="Variant Values", ondelete='restrict')
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+    
+    def _compute_has_configurable_attributes(self):
+        """A product is considered configurable if:
+        - It has dynamic attributes
+        - It has any attribute line with at least 2 attribute values configured
+        - It has multi-checkbox display type
+        - It has at least one custom attribute value
+        """
+        for product in self:
+            product.has_configurable_attributes = (
+                product.has_dynamic_attributes() or any(
+                    ptal.attribute_id.display_type == 'multi'
+                    or len(ptal.value_ids) >= 1
+                    or ptal.value_ids.is_custom
+                    for ptal in product.attribute_line_ids
+                )
+            )
 class YearModel(models.Model):
     _name = 'year.model'
     _description = 'Year Model'
