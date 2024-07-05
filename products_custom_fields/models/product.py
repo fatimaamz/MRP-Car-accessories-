@@ -4,21 +4,10 @@ from odoo import models,fields,api
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
     
-    def _compute_has_configurable_attributes(self):
-        """A product is considered configurable if:
-        - It has dynamic attributes
-        - It has any attribute line with at least 2 attribute values configured
-        - It has multi-checkbox display type
-        - It has at least one custom attribute value
-        """
+    def _compute_has_single_attribute_value(self):
         for product in self:
-            product.has_configurable_attributes = (
-                product.has_dynamic_attributes() or any(
-                    ptal.attribute_id.display_type == 'multi'
-                    or len(ptal.value_ids) >= 1
-                    or ptal.value_ids.is_custom
-                    for ptal in product.attribute_line_ids
-                )
+            product.has_single_attribute_value = any(
+                len(ptal.value_ids) == 1 for ptal in product.attribute_line_ids
             )
 class YearModel(models.Model):
     _name = 'year.model'
