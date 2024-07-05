@@ -4,7 +4,7 @@ from odoo import models,fields,api
 
 class ProductTemplateAttributeValue(models.Model):
     
-    _inherit = 'product.template.attribute.value'
+_inherit = 'product.template.attribute.value'
     
     def _filter_single_value_lines(self):
       
