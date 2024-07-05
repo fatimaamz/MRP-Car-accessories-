@@ -3,8 +3,7 @@
 from odoo import models,fields,api
 class ProductProduct(models.Model):
     _inherit = 'product.product'
-    product_template_variant_value_ids = fields.Many2many('product.template.attribute.value', relation='product_variant_combination',
-                                                          domain=[('attribute_line_id.value_count', '>=', 1)], string="Variant Values", ondelete='restrict')
+    product_template_variant_value_ids = fields.Many2many('product.template.attribute.value', relation='product_variant_combination',string="Variant Values", ondelete='restrict')
 class YearModel(models.Model):
     _name = 'year.model'
     _description = 'Year Model'
