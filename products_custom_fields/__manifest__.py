@@ -7,7 +7,7 @@
     'description': """
         New custom product fields 
     """,
-    'depends': ['base','product'],
+    'depends': ['base','product','sale'],
     'data': [
         'security/ir.model.access.csv',
         'views/product_view.xml',
