@@ -13,6 +13,21 @@ class ProductTemplateAttributeValue(models.Model):
         return self.filtered(lambda ptav: ptav._is_from_single_value_line(only_active))
 
 
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        if self.product_id:
+            ptavs = self.product_id.product_tmpl_id.product_template_attribute_value_ids
+            # Apply the modified filter
+            ptavs = ptavs._filter_single_value_lines()
+            self.update({
+                'product_attribute_value_ids': [(6, 0, ptavs.ids)]
+            })
+            
+
+
 class YearModel(models.Model):
     _name = 'year.model'
     _description = 'Year Model'
