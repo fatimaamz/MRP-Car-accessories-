@@ -19,7 +19,7 @@ class SaleOrderLine(models.Model):
     @api.onchange('product_id')
     def _onchange_product_id(self):
         if self.product_id:
-            ptavs = self.product_id.product_tmpl_id.product_template_attribute_value_ids
+            ptavs = self.product_id.product_tmpl_id.valid_product_template_attribute_line_ids
             # Apply the modified filter
             ptavs = ptavs._filter_single_value_lines()
             self.update({
