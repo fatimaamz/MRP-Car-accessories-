@@ -26,7 +26,7 @@
                 </group>
             </xpath>
 
-            <xpath expr="//page[@string='Sales']" position="inside">
+            <xpath expr="//page[@name='sales']" position="inside">
             <group>
                 <field name="price_line_ids">
                     <tree>
