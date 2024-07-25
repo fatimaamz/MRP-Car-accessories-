@@ -76,7 +76,7 @@ class ProductPriceLine(models.Model):
         ('Carrosserie', 'Carrosserie')
     ], string='Type client', required=True)
     
-    price = fields.Float(string='Prix')
+    price = fields.Float(string='Prix', required=True)
     intitule=fields.Char(string='Intitulé')
 
 
