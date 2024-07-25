@@ -25,6 +25,19 @@
                     </group>
                 </group>
             </xpath>
+
+            <xpath expr="//page[@string='Sales']" position="inside">
+            <group>
+                <field name="price_line_ids">
+                    <tree>
+                        <field name="customer_type"/>
+                        <field name="price"/>
+                        <field name="intitule"/>
+                        
+                    </tree>
+                </field>
+            </group>
+        </xpath>
         </field>
     </record>
 
