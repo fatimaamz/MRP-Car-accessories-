@@ -40,6 +40,7 @@ class ProductMarque(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
+    price_line_ids = fields.One2many('product.price.line', 'product_id', string='Liste des prix')
     year_ids = fields.Many2many('year.model', string='Année')
     product_type = fields.Selection([
         ('Exterior', 'Exterior'),
@@ -57,3 +58,25 @@ class ProductTemplate(models.Model):
     sous_model_id = fields.Many2one('product.sousmodele', string='Sous modèle')
     style_id = fields.Many2one('product.style', string='Style')
     marque_id = fields.Many2one('product.marque', string='Marque')
+
+
+
+class ProductPriceLine(models.Model):
+    _name = 'product.price.line'
+    _description = 'Product Price Line'
+
+    product_id = fields.Many2one('product.template', string='Product')
+    customer_type = fields.Selection([
+        ('Concessionnaires Régulier', 'Concessionnaires Régulier'),
+        ('Concessionnaires Programme nationaux', 'Concessionnaires Programme nationaux'),
+        ('Distributeur', 'Distributeur'),
+        ('Particulier', 'Particulier'),
+        ('Fabriquant majeur', 'Fabriquant majeur'),
+        ('E-comm Distributeur', 'E-comm Distributeur'),
+        ('Carrosserie', 'Carrosserie')
+    ], string='Type client', required=True)
+    
+    price = fields.Float(string='Prix')
+    intitule=fields.Char(string='Intitulé')
+
+
