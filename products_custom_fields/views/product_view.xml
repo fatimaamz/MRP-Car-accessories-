@@ -6,6 +6,16 @@
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='general_information']" position="inside">
+                <group>
+                <field name="price_line_ids">
+                    <tree>
+                        <field name="customer_type"/>
+                        <field name="price"/>
+                        <field name="intitule"/>
+                        
+                    </tree>
+                </field>
+            </group>
                 <group string="Détails">
                     <group>
                         <field name="year_ids" widget="many2many_tags"/>
@@ -26,18 +36,7 @@
                 </group>
             </xpath>
 
-            <xpath expr="//page[@name='sales']" position="inside">
-            <group>
-                <field name="price_line_ids">
-                    <tree>
-                        <field name="customer_type"/>
-                        <field name="price"/>
-                        <field name="intitule"/>
-                        
-                    </tree>
-                </field>
-            </group>
-        </xpath>
+           
         </field>
     </record>
 
