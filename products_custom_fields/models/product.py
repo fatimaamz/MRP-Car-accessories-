@@ -69,7 +69,7 @@ class ProductPriceLine(models.Model):
     _name = 'product.price.line'
     _description = 'Product Price Line'
 
-    product_id = fields.Many2one('product.template', string='Product')
+    product_id = fields.Many2one('product.template', string='Produit')
     customer_type_id = fields.Many2one('customer.type', string='Type client', required=True)
 
     price = fields.Float(string='Prix', required=True)
