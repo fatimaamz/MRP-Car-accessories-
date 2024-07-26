@@ -9,7 +9,7 @@
                 <group>
                 <field name="price_line_ids">
                     <tree>
-                        <field name="customer_type"/>
+                        <field name="customer_type_id"/>
                         <field name="price"/>
                         <field name="intitule"/>
                         
