@@ -59,23 +59,19 @@ class ProductTemplate(models.Model):
     style_id = fields.Many2one('product.style', string='Style')
     marque_id = fields.Many2one('product.marque', string='Marque')
 
+class CustomerType(models.Model):
+    _name = 'customer.type'
+    _description = 'Customer Type'
 
+    name = fields.Char(string='Name', required=True)
 
 class ProductPriceLine(models.Model):
     _name = 'product.price.line'
     _description = 'Product Price Line'
 
     product_id = fields.Many2one('product.template', string='Product')
-    customer_type = fields.Selection([
-        ('Concessionnaires Régulier', 'Concessionnaires Régulier'),
-        ('Concessionnaires Programme nationaux', 'Concessionnaires Programme nationaux'),
-        ('Distributeur', 'Distributeur'),
-        ('Particulier', 'Particulier'),
-        ('Fabriquant majeur', 'Fabriquant majeur'),
-        ('E-comm Distributeur', 'E-comm Distributeur'),
-        ('Carrosserie', 'Carrosserie')
-    ], string='Type client', required=True)
-    
+    customer_type_id = fields.Many2one('customer.type', string='Type client', required=True)
+
     price = fields.Float(string='Prix', required=True)
     intitule=fields.Char(string='Intitulé')
 
