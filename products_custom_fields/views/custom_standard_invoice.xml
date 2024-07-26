@@ -6,8 +6,9 @@
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <t t-set="forced_vat" t-value="o.fiscal_position_id.foreign_vat"/> <!-- So that it appears in the footer of the report instead of the company VAT if it's set -->
                 <div class="row">
+	           <h2>Facture/Invoice</h2><br/>
                     <t t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
-                        <div class="col-6">
+                        <div ><!--class="col-6"-->
                             <t t-set="information_block">
                                 <div groups="account.group_delivery_invoice_address" name="shipping_address_block">
                                     <strong>Shipping Address:</strong>
@@ -15,15 +16,15 @@
                                 </div>
                             </t>
                         </div>
-                         <h2>Facture/Invoice</h2><br/>
-                        <div class="row">
+                        
+                       
                             <div class="col-6 text-left">
                                 <strong>Sold to/Vendu à</strong>
                             </div>
                             <div class="col-6 text-right">
                                 <strong>Ship to/Expédié à</strong>
                             </div>
-                        </div>
+                     
                         <div  name="address_not_same_as_shipping"><!--class="col-6"-->
                             <t t-set="address">
                                 <address class="mb-0" t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
