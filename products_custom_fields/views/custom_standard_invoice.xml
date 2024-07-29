@@ -10,21 +10,23 @@
                    t-value="o.fiscal_position_id.foreign_vat"/> <!-- So that it appears in the footer of the report instead of the company VAT if it's set -->
                  
                
-                  
-                
-                    <t t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
-                        <div class="col-6">
-                            <div style="float: right; width: 50%; text-align: right;">
+                  <div class="row">
+                    <div class="col-6 ">
                     
                                     <strong>Facture/Invoice: </strong><span t-field="o.name"/><br/>
-                                    <strong>Date: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
+                                    <strong>Date: </strong><span t-field="o.invoice_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/><br/>
                                     <strong>Ref: </strong><span t-field="o.ref"/><br/>
                                     <strong>Client PO#: </strong><span t-field="o.invoice_origin"/><br/>
-                                    <strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
+                                    <strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/><br/>
                                     <strong>Chéque#: </strong><span t-field="o.payment_reference"/><br/>
                                     <strong>Invoice Discount: </strong><span t-field="o.invoice_line_ids[0].discount"/>%<br/>
                                 </div>
-                                    <h2>Facture/Invoice</h2>
+                                </div>
+                
+                    <t t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
+                        <div class="col-6">
+                           
+                                   
                             <t t-set="information_block">
                                 <div groups="account.group_delivery_invoice_address" name="shipping_address_block">
                                     <strong>Ship to / Expédié a :</strong>
@@ -53,6 +55,7 @@
                         <div class="col-6 text-right">
                             <t t-set="information_block">
                                 <div name="soldaddress_block">
+                                     <h2>Facture/Invoice</h2>
                                     <strong>Sold to/Vendu à:</strong>
                                     <div t-field="o.partner_id"
                                          t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': True}"/>
