@@ -7,6 +7,17 @@
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <t t-set="forced_vat"
                    t-value="o.fiscal_position_id.foreign_vat"/> <!-- So that it appears in the footer of the report instead of the company VAT if it's set -->
+                 <div class="row">
+                    <div class="col-6 text-right">
+                        <strong>Facture/Invoice: </strong><span t-field="o.name"/><br/>
+                        <strong>Date: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
+                        <strong>Ref: </strong><span t-field="o.ref"/><br/>
+                        <strong>Client PO#: </strong><span t-field="o.invoice_origin"/><br/>
+                        <strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
+                        <strong>Chéque#: </strong><span t-field="o.payment_reference"/><br/>
+                        <strong>Invoice Discount: </strong><span t-field="o.custom_discount_field"/><br/>
+                    </div>
+                </div>
                 <div class="row">
                     <t t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
                         <div class="col-6">
@@ -32,17 +43,7 @@
                             </t>
                         </div>
                     </t>
-                     <div class="row">
-                    <div class="col-6 text-right">
-                        <strong>Facture/Invoice: </strong><span t-field="o.name"/><br/>
-                        <strong>Date: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
-                        <strong>Ref: </strong><span t-field="o.ref"/><br/>
-                        <strong>Client PO#: </strong><span t-field="o.invoice_origin"/><br/>
-                        <strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
-                        <strong>Chéque#: </strong><span t-field="o.payment_reference"/><br/>
-                        <strong>Invoice Discount: </strong><span t-field="o.custom_discount_field"/><br/>
-                    </div>
-                </div>
+                    
                     <div class="row">
                         <h2>Facture/Invoice</h2>
                         <div class="col-6 text-right">
