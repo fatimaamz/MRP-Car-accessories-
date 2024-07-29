@@ -14,6 +14,17 @@
                 
                     <t t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
                         <div class="col-6">
+                            <div style="float: right; width: 50%; text-align: right;">
+                    
+                                    <strong>Facture/Invoice: </strong><span t-field="o.name"/><br/>
+                                    <strong>Date: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
+                                    <strong>Ref: </strong><span t-field="o.ref"/><br/>
+                                    <strong>Client PO#: </strong><span t-field="o.invoice_origin"/><br/>
+                                    <strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
+                                    <strong>Chéque#: </strong><span t-field="o.payment_reference"/><br/>
+                                    <strong>Invoice Discount: </strong><span t-field="o.invoice_line_ids[0].discount"/>%<br/>
+                                </div>
+                                    <h2>Facture/Invoice</h2>
                             <t t-set="information_block">
                                 <div groups="account.group_delivery_invoice_address" name="shipping_address_block">
                                     <strong>Ship to / Expédié a :</strong>
@@ -49,17 +60,7 @@
                             </t>
                         </div>
 
-                         <div style="float: right; width: 50%; text-align: right;">
-                    
-                        <strong>Facture/Invoice: </strong><span t-field="o.name"/><br/>
-                        <strong>Date: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
-                        <strong>Ref: </strong><span t-field="o.ref"/><br/>
-                        <strong>Client PO#: </strong><span t-field="o.invoice_origin"/><br/>
-                        <strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
-                        <strong>Chéque#: </strong><span t-field="o.payment_reference"/><br/>
-                        <strong>Invoice Discount: </strong><span t-field="o.invoice_line_ids[0].discount"/>%<br/>
-                    </div>
-                        <h2>Facture/Invoice</h2>
+                         
                         
                         <t t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
                             <div class="col-6 text-right">
