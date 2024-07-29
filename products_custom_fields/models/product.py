@@ -80,6 +80,6 @@ class ProductPriceLine(models.Model):
 
     price = fields.Float(string='Prix', required=True)
     intitule=fields.Char(string='Intitulé')
-    Type_de_prix=fields.Many2one('price.type', string='Type de prix', required=True)
+    type_de_prix=fields.Many2one('price.type', string='Type de prix', required=True)
 
 
