@@ -9,7 +9,7 @@
                 <t t-set="forced_vat"
                    t-value="o.fiscal_position_id.foreign_vat"/> <!-- So that it appears in the footer of the report instead of the company VAT if it's set -->
                  
-               
+               <br/><br/>
                   <div class="row">
                     <div class="col-6 ">
                     
