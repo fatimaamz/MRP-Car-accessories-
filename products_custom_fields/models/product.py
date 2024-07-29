@@ -65,6 +65,12 @@ class CustomerType(models.Model):
 
     name = fields.Char(string='Name', required=True)
 
+class PriceType(models.Model):
+    _name = 'price.type'
+    _description = 'Price Type'
+
+    name = fields.Char(string='Name', required=True)
+
 class ProductPriceLine(models.Model):
     _name = 'product.price.line'
     _description = 'Product Price Line'
