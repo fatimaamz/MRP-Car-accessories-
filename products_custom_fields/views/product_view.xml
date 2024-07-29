@@ -21,8 +21,8 @@
                    
                 </field>
             </group>
-              <!--  <group string="Détails">
-                    <group>
+              <group string="Détails">
+                   <!-- <group>
                         <field name="year_ids" widget="many2many_tags"/>
 
                         <field name="priceA"/>
