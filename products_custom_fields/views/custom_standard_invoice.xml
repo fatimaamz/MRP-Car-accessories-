@@ -7,15 +7,15 @@
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <t t-set="forced_vat"
                    t-value="o.fiscal_position_id.foreign_vat"/> <!-- So that it appears in the footer of the report instead of the company VAT if it's set -->
-                 <div class="row">
-                    <div class="col-6 text-right">
+                 <div class="col-12 text-right">
+                    <div class="d-inline-block">
                         <strong>Facture/Invoice: </strong><span t-field="o.name"/><br/>
                         <strong>Date: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
                         <strong>Ref: </strong><span t-field="o.ref"/><br/>
                         <strong>Client PO#: </strong><span t-field="o.invoice_origin"/><br/>
                         <strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
                         <strong>Chéque#: </strong><span t-field="o.payment_reference"/><br/>
-                        <strong>Invoice Discount: </strong><span t-field="o.invoice_line_ids[0].discount"/><br/>
+                        <strong>Invoice Discount: </strong><span t-field="o.invoice_line_ids[0].discount"/>%<br/>
                     </div>
                 </div>
                 <div class="row">
@@ -69,6 +69,7 @@
                         <t t-else="">
                             <div class="offset-col-6 col-6" name="no_shipping">
                                 <t t-set="address">
+                                     <strong>Ship to / Expédié a:</strong>
                                     <address class="mb-0" t-field="o.partner_id"
                                              t-options="{'widget': 'contact', 'fields': ['address', 'name'], 'no_marker': True}"/>
                                     <div t-if="o.partner_id.vat" id="partner_vat_no_shipping">
