@@ -13,8 +13,8 @@
                         <strong>Client PO#: </strong><span t-field="o.invoice_origin"/><br/>
                         <strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options='{"widget": "date"}'/><br/>
                         <strong>Chéque#: </strong><span t-field="o.payment_reference"/><br/>
-                        <strong>Invoice Discount: </strong><t t-set="first_discount" t-value="next((line.discount for line in o.invoice_line_ids if line.discount), 0)"/>
-                        <span t-esc="first_discount"/>%
+                        <strong>Invoice Discount: </strong><span t-field="o.invoice_line_id[0].discount"/> <span t-esc="first_discount"/>%
+                       
                         <br/>
                     </div>
                 </div>
