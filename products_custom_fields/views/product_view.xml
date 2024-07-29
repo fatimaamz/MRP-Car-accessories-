@@ -13,6 +13,7 @@
                         <field name="product_id" column_invisible="True"/>
                         <field name="customer_type_id" options="{'no_create_edit': True}"/>
                         <field name="price"/>
+                        <field name="type_de_prix"/>
                         <field name="intitule"/>
                     </tree>
                     
@@ -20,7 +21,7 @@
                    
                 </field>
             </group>
-                <group string="Détails">
+              <!--  <group string="Détails">
                     <group>
                         <field name="year_ids" widget="many2many_tags"/>
 
@@ -29,13 +30,13 @@
 
                         <field name="priceC"/>
                         <field name="priceD"/>
-                    </group>
+                    </group>-->
                     <group>
                         <field name="product_type"/>
-                        <field name="modele_id"/>
+                       <!-- <field name="modele_id"/>
                         <field name="sous_model_id"/>
                         <field name="style_id"/>
-                        <field name="marque_id"/>
+                        <field name="marque_id"/>-->
                     </group>
                 </group>
             </xpath>
