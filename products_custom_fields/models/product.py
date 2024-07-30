@@ -71,6 +71,13 @@ class PriceType(models.Model):
 
     name = fields.Char(string='Name', required=True)
 
+class PriceTypeUpdate(models.Model):
+    _name = 'price.type.update'
+    _description = 'Price Type Update'
+
+    name = fields.Char(string='Name', required=True)
+
+
 class ProductPriceLine(models.Model):
     _name = 'product.price.line'
     _description = 'Product Price Line'
