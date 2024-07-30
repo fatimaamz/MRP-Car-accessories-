@@ -136,6 +136,17 @@
         </field>
     </record>
 
+    <record id="price_type_tree_editable" model="ir.ui.view">
+        <field name="name">price.type.tree.editable</field>
+        <field name="model">price.type</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                
+            </tree>
+        </field>
+    </record>
+
    
     <record id="action_price_type_tree_editable" model="ir.actions.act_window">
         <field name="name">Price Type</field>
@@ -149,7 +160,7 @@
               name="Type de prix"
               parent="sale.menu_sale_config"
               action="action_price_type_tree_editable"
-              sequence="10"/>
+              sequence="13"/>
 
     <menuitem id="menu_action_styles_configuration_view" name="Styles" parent="sale.menu_sale_config" sequence="11"
               action="action_style_view"/>
