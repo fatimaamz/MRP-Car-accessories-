@@ -122,6 +122,35 @@
         <field name="view_mode">tree</field>
     </record>
 
+      <record id="view_order_tree_editable" model="ir.ui.view">
+        <field name="name">sale.order.tree.editable</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_order"/>
+                <field name="state"/>
+                <field name="amount_total"/>
+            </tree>
+        </field>
+    </record>
+
+   
+    <record id="action_price_type_tree_editable" model="ir.actions.act_window">
+        <field name="name">Price Type</field>
+        <field name="res_model">price.type</field>
+        <field name="view_mode">tree</field>
+        
+    </record>
+
+    <!-- Add the Action to the Existing Sales Menu -->
+    <menuitem id="menu_price_type_tree_editable"
+              name="Type de prix"
+              parent="sale.menu_sale_config"
+              action="action_price_type_tree_editable"
+              sequence="10"/>
+
     <menuitem id="menu_action_styles_configuration_view" name="Styles" parent="sale.menu_sale_config" sequence="11"
               action="action_style_view"/>
     <menuitem id="menu_action_modele_configuration_view" name="Modèles" parent="sale.menu_sale_config" sequence="12"
