@@ -12,6 +12,7 @@
         'security/ir.model.access.csv',
         'views/product_view.xml',
         'views/custom_standard_invoice.xml',
+        'views/update_price_wizard.xml',
     ],
     'installable': True,
 
