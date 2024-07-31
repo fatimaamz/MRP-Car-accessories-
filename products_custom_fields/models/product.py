@@ -90,3 +90,21 @@ class ProductPriceLine(models.Model):
     type_de_prix=fields.Many2one('price.type', string='Type de prix', required=True)
 
 
+class PriceUpdateWizard(models.TransientModel):
+    _name = 'price.update.wizard'
+    _description = 'Price Update Wizard'
+
+    customer_type_id = fields.Many2one('customer.type', string='Type de client', required=True)
+    price_type_id = fields.Many2one('price.type', string='Type de prix', required=True)
+    value = fields.Float(string='Nouveau prix', required=True)
+
+  
+    def update_prices(self):
+        product_price_line_obj = self.env['product.price.line']
+        lines_to_update = product_price_line_obj.search([
+            ('customer_type_id', '=', self.customer_type_id.id),
+            ('type_de_prix', '=', self.price_type_id.id)
+        ])
+        for line in lines_to_update:
+            line.price = self.value
+        return {'type': 'ir.actions.act_window_close'}
