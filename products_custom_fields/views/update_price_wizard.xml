@@ -19,7 +19,7 @@
     </record>
 
     <record id="action_price_update_wizard" model="ir.actions.act_window">
-        <field name="name">Modification de prix</field>
+        <field name="name">Mettre à jour le prix</field>
         <field name="res_model">price.update.wizard</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_price_update_wizard_form"/>
