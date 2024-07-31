@@ -7,4 +7,6 @@ access_product_marque,product.marque,model_product_marque,,1,1,1,1
 access_product_price_line,product.price.line,model_product_price_line,,1,1,1,1
 access_customer_type,customer.type,model_customer_type,,1,1,1,1
 access_price_type,price.type,model_price_type,,1,1,1,1
+access_price_update_wizard,price.update.wizard,model_price_update_wizard,,1,1,1,1
+
 
