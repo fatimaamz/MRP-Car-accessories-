@@ -422,7 +422,36 @@
                                     </p>
                                 </div>
 
-                        <div class="row mt32 mb32">
+                        
+
+                                
+                                <t t-set="show_qr" t-value="o.display_qr_code and o.amount_residual &gt; 0"/>
+                                <div t-if="not show_qr" name="qr_code_placeholder" class="oe_structure"/>
+                                <div id="qrcode" class="d-flex mb-3 avoid-page-break-inside" t-else="">
+                                    <div class="qrcode me-3" id="qrcode_image">
+                                        <t t-set="qr_code_url" t-value="o._generate_qr_code(silent_errors=True)"/>
+                                        <p t-if="qr_code_url" class="position-relative mb-0">
+                                            <img t-att-src="qr_code_url"/>
+                                            <img src="/account/static/src/img/Odoo_logo_O.svg" id="qrcode_odoo_logo"
+                                                 class="top-50 start-50 position-absolute bg-white border border-white border-3 rounded-circle"/>
+                                        </p>
+                                    </div>
+                                    <div class="d-inline text-muted lh-sm fst-italic" id="qrcode_info"
+                                         t-if="qr_code_url">
+                                        <p>Scan this QR Code to<br/>pay with your mobile
+                                        </p>
+                                    </div>
+                                </div>
+                                <!--terms and conditions-->
+                                <div class="text-muted mb-3"
+                                     t-attf-style="#{'text-align:justify;text-justify:inter-word;' if o.company_id.terms_type != 'html' else ''}"
+                                     t-if="not is_html_empty(o.narration)" name="comment">
+                                    <span t-field="o.narration"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt32 mb32">
                                 <div class="col-6">
                                     <strong>PCS:</strong>
                                     <span t-field="o.pcs"/>
@@ -459,34 +488,6 @@
                                 </div>
                         </div>
 
-
-                                
-                                <t t-set="show_qr" t-value="o.display_qr_code and o.amount_residual &gt; 0"/>
-                                <div t-if="not show_qr" name="qr_code_placeholder" class="oe_structure"/>
-                                <div id="qrcode" class="d-flex mb-3 avoid-page-break-inside" t-else="">
-                                    <div class="qrcode me-3" id="qrcode_image">
-                                        <t t-set="qr_code_url" t-value="o._generate_qr_code(silent_errors=True)"/>
-                                        <p t-if="qr_code_url" class="position-relative mb-0">
-                                            <img t-att-src="qr_code_url"/>
-                                            <img src="/account/static/src/img/Odoo_logo_O.svg" id="qrcode_odoo_logo"
-                                                 class="top-50 start-50 position-absolute bg-white border border-white border-3 rounded-circle"/>
-                                        </p>
-                                    </div>
-                                    <div class="d-inline text-muted lh-sm fst-italic" id="qrcode_info"
-                                         t-if="qr_code_url">
-                                        <p>Scan this QR Code to<br/>pay with your mobile
-                                        </p>
-                                    </div>
-                                </div>
-                                <!--terms and conditions-->
-                                <div class="text-muted mb-3"
-                                     t-attf-style="#{'text-align:justify;text-justify:inter-word;' if o.company_id.terms_type != 'html' else ''}"
-                                     t-if="not is_html_empty(o.narration)" name="comment">
-                                    <span t-field="o.narration"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </t>
 
