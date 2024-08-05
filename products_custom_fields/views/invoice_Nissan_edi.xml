@@ -511,7 +511,7 @@
        <field name="report_name">products_custom_fields.report_nissan_edi_invoice_document</field>
        <field name="report_file">products_custom_fields.report_nissan_edi_invoice_document</field>
        <field name="print_report_name">'Facture - %s' % (object.name)</field>
-       <field name="binding_model_id" ref="model_sale_order"/>
+       <field name="binding_model_id" ref="model_account_move"/>
     </record>
     
     
