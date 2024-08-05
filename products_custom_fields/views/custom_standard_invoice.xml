@@ -362,42 +362,7 @@
                                 <t t-call="account.document_tax_totals_company_currency_template"/>
                             </div>
 
-                            <div class="row mt32 mb32">
-                                <div class="col-6">
-                                    <strong>PCS:</strong>
-                                    <span t-field="o.pcs"/>
-                                </div>
-                                <div class="col-6">
-                                    <strong>Ship Date:</strong>
-                                    <span t-field="o.invoice_date"/>
-                                </div>
-                            </div>
-                            <div class="row mt32 mb32">
-                                <div class="col-6">
-                                    <strong>Poids:</strong>
-                                    <span t-field="o.weight"/>
-                                </div>
-                                <div class="col-6">
-                                    <strong>Transporteur#:</strong>
-                                    <span t-field="o.carrier"/>
-                                </div>
-                            </div>
-                            <div class="row mt32 mb32">
-                                <div class="col-6">
-                                    <strong>Suivi:</strong>
-                                    <span t-field="o.tracking"/>
-                                </div>
-                                <div class="col-6">
-                                    <strong>Transport:</strong>
-                                    <span t-field="o.transport"/>
-                                </div>
-                            </div>
-                            <div class="row mt32 mb32">
-                                <div class="col-6">
-                                    <strong>Dédouanement:</strong>
-                                    <span t-field="o.custom_clearance"/>
-                                </div>
-                        </div>
+                           
                             
                             <div id="payment_term" class="clearfix">
                                 <div class="justify-text">
@@ -456,6 +421,46 @@
                                         </t>
                                     </p>
                                 </div>
+
+                        <div class="row mt32 mb32">
+                                <div class="col-6">
+                                    <strong>PCS:</strong>
+                                    <span t-field="o.pcs"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Ship Date:</strong>
+                                    <span t-field="o.invoice_date"/>
+                                </div>
+                            </div>
+                            <div class="row mt32 mb32">
+                                <div class="col-6">
+                                    <strong>Poids:</strong>
+                                    <span t-field="o.weight"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Transporteur#:</strong>
+                                    <span t-field="o.carrier"/>
+                                </div>
+                            </div>
+                            <div class="row mt32 mb32">
+                                <div class="col-6">
+                                    <strong>Suivi:</strong>
+                                    <span t-field="o.tracking"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Transport:</strong>
+                                    <span t-field="o.transport"/>
+                                </div>
+                            </div>
+                            <div class="row mt32 mb32">
+                                <div class="col-6">
+                                    <strong>Dédouanement:</strong>
+                                    <span t-field="o.custom_clearance"/>
+                                </div>
+                        </div>
+
+
+                                
                                 <t t-set="show_qr" t-value="o.display_qr_code and o.amount_residual &gt; 0"/>
                                 <div t-if="not show_qr" name="qr_code_placeholder" class="oe_structure"/>
                                 <div id="qrcode" class="d-flex mb-3 avoid-page-break-inside" t-else="">
