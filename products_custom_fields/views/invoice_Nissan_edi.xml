@@ -504,14 +504,15 @@
         </t>
     </template>
 
-
-    <report
-            id="action_report_new_invoice_document"
-            model="account.move"
-            report_type="qweb-pdf"
-            string="Facture Nissan EDI"
-            name="products_custom_fields.report_nissan_edi_invoice_document"
-            file="products_custom_fields.report_nissan_edi_invoice_document"
-            print_report_name="'Facture - ' + object.name"
-    />
+     <record id="action_report_nissan_invoice" model="ir.actions.report">
+       <field name="name">Facture Nissan EDI</field>
+       <field name="model">account.move</field>
+       <field name="report_type">qweb-pdf</field>
+       <field name="report_name">products_custom_fields.report_nissan_edi_invoice_document</field>
+       <field name="report_file">products_custom_fields.report_nissan_edi_invoice_document</field>
+       <field name="print_report_name">'Facture - %s' % (object.name)</field>
+       <field name="binding_model_id" ref="model_sale_order"/>
+    </record>
+    
+    
 </odoo>
