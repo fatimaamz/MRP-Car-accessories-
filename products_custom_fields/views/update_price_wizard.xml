@@ -11,8 +11,8 @@
                     <field name="value"/>
                 </group>
                 <footer>
-                    <button string="Update Prices" type="object" name="update_prices" class="btn-primary"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    <button string="Mise à jour des prix" type="object" name="update_prices" class="btn-primary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>
