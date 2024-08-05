@@ -6,6 +6,6 @@ class AccountMove(models.Model):
     pcs = fields.Integer(string='PCS')
     weight = fields.Float(string='Poids')
     tracking = fields.Char(string='Suivi')
-    custom_clearance = fields.Boolean(string='Dédouanement')
+    custom_clearance = fields.Char(string='Dédouanement')
     transport = fields.Char(string='Transport')
     carrier = fields.Char(string='Transporteur')
