@@ -13,6 +13,7 @@
         'views/product_view.xml',
         'views/custom_standard_invoice.xml',
         'views/update_price_wizard.xml',
+        'views/account_move_form_view.xml',
     ],
     'installable': True,
 
