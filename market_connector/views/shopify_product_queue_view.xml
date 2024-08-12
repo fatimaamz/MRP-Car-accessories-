@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="action_shopify_queue_product_tree" model="ir.ui.view">
+        <field name="name">merket.connector.products.data.queue.tree</field>
+        <field name="model">merket.connector.products.data.queue</field>
+        <field name="arch" type="xml">
+            <tree string="Shopify Credentials">
+                <field name="name"/>
+                <field name="is_process_queue"/>
+                <field name="shopify_id"/>
+                <field name="shopify_title"/>
+                <field name="shopify_name"/>
+                <field name="shopify_years"/>
+                <field name="shopify_attribute"/>
+                <field name="shopify_reference"/>
+                <field name="product_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_shopify_queue_product" model="ir.actions.act_window">
+        <field name="name">Queue Product</field>
+        <field name="res_model">merket.connector.products.data.queue</field>
+        <field name="view_mode">tree</field>
+    </record>
+</odoo>
