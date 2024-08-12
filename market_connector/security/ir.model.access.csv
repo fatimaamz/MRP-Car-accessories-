@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_shopify_credentials,shopify.credentials,model_shopify_credentials,,1,1,1,1
+access_shopify_product_data_queue_ept,merket.connector.products.data.queue,model_merket_connector_products_data_queue,base.group_user,1,1,1,1
+access_shopify_order_data_queue_ept_user,shopify.order.data.queue.ept.user,model_shopify_order_data_queue_ept,base.group_user,1,1,1,0
+access_shopify_order_data_queue_line_ept_user,shopify.order.data.queue.line.ept.user,model_shopify_order_data_queue_line_ept,base.group_user,1,1,1,0

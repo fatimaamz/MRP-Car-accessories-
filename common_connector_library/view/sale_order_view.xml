@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_order_form_view_ept" model="ir.ui.view">
+        <field name="name">sale.order.form.view.ept</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="fiscal_position_id" options="{'no_create': True}" position="after">
+                <field name="auto_workflow_process_id"/></field>
+            <xpath expr="//button[@name='action_view_invoice']" position="before">
+                <button class="oe_stat_button" groups="base.group_user" icon="fa-truck" invisible="moves_count == 0" name="action_view_stock_move_ept" type="object">
+                    <field name="moves_count" string="Stock Move" widget="statinfo"/>
+                </button>
+            </xpath></field>
+    </record>
+</odoo>

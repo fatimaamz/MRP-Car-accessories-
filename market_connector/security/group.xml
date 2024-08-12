@@ -1,0 +1,15 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Define a new module category -->
+        <record id="module_category_shopify_connector" model="ir.module.category">
+            <field name="name">Shopify Connector</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Define Security Group -->
+        <record id="group_shopify_connector_user" model="res.groups">
+            <field name="name">Shopify Connector User</field>
+            <field name="category_id" ref="module_category_shopify_connector"/>
+        </record>
+    </data>
+</odoo>

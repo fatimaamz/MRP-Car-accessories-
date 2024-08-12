@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Main menu for Connector with icon -->
+    <menuitem id="shopify_main_menu" name="Connecteur" sequence="1" web_icon="your_module/static/description/icon.png"/>
+    <!-- Submenu for Orders under Connector -->
+    <menuitem id="shopify_orders_menu" name="Commandes" parent="shopify_main_menu" action="action_shopify_orders" sequence="1"/>
+    <!-- Submenu for Products under Connector -->
+    <menuitem id="shopify_products_menu" name="Produits" parent="shopify_main_menu" action="action_product_template_tree" sequence="2"/>
+
+    
+    <!-- Submenu for Configuration -->
+    <menuitem id="shopify_queue_menu" name="Traitements" parent="shopify_main_menu"  sequence="3"/>
+    <menuitem id="shopify_queue_product_menu" name="Produits" parent="shopify_queue_menu" action="action_shopify_queue_product"/>
+    <!-- Submenu for Configuration -->
+    <menuitem id="shopify_configuration_menu" name="Configuration" parent="shopify_main_menu"  sequence="4"/>
+
+    <!-- Submenu for Shopify Credentials under Configuration -->
+    <menuitem id="shopify_credentials_menu" name="Shopify" parent="shopify_configuration_menu" action="action_shopify_credentials"/>
+</odoo>
