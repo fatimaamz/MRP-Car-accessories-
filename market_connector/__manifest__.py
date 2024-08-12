@@ -21,8 +21,8 @@
         'views/sale_order_view.xml',
         'views/product_template_view.xml',
         'views/shopify_product_queue_view.xml',
-        'views/order_data_queue_ept.xml',
         'views/menu.xml',
+        'views/order_data_queue_ept.xml',
     ],
     'images': ['static/src/description/icon.png']
 }
