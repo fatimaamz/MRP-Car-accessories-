@@ -73,15 +73,12 @@ class SaleOrder(models.Model):
         })
         return order_vals
 
-    @api.onchange('partner_shipping_id', 'partner_id')
+    """ @api.onchange('partner_shipping_id', 'partner_id')
     def onchange_partner_shipping_id(self):
-        """
-        Inherited method for setting fiscal position by warehouse.
-        """
         res = super(SaleOrder, self).onchange_partner_shipping_id()
         fiscal_position = self.get_fiscal_position_by_warehouse()
         self.fiscal_position_id = fiscal_position
-        return res
+        return res """
 
     @api.onchange('warehouse_id')
     def onchange_warehouse_id(self):
