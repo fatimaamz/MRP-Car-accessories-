@@ -34,7 +34,7 @@ class ShopifySync(models.Model):
         product = shopify.Product.find(product_id)
         existing_product = self.env['merket.connector.products.data.queue'].search([('shopify_id', '=', product.id)], limit=1)
         if not existing_product:
-            _logger.debug()
+            _logger.debug(existing_product)
             return self.env['merket.connector.products.data.queue'].shopify_product_data_queue_create(product)
         else:
             _logger.info(f"Product with ID {product.id} already exists in the queue, skipping.{existing_product}")
