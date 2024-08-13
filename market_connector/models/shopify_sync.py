@@ -1,3 +1,4 @@
+import logging
 import json
 from time import sleep
 from odoo import models, fields
@@ -5,6 +6,7 @@ from odoo import models, api
 from ..libs  import shopify
 
 
+_logger = logging.getLogger("Shopify Sync")
 
 class ShopifySync(models.Model):
     _name = 'shopify.sync'
@@ -28,12 +30,14 @@ class ShopifySync(models.Model):
             self._cr.commit()
 
     def process_single_product(self, product_id):
+        _logger.info("Start processing product")
         product = shopify.Product.find(product_id)
         existing_product = self.env['merket.connector.products.data.queue'].search([('shopify_id', '=', product.id)], limit=1)
         if not existing_product:
+            _logger.debug()
             return self.env['merket.connector.products.data.queue'].shopify_product_data_queue_create(product)
         else:
-            print(f"Product with ID {product.id} already exists in the queue, skipping.")
+            _logger.info(f"Product with ID {product.id} already exists in the queue, skipping.{existing_product}")
             return existing_product
             
     
