@@ -18,6 +18,9 @@ class ShopifyProductDataQueueEpt(models.Model):
     shopify_id = fields.Char()
     shopify_title = fields.Char()
     shopify_name = fields.Char()
+    brand = fields.Char()
+    style = fields.Char()
+    model = fields.Char()
     shopify_years = fields.Char()
     shopify_attribute = fields.Char()
     shopify_reference = fields.Char()
@@ -79,6 +82,17 @@ class ShopifyProductDataQueueEpt(models.Model):
         split_title = [part.strip() for part in title.split('|')]
         try:
             name = split_title[0]
+            brands = [
+                "GMC", "JEEP", "Ford", "RAM", "Chevrolet", "JEEP", "Kia", "MITSUBISHI",
+                "Toyota", "Acura", "Alfa Romeo", "Audi", "BMW", "Cadillac", "Campagna",
+                "Chrysler", "Dodge", "Genesis", "Honda", "Infiniti", "Hyundai", "Jeep",
+                "Land Rover", "Lexus", "Lincoln", "Mack", "Maserati", "Mazda", "Mercedes-Benz",
+                "Mitsubishi", "Nissan", "Peterbilt", "Ram", "Scion", "Subaru", "Volkswagen",
+                "Volvo", "Tesla", "Buick", "Fiat", "Universal", "International", "Jaguar",
+                "Kenworth", "Porsche"
+            ]
+            brand =  next((b for b in brands if name.startswith(b)), None)
+            model = name[len(brand):].strip()
             years = split_title[1]
             attribute = split_title[2]
             reference = split_title[3]
@@ -89,28 +103,55 @@ class ShopifyProductDataQueueEpt(models.Model):
                     'shopify_title': result.get('title'),
                     'shopify_name': name,
                     'shopify_years': years,
+                    'brand': brand,
+                    'model': model,
                     'shopify_attribute': attribute,
                     'shopify_reference': reference,
                     'data' : data
                 })
+            self._cr.commit()
         except IndexError:
             print(split_title)
         except Exception as err:
             print(err)
             
     def shopify_sync_products(self,shopify_id, instance):
-        shopify_product = self.search([("shopify_id", "=", shopify_id)])
+        shopify_product = self.search([("shopify_id", "=", shopify_id)],limit=1)
         if not shopify_product:
             # TODO : Fix le problème return None
             shopify_product =  self.new_signle_product(shopify_id, instance)
-        return self.macthing_product(shopify_product)
+        return self.matching_product_product(shopify_product)
     
-    def macthing_product(self, shopify_product):
-        product = self.env['product.product'].search([], limit=1)
-        print("Matching product",shopify_product, product)
+    def matching_products(self):
+        for record in self:
+            print(record)
+            self.macthing_product(record)
+    
+    def matching_product_product(self, shopify_product):
+        by_modele = True
+        by_style = True
+        by_brand = True
+        domain = [("name", "=", shopify_product.shopify_reference)]
+        if by_modele:
+            domain.append(("product_template_variant_value_ids.name", "=", shopify_product.model))
+        if by_style:
+            domain.append(("product_template_variant_value_ids.name", "=", 'None')) # shopify_product.style
+        if by_brand:
+            domain.append(("product_template_variant_value_ids.name", "=", shopify_product.brand))
+            
+        product = self.env['product.product'].search(domain)
         shopify_product.product_id = product
         product.variant_id = shopify_product.shopify_id
         return product
+    
+    def matching_product_template(self, shopify_product):
+        product_template = self.env['product.template'].search([("name","=",shopify_product.shopify_reference)])
+        if len(product_template) == 1:
+            return product_template[0]
+        elif len(product_template) == 0 :
+            print("No Exist ... sync_product from shopify")
+        else:
+            return product_template[0]
         
         
     

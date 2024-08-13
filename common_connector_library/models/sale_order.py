@@ -267,7 +267,7 @@ class SaleOrder(models.Model):
                 bom_lines = self.check_for_bom_product(order_line.product_id)
             for bom_line in bom_lines:
                 self.create_and_done_stock_move_ept(order_line, customers_location, bom_line=bom_line)
-            if not bom_lines and order_line.product_id.is_drop_ship_product:
+            if not bom_lines and False:
                 self.create_and_done_stock_move_ept(order_line, customers_location, vendor_location=vendor_location)
             elif not bom_lines or not is_mrp_installed:
                 self.create_and_done_stock_move_ept(order_line, customers_location)
