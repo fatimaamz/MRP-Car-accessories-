@@ -98,7 +98,7 @@ class ShopifyProductDataQueueEpt(models.Model):
             reference = split_title[3]
             result = result.to_dict()
             data = json.dumps(result)
-            self.create({
+            product = self.create({
                     'shopify_id': result.get('id'),
                     'shopify_title': result.get('title'),
                     'shopify_name': name,
@@ -110,6 +110,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                     'data' : data
                 })
             self._cr.commit()
+            return product
         except IndexError:
             print(split_title)
         except Exception as err:
@@ -128,6 +129,7 @@ class ShopifyProductDataQueueEpt(models.Model):
             self.macthing_product(record)
     
     def matching_product_product(self, shopify_product):
+        print(shopify_product)
         by_modele = True
         by_style = True
         by_brand = True
@@ -159,5 +161,5 @@ class ShopifyProductDataQueueEpt(models.Model):
         instance.connect_in_shopify()
         shopify_product = self.env['shopify.sync'].process_single_product(shopify_id)
         # matching 
-        return 
+        return shopify_product
         
