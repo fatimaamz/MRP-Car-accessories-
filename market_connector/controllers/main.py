@@ -51,7 +51,7 @@ class CustomMain(http.Controller):
         data = http.request.httprequest.data
         data_string = data.decode('utf-8')
         json_data = json.loads(data_string)
-        _logger.info(json_data)
+        # _logger.info(json_data)
         
         instance = request.env['shopify.credentials'].sudo().search([], limit=1)
         """ host = request.httprequest.headers.get("X-Custom-Shop-Domain")

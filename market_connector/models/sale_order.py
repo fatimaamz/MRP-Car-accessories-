@@ -324,11 +324,10 @@ class SaleOrder(models.Model):
 
     def search_existing_shopify_order(self, order_response, instance, order_number):
         sale_order = self.search([("shopify_order_id", "=", order_response.get("id")),
-                                  ("shopify_instance_id", "=", instance.id),
-                                  ("shopify_order_number", "=", order_number)])
-        if not sale_order:
+                                  ("shopify_instance_id", "=", instance.id)])
+        """ if not sale_order:
             sale_order = self.search([("shopify_instance_id", "=", instance.id),
-                                      ("client_order_ref", "=", order_response.get("name"))])
+                                      ("client_order_ref", "=", order_response.get("name"))]) """
         return sale_order
 
     def check_mismatch_details(self, lines, instance, order_number, order_data_queue_line,
@@ -345,9 +344,11 @@ class SaleOrder(models.Model):
                 line_product_id = line.get("product_id", False)
                 if line_product_id:
                     shopify_variant = shopify_product_obj.shopify_sync_products(line_product_id,instance)
+                    print(shopify_variant)
                     if not shopify_variant:
                         message = "Product [%s][%s] not found for Order %s" % (
                             line.get("sku"), line.get("name"), order_number)
+                        print(message)
                         self.create_shopify_log_line(message, order_data_queue_line, log_book_id, order_number)
                         mismatch = True
                         break

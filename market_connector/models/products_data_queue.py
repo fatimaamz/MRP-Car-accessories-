@@ -129,11 +129,15 @@ class ShopifyProductDataQueueEpt(models.Model):
             self.macthing_product(record)
     
     def matching_product_product(self, shopify_product):
-        print(shopify_product)
+        _logger.info(f"Strat Matching Product{shopify_product}")
         by_modele = True
         by_style = True
         by_brand = True
-        domain = [("name", "=", shopify_product.shopify_reference)]
+        referance = shopify_product.shopify_reference
+        referance = referance.strip()
+        if referance.startswith("#"):
+            referance = referance[1:]
+        domain = [("name", "ilike", referance)]
         if by_modele:
             domain.append(("product_template_variant_value_ids.name", "=", shopify_product.model))
         if by_style:
@@ -142,9 +146,22 @@ class ShopifyProductDataQueueEpt(models.Model):
             domain.append(("product_template_variant_value_ids.name", "=", shopify_product.brand))
             
         product = self.env['product.product'].search(domain)
-        shopify_product.product_id = product
-        product.variant_id = shopify_product.shopify_id
-        return product
+        product_count = len(product)
+        _logger.info(f"List of products found {product} | count {product_count}")
+        if product_count == 1:
+            shopify_product.product_id = product
+            product.variant_id = shopify_product.shopify_id
+            return product
+        elif product_count == 0:
+            _logger.info("No Product Matching")
+            _logger.info(f"""
+                          Product Referance: {referance} \n
+                          Model : {shopify_product.model} \n 
+                          Brand : {shopify_product.brand} \n 
+                          Search domain : {domain}
+                          """)
+        else:
+            _logger.info("Conflict")
     
     def matching_product_template(self, shopify_product):
         product_template = self.env['product.template'].search([("name","=",shopify_product.shopify_reference)])
