@@ -175,11 +175,12 @@ class SaleOrder(models.Model):
                 if not is_custom_line:
                     shopify_product = self.search_shopify_product_for_order_line(line, instance)
                     product = shopify_product.product_id
+                    description = shopify_product.shopify_title
                 is_gift_card_line = False
 
             order_line = self.shopify_create_sale_order_line(line, product, line.get("quantity"),
                                                              product.name, line.get("price"),
-                                                             order_response)
+                                                             order_response,description=description)
             """ if is_gift_card_line:
                 line_vals = {'is_gift_card_line': True}
                 if line.get('name'):
@@ -191,7 +192,7 @@ class SaleOrder(models.Model):
 
             if float(total_discount) > 0.0:
                 discount_amount = 0.0
-                for discount_allocation in line.get("discount_allocations"):
+                for discount_allocation in line.get("discount_allocations",[]):
                     discount_amount += float(discount_allocation.get("amount"))
                 if discount_amount > 0.0:
                     _logger.info("Creating discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
@@ -464,11 +465,11 @@ class SaleOrder(models.Model):
             return shopify_product
 
     def shopify_create_sale_order_line(self, line, product, quantity, product_name, price,
-                                       order_response, is_shipping=False, previous_line=False,
+                                       order_response, description="",is_shipping=False, previous_line=False,
                                        is_discount=False):
         sale_order_line_obj = self.env["sale.order.line"]
         instance = self.shopify_instance_id
-        line_vals = self.prepare_vals_for_sale_order_line(product, product_name, price, quantity)
+        line_vals = self.prepare_vals_for_sale_order_line(product, product_name, price, quantity,description=description)
         order_line_vals = sale_order_line_obj.create_sale_order_line_ept(line_vals)
         order_line_vals = self.shopify_set_tax_in_sale_order_line(instance, line, order_response, is_shipping,
                                                                   is_discount, previous_line, order_line_vals)
@@ -485,7 +486,7 @@ class SaleOrder(models.Model):
         order_line.order_id.with_context(round=False).write({'shopify_instance_id': instance.id})
         return order_line
 
-    def prepare_vals_for_sale_order_line(self, product, product_name, price, quantity):
+    def prepare_vals_for_sale_order_line(self, product, product_name, price, quantity,description=""):
         uom_id = product and product.uom_id and product.uom_id.id or False
         line_vals = {
             "product_id": product and product.ids[0] or False,
@@ -495,6 +496,7 @@ class SaleOrder(models.Model):
             "name": product_name,
             "price_unit": price,
             "order_qty": quantity,
+            "description" : description
         }
         return line_vals
 
