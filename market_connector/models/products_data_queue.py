@@ -161,12 +161,13 @@ class ShopifyProductDataQueueEpt(models.Model):
                           Brand : {shopify_product.brand} \n 
                           Search domain : {domain}
                           """)
-            product = self.env['product.product'].search([("name", "ilike", referance)])
-            if len(product) > 0:
-                return product[0]
+            product = self.env['product.product'].search([("name", "=", "default product")])
+            shopify_product.product_id = product
+            product.variant_id = shopify_product.shopify_id
+            return product
         else:
             _logger.info("Conflict")
-            product[0]
+            return product[0]
     
     def matching_product_template(self, shopify_product):
         product_template = self.env['product.template'].search([("name","=",shopify_product.shopify_reference)])
