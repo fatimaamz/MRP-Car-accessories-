@@ -160,6 +160,6 @@ class ShopifyProductDataQueueEpt(models.Model):
     def new_signle_product(self,shopify_id, instance):
         instance.connect_in_shopify()
         shopify_product = self.env['shopify.sync'].process_single_product(shopify_id)
-        # matching 
+        _logger.info(f"New product {shopify_product}")
         return shopify_product
         
