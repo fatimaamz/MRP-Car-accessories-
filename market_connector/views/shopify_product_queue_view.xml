@@ -11,9 +11,12 @@
                 <field name="shopify_id"/>
                 <field name="shopify_title"/>
                 <field name="shopify_name"/>
-                <field name="shopify_years"/>
+                <field name="brand"/>
+                <field name="style"/>
+                <field name="model"/>
                 <field name="shopify_attribute"/>
                 <field name="shopify_reference"/>
+                <field name="shopify_years"/>
                 <field name="product_id"/>
             </tree>
         </field>

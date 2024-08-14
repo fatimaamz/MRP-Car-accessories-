@@ -98,6 +98,7 @@ class ShopifyProductDataQueueEpt(models.Model):
             reference = split_title[3]
             result = result.to_dict()
             data = json.dumps(result)
+            print(reference[-3:])
             product = self.create({
                     'shopify_id': result.get('id'),
                     'shopify_title': result.get('title'),
@@ -105,6 +106,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                     'shopify_years': years,
                     'brand': brand,
                     'model': model,
+                    'style': reference[-3:],
                     'shopify_attribute': attribute,
                     'shopify_reference': reference,
                     'data' : data
@@ -141,7 +143,7 @@ class ShopifyProductDataQueueEpt(models.Model):
         if by_modele:
             domain.append(("product_template_variant_value_ids.name", "=", shopify_product.model))
         if by_style:
-            domain.append(("product_template_variant_value_ids.name", "=", 'None')) # shopify_product.style
+            domain.append(("product_template_variant_value_ids.name", "=", shopify_product.style)) # shopify_product.style
         if by_brand:
             domain.append(("product_template_variant_value_ids.name", "=", shopify_product.brand))
             
@@ -150,7 +152,7 @@ class ShopifyProductDataQueueEpt(models.Model):
         _logger.info(f"List of products found {product} | count {product_count}")
         if product_count == 1:
             shopify_product.product_id = product
-            product.variant_id = shopify_product.shopify_id
+            product.shopify_id = shopify_product.shopify_id
             return product
         elif product_count == 0:
             # TODO :  Problème matching 
@@ -163,7 +165,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                           """)
             product = self.env['product.product'].search([("name", "=", "default product")])
             shopify_product.product_id = product
-            product.variant_id = shopify_product.shopify_id
+            product.shopify_id = shopify_product.shopify_id
             return product
         else:
             _logger.info("Conflict")

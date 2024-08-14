@@ -159,50 +159,23 @@ class SaleOrder(models.Model):
                 "warehouse_id": warehouse_id, "is_pos_order": pos_order}
 
     def create_shopify_order_lines(self, lines, order_response, instance):
-        total_discount = order_response.get("total_discounts", 0.0)
-        order_number = order_response.get("order_number")
+        addons = ""
+        order_line = None
         for line in lines:
-            is_custom_line = False
-            if not line.get('product_id'):
-                product = self.env.ref('shopify_ept.shopify_custom_service_product', False)
-                if line.get('requires_shipping'):
-                    product = self.env.ref('shopify_ept.shopify_custom_storable_product', False)
-                is_custom_line = True
-            if line.get('gift_card'):
-                product = self.env.ref('shopify_ept.shopify_gift_card_product', False)
-                is_gift_card_line = True
-            else:
-                if not is_custom_line:
-                    shopify_product = self.search_shopify_product_for_order_line(line, instance)
-                    product = shopify_product.product_id
-                    description = shopify_product.shopify_title
-                is_gift_card_line = False
+            print(line.get('name'))
+            if  "#" not in line.get('name') and "|" not in line.get('name'):
+                addons += f"\n {line.get('name')}"
+                continue
+            shopify_product = self.search_shopify_product_for_order_line(line, instance)
+            product = shopify_product.product_id
+            description = shopify_product.shopify_title
 
             order_line = self.shopify_create_sale_order_line(line, product, line.get("quantity"),
                                                              product.name, line.get("price"),
-                                                             order_response,description=description)
-            """ if is_gift_card_line:
-                line_vals = {'is_gift_card_line': True}
-                if line.get('name'):
-                    line_vals.update({'name': line.get('name')})
-                order_line.write(line_vals) """
+                                                             order_response, description=description)
+        if order_line and addons != "":
+            order_line.name += addons
 
-            if is_custom_line:
-                order_line.write({'name':line.get('name')})
-
-            if float(total_discount) > 0.0:
-                discount_amount = 0.0
-                for discount_allocation in line.get("discount_allocations",[]):
-                    discount_amount += float(discount_allocation.get("amount"))
-                if discount_amount > 0.0:
-                    _logger.info("Creating discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
-                                 order_number)
-                    self.shopify_create_sale_order_line({}, instance.discount_product_id, 1,
-                                                        product.name, float(discount_amount) * -1,
-                                                        order_response, previous_line=order_line,
-                                                        is_discount=True)
-                    _logger.info("Created discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
-                                 order_number)
 
     def create_shopify_shipping_lines(self, order_response, instance):
         delivery_carrier_obj = self.env["delivery.carrier"]
@@ -221,10 +194,10 @@ class SaleOrder(models.Model):
                 if discount_amount > 0.0:
                     _logger.info("Creating discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
                                  order_number)
-                    self.shopify_create_sale_order_line({}, instance.discount_product_id, 1,
+                    """ self.shopify_create_sale_order_line({}, instance.discount_product_id, 1,
                                                         shipping_product.name, float(discount_amount) * -1,
                                                         order_response, previous_line=order_line,
-                                                        is_discount=True)
+                                                        is_discount=True) """
                     _logger.info("Created discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
                                  order_number)
 
@@ -338,7 +311,7 @@ class SaleOrder(models.Model):
 
         for line in lines:
             shopify_variant = self.search_shopify_variant(line)
-            if shopify_variant:
+            if shopify_variant or ("#" not in line.get("name") and "|" not in line.get("name")):
                 continue
             
             if not shopify_variant:
@@ -356,11 +329,14 @@ class SaleOrder(models.Model):
         return mismatch
 
     def search_shopify_variant(self, line):
+        _logger.info("serach product")
         shopify_variant = False
         product_product = self.env["product.product"]
-        if line.get("variant_id", None):
+        print(line.get("product_id", None))
+        if line.get("product_id", None):
             shopify_variant = product_product.search(
-                [("variant_id", "=", line.get("variant_id"))])
+                [("shopify_id", "=", line.get("product_id"))])
+        print(shopify_variant)
         return shopify_variant
 
     def shopify_create_order(self, instance, partner, shipping_address, invoice_address,
@@ -469,7 +445,7 @@ class SaleOrder(models.Model):
                                        is_discount=False):
         sale_order_line_obj = self.env["sale.order.line"]
         instance = self.shopify_instance_id
-        line_vals = self.prepare_vals_for_sale_order_line(product, product_name, price, quantity,description=description)
+        line_vals = self.prepare_vals_for_sale_order_line(product, product_name, price, quantity, description=description)
         order_line_vals = sale_order_line_obj.create_sale_order_line_ept(line_vals)
         order_line_vals = self.shopify_set_tax_in_sale_order_line(instance, line, order_response, is_shipping,
                                                                   is_discount, previous_line, order_line_vals)
