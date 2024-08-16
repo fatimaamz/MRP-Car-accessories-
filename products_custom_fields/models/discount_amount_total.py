@@ -21,7 +21,7 @@ class SaleOrder(models.Model):
     def convert_and_apply_discount(self):
         for order in self:
             # Only apply the discount if conditions are met
-            if order.partner_id.country_id.code == 'US' and order.currency_id.name == 'USD':
+            if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
                 cad_currency = self.env['res.currency'].search([('name', '=', 'CAD')], limit=1)
                 amount_usd = order.amount_total
