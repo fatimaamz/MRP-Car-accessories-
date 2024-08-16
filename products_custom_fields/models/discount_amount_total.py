@@ -3,6 +3,7 @@ from odoo import models, fields, api
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    @api.depends('amount_total','partner_id')
     def convert_and_apply_discount(self):
         for order in self:
             if order.partner_id.country_id.code == 'US' :
@@ -23,5 +24,15 @@ class SaleOrder(models.Model):
                 order.update({
                     'amount_total': discounted_amount,  # Cela modifie le total de la commande
                 })
+    @api.model
+    def create(self, vals):
+        order = super(SaleOrder, self).create(vals)
+        order.convert_and_apply_discount()
+        return order
+
+    def write(self, vals):
+        result = super(SaleOrder, self).write(vals)
+        self.convert_and_apply_discount()
+        return result
 
                
