@@ -4,7 +4,8 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     converted_discounted_amount = fields.Monetary(string="Amount in CAD (75% Discount Applied)", currency_field='currency_id')
-    
+
+    @api.depends('partner_id','amount_total')
     def convert_and_apply_discount(self):
         # Use context to prevent recursion
         context = dict(self.env.context, skip_discount_update=True)
@@ -26,14 +27,13 @@ class SaleOrder(models.Model):
                 order.with_context(context).converted_discounted_amount = discounted_amount
 
     
-
+    @api.model
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
         order.convert_and_apply_discount()
         return order
 
     def write(self, vals):
-        
         if not self.env.context.get('skip_discount_update', False):
             result = super(SaleOrder, self).write(vals)
             self.convert_and_apply_discount()
