@@ -26,7 +26,7 @@ class SaleOrder(models.Model):
                 order.with_context(context).converted_discounted_amount = discounted_amount
 
     
-
+    @api.model
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
         order.convert_and_apply_discount()
