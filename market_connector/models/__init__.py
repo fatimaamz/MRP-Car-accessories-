@@ -12,3 +12,4 @@ from . import common_log_lines
 from . import common_log_book_ept
 from . import res_company
 from . import res_partner
+from . import delivery_carrier

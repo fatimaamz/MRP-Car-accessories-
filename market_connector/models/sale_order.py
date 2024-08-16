@@ -161,8 +161,9 @@ class SaleOrder(models.Model):
     def create_shopify_order_lines(self, lines, order_response, instance):
         addons = ""
         order_line = None
+        total_discount = order_response.get("total_discounts", 0.0)
+        order_number = order_response.get("order_number")
         for line in lines:
-            print(line.get('name'))
             if  "#" not in line.get('name') and "|" not in line.get('name'):
                 addons += f"\n {line.get('name')}"
                 continue
@@ -173,6 +174,22 @@ class SaleOrder(models.Model):
             order_line = self.shopify_create_sale_order_line(line, product, line.get("quantity"),
                                                              product.name, line.get("price"),
                                                              order_response, description=description)
+    
+    
+
+            if float(total_discount) > 0.0:
+                discount_amount = 0.0
+                for discount_allocation in line.get("discount_allocations"):
+                    discount_amount += float(discount_allocation.get("amount"))
+                if discount_amount > 0.0:
+                    _logger.info("Creating discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
+                                 order_number)
+                    self.shopify_create_sale_order_line({}, instance.discount_product_id, 1,
+                                                        product.name, float(discount_amount) * -1,
+                                                        order_response, previous_line=order_line,
+                                                        is_discount=True)
+                    _logger.info("Created discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
+                                 order_number)
         if order_line and addons != "":
             order_line.name += addons
 
@@ -194,10 +211,10 @@ class SaleOrder(models.Model):
                 if discount_amount > 0.0:
                     _logger.info("Creating discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
                                  order_number)
-                    """ self.shopify_create_sale_order_line({}, instance.discount_product_id, 1,
+                    self.shopify_create_sale_order_line({}, instance.discount_product_id, 1,
                                                         shipping_product.name, float(discount_amount) * -1,
                                                         order_response, previous_line=order_line,
-                                                        is_discount=True) """
+                                                        is_discount=True)
                     _logger.info("Created discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
                                  order_number)
 
@@ -354,8 +371,8 @@ class SaleOrder(models.Model):
 
         _logger.info("Created order lines for Odoo order(%s) and Shopify order is (%s)", order.name, order_number)
 
-        """ order.create_shopify_shipping_lines(order_response, instance)
-        _logger.info("Created Shipping lines for order (%s).", order.name) """
+        order.create_shopify_shipping_lines(order_response, instance)
+        _logger.info("Created Shipping lines for order (%s).", order.name)
 
         return order
 
@@ -447,8 +464,10 @@ class SaleOrder(models.Model):
         instance = self.shopify_instance_id
         line_vals = self.prepare_vals_for_sale_order_line(product, product_name, price, quantity, description=description)
         order_line_vals = sale_order_line_obj.create_sale_order_line_ept(line_vals)
+        print("========================================================>", order_line_vals)
         order_line_vals = self.shopify_set_tax_in_sale_order_line(instance, line, order_response, is_shipping,
                                                                   is_discount, previous_line, order_line_vals)
+        
         if is_discount:
             order_line_vals["name"] = "Discount for " + str(product_name)
             if instance.apply_tax_in_order == "odoo_tax" and is_discount:
@@ -478,9 +497,7 @@ class SaleOrder(models.Model):
 
     def shopify_set_tax_in_sale_order_line(self, instance, line, order_response, is_shipping, is_discount,
                                            previous_line, order_line_vals):
-        
-        # instance.apply_tax_in_order == "create_shopify_tax"
-        if False :
+        if instance.apply_tax_in_order == "create_shopify_tax":
             taxes_included = order_response.get("taxes_included") or False
             tax_ids = []
             if line and line.get("tax_lines"):
@@ -516,7 +533,7 @@ class SaleOrder(models.Model):
     def shopify_get_tax_id_ept(self, instance, tax_lines, tax_included):
         tax_id = []
         taxes = []
-        company = instance.shopify_warehouse_id.company_id
+        company = instance.shopify_company_id
         for tax in tax_lines:
             rate = float(tax.get("rate", 0.0))
             price = float(tax.get('price', 0.0))
@@ -543,6 +560,7 @@ class SaleOrder(models.Model):
         account_tax_obj = self.env["account.tax"]
 
         account_tax_id = account_tax_obj.create({"name": name, "amount": float(value),
+                                                 "tax_group_id": 1,
                                                  "type_tax_use": "sale", "price_include": price_included,
                                                  "company_id": company.id})
 
