@@ -1,24 +1,10 @@
-from odoo import models, fields, api
+from odoo import models, fields, api,date
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     converted_discounted_amount = fields.Monetary(string="Amount in CAD (75% Discount Applied)", currency_field='currency_id')
-
-    @api.model
-    def create(self, vals):
-        order = super(SaleOrder, self).create(vals)
-        order.convert_and_apply_discount()
-        return order
-
-    def write(self, vals):
-        # Use a flag to avoid recursion
-        if not self.env.context.get('skip_discount_update', False):
-            result = super(SaleOrder, self).write(vals)
-            self.convert_and_apply_discount()
-            return result
-        return super(SaleOrder, self).write(vals)
-
+    
     def convert_and_apply_discount(self):
         # Use context to prevent recursion
         context = dict(self.env.context, skip_discount_update=True)
@@ -35,6 +21,23 @@ class SaleOrder(models.Model):
                 discounted_amount = amount_cad * 0.75
 
                 if order.amount_total != discounted_amount:
-                    order.write({'amount_total': discounted_amount})
+                    order.with_context(context).write({'amount_total': discounted_amount})
 
-                order.converted_discounted_amount = discounted_amount
+                order.with_context(context).converted_discounted_amount = discounted_amount
+
+    
+
+    def create(self, vals):
+        order = super(SaleOrder, self).create(vals)
+        order.convert_and_apply_discount()
+        return order
+
+    def write(self, vals):
+        
+        if not self.env.context.get('skip_discount_update', False):
+            result = super(SaleOrder, self).write(vals)
+            self.convert_and_apply_discount()
+            return result
+        return super(SaleOrder, self).write(vals)
+
+    
