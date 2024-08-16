@@ -1,14 +1,16 @@
 from odoo import models, fields, api
+from datetime import date
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    converted_discounted_amount = fields.Monetary(string="Amount in CAD (75% Discount Applied)", currency_field='currency_id')
+    adjusted_amount_total = fields.Monetary(
+        string="Adjusted Amount Total", 
+        currency_field='currency_id'
+    )
 
-    @api.depends('partner_id','amount_total')
+    @api.depends('partner_id', 'amount_total')
     def convert_and_apply_discount(self):
-        # Use context to prevent recursion
-        context = dict(self.env.context, skip_discount_update=True)
         for order in self:
             if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
@@ -17,16 +19,26 @@ class SaleOrder(models.Model):
                 if not usd_currency or not cad_currency:
                     continue  
 
-                amount_usd = order.amount_total
-                amount_cad = usd_currency._convert(amount_usd, cad_currency, order.company_id, fields.Date.today())
-                discounted_amount = amount_cad * 0.75
+                today = date.today()
+                rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
 
-                if order.amount_total != discounted_amount:
-                    order.amount_total = discounted_amount
+                if rate_record:
+                    inverse_rate = rate_record.inverse_company_rate
 
-                order.with_context(context).converted_discounted_amount = discounted_amount
+                    # Convertir le montant total en CAD et appliquer la remise de 75%
+                    amount_usd = order.amount_total
+                    amount_cad = amount_usd * inverse_rate
+                    discounted_amount = amount_cad * 0.75
 
-    
+                    # Mettre à jour amount_total avec le montant remisé
+                    order.write({'amount_total': discounted_amount})
+                    
+                    order.adjusted_amount_total = discounted_amount
+                else:
+                    order.adjusted_amount_total = order.amount_total
+            else:
+                order.adjusted_amount_total = order.amount_total
+
     @api.model
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
@@ -34,10 +46,7 @@ class SaleOrder(models.Model):
         return order
 
     def write(self, vals):
+        result = super(SaleOrder, self).write(vals)
         if not self.env.context.get('skip_discount_update', False):
-            result = super(SaleOrder, self).write(vals)
             self.convert_and_apply_discount()
-            return result
-        return super(SaleOrder, self).write(vals)
-
-    
+        return result
