@@ -12,25 +12,29 @@ class SaleOrder(models.Model):
         return order
 
     def write(self, vals):
-        result = super(SaleOrder, self).write(vals)
-        # Only apply discount if relevant fields are updated
-        if 'amount_total' in vals or 'currency_id' in vals:
+        # Use a flag to avoid recursion
+        if not self.env.context.get('skip_discount_update', False):
+            result = super(SaleOrder, self).write(vals)
             self.convert_and_apply_discount()
-        return result
+            return result
+        return super(SaleOrder, self).write(vals)
 
     def convert_and_apply_discount(self):
+        # Use context to prevent recursion
+        context = dict(self.env.context, skip_discount_update=True)
         for order in self:
-            # Only apply the discount if conditions are met
             if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
                 cad_currency = self.env['res.currency'].search([('name', '=', 'CAD')], limit=1)
+
+                if not usd_currency or not cad_currency:
+                    continue  
+
                 amount_usd = order.amount_total
                 amount_cad = usd_currency._convert(amount_usd, cad_currency, order.company_id, fields.Date.today())
                 discounted_amount = amount_cad * 0.75
 
-                # Check if the calculated amount is different from the current amount
                 if order.amount_total != discounted_amount:
-                    
-                    order.amount_total = discounted_amount
-                    
-                    order.converted_discounted_amount = discounted_amount
+                    order.with_context(context).write({'amount_total': discounted_amount})
+
+                order.with_context(context).converted_discounted_amount = discounted_amount
