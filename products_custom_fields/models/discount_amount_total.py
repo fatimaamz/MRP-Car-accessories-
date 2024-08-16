@@ -21,7 +21,7 @@ class SaleOrder(models.Model):
 
                 order.update({
                     'amount_total': discounted_amount,  
-                }
+                })
     @api.model
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
