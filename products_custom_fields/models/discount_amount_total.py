@@ -22,7 +22,7 @@ class SaleOrder(models.Model):
                 discounted_amount = amount_cad * 0.75
 
                 if order.amount_total != discounted_amount:
-                    order.with_context(context).update({'amount_total': discounted_amount})
+                    order.amount_total = discounted_amount
 
                 order.with_context(context).converted_discounted_amount = discounted_amount
 
