@@ -18,12 +18,10 @@ class SaleOrder(models.Model):
                 # Appliquer la remise de 75 %
                 discounted_amount = amount_cad * 0.75
 
-               
-                order.write({'converted_discounted_amount': discounted_amount})
 
                 order.update({
-                    'amount_total': discounted_amount,  # Cela modifie le total de la commande
-                })
+                    'amount_total': discounted_amount,  
+                }
     @api.model
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
