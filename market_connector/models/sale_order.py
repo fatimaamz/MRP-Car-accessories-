@@ -60,7 +60,7 @@ class SaleOrder(models.Model):
     shopify_payment_gateway_id = fields.Many2one('shopify.payment.gateway.ept', string="Passerelle de paiement", copy=False)
     checkout_id = fields.Char("ID de paiement", copy=False)
     is_risky_order = fields.Boolean("Commande risquée ?", default=False, copy=False)
-    updated_in_shopify = fields.Boolean("Mis à jour dans Shopify ?", compute=_get_shopify_order_status,
+    updated_in_shopify = fields.Boolean("Mis à jour dans Shopify ?",
                                         search='_search_shopify_order_ids')
     closed_at_ept = fields.Datetime("Fermé à", copy=False)
     canceled_in_shopify = fields.Boolean("Annulé dans Shopify ?", default=False, copy=False)

@@ -80,66 +80,9 @@
                 <br/>
                 <p>
                     <b>
-                        There is no any Sale Quotation synchronised from any of your
-                        Shopify
-                        Instance yet.
+                        Aucune offre de vente n'a encore été synchronisée depuis l'une de vos
+                        compates Shopify.
                     </b>
-                </p>
-                <p>
-                    You can't create Sale Quotation manually and push it to Shopify.
-                    Through
-                    only import Sale Quotation from
-                    any of your Shopify Instance, you can see your Quotation here.Import
-                    Sale
-                    Quotation can be performed by 2 ways.
-                </p>
-                <p>
-                    <b>
-                        1.
-                    </b>
-                    Via automatic jobs to import Sale Quotation at frequent amount of
-                    time.
-                    <br/>
-                    Go to Shopify
-                    <i class="fa fa-angle-double-right"/>
-                    Settings
-                    <i class="fa fa-angle-double-right"/>
-                    Instances and open the instance.
-                    <br/>
-                    Activate automatic Job for Import orders by clicking the 'Configure Schedulers'.
-                </p>
-                <p>
-                    <b>
-                        2.
-                    </b>
-                    Manually Import Orders at any time
-                    <br/>
-                    Go to menu Shopify
-                    <i class="fa fa-angle-double-right"/>
-                    Processes
-                    <i class="fa fa-angle-double-right"/>
-                    Shopify Operations and select
-                    your
-                    instances and option "Import Orders".
-                    Clicking on "OK" button will import all
-                    <b>
-                        Open
-                    </b>
-                    orders from Shopify to
-                    ERP.
-                </p>
-                <p>
-                    <b>
-                        3.
-                    </b>
-                    At the time of import order,you must configure workflow order
-                    status.
-                    <br/>
-                    Go to Shopify
-                    <i class="fa fa-angle-double-right"/>
-                    Configuration
-                    <i class="fa fa-angle-double-right"/>
-                    Financial Status
                 </p>
             </div></field>
     </record>
@@ -217,14 +160,5 @@
         <field name="context">{"not_shopify_order":False}</field>
         <field name="domain">[('shopify_order_id','!=',False),('state','=','draft'),('is_risky_order','!=',False),('shopify_instance_id','=',active_id)]</field>
     </record>
-    <!--Main of Sale -->
-    <menuitem id="shopify_menu_item_sales" name="Sales" parent="market_connector.shopify_main_menu" sequence="4"/>
-    <menuitem id="shopify_order_parent_menu" name="Orders" parent="market_connector.shopify_menu_item_sales" sequence="7"/>
-    <!--Quotation Order menuitem -->
-    <menuitem action="action_shopify_sale_quotation" id="shopify_menu_item_quotation_order" name="Quotations" parent="market_connector.shopify_main_menu" sequence="5"/>
-    <!--Risky Order menuitem -->
-    <menuitem action="action_shopify_risky_quotations" id="shopify_menu_item_risky_quotation_order" name="Risky Quotations" parent="market_connector.shopify_main_menu" sequence="10"/>
-    <!--Confirm Order menuitem -->
-    <menuitem action="action_shopify_sales_order" id="shopify_menu_item_sales_order" name="Sales Order" parent="market_connector.shopify_main_menu" sequence="15"/>
 
     </odoo>

@@ -12,8 +12,17 @@
     <menuitem id="shopify_queue_menu" name="Traitements" parent="shopify_main_menu"  sequence="3"/>
     <menuitem id="shopify_queue_product_menu" name="Produits" parent="shopify_queue_menu" action="action_shopify_queue_product"/>
     <!-- Submenu for Configuration -->
-    <menuitem id="shopify_configuration_menu" name="Configuration" parent="shopify_main_menu"  sequence="4"/>
+    <menuitem id="shopify_configuration_menu" name="Configuration" parent="shopify_main_menu"  sequence="30"/>
 
     <!-- Submenu for Shopify Credentials under Configuration -->
     <menuitem id="shopify_credentials_menu" name="Shopify" parent="shopify_configuration_menu" action="action_shopify_credentials"/>
+
+    <menuitem id="shopify_menu_item_sales" name="Sales" parent="market_connector.shopify_orders_menu" sequence="4"/>
+    <menuitem id="shopify_order_parent_menu" name="Orders" parent="market_connector.shopify_orders_menu" sequence="7"/>
+    <!--Quotation Order menuitem -->
+    <menuitem action="action_shopify_sale_quotation" id="shopify_menu_item_quotation_order" name="Devis" parent="market_connector.shopify_orders_menu" sequence="5"/>
+     <!--Risky Order menuitem -->
+    <!-- <menuitem action="action_shopify_risky_quotations" id="shopify_menu_item_risky_quotation_order" name="Risky Quotations" parent="market_connector.shopify_orders_menu" sequence="10"/> -->
+    <!--Confirm Order menuitem -->
+    <menuitem action="action_shopify_sales_order" id="shopify_menu_item_sales_order" name="Vente" parent="market_connector.shopify_orders_menu" sequence="15"/>
 </odoo>
