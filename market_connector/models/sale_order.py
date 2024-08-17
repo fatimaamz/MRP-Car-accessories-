@@ -52,22 +52,21 @@ class SaleOrder(models.Model):
         order_ids = list(set(order_ids))
         return [('id', 'in', order_ids)]
 
-    shopify_order_id = fields.Char("Shopify Order Ref", copy=False)
-    shopify_order_number = fields.Char(copy=False)
-    shopify_instance_id = fields.Many2one("shopify.credentials", "Instance", copy=False)
-    shopify_order_status = fields.Char(copy=False, tracking=True,
-                                       help="Shopify order status when order imported in odoo at the moment order"
-                                            "status in Shopify.")
-    shopify_payment_gateway_id = fields.Many2one('shopify.payment.gateway.ept',
-                                                 string="Payment Gateway", copy=False)
-    checkout_id = fields.Char(copy=False)
-    is_risky_order = fields.Boolean("Risky Order?", default=False, copy=False)
-    updated_in_shopify = fields.Boolean("Updated In Shopify ?", compute=_get_shopify_order_status,
+    shopify_order_id = fields.Char("Référence", copy=False)
+    shopify_order_number = fields.Char("N commande", copy=False)
+    shopify_instance_id = fields.Many2one("shopify.credentials", "Compte", copy=False)
+    shopify_order_status = fields.Char("Statut", copy=False, tracking=True,
+                                    help="Statut de la commande Shopify lors de l'importation dans Odoo, correspondant au statut de la commande dans Shopify au moment de l'importation.")
+    shopify_payment_gateway_id = fields.Many2one('shopify.payment.gateway.ept', string="Passerelle de paiement", copy=False)
+    checkout_id = fields.Char("ID de paiement", copy=False)
+    is_risky_order = fields.Boolean("Commande risquée ?", default=False, copy=False)
+    updated_in_shopify = fields.Boolean("Mis à jour dans Shopify ?", compute=_get_shopify_order_status,
                                         search='_search_shopify_order_ids')
-    closed_at_ept = fields.Datetime("Closed At", copy=False)
-    canceled_in_shopify = fields.Boolean(default=False, copy=False)
-    is_pos_order = fields.Boolean("POS Order ?", copy=False, default=False)
-    is_service_tracking_updated = fields.Boolean("Service Tracking Updated", default=False, copy=False)
+    closed_at_ept = fields.Datetime("Fermé à", copy=False)
+    canceled_in_shopify = fields.Boolean("Annulé dans Shopify ?", default=False, copy=False)
+    is_pos_order = fields.Boolean("Commande POS ?", copy=False, default=False)
+    is_service_tracking_updated = fields.Boolean("Suivi de service mis à jour ?", default=False, copy=False)
+
 
     _sql_constraints = [('unique_shopify_order',
                          'unique(shopify_instance_id,shopify_order_id,shopify_order_number)',
