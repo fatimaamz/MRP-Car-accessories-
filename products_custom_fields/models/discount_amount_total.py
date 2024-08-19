@@ -50,16 +50,15 @@ class SaleOrder(models.Model):
         order._compute_discounted_amount_total()
         
         # Update amount_total with the calculated discounted_amount_total
-         _logger.warning("start create")
+        _logger.warning("start create")
         if order.discounted_amount_total:
-             _logger.warning("update processing.")
+            _logger.warning("update processing.")
             order.write({'amount_total': order.discounted_amount_total})
         
         return order
 
     def write(self, vals):
         for rec in self :
-            
             res = super(SaleOrder, self).write(vals)
             rec._compute_discounted_amount_total()
             
@@ -67,5 +66,6 @@ class SaleOrder(models.Model):
             _logger.warning("start update")
             if rec.discounted_amount_total:
                 super(SaleOrder, self).write({'amount_total': rec.discounted_amount_total})
+                _logger.warning("update processing.")
             
             return res
