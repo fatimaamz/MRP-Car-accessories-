@@ -14,12 +14,11 @@ class SaleOrder(models.Model):
         for order in self:
             if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
-                #cad_currency = self.env['res.currency'].search([('name', '=', 'CAD')], limit=1)
 
-                if usd_currency :
+                if usd_currency:
                     today = date.today()
                     rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
-                    
+
                     # If no rate for today, take the last available rate
                     if not rate_record:
                         rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
@@ -40,7 +39,7 @@ class SaleOrder(models.Model):
                     else:
                         _logger.warning("No rate record found.")
                 else:
-                    _logger.warning("USD  currency not found.")
+                    _logger.warning("USD currency not found.")
             else:
                 order.discounted_amount_total = 0
 
@@ -48,9 +47,19 @@ class SaleOrder(models.Model):
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
         order._compute_discounted_amount_total()
+        
+        # Update amount_total with the calculated discounted_amount_total
+        if order.discounted_amount_total:
+            order.write({'amount_total': order.discounted_amount_total})
+        
         return order
 
     def write(self, vals):
         res = super(SaleOrder, self).write(vals)
         self._compute_discounted_amount_total()
+        
+        # Update amount_total with the calculated discounted_amount_total
+        if self.discounted_amount_total:
+            super(SaleOrder, self).write({'amount_total': self.discounted_amount_total})
+        
         return res
