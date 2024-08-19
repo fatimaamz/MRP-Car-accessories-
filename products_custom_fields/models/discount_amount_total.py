@@ -53,7 +53,7 @@ class SaleOrder(models.Model):
         # After the record is created, compute and update the amount_total
         if order:
             order._compute_discounted_amount_total()
-            order.write({'amount_total': order.discounted_amount_total})
+            order.update({'amount_total': order.discounted_amount_total})
         
         return order
 
@@ -65,6 +65,6 @@ class SaleOrder(models.Model):
         if 'amount_total' not in vals:
             for order in self:
                 order._compute_discounted_amount_total()
-                order.write({'amount_total': order.discounted_amount_total})
+                order.update({'amount_total': order.discounted_amount_total})
 
         return res
