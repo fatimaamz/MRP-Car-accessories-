@@ -11,9 +11,9 @@ class SaleOrder(models.Model):
         for order in self:
             if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
-                cad_currency = self.env['res.currency'].search([('name', '=', 'CAD')], limit=1)
+                #cad_currency = self.env['res.currency'].search([('name', '=', 'CAD')], limit=1)
 
-                if usd_currency and cad_currency:
+                if usd_currency :
                     today = date.today()
                     rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
                     
