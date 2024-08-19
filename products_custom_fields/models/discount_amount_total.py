@@ -4,8 +4,10 @@ from datetime import date
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    discounted_amount_total = fields.Monetary(string='Discounted Amount Total', compute='_compute_discounted_amount_total', store=True)
+
     @api.depends('order_line.price_total', 'partner_id')
-    def _compute_custom_total(self):
+    def _compute_discounted_amount_total(self):
         for order in self:
             if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
@@ -19,19 +21,15 @@ class SaleOrder(models.Model):
                         inverse_rate = rate_record.inverse_company_rate
                         total_cad = order.amount_total * inverse_rate
                         discounted_total = total_cad * 0.75
-                        
-                        # Use context to avoid recursion
-                        context = dict(self.env.context, skip_custom_total=True)
-                        order.with_context(context).write({'amount_total': discounted_total})
-
-    def write(self, vals):
-        # Bypass infinite recursion using context
-        if not self.env.context.get('skip_custom_total'):
-            self._compute_custom_total()
-        return super(SaleOrder, self).write(vals)
+                        order.discounted_amount_total = discounted_total
 
     @api.model
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
-        order._compute_custom_total()
+        order._compute_discounted_amount_total()
         return order
+
+    def write(self, vals):
+        res = super(SaleOrder, self).write(vals)
+        self._compute_discounted_amount_total()
+        return res
