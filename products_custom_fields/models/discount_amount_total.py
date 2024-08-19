@@ -1,5 +1,8 @@
 from odoo import models, fields, api
 from datetime import date
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -17,11 +20,29 @@ class SaleOrder(models.Model):
                     today = date.today()
                     rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
                     
+                    # If no rate for today, take the last available rate
+                    if not rate_record:
+                        rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+
+                    _logger.info(f"Rate Record: {rate_record}")
+
                     if rate_record:
                         inverse_rate = rate_record.inverse_company_rate
+                        _logger.info(f"Inverse Rate: {inverse_rate}")
+
                         total_cad = order.amount_total * inverse_rate
+                        _logger.info(f"Total CAD: {total_cad}")
+
                         discounted_total = total_cad * 0.75
+                        _logger.info(f"Discounted Total: {discounted_total}")
+
                         order.discounted_amount_total = discounted_total
+                    else:
+                        _logger.warning("No rate record found.")
+                else:
+                    _logger.warning("USD  currency not found.")
+            else:
+                order.discounted_amount_total = 0
 
     @api.model
     def create(self, vals):
