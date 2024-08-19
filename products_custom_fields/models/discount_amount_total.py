@@ -45,21 +45,27 @@ class SaleOrder(models.Model):
 
     @api.model
     def create(self, vals):
+        
         order = super(SaleOrder, self).create(vals)
         order._compute_discounted_amount_total()
         
         # Update amount_total with the calculated discounted_amount_total
+         _logger.warning("start create")
         if order.discounted_amount_total:
+             _logger.warning("update processing.")
             order.write({'amount_total': order.discounted_amount_total})
         
         return order
 
     def write(self, vals):
-        res = super(SaleOrder, self).write(vals)
-        self._compute_discounted_amount_total()
-        
-        # Update amount_total with the calculated discounted_amount_total
-        if self.discounted_amount_total:
-            super(SaleOrder, self).write({'amount_total': self.discounted_amount_total})
-        
-        return res
+        for rec in self :
+            
+            res = super(SaleOrder, self).write(vals)
+            rec._compute_discounted_amount_total()
+            
+            # Update amount_total with the calculated discounted_amount_total
+            _logger.warning("start update")
+            if rec.discounted_amount_total:
+                super(SaleOrder, self).write({'amount_total': rec.discounted_amount_total})
+            
+            return res
