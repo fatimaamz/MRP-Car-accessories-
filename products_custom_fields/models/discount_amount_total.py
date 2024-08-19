@@ -50,21 +50,26 @@ class SaleOrder(models.Model):
         # Create the record using the super method
         order = super(SaleOrder, self).create(vals)
 
-        # After the record is created, compute and update the amount_total
+        # Update the amount_total with context to avoid recursion
         if order:
-            order._compute_discounted_amount_total()
-            order.update({'amount_total': order.discounted_amount_total})
-        
+            context = dict(self.env.context, skip_update_amount_total=True)
+            order.with_context(context)._compute_discounted_amount_total()
+            order.with_context(context).write({'amount_total': order.discounted_amount_total})
+
         return order
 
     def write(self, vals):
-        # Call the super method to perform the usual write operation
-        res = super(SaleOrder, self).write(vals)
+        # Check if the context is set to skip the custom update
+        if not self.env.context.get('skip_update_amount_total'):
+            # Call the super method to perform the usual write operation
+            res = super(SaleOrder, self).write(vals)
 
-        # Update the amount_total after the record has been updated
-        if 'stop_write_recursion' not in self.env.context:
+            # Update the amount_total after the record has been updated
             for order in self:
                 order._compute_discounted_amount_total()
-                order.update({'amount_total': order.discounted_amount_total})
+                order.write({'amount_total': order.discounted_amount_total})
 
-        return res
+            return res
+        else:
+            # If context is set to skip update, just call super
+            return super(SaleOrder, self).write(vals)
