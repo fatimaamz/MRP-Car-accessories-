@@ -62,7 +62,7 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self).write(vals)
 
         # Update the amount_total after the record has been updated
-        if 'amount_total' not in vals:
+        if 'stop_write_recursion' not in self.env.context:
             for order in self:
                 order._compute_discounted_amount_total()
                 order.update({'amount_total': order.discounted_amount_total})
