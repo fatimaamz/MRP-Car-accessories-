@@ -28,23 +28,24 @@ class SaleOrder(models.Model):
             else:
                 amount_untaxed = sum(order_lines.mapped('price_subtotal'))
                 amount_tax = sum(order_lines.mapped('price_tax'))
-            rate=1.0
+           
             if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
                 
                 if usd_currency:
                     today = date.today()
                     rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
-                    rate=rate_record
 
                     if not rate_record:
                         rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
-                        rate=rate_record
+                    
+                    order.amount_untaxed = amount_untaxed
+                    order.amount_tax = amount_tax
+                    order.amount_total = (order.amount_untaxed * rate * 0.75) + order.amount_tax
+
             else:
-                pass
-                        
-            order.amount_untaxed = amount_untaxed
-            order.amount_tax = amount_tax
-            order.amount_total = (order.amount_untaxed * rate * 0.75) + order.amount_tax
+                order.amount_untaxed = amount_untaxed
+                order.amount_tax = amount_tax
+                order.amount_total = order.amount_untaxed + order.amount_tax
 
   
