@@ -44,7 +44,7 @@ class SaleOrder(models.Model):
                     
                   
                     order.amount_total = (order.amount_untaxed  * 0.75 *  rate_record ) + order.amount_tax
-                    _logger.warning("USD conversion done %s",order.amount_total))
+                    _logger.warning("USD conversion done %s",(order.amount_total))
 
             else:
                
