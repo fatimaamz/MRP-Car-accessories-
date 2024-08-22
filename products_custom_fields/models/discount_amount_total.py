@@ -41,7 +41,7 @@ class SaleOrder(models.Model):
                     
                     order.amount_untaxed = amount_untaxed
                     order.amount_tax = amount_tax
-                    order.amount_total = (order.amount_untaxed * rate * 0.75) + order.amount_tax
+                    order.amount_total = (order.amount_untaxed * rate_record * 0.75) + order.amount_tax
 
             else:
                 order.amount_untaxed = amount_untaxed
