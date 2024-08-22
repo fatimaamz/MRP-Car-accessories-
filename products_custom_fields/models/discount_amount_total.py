@@ -48,30 +48,3 @@ class SaleOrder(models.Model):
             order.amount_total = (order.amount_untaxed * rate * 0.75) + order.amount_tax
 
   
-
-
-    
-
-
-
-
-
-
-
-
-
-
-        
-
-        for order in self:
-            # If the customer is from the USA, apply the discount
-            
-                    
-                 
-                    inverse_rate = rate_record.inverse_company_rate
-                    amount_total_in_usd = order.amount_total * inverse_rate
-                    discounted_total_in_usd = amount_total_in_usd * 0.75
-                    context = dict(self.env.context, skip_discount_calculation=True)
-
-                    order.with_context(context).amount_total = discounted_total_in_usd 
-                
