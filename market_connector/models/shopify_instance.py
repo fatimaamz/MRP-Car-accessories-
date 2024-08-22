@@ -37,6 +37,7 @@ class ShopifyCredentials(models.Model):
     shopify_warehouse_id = fields.Many2one('stock.warehouse', string='Warehouse',
                                            help="Selected Warehouse will be set in your Shopify "
                                                 "orders.", required=False)
+    domain_name = fields.Char(string='Domain', required=True, help="Example: example.com")
     
     def get_session(self):
         shopify.Session.setup(api_key=self.api_key, secret=self.api_secret)
