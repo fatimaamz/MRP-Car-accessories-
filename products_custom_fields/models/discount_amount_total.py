@@ -39,20 +39,22 @@ class SaleOrderLine(models.Model):
             
     @api.model
     def create(self, vals):
-        order = super(SaleOrderLine, self).create(vals)
+        line = super(SaleOrderLine, self).create(vals)
+        if not self.env.context.get('skip_price_update', False):
+            context = dict(self.env.context, skip_price_update=True)
+            line.with_context(context)._compute_discounted_amount_total()
+            line.with_context(context).write({'price_subtotal': line.discounted_amount_total})
 
-        if order:
-            context = dict(self.env.context, skip_update_amount_total=True)
-            order.with_context(context)._compute_discounted_amount_total()
-            order.with_context(context).write({'price_subtotal': order.discounted_amount_total})
-
-        return order
+        return line
 
     def write(self, vals):
-        res = super(SaleOrderLine, self).write(vals)
-        for order in self:
-            order._compute_discounted_amount_total()
-            order.write({'price_subtotal': order.discounted_amount_total})
-
-        return res
+        if not self.env.context.get('skip_price_update', False):
+            res = super(SaleOrderLine, self).write(vals)
+            for line in self:
+                context = dict(self.env.context, skip_price_update=True)
+                line.with_context(context)._compute_discounted_amount_total()
+                line.with_context(context).write({'price_subtotal': line.discounted_amount_total})
+            return res
+        else:
+            return super(SaleOrderLine, self).write(vals)
        
