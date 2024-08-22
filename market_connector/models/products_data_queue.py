@@ -153,7 +153,6 @@ class ShopifyProductDataQueueEpt(models.Model):
         if product_count == 1:
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
-            return product
         elif product_count == 0:
             # TODO :  Problème matching 
             _logger.info("No Product Matching")
@@ -166,10 +165,11 @@ class ShopifyProductDataQueueEpt(models.Model):
             product = self.env['product.product'].search([("name", "=", "default product")])
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
-            return product
         else:
             _logger.info("Conflict")
-            return product[0]
+            product  = product[0]
+        _logger.info(f"product : {product}")
+        return product
     
     def matching_product_template(self, shopify_product):
         product_template = self.env['product.template'].search([("name","=",shopify_product.shopify_reference)])
