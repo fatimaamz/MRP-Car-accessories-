@@ -22,13 +22,14 @@ class SaleOrderLine(models.Model):
                     # If no rate for today, take the last available rate
                     if not rate_record:
                         rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+                    else:
+                        _logger.warning("No rate record found.")
                     
                     inverse_rate = rate_record.inverse_company_rate
                     total_cad = order.price_subtotal * inverse_rate
                     discounted_total = total_cad * 0.75
                     order.discounted_amount_total = discounted_total
-                    else:
-                        _logger.warning("No rate record found.")
+                   
                 else:
                     _logger.warning("USD currency not found.")
             else:
