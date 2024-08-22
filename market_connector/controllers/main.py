@@ -49,19 +49,10 @@ class CustomMain(http.Controller):
 
     def get_basic_info(self, route):
         data = http.request.httprequest.data
+        host = request.httprequest.headers.get("X-Shopify-Shop-Domain")
+        _logger.info(host)
         data_string = data.decode('utf-8')
         json_data = json.loads(data_string)
         _logger.info(json_data)
-        
-        instance = request.env['shopify.credentials'].sudo().search([], limit=1)
-        """ host = request.httprequest.headers.get("X-Custom-Shop-Domain")
-        instance = request.env["shopify.credentials"].sudo().with_context(active_test=False).search(
-            [("shop_url", "ilike", host)], limit=1)
-
-        webhook = request.env["market.connector.shopify.webhook"].sudo().search([("delivery_url", "ilike", route),
-                                                                   ("instance_id", "=", instance.id)], limit=1)
-
-        if not instance.active or not webhook.state == "active":
-            _logger.info("The method is skipped. The instance: %s is not active or the webhook %s is not active.", instance.name, webhook.webhook_name)
-            res = False """
+        instance = request.env['shopify.credentials'].sudo().search([("shopify_host", "ilike", host)], limit=1)
         return json_data, instance
