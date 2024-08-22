@@ -43,7 +43,7 @@ class SaleOrder(models.Model):
                         rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
                     
                   
-                    order.amount_total = (order.amount_untaxed  * 0.75) + order.amount_tax
+                order.amount_total = (order.amount_untaxed  * 0.75) + order.amount_tax
 
             else:
                
