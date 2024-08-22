@@ -27,6 +27,7 @@ class ShopifyProductDataQueueEpt(models.Model):
     variant_id = fields.Char()
     data = fields.Char()
     product_id = fields.Many2one('product.product', string="Product", required=False)
+    shopify_instance_id = fields.Many2one("shopify.credentials", "Compte", copy=False)
     
     
     @api.model
