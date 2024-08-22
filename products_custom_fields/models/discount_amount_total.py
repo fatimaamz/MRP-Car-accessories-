@@ -9,7 +9,7 @@ class SaleOrderLine(models.Model):
 
     discounted_amount_total = fields.Monetary(string='Discounted Amount Total', compute='_compute_discounted_amount_total', store=True)
 
-    @api.depends('order_line.price_total', 'partner_id')
+    @api.depends('price_total', 'order_id.partner_id')
     def _compute_discounted_amount_total(self):
         for order in self:
             if order.order_id.partner_id.country_id.code == 'US':
@@ -48,10 +48,10 @@ class SaleOrderLine(models.Model):
         return order
 
     def write(self, vals):
-        res = super(SaleOrder, self).write(vals)
+        res = super(SaleOrderLine, self).write(vals)
         for order in self:
             order._compute_discounted_amount_total()
-            order.write({'price_subtotal': line.discounted_amount_total})
+            order.write({'price_subtotal': order.discounted_amount_total})
 
         return res
        
