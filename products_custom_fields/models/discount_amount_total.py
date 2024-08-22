@@ -28,7 +28,7 @@ class SaleOrder(models.Model):
             else:
                 amount_untaxed = sum(order_lines.mapped('price_subtotal'))
                 amount_tax = sum(order_lines.mapped('price_tax'))
-            rate=0.0
+            rate=1.0
             if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
                 
