@@ -28,7 +28,10 @@ class SaleOrder(models.Model):
             else:
                 amount_untaxed = sum(order_lines.mapped('price_subtotal'))
                 amount_tax = sum(order_lines.mapped('price_tax'))
-           
+                
+            order.amount_untaxed = amount_untaxed
+            order.amount_tax = amount_tax
+            
             if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
                 
@@ -39,13 +42,11 @@ class SaleOrder(models.Model):
                     if not rate_record:
                         rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
                     
-                    order.amount_untaxed = amount_untaxed
-                    order.amount_tax = amount_tax
-                    order.amount_total = (order.amount_untaxed * rate_record * 0.75) + order.amount_tax
+                  
+                    order.amount_total = (order.amount_untaxed  * 0.75) + order.amount_tax
 
             else:
-                order.amount_untaxed = amount_untaxed
-                order.amount_tax = amount_tax
+               
                 order.amount_total = order.amount_untaxed + order.amount_tax
 
   
