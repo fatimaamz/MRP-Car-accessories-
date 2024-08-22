@@ -27,7 +27,7 @@ class SaleOrder(models.Model):
                     
                  
                     inverse_rate = rate_record.inverse_company_rate
-                    amount_total_in_usd = orde.amount_total * inverse_rate
+                    amount_total_in_usd = order.amount_total * inverse_rate
                     discounted_total_in_usd = amount_total_in_usd * 0.75
                     context = dict(self.env.context, skip_discount_calculation=True)
 
