@@ -37,7 +37,8 @@ class CustomMain(http.Controller):
         
 
         fulfillment_status = res.get("fulfillment_status") or "unfulfilled"
-        if request.env["sale.order"].sudo().search_read([("shopify_order_id", "=", res.get("id")),
+        if request.env["sale.order"].sudo().search_read([("shopify_instance_id", "=", instance.id),
+                                                         ("shopify_order_id", "=", res.get("id")),
                                                          ("shopify_order_number", "=",
                                                           res.get("order_number"))],
                                                         ["id"]):
