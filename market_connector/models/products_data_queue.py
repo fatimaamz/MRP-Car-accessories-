@@ -169,6 +169,8 @@ class ShopifyProductDataQueueEpt(models.Model):
         else:
             _logger.info("Conflict")
             product  = product[0]
+            shopify_product.product_id = product
+            product.shopify_id = shopify_product.shopify_id
         _logger.info(f"product : {product}")
         return product
     
