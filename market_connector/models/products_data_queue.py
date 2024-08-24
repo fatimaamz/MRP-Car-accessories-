@@ -150,7 +150,7 @@ class ShopifyProductDataQueueEpt(models.Model):
             
         product = self.env['product.product'].search(domain)
         product_count = len(product)
-        _logger.info(f"List of products found {product} | count {product_count}")
+        _logger.info(f"List of products found : {product} | count {product_count}")
         if product_count == 1:
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
