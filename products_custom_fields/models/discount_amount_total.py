@@ -13,7 +13,7 @@ class SaleOrder(models.Model):
         
         for order in self:
             # Only apply conversion and discount if the partner is in the US
-            if order.partner_id.country_id.code == 'US':
+            #if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
                 
                 if usd_currency:
