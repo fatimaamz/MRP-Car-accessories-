@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="action_shopify_queue_order_tree" model="ir.ui.view">
+        <field name="name">merket.connector.orders.data.queue.tree</field>
+        <field name="model">merket.connector.orders.data.queue</field>
+        <field name="arch" type="xml">
+            <tree string="Orders">
+                <field name="instance"/>
+                <field name="shopify_id"/>
+                <field name="synchronized"/>
+                <field name="data"/>
+                <button name="force_sync" string="Force Sync" type="object" class="oe_highlight"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="action_shopify_queue_order_form" model="ir.ui.view">
+        <field name="name">merket.connector.orders.data.queue.form</field>
+        <field name="model">merket.connector.orders.data.queue</field>
+        <field name="arch" type="xml">
+            <form string="Order">
+                <sheet>
+                    <group>
+                        <field name="instance"/>
+                        <field name="shopify_id"/>
+                        <field name="synchronized"/>
+                    </group>
+                    <group>
+                        <field name="data"/>
+                    </group>
+                    <footer>
+                        <button name="force_sync" string="Force Sync" type="object" class="oe_highlight"/>
+                        <button string="Close" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action Window -->
+    <record id="action_shopify_queue_order" model="ir.actions.act_window">
+        <field name="name">Queue Order</field>
+        <field name="res_model">merket.connector.orders.data.queue</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="action_shopify_queue_order_tree"/>
+    </record>
+</odoo>

@@ -10,6 +10,7 @@
     
     <!-- Submenu for Configuration -->
     <menuitem id="shopify_queue_menu" name="Traitements" parent="shopify_main_menu"  sequence="3"/>
+    <menuitem id="shopify_queue_order_menu" name="Commandes" parent="shopify_queue_menu" action="action_shopify_queue_order"/>
     <menuitem id="shopify_queue_product_menu" name="Produits" parent="shopify_queue_menu" action="action_shopify_queue_product"/>
     <!-- Submenu for Configuration -->
     <menuitem id="shopify_configuration_menu" name="Configuration" parent="shopify_main_menu"  sequence="30"/>

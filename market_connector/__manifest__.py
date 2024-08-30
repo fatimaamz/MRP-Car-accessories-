@@ -21,6 +21,7 @@
         'views/sale_order_view.xml',
         'views/product_template_view.xml',
         'views/shopify_product_queue_view.xml',
+        'views/shopify_order_queue_view.xml',
         'views/menu.xml',
         'views/order_data_queue_ept.xml',
     ],

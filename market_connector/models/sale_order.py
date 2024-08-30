@@ -163,7 +163,7 @@ class SaleOrder(models.Model):
         total_discount = order_response.get("total_discounts", 0.0)
         order_number = order_response.get("order_number")
         for line in lines:
-            if  "#" not in line.get('name') and "|" not in line.get('name'):
+            if   "|" not in line.get('name'):
                 addons += f"\n {line.get('name')}"
                 continue
             shopify_product = self.search_shopify_product_for_order_line(line, instance)
@@ -217,7 +217,7 @@ class SaleOrder(models.Model):
                     _logger.info("Created discount line for Odoo order(%s) and Shopify order is (%s)", self.name,
                                  order_number)
 
-    def import_shopify_orders(self, order_data_lines,log_book, is_queue_line=True):
+    def import_shopify_orders(self, order_data_lines, log_book, is_queue_line=True):
         order_ids = []
         commit_count = 0
         instance = log_book.shopify_instance_id
@@ -309,7 +309,10 @@ class SaleOrder(models.Model):
                 order_data_line.write({"state": "done", "processed_at": datetime.now(),
                                        "sale_order_id": sale_order.id})
             _logger.info("Processed the Odoo Order %s process and Shopify Order (%s)", sale_order.name, order_number)
-
+            
+            order_queue = self.env['merket.connector.orders.data.queue'].search([('shopify_id','=',sale_order.shopify_order_id)],limit=1)
+            if order_queue:
+                order_queue.synchronized = True
         return order_ids
 
     def search_existing_shopify_order(self, order_response, instance, order_number):
@@ -327,14 +330,13 @@ class SaleOrder(models.Model):
 
         for line in lines:
             shopify_variant = self.search_shopify_variant(line)
-            if shopify_variant or ("#" not in line.get("name") and "|" not in line.get("name")):
+            if shopify_variant or "|" not in line.get("name"):
                 continue
             
             if not shopify_variant:
                 line_product_id = line.get("product_id", False)
                 if line_product_id:
                     shopify_variant = shopify_product_obj.shopify_sync_products(line_product_id,instance)
-                    print(shopify_variant)
                     if not shopify_variant:
                         message = "Product [%s][%s] not found for Order %s" % (
                             line.get("sku"), line.get("name"), order_number)
@@ -841,11 +843,11 @@ class SaleOrder(models.Model):
         return True
 
     @api.model
-    def process_shopify_order_via_webhook(self, order_data, instance, update_order=False):
-        shopify_order_queue_obj = self.env["shopify.order.data.queue.ept"]
+    def process_shopify_order_via_webhook(self, order_data, instance, update_order=False, manuel=False):
+        shopify_order_queue_obj = self.env["merket.connector.orders.data.queue"]
 
         if not update_order:
-            order_ids = shopify_order_queue_obj.process_shopify_orders_directly([order_data], instance)
+            order_ids = shopify_order_queue_obj.process_shopify_orders_directly([order_data], instance,manuel=manuel)
             if order_ids:
                 _logger.info("Imported order %s of %s via Webhook Successfully", order_data.get("id"), instance.name)
             else:
