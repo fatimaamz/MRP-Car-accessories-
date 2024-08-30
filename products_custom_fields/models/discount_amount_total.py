@@ -13,7 +13,7 @@ class SaleOrder(models.Model):
         
         for order in self:
             # Only apply conversion and discount if the partner is in the US
-            #if order.partner_id.country_id.code == 'US':
+            if order.partner_id.country_id.code == 'US':
                 usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
                 
                 if usd_currency:
@@ -30,3 +30,4 @@ class SaleOrder(models.Model):
                         # Recalculate the total amount using the conversion and the discount
                         order.amount_total = (order.amount_untaxed * conversion) + order.amount_tax
                         _logger.warning("USD conversion done. New Total: %s", order.amount_total)
+            return res 
