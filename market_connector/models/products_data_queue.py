@@ -28,6 +28,11 @@ class ShopifyProductDataQueueEpt(models.Model):
     data = fields.Char()
     product_id = fields.Many2one('product.product', string="Product", required=False)
     shopify_instance_id = fields.Many2one("shopify.credentials", "Compte", copy=False)
+    is_match_name = fields.Boolean("Is Match Name", default=False)
+    is_match_brand = fields.Boolean("Is Match Brand", default=False)
+    is_match_style = fields.Boolean("Is Match Style", default=False)
+    is_match_model = fields.Boolean("Is Match Model", default=False)
+    result = fields.Char()
     
     
     @api.model
@@ -130,17 +135,61 @@ class ShopifyProductDataQueueEpt(models.Model):
         for record in self:
             print(record)
             self.macthing_product(record)
+            
+            
+    def check_matching_action(self):
+        for record in self:
+            record.check_matching()
+            self._cr.commit()
+            
+    
+    def check_matching(self):
+        produc_product = self.env['product.product']
+        products = produc_product.search([("name", "=", self.shopify_reference)])
+        result = f'check ref : {len(products)}\n'
+
+        if len(products) > 0:
+            self.is_match_name = True
+            products_model = products.filtered(lambda p: self.model in p.product_template_variant_value_ids.mapped('name'))
+            result += f'Model : {len(products_model)}/{len(products)} \n'
+            if len(products_model) > 0:
+                self.is_match_model = True
+                products = products_model
+
+
+            products_brand = products.filtered(lambda p: self.brand in p.product_template_variant_value_ids.mapped('name'))
+            result += f'Brand : {len(products_brand)}/{len(products)}\n'
+            if len(products_brand) > 0:
+                self.is_match_brand = True
+                products = products_brand
+
+            products_style = products.filtered(lambda p: self.style in p.product_template_variant_value_ids.mapped('name'))
+            result += f'Style : {len(products_style)}/{len(products)}\n'
+            if len(products_style) > 0:
+                self.is_match_style = True
+                products = products_style
+            if len(products) == 1:
+                self.product_id = products[0]
+                products[0].shopify_id = self.shopify_id
+                result += "Done"
+            elif len(products) == 0:
+                result += "Not Found"
+            else:
+                result += "Conflict"
+
+        self.result = result
+
     
     def matching_product_product(self, shopify_product):
         _logger.info(f"Strat Matching Product{shopify_product}")
         by_modele = True
-        by_style = True
+        by_style = False
         by_brand = True
         referance = shopify_product.shopify_reference
         referance = referance.strip()
-        if referance.startswith("#"):
-            referance = referance[1:]
-        domain = [("name", "ilike", referance)]
+        # if referance.startswith("#"):
+        #     referance = referance[1:]
+        domain = [("name", "=", referance)]
         if by_modele:
             domain.append(("product_template_variant_value_ids.name", "=", shopify_product.model))
         if by_style:
