@@ -169,9 +169,12 @@ class ShopifyProductDataQueueEpt(models.Model):
                 self.is_match_style = True
                 products = products_style
             if len(products) == 1:
-                self.product_id = products[0]
-                products[0].shopify_id = self.shopify_id
-                result += "Done"
+                if self.is_match_brand and self.is_match_model:
+                    self.product_id = products[0]
+                    products[0].shopify_id = self.shopify_id
+                    result += "Done"
+                else:
+                    result += "No matching Brand or Model"
             elif len(products) == 0:
                 result += "Not Found"
             else:
