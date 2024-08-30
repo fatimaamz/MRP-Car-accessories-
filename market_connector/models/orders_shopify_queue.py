@@ -49,8 +49,15 @@ class ShopifyOrderQueue(models.Model):
     
     def force_sync(self):
         for record in self:
-            data_dict = ast.literal_eval(record.data)
-            self.env['sale.order'].sudo().process_shopify_order_via_webhook(data_dict, record.instance,manuel=True)
+            if record.instance:
+                if record.data:
+                    data_dict = ast.literal_eval(record.data)
+                else:
+                    record.instance.connect_in_shopify()
+                    data_dict = self.env['shopify.sync'].get_order_by_id(record.shopify_id)
+                    record.data = data_dict
+                    self._cr.commit()
+                self.env['sale.order'].sudo().process_shopify_order_via_webhook(data_dict, record.instance,manuel=True)
         
     
     
