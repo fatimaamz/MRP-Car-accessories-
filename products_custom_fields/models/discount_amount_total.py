@@ -34,13 +34,13 @@ class SaleOrder(models.Model):
 """
    
 
-    additional_amount = fields.Monetary(string='Additional Amount')
-
-    @api.depends('order_line.price_total', 'additional_amount')
-    def _amount_all(self):
+   @api.depends('order_line.price_total', 'additional_amount')
+   def _amount_all(self):
         super(SaleOrder, self)._amount_all()
         for order in self:
-            # Adding custom logic to include the additional amount
-            order.write({
+            _logger.info(f"Original total: {order.amount_total}")
+            _logger.info(f"Adding additional amount: {order.additional_amount}")
+            order.update({
                 'amount_total': order.amount_total + order.additional_amount
             })
+            _logger.info(f"Updated total: {order.amount_total}")
