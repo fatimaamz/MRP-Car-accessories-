@@ -7,18 +7,21 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
+    amount_total = fields.Monetary(
+        string='Total',
+        store=True, 
+        readonly=True, 
+        compute='_compute_amount_total'
+    )
+
+    
+
     @api.depends('order_line.price_total', 'additional_amount')
-    def _amount_all(self):
-            
-        res=super(SaleOrder, self)._amount_all()
+    def _compute_amount_total(self):
         for order in self:
-            _logger.info(f"Original total: {order.amount_total}")
-            _logger.info(f"Adding additional amount: {order.additional_amount}")
-            res.update({
-                    'amount_total': order.amount_total + order.additional_amount
-            })
-            _logger.info(f"Updated total: {order.amount_total}")
-        return res
+            total = sum(order.order_line.mapped('price_total'))
+            # Add custom additional amount to the total
+            order.amount_total = total + 200
 
 
     """
