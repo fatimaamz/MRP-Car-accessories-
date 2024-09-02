@@ -7,6 +7,9 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
+    amount_total = fields.Monetary(string="Total", store=True, compute='_compute_amounts', tracking=4)
+
+    
     @api.depends('order_line.price_subtotal', 'order_line.price_tax', 'order_line.price_total')
     def _compute_amounts(self):
         """Compute the total amounts of the SO."""
