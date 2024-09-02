@@ -6,6 +6,18 @@ _logger = logging.getLogger(__name__)
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
+    
+    @api.depends('order_line.price_total', 'additional_amount')
+    def _amount_all(self):
+            super(SaleOrder, self)._amount_all()
+            for order in self:
+                _logger.info(f"Original total: {order.amount_total}")
+                _logger.info(f"Adding additional amount: {order.additional_amount}")
+                order.update({
+                    'amount_total': order.amount_total + order.additional_amount
+                })
+                _logger.info(f"Updated total: {order.amount_total}")
+
 
     """
     @api.depends('order_line.price_total')
@@ -33,14 +45,4 @@ class SaleOrder(models.Model):
             return res 
 """
    
-
-   @api.depends('order_line.price_total', 'additional_amount')
-   def _amount_all(self):
-        super(SaleOrder, self)._amount_all()
-        for order in self:
-            _logger.info(f"Original total: {order.amount_total}")
-            _logger.info(f"Adding additional amount: {order.additional_amount}")
-            order.update({
-                'amount_total': order.amount_total + order.additional_amount
-            })
-            _logger.info(f"Updated total: {order.amount_total}")
+     
