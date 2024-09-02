@@ -41,6 +41,6 @@ class SaleOrder(models.Model):
         super(SaleOrder, self)._amount_all()
         for order in self:
             # Adding custom logic to include the additional amount
-            order.update({
+            order.write({
                 'amount_total': order.amount_total + order.additional_amount
             })
