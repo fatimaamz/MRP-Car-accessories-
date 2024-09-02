@@ -1031,7 +1031,7 @@ class SaleOrder(models.Model):
             'context': context
         }
 
-    """ def _create_invoices(self, grouped=False, final=False, date=None):
+    def _create_invoices(self, grouped=False, final=False, date=None):
         res = self.env['account.move']
         shopify_orders = self.filtered(lambda o: o.shopify_instance_id)
         other_orders = self.filtered(lambda o: not o.shopify_instance_id)
@@ -1039,7 +1039,7 @@ class SaleOrder(models.Model):
             res += super(SaleOrder, shopify_orders.with_context(round=False))._create_invoices(grouped,final, date)
         if other_orders:
             res += super(SaleOrder, other_orders)._create_invoices(grouped, final, date)
-        return res """
+        return res
 
     def process_order_fullfield_qty(self, order_response):
         module_obj = self.env['ir.module.module']
@@ -1121,3 +1121,9 @@ class ImportShopifyOrderStatus(models.Model):
 
     name = fields.Char()
     status = fields.Char()
+    
+    
+class AccountMove(models.Model):
+    _inherit = 'account.move'
+
+    shopify_instance_id = fields.Many2one('shopify.credentials', string='Shopify Instance')
