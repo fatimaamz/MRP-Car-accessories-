@@ -293,14 +293,14 @@ class SaleOrder(models.Model):
             _logger.info("Starting auto workflow process for Odoo order(%s) and Shopify order is (%s)",
                          sale_order.name, order_number)
 
-            if not sale_order.is_risky_order:
+            """ if not sale_order.is_risky_order:
                 if sale_order.shopify_order_status == "fulfilled":
                     sale_order.auto_workflow_process_id.shipped_order_workflow_ept(sale_order)
                 if sale_order.shopify_order_status == "partial":
                     sale_order.process_order_fullfield_qty(order_response)
                     sale_order.process_orders_and_invoices_ept()
                 else:
-                    sale_order.process_orders_and_invoices_ept()
+                    sale_order.process_orders_and_invoices_ept() """
 
             _logger.info("Done auto workflow process for Odoo order(%s) and Shopify order is (%s)", sale_order.name,
                          order_number)
