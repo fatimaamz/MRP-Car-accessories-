@@ -9,14 +9,16 @@ class SaleOrder(models.Model):
     
     @api.depends('order_line.price_total', 'additional_amount')
     def _amount_all(self):
-            super(SaleOrder, self)._amount_all()
-            for order in self:
-                _logger.info(f"Original total: {order.amount_total}")
-                _logger.info(f"Adding additional amount: {order.additional_amount}")
-                order.update({
+            
+        res=super(SaleOrder, self)._amount_all()
+        for order in self:
+            _logger.info(f"Original total: {order.amount_total}")
+            _logger.info(f"Adding additional amount: {order.additional_amount}")
+            res.update({
                     'amount_total': order.amount_total + order.additional_amount
-                })
-                _logger.info(f"Updated total: {order.amount_total}")
+            })
+            _logger.info(f"Updated total: {order.amount_total}")
+        return res
 
 
     """
