@@ -7,24 +7,11 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
-    amount_total = fields.Monetary(
-        string='Total',
-        store=True, 
-        readonly=True, 
-        compute='_compute_amount_total'
-    )
+    
 
     
 
-    @api.depends('order_line.price_total', 'additional_amount')
-    def _compute_amount_total(self):
-        for order in self:
-            total = sum(order.order_line.mapped('price_total'))
-            # Add custom additional amount to the total
-            order.amount_total = total + 200
-
-
-    """
+   
     @api.depends('order_line.price_total')
     def _compute_amount(self):
         super(SaleOrder, self)._compute_amount()
@@ -42,12 +29,12 @@ class SaleOrder(models.Model):
                         rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
 
                     if rate_record:
-                        conversion = 0.75 * rate_record.rate  # Apply 75% discount
+                        conversion = 0.75 * rate_record.rate 
                         
                        
                         order.amount_total = (order.amount_untaxed * conversion) + order.amount_tax
                         _logger.warning("USD conversion done. New Total: %s", order.amount_total)
-            return res 
-"""
+       
+
    
      
