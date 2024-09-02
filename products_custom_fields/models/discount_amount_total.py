@@ -23,15 +23,15 @@ class SaleOrder(models.Model):
                     for line in order_lines
                 ])
                 totals = tax_results['totals']
-                amount_untaxed = totals.get(order.currency_id, {}).get('amount_untaxed', 0.0)
+                amount_untaxed = totals.get(order.currency_id, {}).get('amount_untaxed', 0.0)*0.75
                 amount_tax = totals.get(order.currency_id, {}).get('amount_tax', 0.0)
             else:
-                amount_untaxed = sum(order_lines.mapped('price_subtotal'))
+                amount_untaxed = sum(order_lines.mapped('price_subtotal')) * 0.75
                 amount_tax = sum(order_lines.mapped('price_tax'))
 
             order.amount_untaxed = amount_untaxed
             order.amount_tax = amount_tax
-            order.amount_total = order.amount_untaxed + 1000
+            order.amount_total = order.amount_untaxed + amount_tax
 
     
 
