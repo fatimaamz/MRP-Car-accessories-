@@ -44,11 +44,9 @@ class SaleOrder(models.Model):
                 
                 # Si le taux est trouvé, convertir le total avant d'appliquer la remise
                 if rate_record:
-                    converted_total_amount = total_amount * rate_record.rate
+                    converted_total_amount = total_amount * rate_record.inverse_company_rate.rate
                     discount_amount = - (converted_total_amount * 0.75)  # Appliquer la remise de 75%
-                else:
-                    converted_total_amount = total_amount
-                    discount_amount = - (converted_total_amount * 0.75)  # Appliquer la remise de 75%
+              
             else:
                 pass
        
@@ -63,7 +61,7 @@ class SaleOrder(models.Model):
                 # Ajouter une nouvelle ligne de remise
                 self.order_line.create({
                     'order_id': self.id,
-                    'name':'Remise:75%',
+                    'name':'Remise: 75%',
                     'product_id': discount_product.id,
                     'price_unit': discount_amount,
                     'product_uom_qty': 1,
