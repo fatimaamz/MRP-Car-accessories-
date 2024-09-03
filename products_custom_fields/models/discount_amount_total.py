@@ -29,7 +29,7 @@ class SaleOrderLine(models.Model):
         order = self.env['sale.order'].browse(vals['order_id'])
 
         # Vérifier si le partenaire est basé aux États-Unis
-        if order.partner_id.country_id.code == 'US':
+        if order.shopify_instance_id.id==1:
             usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
             
             if usd_currency:
