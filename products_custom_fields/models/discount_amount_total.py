@@ -39,7 +39,7 @@ class SaleOrderLine(models.Model):
                     rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
 
                 if rate_record:
-                    usd_to_cad_rate = rate_record.inverse_company_rate
+                    usd_to_cad_rate = rate_record.inverse_company_rate.rate
                     vals['price_unit'] = vals['price_unit'] * usd_to_cad_rate * 0.75
 
 """
