@@ -2,4 +2,4 @@
 
 from . import product
 from . import account_move
-from . import discount_amount_total
+#from . import discount_amount_total
