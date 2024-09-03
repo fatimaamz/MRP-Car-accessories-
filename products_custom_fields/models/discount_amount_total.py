@@ -44,7 +44,7 @@ class SaleOrder(models.Model):
                 
                 # Si le taux est trouvé, convertir le total avant d'appliquer la remise
                 if rate_record:
-                    converted_total_amount = total_amount * rate_record.inverse_company_rate.rate
+                    converted_total_amount = total_amount * rate_record.inverse_company_rate
                     discount_amount = - (converted_total_amount * 0.75)  # Appliquer la remise de 75%
               
             else:
