@@ -8,24 +8,23 @@ class SaleOrderLine(models.Model):
     def create(self, vals_list):
         orders = self.env['sale.order'].browse([vals['order_id'] for vals in vals_list])
         for vals, order in zip(vals_list, orders):
-            if order.partner_id.country_id.code == 'US':
-                self._apply_conversion(vals)
+            self._apply_conversion(vals)
         
         return super(SaleOrderLine, self).create(vals_list)
 
     def write(self, vals):
         if 'price_unit' in vals or 'order_id' in vals:
             for line in self:
-                if line.order_id.partner_id.country_id.code == 'US':
-                    line_vals = {
+                line_vals = {
                         'price_unit': vals.get('price_unit', line.price_unit),
                         'order_id': vals.get('order_id', line.order_id.id),
                     }
-                    self._apply_conversion(line_vals)
-                    vals.update(line_vals)
+                self._apply_conversion(line_vals)
+                vals.update(line_vals)
                 
         return super(SaleOrderLine, self).write(vals)
-
+        
+    @api.onchange('order_id.partner_id', 'price_unit')
     def _apply_conversion(self, vals):
         order = self.env['sale.order'].browse(vals['order_id'])
 
