@@ -6,6 +6,56 @@ import logging
 
 from odoo import models, fields, api
 
+
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            self._apply_conversion(vals)
+        
+        return super(SaleOrderLine, self).create(vals_list)
+
+    def write(self, vals):
+        if 'price_unit' in vals or 'order_id' in vals:
+            # Appliquer la conversion si le prix unitaire ou l'ordre est mis à jour
+            for line in self:
+                line_vals = {
+                    'price_unit': vals.get('price_unit', line.price_unit),
+                    'order_id': vals.get('order_id', line.order_id.id),
+                }
+                self._apply_conversion(line_vals)
+                vals.update(line_vals)
+                
+        return super(SaleOrderLine, self).write(vals)
+
+    def _apply_conversion(self, vals):
+        """Applique la conversion du montant price_unit selon le taux USD -> CAD."""
+        order = self.env['sale.order'].browse(vals['order_id'])
+
+        # Vérifier si le partenaire est basé aux États-Unis
+        if order.partner_id.country_id.code == 'US':
+            usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+
+            if usd_currency :
+                today = date.today()
+                # Chercher le taux du jour ou le plus récent
+                rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
+                if not rate_record:
+                    rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+
+                if rate_record:
+                    usd_to_cad_rate = rate_record.inverse_company_rate
+
+                    # Conversion du price_unit en CAD
+                    vals['price_unit'] = vals['price_unit'] * usd_to_cad_rate
+        else:
+            pass
+
+
+
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
@@ -28,43 +78,26 @@ class SaleOrder(models.Model):
         if not discount_product:
             return
         discount_amount = 0.0
-        # Calcul du montant total avant remise
+        
         total_amount = sum(line.price_subtotal for line in self.order_line)
         
-        if self.partner_id.country_id.code == 'US':
-            usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
-            
-            if usd_currency:
-                today = date.today()
-                
-                # Chercher le taux du jour ou le plus récent
-                rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
-                if not rate_record:
-                    rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
-                
-                # Si le taux est trouvé, convertir le total avant d'appliquer la remise
-                if rate_record:
-                    converted_total_amount = total_amount * rate_record.inverse_company_rate
-                    discount_amount = - (converted_total_amount * 0.75)  # Appliquer la remise de 75%
-              
-            else:
-                pass
-       
-            discount_line = self.order_line.filtered(lambda line: line.product_id == discount_product)
+        discount_amount = - (total_amount * 0.75)  # Appliquer la remise de 75%
         
-            if discount_line:
-                discount_line.write({
-                    'price_unit': discount_amount,
+       
+        discount_line = self.order_line.filtered(lambda line: line.product_id == discount_product)
+        
+        if discount_line:
+            discount_line.write({
+                'price_unit': discount_amount,
+                'name':'Remise: 75%',
                     
                 })
-            else:
-                # Ajouter une nouvelle ligne de remise
-                self.order_line.create({
+        else:
+            self.order_line.create({
                     'order_id': self.id,
                     'name':'Remise: 75%',
                     'product_id': discount_product.id,
                     'price_unit': discount_amount,
                     'product_uom_qty': 1,
                 })
-        else:
-            pass
+        
