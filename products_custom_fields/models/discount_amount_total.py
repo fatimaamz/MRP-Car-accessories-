@@ -51,21 +51,22 @@ class SaleOrder(models.Model):
                     discount_amount = - (converted_total_amount * 0.75)  # Appliquer la remise de 75%
             else:
                 pass
+       
+            discount_line = self.order_line.filtered(lambda line: line.product_id == discount_product)
+        
+            if discount_line:
+                discount_line.write({
+                    'price_unit': discount_amount,
+                    
+                })
+            else:
+                # Ajouter une nouvelle ligne de remise
+                self.order_line.create({
+                    'order_id': self.id,
+                    'name':'Remise:75%',
+                    'product_id': discount_product.id,
+                    'price_unit': discount_amount,
+                    'product_uom_qty': 1,
+                })
         else:
-            # Si le partenaire n'est pas des États-Unis, pas de conversion
             pass
-        # Vérifier si une ligne de remise existe déjà
-        discount_line = self.order_line.filtered(lambda line: line.product_id == discount_product)
-    
-        if discount_line:
-            discount_line.write({
-                'price_unit': discount_amount,
-            })
-        else:
-            # Ajouter une nouvelle ligne de remise
-            self.order_line.create({
-                'order_id': self.id,
-                'product_id': discount_product.id,
-                'price_unit': discount_amount,
-                'product_uom_qty': 1,
-            })
