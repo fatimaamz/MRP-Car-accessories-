@@ -29,7 +29,7 @@ class SaleOrderLine(models.Model):
         order = self.env['sale.order'].browse(vals.get('order_id'))
     
         # Check if the partner is based in the US
-        if order.shopify_instance_id.id == 1:
+        if order.shopify_instance_id.id == 1 and order.partner_id.country_id.code == 'US':
             product_template_id = vals.get('product_template_id', {}).get('name')
             
             if product_template_id != 'discount':
