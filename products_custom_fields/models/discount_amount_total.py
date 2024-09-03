@@ -27,7 +27,7 @@ class SaleOrder(models.Model):
         
         if not discount_product:
             return
-    
+        discount_amount = 0.0
         # Calcul du montant total avant remise
         total_amount = sum(line.price_subtotal for line in self.order_line)
         
