@@ -2,63 +2,70 @@ from odoo import models, fields, api
 from datetime import date
 import logging
 
-_logger = logging.getLogger(__name__)
+
+
+from odoo import models, fields, api
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
-    
-    amount_total = fields.Monetary(string="Total", store=True, compute='_compute_amounts', tracking=4)
 
-    
-    @api.depends('order_line.price_subtotal', 'order_line.price_tax', 'order_line.price_total')
-    def _compute_amounts(self):
-        """Compute the total amounts of the SO."""
+    @api.model
+    def create(self, vals):
+        order = super(SaleOrder, self).create(vals)
+        order._add_global_discount_line()
+        return order
+
+    def write(self, vals):
+        res = super(SaleOrder, self).write(vals)
         for order in self:
-            order = order.with_company(order.company_id)
-            order_lines = order.order_line.filtered(lambda x: not x.display_type)
+            order._add_global_discount_line()
+        return res
 
-            if order.company_id.tax_calculation_rounding_method == 'round_globally':
-                tax_results = order.env['account.tax']._compute_taxes([
-                    line._convert_to_tax_base_line_dict()
-                    for line in order_lines
-                ])
-                totals = tax_results['totals']
-                amount_untaxed = totals.get(order.currency_id, {}).get('amount_untaxed', 0.0)*0.75
-                amount_tax = totals.get(order.currency_id, {}).get('amount_tax', 0.0)
-            else:
-                amount_untaxed = sum(order_lines.mapped('price_subtotal')) * 0.75
-                amount_tax = sum(order_lines.mapped('price_tax'))
-
-            order.amount_untaxed = amount_untaxed
-            order.amount_tax = amount_tax
-            order.amount_total = order.amount_untaxed + amount_tax
-
-    
-
-    """
-    @api.depends('order_line.price_total')
-    def _compute_amount(self):
-        super(SaleOrder, self)._compute_amount()
+    def _add_global_discount_line(self):
+        # Rechercher le produit de remise globale
+        discount_product = self.env['product.product'].search([('name', '=', 'Remise')], limit=1)
         
-        for order in self:
-            if order.partner_id.country_id.code == 'US':
-                usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+        if not discount_product:
+            return
+    
+        # Calcul du montant total avant remise
+        total_amount = sum(line.price_subtotal for line in self.order_line)
+        
+        if self.partner_id.country_id.code == 'US':
+            usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+            
+            if usd_currency:
+                today = date.today()
                 
-                if usd_currency:
-                    today = date.today()
-                    
-                    rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
-
-                    if not rate_record:
-                        rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
-
-                    if rate_record:
-                        conversion = 0.75 * rate_record.rate 
-                        
-                       
-                        order.amount_total = (order.amount_untaxed * conversion) + order.amount_tax
-                        _logger.warning("USD conversion done. New Total: %s", order.amount_total)
-       """
-
-   
-     
+                # Chercher le taux du jour ou le plus récent
+                rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
+                if not rate_record:
+                    rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+                
+                # Si le taux est trouvé, convertir le total avant d'appliquer la remise
+                if rate_record:
+                    converted_total_amount = total_amount * rate_record.rate
+                    discount_amount = - (converted_total_amount * 0.75)  # Appliquer la remise de 75%
+                else:
+                    converted_total_amount = total_amount
+                    discount_amount = - (converted_total_amount * 0.75)  # Appliquer la remise de 75%
+            else:
+                pass
+        else:
+            # Si le partenaire n'est pas des États-Unis, pas de conversion
+            pass
+        # Vérifier si une ligne de remise existe déjà
+        discount_line = self.order_line.filtered(lambda line: line.product_id == discount_product)
+    
+        if discount_line:
+            discount_line.write({
+                'price_unit': discount_amount,
+            })
+        else:
+            # Ajouter une nouvelle ligne de remise
+            self.order_line.create({
+                'order_id': self.id,
+                'product_id': discount_product.id,
+                'price_unit': discount_amount,
+                'product_uom_qty': 1,
+            })
