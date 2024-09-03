@@ -26,23 +26,24 @@ class SaleOrderLine(models.Model):
         
    
     def _apply_conversion(self, vals):
-        order = self.env['sale.order'].browse(vals['order_id'])
-
-        # Vérifier si le partenaire est basé aux États-Unis
-        
+        order = self.env['sale.order'].browse(vals.get('order_id'))
+    
+        # Check if the partner is based in the US
+        if order.shopify_instance_id.id == 1:
+            product_template_id = vals.get('product_template_id', {}).get('name')
             
-        if order.shopify_instance_id.id==1 and vals['product_template_id']['name'] != 'discount':
-            usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
-            
-            if usd_currency:
-                today = date.today()
-                rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
-                if not rate_record:
-                    rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
-
-                if rate_record:
-                    usd_to_cad_rate = float(rate_record.inverse_company_rate)
-                    vals['price_unit'] = float(vals['price_unit']) * usd_to_cad_rate * 0.75
+            if product_template_id != 'discount':
+                usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+                
+                if usd_currency:
+                    today = date.today()
+                    rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
+                    if not rate_record:
+                        rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+    
+                    if rate_record:
+                        usd_to_cad_rate = float(rate_record.inverse_company_rate)
+                        vals['price_unit'] = float(vals.get('price_unit', 0)) * usd_to_cad_rate * 0.75
 
 """
 class SaleOrder(models.Model):
