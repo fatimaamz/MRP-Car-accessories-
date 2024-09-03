@@ -41,9 +41,9 @@ class SaleOrderLine(models.Model):
 
                 if rate_record:
                     usd_to_cad_rate = rate_record.inverse_company_rate
-                    vals['price_unit'] = vals['price_unit'] * usd_to_cad_rate
+                    vals['price_unit'] = vals['price_unit'] * usd_to_cad_rate * 0.75
 
-
+"""
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
@@ -85,3 +85,4 @@ class SaleOrder(models.Model):
                 'price_unit': discount_amount,
                 'product_uom_qty': 1,
             })
+"""
