@@ -40,7 +40,7 @@ class SaleOrderLine(models.Model):
 
                 if rate_record:
                     usd_to_cad_rate = float(rate_record.inverse_company_rate)
-                    vals['price_unit'] = vals['price_unit'] * 1.3491 * 0.75
+                    vals['price_unit'] = float(vals['price_unit']) * usd_to_cad_rate * 0.75
 
 """
 class SaleOrder(models.Model):
