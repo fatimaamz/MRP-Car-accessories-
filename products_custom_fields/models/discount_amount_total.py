@@ -24,7 +24,7 @@ class SaleOrderLine(models.Model):
                 
         return super(SaleOrderLine, self).write(vals)
         
-    @api.onchange('order_id.partner_id', 'price_unit')
+   
     def _apply_conversion(self, vals):
         order = self.env['sale.order'].browse(vals['order_id'])
 
