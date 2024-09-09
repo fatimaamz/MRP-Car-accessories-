@@ -44,6 +44,12 @@ class SaleOrderLine(models.Model):
                     if rate_record:
                         usd_to_cad_rate = float(rate_record.inverse_company_rate)
                         vals['price_unit'] = float(vals.get('price_unit', 0)) * usd_to_cad_rate * 0.75
+                        
+        elif order.shopify_instance_id.id == 1 and order.partner_id.country_id.code != 'US':
+            product_template_id = vals.get('product_template_id', {}).get('name')
+            
+            if product_template_id != 'discount':
+                vals['price_unit'] = float(vals.get('price_unit', 0)) * 0.75
 
 """
 class SaleOrder(models.Model):
