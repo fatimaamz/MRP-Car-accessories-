@@ -545,7 +545,7 @@ class SaleOrder(models.Model):
                     name = "%s_(%s %s included)_%s" % (title, str(rate), "%", company.name)
                 else:
                     name = "%s_(%s %s excluded)_%s" % (title, str(rate), "%", company.name)
-                tax_id = self.env["account.tax"].sudo().search([("price_include", "=", tax_included),
+                tax_id = self.env["account.tax"].search([("price_include", "=", tax_included),
                                                          ("type_tax_use", "=", "sale"), ("amount", "=", rate),
                                                          ("name", "=", name), ("company_id", "=", company.id)], limit=1)
                 if not tax_id:
@@ -560,8 +560,8 @@ class SaleOrder(models.Model):
     def shopify_create_account_tax(self, instance, value, price_included, company, name):
         account_tax_obj = self.env["account.tax"]
 
-        account_tax_id = account_tax_obj.sudo().create({"name": name, "amount": float(value),
-                                                 "tax_group_id": 1,
+        account_tax_id = account_tax_obj.create({"name": name, "amount": float(value),
+                                                 "tax_group_id": 2,
                                                  "type_tax_use": "sale", "price_include": price_included,
                                                  "company_id": company.id})
 
