@@ -7,7 +7,7 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_tree_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//tree" position="buttons">
+            <xpath expr="//header" position="inside">
                 <button name="sync_selected_shopify_images" type="object" string="Sync Shopify Image" class="btn-primary" />
             </xpath>
         </field>
