@@ -14,7 +14,7 @@ class ShopifyProductSync(models.Model):
             if product.name:  # Assuming 'default_code' holds the SKU
                 # Shopify API details
                 reference = product.name.split('#')[-1].strip()
-                shopify_url = f'designer-trim.myshopify.com/products.json?sku={reference}'
+                shopify_url = f'https://designer-trim.myshopify.com/products.json?sku={reference}'
                 _logger.info(f" SKU {product.name} (SKU: {reference})")
                 headers = {
                     "Content-Type": "application/json",
