@@ -14,11 +14,11 @@ class ShopifyProductSync(models.Model):
             if product.name:  # Assuming 'default_code' holds the SKU
                 # Shopify API details
                 reference = product.name.split('#')[-1].strip()
-                shopify_url = f'https://admin.shopify.com/store/designer-trim/products.json?sku={reference}'
+                shopify_url = f'designer-trim.myshopify.com/products.json?sku={reference}'
                 _logger.info(f" SKU {product.name} (SKU: {reference})")
                 headers = {
                     "Content-Type": "application/json",
-                    "X-Shopify-Access-Token": "54edfba222de40178c5afc6430739501"
+                    "X-Shopify-Access-Token": "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"
                 }
 
                 # Fetch the product from Shopify based on the SKU
