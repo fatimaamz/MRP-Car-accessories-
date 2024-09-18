@@ -1,7 +1,6 @@
-import requests
+from odoo import api, fields, models, exceptions
 import base64
 import logging
-import models
 _logger = logging.getLogger(__name__)
 
 class ShopifyProductSync(models.Model):
