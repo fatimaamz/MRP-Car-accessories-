@@ -1,6 +1,9 @@
 import requests
 import base64
 from odoo import models, fields, api
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class ShopifyProductSync(models.Model):
     _inherit = 'product.template'
