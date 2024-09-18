@@ -7,10 +7,6 @@ _logger = logging.getLogger(__name__)
 class ShopifyProductSync(models.Model):
     _inherit = 'product.template'
 
-    class ShopifyProductSync(models.Model):
-    _inherit = 'product.template'
-
-    # Add a button to the form view for syncing
     def sync_selected_shopify_images(self):
         selected_records = self.browse(self.env.context.get('active_ids', []))
         for product in selected_records:
