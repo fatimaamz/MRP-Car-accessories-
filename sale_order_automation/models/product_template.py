@@ -1,6 +1,5 @@
 import requests
 import base64
-from odoo import models, fields, api
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -8,7 +7,6 @@ _logger = logging.getLogger(__name__)
 class ShopifyProductSync(models.Model):
     _inherit = 'product.template'
 
-    # Add a button to the form view for syncing
     def sync_selected_shopify_images(self):
         # Get the selected records (active_ids) from the context
         selected_records = self.browse(self.env.context.get('active_ids', []))
