@@ -163,16 +163,29 @@ class SaleOrder(models.Model):
         total_discount = order_response.get("total_discounts", 0.0)
         order_number = order_response.get("order_number")
         for line in lines:
-            if   "|" not in line.get('name'):
+            is_gift_card_line = line.get('gift_card') or 'Gift Card' in line.get('name')
+            if   "|" not in line.get('name') and not is_gift_card_line:
                 addons += f"\n {line.get('name')}"
                 continue
-            shopify_product = self.search_shopify_product_for_order_line(line, instance)
-            product = shopify_product.product_id
-            description = shopify_product.shopify_title
+            
+            if is_gift_card_line :
+                product = instance.gift_card_product_id
+                description = line.get('name')
+            else :
+                shopify_product = self.search_shopify_product_for_order_line(line, instance)
+                product = shopify_product.product_id
+                description = shopify_product.shopify_title
 
             order_line = self.shopify_create_sale_order_line(line, product, line.get("quantity"),
                                                              product.name, line.get("price"),
                                                              order_response, description=description)
+            
+            
+            if is_gift_card_line:
+                line_vals = {'is_gift_card_line': True}
+                if line.get('name'):
+                    line_vals.update({'name': line.get('name')})
+                order_line.write(line_vals)
     
     
 

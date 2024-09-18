@@ -38,6 +38,8 @@ class ShopifyCredentials(models.Model):
                                            help="Selected Warehouse will be set in your Shopify "
                                                 "orders.", required=False)
     domain_name = fields.Char(string='Domain', required=True, help="Example: example.com")
+    gift_card_product_id = fields.Many2one("product.product", domain=[('type', '=', 'service')])
+
     
     def get_session(self):
         shopify.Session.setup(api_key=self.api_key, secret=self.api_secret)
