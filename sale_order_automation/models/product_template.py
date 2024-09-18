@@ -25,7 +25,7 @@ class ShopifyProductSync(models.Model):
                 if response.status_code == 200:
                     products = response.json().get('products', [])
                     for shopify_product in products:
-                        if shopify_product.get('sku') == product.default_code
+                        if shopify_product.get('sku') == product.default_code:
                             if shopify_product['images']:  # Check if the product has images is this correct tp get only first product if exist two with the same  sku 
                                 first_image_url = shopify_product['images'][0]['src']  # Get the first image URL
                              
