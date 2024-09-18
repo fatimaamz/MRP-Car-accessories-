@@ -1,7 +1,7 @@
 import requests
 import base64
 import logging
-
+import models
 _logger = logging.getLogger(__name__)
 
 class ShopifyProductSync(models.Model):
