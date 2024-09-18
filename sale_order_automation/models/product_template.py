@@ -24,7 +24,7 @@ class ShopifyProductSync(models.Model):
                 response = requests.get(shopify_url, headers=headers)
                 if response.status_code == 200:
                     products = response.json().get('products', [])
-                    for shopify_product in products:
+                    for shopify_product in products[0]:
                         if shopify_product['images']:  # Check if the product has images
                             first_image_url = shopify_product['images'][0]['src']  # Get the first image URL
                             # Download the first image from Shopify
