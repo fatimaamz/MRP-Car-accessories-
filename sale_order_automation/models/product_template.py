@@ -15,7 +15,7 @@ class ShopifyProductSync(models.Model):
             if product.name:  
                 # Extract reference from product name
                 reference = product.name.split('#')[-1].strip()
-                shopify_url = 'https://designer-trim.myshopify.com/admin/api/2023-04/products.json'
+                shopify_url = 'https://designer-trim.myshopify.com/admin/api/products.json'
                 headers = {
                     "Content-Type": "application/json",
                     "X-Shopify-Access-Token": "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"
