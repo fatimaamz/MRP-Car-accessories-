@@ -18,7 +18,7 @@ class ShopifyProductSync(models.Model):
                 _logger.info(f" SKU {product.name} (SKU: {reference})")
                 headers = {
                     "Content-Type": "application/json",
-                    "X-Shopify-Access-Token": "734f6ab90c27f2012433f952b0ea34aa"
+                    "X-Shopify-Access-Token": "54edfba222de40178c5afc6430739501"
                 }
 
                 # Fetch the product from Shopify based on the SKU
