@@ -11,8 +11,8 @@ class ShopifyProductSync(models.Model):
     # Add a button to the form view for syncing
     def sync_selected_shopify_images(self):
         selected_records = self.browse(self.env.context.get('active_ids', []))
-        for product in selected_records99:
-            if product.name:  # Assuming 'default_code' holds the SKU
+        for product in selected_records:
+            if product.name:  
                 # Shopify API details
                 reference = product.name.split('#')[-1].strip()
                 shopify_url = f'https://designer-trim.myshopify.com/products.json?sku={reference}'
