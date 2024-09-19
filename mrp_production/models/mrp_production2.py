@@ -2,22 +2,29 @@ from odoo import fields, models, api
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
+    
+    description_mrp = fields.Text(
+        string="Description After Newline",
+        compute="_compute_description_mrp",
+       
+    )
 
-    @api.model
-    def create_mrp_production(self):
-        mo = self.env['mrp.production'].create({
-            'product_id': self.product_id.id,
-            'product_qty': self.product_uom_qty,
-            'selected_characteristics': self._get_selected_characteristics(),
-            
-        })
-        return mo
+    @api.depends('product_id')
+    def _compute_description_mrp(self):
+        for line in self:
+            if not line.name:
+                continue
+    
+            # Split the name field by the newline character (\n)
+            name_parts = line.name.split('\n')
+    
+            # Take the part after the first newline, if it exists
+            if len(name_parts) > 1:
+                line.description_after_newline = name_parts[1]
+            else:
+                line.description_after_newline = ''
 
-    def _get_selected_characteristics(self):
-        variant_description = []
-        for variant in self.product_id.attribute_value_ids:
-            variant_description.append(f"{variant.attribute_id.name}: {variant.name}")
-        return ', '.join(variant_description)
+   
 
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
@@ -32,7 +39,7 @@ class MrpProduction(models.Model):
     conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Statut Contrôle Qualité', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
     color = fields.Char(string='Couleur', default='No couleur')
-    selected_characteristics = fields.Char(string="Selected Characteristics")
+    selected_characteristics = fields.Text(string="Caractéristiques")
 
     
     
