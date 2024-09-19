@@ -51,46 +51,14 @@ class SaleOrderLine(models.Model):
             if product_template_id != 'discount':
                 vals['price_unit'] = float(vals.get('price_unit', 0)) * 0.75
 
-"""
+
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
+    
+    order_source = fields.Selection([
+        ('luxwood-retailer', 'Luxwood Retailer'),
+        ('designer-trim', 'Designer Trim'),
+        ('whatsapp', 'WhatsApp'),
+    ], string='order Source')
 
-    @api.model
-    def create(self, vals):
-        order = super(SaleOrder, self).create(vals)
-        if order.partner_id.country_id.code == 'US':
-            order._add_global_discount_line()
-        return order
-
-    def write(self, vals):
-        res = super(SaleOrder, self).write(vals)
-        for order in self:
-            if order.partner_id.country_id.code == 'US':
-                order._add_global_discount_line()
-        return res
-
-    def _add_global_discount_line(self):
-        # Rechercher le produit de remise globale
-        discount_product = self.env['product.product'].search([('name', '=', 'Remise')], limit=1)
-        if not discount_product:
-            return
-        
-        total_amount = sum(line.price_subtotal for line in self.order_line)
-        discount_amount = - (total_amount * 0.75)  # Appliquer la remise de 75%
-
-        discount_line = self.order_line.filtered(lambda line: line.product_id == discount_product)
-        
-        if discount_line:
-            discount_line.write({
-                'price_unit': discount_amount,
-                'name': 'Remise: 75%',
-            })
-        else:
-            self.order_line.create({
-                'order_id': self.id,
-                'name': 'Remise: 75%',
-                'product_id': discount_product.id,
-                'price_unit': discount_amount,
-                'product_uom_qty': 1,
-            })
-"""
+  
