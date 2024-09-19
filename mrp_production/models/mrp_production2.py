@@ -1,14 +1,7 @@
 from odoo import fields, models, api
 
 
-class SaleOrderLine(models.Model):
-    _inherit = 'sale.order.line'
-    
-    description_mrp = fields.Text(
-        string="Description After Newline",
-       
-       
-    )
+
 
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
@@ -23,7 +16,37 @@ class MrpProduction(models.Model):
     conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Statut Contrôle Qualité', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
     color = fields.Char(string='Couleur', default='No couleur')
-    selected_characteristics = fields.Text(string="Caractéristiques")
+    
+
+
+    selected_characteristics = fields.Text(
+        string="Caractéristiques",
+        compute="_compute_selected_characteristics",
+        store=True
+    )
+
+    @api.depends('origin', 'product_id')
+    def _compute_selected_characteristics(self):
+        for production in self:
+            production.selected_characteristics = "No characteristics available"
+
+            if production.sale_order_origin:
+                # Search for the sale order with the matching origin
+                sale_order = self.env['sale.order'].search([('name', '=', production.origin)], limit=1)
+                if sale_order:
+                    # Find the sale order line with the same product_id
+                    sale_order_line = self.env['sale.order.line'].search([
+                        ('order_id', '=', sale_order.id),
+                        ('product_id', '=', production.product_id.id)
+                    ], limit=1)
+                    if sale_order_line:
+                        # Extract characteristics from the sale order line's name
+                        characteristics = sale_order_line.name.split('\n')[-1]
+                        production.selected_characteristics = characteristics
+                else:
+                    break
+            else:
+                break
 
     
     
