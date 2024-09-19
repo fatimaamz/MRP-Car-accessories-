@@ -136,7 +136,7 @@
         'static/description/spiffy_screenshot.gif',
     ],
     'sequence': 1,
-    'installable': False,
+    'installable': True,
     'application': True,
     'price': 130,
     'license': 'OPL-1',
