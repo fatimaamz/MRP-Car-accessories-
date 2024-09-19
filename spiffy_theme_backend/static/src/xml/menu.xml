@@ -411,7 +411,7 @@
 
 	<t t-name="AllmenuRecursive" >
 		<li class="nav-item">
-			<!--<t t-if="menu.childrenTree.length">
+			<t t-if="menu.childrenTree.length">
 				<p class="bg-muted">
 					<a class="d-flex align-items-center w-100" data-bs-toggle="collapse" t-attf-data-bs-target="#child_menu_{{menu.id}}" t-att-data-menu-xmlid="menu.xmlid">
 						<span><t t-esc="menu.name"/></span>
@@ -425,7 +425,7 @@
 						<t t-esc="menu.name" />
 					</span>
 				</a>
-			</t>-->
+			</t>
 			<div t-attf-id="child_menu_{{menu.id}}" class="collapse" >
 				<ul t-if="menu.childrenTree.length" class="show">
 					<t t-foreach="menu.children" t-as="menuid" t-key="menuid">
