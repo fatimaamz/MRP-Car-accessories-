@@ -1,7 +1,14 @@
 from odoo import fields, models, api
 
 
-   
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+    
+    description_mrp = fields.Text(
+        string="Description After Newline",
+       
+       
+    )
 
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
@@ -16,7 +23,7 @@ class MrpProduction(models.Model):
     conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Statut Contrôle Qualité', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
     color = fields.Char(string='Couleur', default='No couleur')
-    selected_characteristics = fields.Text(related='order_id.sale_order_line.name',string="Caractéristiques")
+    selected_characteristics = fields.Text(string="Caractéristiques")
 
     
     
