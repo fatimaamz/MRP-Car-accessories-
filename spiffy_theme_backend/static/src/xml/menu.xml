@@ -55,7 +55,7 @@
 								<span class="align-middle text-medium">Select</span>
 							</span>
 						</div>
-					</div>
+					</div
 				</div>
 			</div>
 		</div>
@@ -409,7 +409,7 @@
 		</xpath> -->
 	</t>
 
-	<t t-name="AllmenuRecursive" >
+	<!--<t t-name="AllmenuRecursive" >
 		<li class="nav-item">
 			<t t-if="menu.childrenTree.length">
 				<p class="bg-muted">
@@ -435,7 +435,7 @@
 				</ul>
 			</div>
 		</li>
-	</t>
+	</t>-->
 
 	<t t-name="AllAppsMenus" >
 		<ul id="accordion">
