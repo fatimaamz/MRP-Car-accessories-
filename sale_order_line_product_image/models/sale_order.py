@@ -11,5 +11,5 @@ class SaleOrderLine(models.Model):
     @api.onchange('product_id')
     def onchange_sake_product_image(self):
     	for product in self:
-    		product.image_128 = product.product_id.image_128
+    		product.image_128 = product.product_template_id.image_128
         
