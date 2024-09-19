@@ -41,7 +41,7 @@ class MrpProduction(models.Model):
                     ], limit=1)
                     if sale_order_line:
                         # Extract characteristics from the sale order line's name
-                        characteristics = sale_order_line.name.split('\n')[-1]
+                        characteristics = sale_order_line.name
                         production.selected_characteristics = characteristics
                 else:
                     break
