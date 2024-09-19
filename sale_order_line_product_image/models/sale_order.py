@@ -6,7 +6,8 @@ from odoo import api, fields, models,_
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    image_128 = fields.Image(string="Image")
+    #image_128 = fields.Image(string="Image")
+    image_128 = fields.Image(related='product_id.image_128', string="Image", readonly=True)
 
     @api.onchange('product_template_id')
     def onchange_sake_product_image(self):
