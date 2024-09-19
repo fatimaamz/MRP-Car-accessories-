@@ -6,6 +6,7 @@ _logger = logging.getLogger(__name__)
 
 class ShopifyProductSync(models.Model):
     _inherit = 'product.template'
+    
     """
     def sync_selected_shopify_images(self):
         selected_records = self.browse(self.env.context.get('active_ids', []))
@@ -37,7 +38,7 @@ class ShopifyProductSync(models.Model):
                                 break
                 else:
                     _logger.error(f"Failed to fetch Shopify product for SKU {product.default_code}: {response.status_code}")
-                """
+    """
     def sync_selected_shopify_images(self):
     """
     Syncs images for selected products from Shopify to Odoo.
