@@ -356,11 +356,11 @@
 				<!-- <t t-out="menu">jiohiugiu</t> -->
 				<t t-call="AllAppsMenus"/>
 				<div class="appdrawer_section">
-					<div class="top_navbar_section mb-3 mb-md-5">
+					<!--<div class="top_navbar_section mb-3 mb-md-5">
 						<a class="close_fav_app_btn d-none">
 							<span class="ri ri-arrow-left-s-line"/>
 						</a>
-					</div>
+					</div>-->
 					<div class="container">
 						<div class="input-group">
 							<div class="input-group-prepend d-flex">
