@@ -8,7 +8,7 @@ class SaleOrderLine(models.Model):
 
     image_128 = fields.Image(string="Image")
 
-    @api.onchange('product_id')
+    @api.onchange('product_template_id')
     def onchange_sake_product_image(self):
     	for product in self:
     		product.image_128 = product.product_template_id.image_128
