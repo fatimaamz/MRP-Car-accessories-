@@ -30,7 +30,7 @@ class MrpProduction(models.Model):
         for production in self:
             production.selected_characteristics = "No characteristics available"
 
-            if production.sale_order_origin:
+            if production.origin:
                 # Search for the sale order with the matching origin
                 sale_order = self.env['sale.order'].search([('name', '=', production.origin)], limit=1)
                 if sale_order:
