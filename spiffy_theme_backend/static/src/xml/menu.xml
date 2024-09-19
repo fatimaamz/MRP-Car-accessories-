@@ -119,12 +119,13 @@
 		<xpath expr="//nav[hasclass('o_main_navbar')]" position="before">
 			<!-- SPIFFY MULTI TAB START -->
 			<div class="multi_tab_section"/>
-			<!-- SPIFFY MULTI TAB END -->
-			<div class="fav_app_island d-none">
+			<!-- SPIFFY MULTI TAB END **** -->
+			
+			<!--<div class="fav_app_island d-none">
 				<span class="ri ri-apps-2-line fav_app_island_btn"/>
 				<div class="fav_apps d-flex alige-items-center justify-content-center">
 				</div>
-			</div>
+			</div>-->
 			<div class="float-end d-flex align-items-center header_menu_right_content flex-wrap">
 				<li class="bookmark_list list-unstyled"></li>
 
