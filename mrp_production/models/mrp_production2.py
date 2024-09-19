@@ -1,5 +1,24 @@
 from odoo import fields, models, api
 
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    @api.model
+    def create_mrp_production(self):
+        mo = self.env['mrp.production'].create({
+            'product_id': self.product_id.id,
+            'product_qty': self.product_uom_qty,
+            'selected_characteristics': self._get_selected_characteristics(),
+            
+        })
+        return mo
+
+    def _get_selected_characteristics(self):
+        variant_description = []
+        for variant in self.product_id.attribute_value_ids:
+            variant_description.append(f"{variant.attribute_id.name}: {variant.name}")
+        return ', '.join(variant_description)
+
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
@@ -13,6 +32,9 @@ class MrpProduction(models.Model):
     conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Statut Contrôle Qualité', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
     color = fields.Char(string='Couleur', default='No couleur')
+    selected_characteristics = fields.Char(string="Selected Characteristics")
+
+    
     
     
     @api.onchange('product_id')
