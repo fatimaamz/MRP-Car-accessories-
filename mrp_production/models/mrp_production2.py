@@ -1,28 +1,5 @@
 from odoo import fields, models, api
 
-class SaleOrderLine(models.Model):
-    _inherit = 'sale.order.line'
-    
-    description_mrp = fields.Text(
-        string="Description After Newline",
-        compute="_compute_description_mrp",
-       
-    )
-
-    @api.depends('product_id')
-    def _compute_description_mrp(self):
-        for line in self:
-            if not line.name:
-                continue
-    
-            # Split the name field by the newline character (\n)
-            name_parts = line.name.split('\n')
-    
-            # Take the part after the first newline, if it exists
-            if len(name_parts) > 1:
-                line.description_mrp = name_parts[1]
-            else:
-                line.description_mrp = ''
 
    
 
@@ -39,7 +16,7 @@ class MrpProduction(models.Model):
     conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Statut Contrôle Qualité', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
     color = fields.Char(string='Couleur', default='No couleur')
-    selected_characteristics = fields.Text(string="Caractéristiques")
+    selected_characteristics = fields.Text(related='order_id.sale_order_line.name',string="Caractéristiques")
 
     
     
