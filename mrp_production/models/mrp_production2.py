@@ -27,8 +27,8 @@ class MrpProduction(models.Model):
 
     @api.depends('origin', 'product_id')
     def _compute_selected_characteristics(self):
-        selected_records = self.browse(self.env.context.get('active_ids', []))
-        for production in selected_records:
+        
+        for production in self:
             production.selected_characteristics = "No characteristics available"
 
             if production.origin:
