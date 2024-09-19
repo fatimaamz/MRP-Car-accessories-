@@ -7,7 +7,7 @@ _logger = logging.getLogger(__name__)
 class ShopifyProductSync(models.Model):
     _inherit = 'product.template'
     
-    """
+
     def sync_selected_shopify_images(self):
         selected_records = self.browse(self.env.context.get('active_ids', []))
         for product in selected_records:
@@ -38,47 +38,4 @@ class ShopifyProductSync(models.Model):
                                 break
                 else:
                     _logger.error(f"Failed to fetch Shopify product for SKU {product.default_code}: {response.status_code}")
-    """
-    def sync_selected_shopify_images(self):
-        """
-        Syncs images for selected products from Shopify to Odoo.
-        """
-        selected_records = self.browse(self.env.context.get('active_ids', []))
-        
-        # Shopify API details
-        shopify_store_url = 'https://designer-trim.myshopify.com/admin/api/2023-04/products.json'
-        shopify_access_token = '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'  # Replace with your API key
-        
-        headers = {
-            "Content-Type": "application/json",
-            "X-Shopify-Access-Token": shopify_access_token
-        }
-        
-        for product in selected_records:
-            # Extract SKU from the product name
-            reference = product.name.split('#')[-1].strip()
-            
-            # Fetch the product from Shopify based on the SKU
-            params = {
-                'fields': 'id,title,variants,images'
-            }
-            response = requests.get(shopify_store_url, headers=headers, params=params)
-            
-            if response.status_code == 200:
-                products = response.json().get('products', [])
-                for shopify_product in products:
-                    # Check each variant for the SKU
-                    for variant in shopify_product.get('variants', []):
-                        if variant.get('sku') == product.default_code:
-                            # If a matching SKU is found
-                            if shopify_product.get('images'):  # Check if the product has images
-                                first_image_url = shopify_product['images'][0]['src']  # Get the first image URL
-                                img_data = requests.get(first_image_url).content
-                                # Update the image in Odoo (image_1920 field for the product image)
-                                product.image_1920 = base64.b64encode(img_data)
-                                _logger.info(f"Updated image for product {product.name} (SKU: {reference})")
-                            else:
-                                _logger.info(f"No images found for product SKU: {reference}")
-                            break  # Stop after processing the first image
-            else:
-                _logger.error(f"Failed to fetch Shopify product data for SKU {product.default_code}. Status code: {response.status_code}")
+  
