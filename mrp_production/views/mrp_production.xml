@@ -53,6 +53,7 @@
        <xpath expr="//group[1]" position="after" >
          <group name="product_image_group" string="Détails du Produit" invisible="not product_id" >
             <field name="product_image" widget="image"/>
+            <field name="selected_characteristics" />
             <field name="product_variant_ids"  widget="many2many_tags"/>
             <field name="product_tag_ids"  widget="many2many_tags"/>
          </group>
