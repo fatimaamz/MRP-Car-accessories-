@@ -20,9 +20,9 @@ class SaleOrderLine(models.Model):
     
             # Take the part after the first newline, if it exists
             if len(name_parts) > 1:
-                line.description_after_newline = name_parts[1]
+                line.description_mrp = name_parts[1]
             else:
-                line.description_after_newline = ''
+                line.description_mrp = ''
 
    
 
