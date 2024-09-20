@@ -240,6 +240,18 @@
 						</a>
 					</li>
 				</div>-->
+				<!-- here's updated version-->
+
+				<div class="o_app_drawer">
+				    <li class="list-unstyled">
+				        <a class="appDrawerToggle me-3" accesskey="A" href="/web#menu_id=apps">
+				            <span class="ri ri-apps-2-line"/>
+				        </a>
+				    </li>
+				</div>
+				
+
+				
 				<div class="o_company_logo">
 					<t t-if="currentCompany">
 						<img class="img img-fluid company_logo" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo&amp;id={{currentCompany.id}}"/>
