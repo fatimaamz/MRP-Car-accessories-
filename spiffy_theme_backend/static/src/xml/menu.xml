@@ -248,7 +248,7 @@
 				</div>
 
 				<!-- Systray -->
-				<!--<div class="o_menu_systray" role="menu">
+				<div class="o_menu_systray" role="menu">
 
 					<t t-foreach="systrayItems" t-as="item" t-key="item.key">
 						<!-- This ensures the correct order of the systray items -->
@@ -257,7 +257,7 @@
 							<t t-component="item.Component" t-props="item.props"/>
 						</ErrorHandler>
 					</t>
-				</div>-->
+				</div>
 
 				<!-- Apps Menu -->
 				<t t-call="web.NavBar.AppsMenu">
@@ -273,14 +273,14 @@
 				</div> 
 
 				<!-- App Brand -->
-				<DropdownItem
+				<!--<DropdownItem
 					t-if="currentApp"
 					href="getMenuItemHref(currentApp)"
 					t-esc="currentApp.name"
 					class="'o_menu_brand d-none d-md-block'"
 					dataset="{ menuXmlid: currentApp.xmlid, section: currentApp.id }"
 					onSelected="() => this.onNavBarDropdownItemSelection(currentApp)"
-				/>
+				/>-->
 
 				<!-- Current App Sections -->
 				<t t-if="currentAppSections.length and !env.isSmall and !isIpad" t-call="web.NavBar.SectionsMenu">
