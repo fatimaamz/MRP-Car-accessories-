@@ -233,17 +233,17 @@
 		</xpath>
 		<xpath expr="//nav[hasclass('o_main_navbar')]" position="replace">
 			<nav class="o_main_navbar" t-on-dropdown-item-selected="onNavBarDropdownItemSelection" data-command-category="navbar">
-				<!--<div class="o_app_drawer">
+				<div class="o_app_drawer">
 					<li class="list-unstyled">
 						<a class="appDrawerToggle me-3" accesskey="A">
 							<span class="ri ri-apps-2-line"/>
 						</a>
 					</li>
-				</div>-->
+				</div>
 				<div class="o_company_logo">
 					<t t-if="currentCompany">
 						<img class="img img-fluid company_logo" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo&amp;id={{currentCompany.id}}"/>
-						<!--<img class="img img-fluid company_logo_icon d-none" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo_icon&amp;id={{currentCompany.id}}"/>-->
+						<img class="img img-fluid company_logo_icon d-none" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo_icon&amp;id={{currentCompany.id}}"/>
 					</t>
 				</div>
 
