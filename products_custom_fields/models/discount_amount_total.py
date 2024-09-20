@@ -59,6 +59,17 @@ class SaleOrder(models.Model):
         ('luxwood-retailer', 'Luxwood Retailer'),
         ('designer-trim', 'Designer Trim'),
         ('whatsapp', 'WhatsApp'),
-    ], string='order Source')
+    ], string='order Source',, compute='_compute_order_source')
+
+    @api.depends('shopify_instance_id')  # Adjust 'some_related_field' based on your actual logic
+    def _compute_order_source(self):
+        for order in self:
+            if order.shopify_instance_id == 1: 
+                order.order_source = 'designer-trim'
+            elif order.shopify_instance_id == 2: 
+                order.order_source = 'luxwood-retailer'
+            
+            else:
+                pass
 
   
