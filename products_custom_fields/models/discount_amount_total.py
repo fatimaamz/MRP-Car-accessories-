@@ -70,6 +70,6 @@ class SaleOrder(models.Model):
                 order.order_source = 'luxwood-retailer'
             
             else:
-                pass
+                break
 
   
