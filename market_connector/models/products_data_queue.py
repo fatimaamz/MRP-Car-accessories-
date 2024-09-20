@@ -2,10 +2,14 @@ import logging
 import json
 import time
 from ..libs.pyactiveresource.connection import ClientError
+import ast
 from odoo import models, fields, api
 from dateutil import parser
 from datetime import datetime
 from ..libs import shopify
+import base64
+import requests
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger("Shopify Order")
 
@@ -25,6 +29,7 @@ class ShopifyProductDataQueueEpt(models.Model):
     shopify_attribute = fields.Char()
     shopify_reference = fields.Char()
     variant_id = fields.Char()
+    default_image_url = fields.Char()
     data = fields.Char()
     product_id = fields.Many2one('product.product', string="Product", required=False)
     shopify_instance_id = fields.Many2one("shopify.credentials", "Compte", copy=False)
@@ -108,6 +113,7 @@ class ShopifyProductDataQueueEpt(models.Model):
             product = self.create({
                     'shopify_id': result.get('id'),
                     'shopify_title': result.get('title'),
+                    'default_image_url' : result.get('image',{'src':None}).get('src'),
                     'shopify_name': name,
                     'shopify_years': years,
                     'brand': brand,
@@ -129,7 +135,9 @@ class ShopifyProductDataQueueEpt(models.Model):
         if not shopify_product:
             # TODO : Fix le problème return None
             shopify_product =  self.new_signle_product(shopify_id, instance)
-        return self.matching_product_product(shopify_product)
+        product_product =  self.matching_product_product(shopify_product)
+        
+        return product_product
     
     def matching_products(self):
         for record in self:
@@ -172,6 +180,15 @@ class ShopifyProductDataQueueEpt(models.Model):
                 if self.is_match_brand and self.is_match_model:
                     self.product_id = products[0]
                     products[0].shopify_id = self.shopify_id
+                    if not self.default_image_url and self.data :
+                        result +=f"==> No Image \n"
+                        data_dict = json.loads(self.data)
+                        self.default_image_url = data_dict.get('image',{'src':None}).get('src')
+                        result +=f"==> Url : {self.default_image_url} \n"
+                    check_image = self.import_shopify_product_image(products[0], self.default_image_url)
+                    if self.default_image_url:
+                        return False
+                    result +=f"Sync Image : {check_image}\n"
                     result += "Done"
                 else:
                     result += "No matching Brand or Model"
@@ -224,6 +241,7 @@ class ShopifyProductDataQueueEpt(models.Model):
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
         _logger.info(f"product : {product}")
+        self.import_shopify_product_image(product, shopify_product.default_image_url)
         return product
     
     def matching_product_template(self, shopify_product):
@@ -242,4 +260,39 @@ class ShopifyProductDataQueueEpt(models.Model):
         shopify_product = self.env['shopify.sync'].process_single_product(shopify_id)
         _logger.info(f"New product {shopify_product}")
         return shopify_product
+    
+    
+    def import_shopify_product_image(self, product_product, image_url):
+        if not image_url:
+            _logger.info(f"No image URL found for Shopify Product ID: {product_product}")
+            return False
+
+        # Download the image
+        try:
+            response = requests.get(image_url)
+            response.raise_for_status()  # Ensure we got the image
+        except requests.exceptions.RequestException as e:
+            raise UserError(f"Error downloading image from Shopify: {e}")
+
+        # Convert the image to base64 to store in Odoo
+        image_base64 = base64.b64encode(response.content)
+
+        # Get the Odoo product template
+        if not product_product:
+            raise UserError(f"No product found with Shopify reference {product_product}")
+
+        # Update the product template with the image
+        product_product.write({
+            'image_1920': image_base64  # Use the appropriate field for the image size
+        })
+
+        _logger.info(f"Successfully imported image for product: {product_product}")
+        return True
+    
+    def force_sync(self):
+        for record in self:
+            self.matching_product_product(record)
+    
+    
+    
         

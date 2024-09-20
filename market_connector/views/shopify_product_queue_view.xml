@@ -37,6 +37,7 @@
                         <field name="brand" readonly="1"/>
                         <field name="style" readonly="1"/>
                         <field name="model" readonly="1"/>
+                        <field name="default_image_url" readonly="1"/>
                         <field name="shopify_attribute" readonly="1"/>
                         <field name="shopify_reference" readonly="1"/>
                         <field name="shopify_years" readonly="1"/>
