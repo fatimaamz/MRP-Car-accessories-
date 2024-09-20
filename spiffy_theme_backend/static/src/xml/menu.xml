@@ -487,13 +487,13 @@
 		</ul>
 	</t>
 	
-	<t t-inherit="web.BurgerMenu" t-inherit-mode="extension" >
+	<!--<t t-inherit="web.BurgerMenu" t-inherit-mode="extension" >
 		<xpath expr="//button[hasclass('o_mobile_menu_toggle')]" position="attributes">
 			<attribute name="class" add="d-lg-none px-2 me-1" remove="d-md-none pe-3" separator=" "/>
 		</xpath>
 		<xpath expr="//button[hasclass('o_mobile_menu_toggle')]/i[hasclass('oi')]" position="replace">
 			<i class="ri ri-menu-line align-middle"/>
 		</xpath>
-	</t>
+	</t>-->
 	
 </templates>
