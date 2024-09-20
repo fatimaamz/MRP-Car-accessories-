@@ -59,7 +59,7 @@ class SaleOrder(models.Model):
         ('luxwood-retailer', 'Luxwood Retailer'),
         ('designer-trim', 'Designer Trim'),
         ('whatsapp', 'WhatsApp'),
-    ], string='order Source',, compute='_compute_order_source')
+    ], string='order Source', compute='_compute_order_source')
 
     @api.depends('shopify_instance_id')  # Adjust 'some_related_field' based on your actual logic
     def _compute_order_source(self):
