@@ -65,9 +65,9 @@ class SaleOrder(models.Model):
     def _compute_order_source(self):
         for order in self:
             if order.shopify_instance_id:
-                if order.shopify_instance_id == 1: 
+                if order.shopify_instance_id.id == 1: 
                     order.order_source = 'designer-trim'
-                elif order.shopify_instance_id == 2: 
+                elif order.shopify_instance_id.id == 2: 
                     order.order_source = 'luxwood-retailer'
                 
                 else:
