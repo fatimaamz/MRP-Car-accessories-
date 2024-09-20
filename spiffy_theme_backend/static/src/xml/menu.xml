@@ -119,12 +119,13 @@
 		<xpath expr="//nav[hasclass('o_main_navbar')]" position="before">
 			<!-- SPIFFY MULTI TAB START -->
 			<div class="multi_tab_section"/>
-			<!-- SPIFFY MULTI TAB END -->
-			<div class="fav_app_island d-none">
+			<!-- SPIFFY MULTI TAB END **** -->
+			
+			<!--<div class="fav_app_island d-none">
 				<span class="ri ri-apps-2-line fav_app_island_btn"/>
 				<div class="fav_apps d-flex alige-items-center justify-content-center">
 				</div>
-			</div>
+			</div>-->
 			<div class="float-end d-flex align-items-center header_menu_right_content flex-wrap">
 				<li class="bookmark_list list-unstyled"></li>
 
@@ -181,22 +182,23 @@
 					</a>
 				</li>
 			</div>
-			<div class="header_menu_right_content_toggler">
+			<!--<div class="header_menu_right_content_toggler">
 				<button type="button" class="btn btn-primary bookmark_panel_toggle" title="Bookmark Panel">
 					<span class="ri ri-arrow-left-s-line"/>
 				</button>
-			</div>
+			</div>-->
 			<!-- SEARCH MODAL -->
 			<t t-call="SearchModalPopup"/>
 			<div class="dynamic_data" />
 			<div class="new_systray d-none">
-				<div class="o_app_drawer d-block d-lg-none">
+				<!-- **** -->
+				<!--<div class="o_app_drawer d-block d-lg-none">
 					<li class="list-unstyled">
 						<a class="appDrawerToggle me-3" accesskey="A">
 							<span class="ri ri-apps-2-line"/>
 						</a>
 					</li>
-				</div>
+				</div>-->
 				<div class="company_logo_brand d-none d-md-flex align-items-center">
 					<div class="o_company_logo d-none d-md-block">
 						<t t-if="currentCompany">
@@ -204,7 +206,8 @@
 							<img class="img img-fluid company_logo_icon d-none" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo_icon&amp;id={{currentCompany.id}}"/>
 						</t>
 					</div>
-					<div class="o_brand_name">
+					<!-- ** -->
+					<!--<div class="o_brand_name">
 						<DropdownItem
 							t-if="currentApp"
 							href="getMenuItemHref(currentApp)"
@@ -213,7 +216,7 @@
 							dataset="{ menuXmlid: currentApp.xmlid, section: currentApp.id }"
 							onSelected="() => this.onNavBarDropdownItemSelection(currentApp)"
 						/>
-					</div>
+					</div>-->
 				</div>
 				<!-- Systray -->
 				<div class="o_menu_systray" role="menu">
@@ -230,17 +233,17 @@
 		</xpath>
 		<xpath expr="//nav[hasclass('o_main_navbar')]" position="replace">
 			<nav class="o_main_navbar" t-on-dropdown-item-selected="onNavBarDropdownItemSelection" data-command-category="navbar">
-				<div class="o_app_drawer">
+				<!--<div class="o_app_drawer">
 					<li class="list-unstyled">
 						<a class="appDrawerToggle me-3" accesskey="A">
 							<span class="ri ri-apps-2-line"/>
 						</a>
 					</li>
-				</div>
+				</div>-->
 				<div class="o_company_logo">
 					<t t-if="currentCompany">
 						<img class="img img-fluid company_logo" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo&amp;id={{currentCompany.id}}"/>
-						<img class="img img-fluid company_logo_icon d-none" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo_icon&amp;id={{currentCompany.id}}"/>
+						<!--<img class="img img-fluid company_logo_icon d-none" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo_icon&amp;id={{currentCompany.id}}"/>-->
 					</t>
 				</div>
 
@@ -263,11 +266,11 @@
 
 				<div class="favorite_apps_section d-none"></div>
 
-				<!-- <div class="mobile-header-toggle d-lg-none d-block">
+				<div class="mobile-header-toggle d-lg-none d-block">
 					<a id="mobileMenuToggleBtn" class="menu-button">
 						<span class="ri ri-menu-line align-middle"></span>
 					</a>
-				</div> -->
+				</div> 
 
 				<!-- App Brand -->
 				<DropdownItem
@@ -354,11 +357,11 @@
 				<!-- <t t-out="menu">jiohiugiu</t> -->
 				<t t-call="AllAppsMenus"/>
 				<div class="appdrawer_section">
-					<div class="top_navbar_section mb-3 mb-md-5">
+					<!--<div class="top_navbar_section mb-3 mb-md-5">
 						<a class="close_fav_app_btn d-none">
 							<span class="ri ri-arrow-left-s-line"/>
 						</a>
-					</div>
+					</div>-->
 					<div class="container">
 						<div class="input-group">
 							<div class="input-group-prepend d-flex">
