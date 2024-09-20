@@ -240,12 +240,12 @@
 						</a>
 					</li>
 				</div>
-				<div class="o_company_logo">
+				<!--<div class="o_company_logo">
 					<t t-if="currentCompany">
 						<img class="img img-fluid company_logo" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo&amp;id={{currentCompany.id}}"/>
 						<img class="img img-fluid company_logo_icon d-none" t-attf-src="/web/image?model=res.company&amp;field=backend_menubar_logo_icon&amp;id={{currentCompany.id}}"/>
 					</t>
-				</div>
+				</div>-->
 
 				<!-- Systray -->
 				<div class="o_menu_systray" role="menu">
