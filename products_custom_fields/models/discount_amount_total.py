@@ -59,11 +59,10 @@ class SaleOrder(models.Model):
         ('luxwood-retailer', 'Luxwood Retailer'),
         ('designer-trim', 'Designer Trim'),
         ('whatsapp', 'WhatsApp'),
-    ], string='order Source')
+    ], string='order Source',compute='_compute_order_source')
 
-    """
+    
     def _compute_order_source(self):
-    , compute='_compute_order_source'
         for order in self:
             if order.shopify_instance_id:
                 if order.shopify_instance_id == 1: 
@@ -75,5 +74,5 @@ class SaleOrder(models.Model):
                     order.order_source = False
             else:
                 order.order_source = False
-    """
+ 
   
