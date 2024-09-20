@@ -182,11 +182,11 @@
 					</a>
 				</li>
 			</div>
-			<!--<div class="header_menu_right_content_toggler">
+			<div class="header_menu_right_content_toggler">
 				<button type="button" class="btn btn-primary bookmark_panel_toggle" title="Bookmark Panel">
 					<span class="ri ri-arrow-left-s-line"/>
 				</button>
-			</div>-->
+			</div>
 			<!-- SEARCH MODAL -->
 			<t t-call="SearchModalPopup"/>
 			<div class="dynamic_data" />
