@@ -257,11 +257,11 @@
 				</div>
 
 				<!-- Apps Menu -->
-				<t t-call="web.NavBar.AppsMenu">
-					<!--<t t-set="apps" t-value="menuService.getApps()" />-->
+				<t t-call="web.NavBar.AppsMenu" >
+					<t t-set="apps" t-value="menuService.getApps()" />
 				</t>
 
-				<div class="favorite_apps_section d-none"></div>
+				<!--<div class="favorite_apps_section d-none"></div>-->
 
 				<!-- <div class="mobile-header-toggle d-lg-none d-block">
 					<a id="mobileMenuToggleBtn" class="menu-button">
