@@ -71,7 +71,7 @@ class SaleOrder(models.Model):
                     order.order_source = 'luxwood-retailer'
                 
                 else:
-                    break
+                    order.order_source = False
             else:
-                    break
+                order.order_source = False
   
