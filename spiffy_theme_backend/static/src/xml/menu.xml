@@ -355,10 +355,10 @@
 
 
 
-	<!--<t t-inherit="web.NavBar.AppsMenu" t-inherit-mode="extension" >
+	<t t-inherit="web.NavBar.AppsMenu" t-inherit-mode="extension" >
 		<xpath expr="//Dropdown" position="replace">
 			<div class="o_navbar_apps_menu">
-				 <t t-out="menu">jiohiugiu</t> ** here was commented
+				<!-- <t t-out="menu">jiohiugiu</t>--> 
 				<t t-call="AllAppsMenus"/>
 				<div class="appdrawer_section">
 					<div class="top_navbar_section mb-3 mb-md-5">
@@ -399,7 +399,7 @@
 				</div>
 			</div>
 		</xpath>
-	</t>-->
+	</t>
 
 	<t t-inherit="web.NavBar.SectionsMenu.Dropdown.MenuSlot" t-inherit-mode="extension" >
 		<!-- code commented for website module HTML editor and other link not working -->
@@ -416,7 +416,7 @@
 		</xpath> -->
 	</t>
 
-	<!--<t t-name="AllmenuRecursive" >
+	<t t-name="AllmenuRecursive" >
 		<li class="nav-item">
 			<t t-if="menu.childrenTree.length">
 				<p class="bg-muted">
@@ -442,16 +442,16 @@
 				</ul>
 			</div>
 		</li>
-	</t>-->
+	</t>
 
-	<!--<t t-name="AllAppsMenus" >
+	<t t-name="AllAppsMenus" >
 		<ul id="accordion">
-			 <t t-if="currentApp"> this was commented
+			<!-- <t t-if="currentApp"> -->
 				<t t-foreach="menuService.getApps()" t-as="menu" t-key="menu.name">
 					<t t-if="menu">
 						<t t-if="!menu.childrenTree.length">
 							<li>
-								 t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}"  **this was commented
+								<!-- t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}"  -->
 								<a t-attf-href="#menu_id={{menu.id}}&amp;action={{menu.actionID ? menu.actionID : ''}}"
 									t-att-data-menu="menu.id"
 									t-attf-data-action-model="{{menu.actionModel ? menu.actionModel : ''}}"
@@ -466,7 +466,7 @@
 						</t>
 						<t t-else="">
 							<li>
-								 t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}" **this was commented
+								<!-- t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}" -->
 								<a t-attf-href="#menu_id={{menu.id}}&amp;action={{menu.actionID ? menu.actionID : ''}}" t-att-data-menu="menu.id"
 									t-attf-data-action-model="{{menu.actionModel ? menu.actionModel : ''}}"
 									t-attf-data-action-id="{{menu.actionID ? menu.actionID : ''}}"
@@ -477,7 +477,7 @@
 									</span>
 									<span class="ri ri-arrow-right-s-line ms-auto dropdown_icon" />
 								</a>
-								 <ul t-attf-class="{{currentApp.name == menu.name ? 'show':''}}"> **this was commented
+								 <!--<ul t-attf-class="{{currentApp.name == menu.name ? 'show':''}}"> -->
 								<ul t-attf-class="header-sub-menus">
 									<t t-set="parent_menu_id" t-value="menu.id" />
 									<t t-foreach="menu.children" t-as="menuid" t-key="menuid">
@@ -490,9 +490,9 @@
 						</t>
 					</t>
 				</t>
-			</t> this was commented
+			<!--</t> -->
 		</ul>
-	</t>-->
+	</t>
 	
 	<t t-inherit="web.BurgerMenu" t-inherit-mode="extension" >
 		<xpath expr="//button[hasclass('o_mobile_menu_toggle')]" position="attributes">
