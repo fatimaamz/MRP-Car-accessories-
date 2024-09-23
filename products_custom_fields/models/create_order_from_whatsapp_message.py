@@ -41,17 +41,18 @@ class WhatsAppMessage(models.Model):
         return clean_text
 
     def extract_key_value_pairs(self, text):
-        """Extract key-value pairs from a text using ':' as the delimiter."""
-        lines = text.split(':')
+        """Extract key-value pairs from the text using ':' as the delimiter."""
         message_data = {}
-
-        # Loop through lines and extract keys and values
-        for i in range(0, len(lines) - 1):
-            key_part = lines[i].strip().split()[-1]  # Get the last word as the key
-            value_part = lines[i + 1].strip()  # Get the next part as the value
-            
-            # Add the key-value pair to the dictionary
-            message_data[key_part] = value_part
+        
+        # Use regex to match each key-value pair pattern like 'Key : Value'
+        pattern = r"(\w+)\s*:\s*([^\n:]+)"  # Looks for 'Key: Value' pattern
+        matches = re.findall(pattern, text)
+        
+        # Fill the message_data dictionary with extracted pairs
+        for match in matches:
+            key = match[0].strip()  # Clean key
+            value = match[1].strip()  # Clean value
+            message_data[key] = value
         
         return message_data
 
