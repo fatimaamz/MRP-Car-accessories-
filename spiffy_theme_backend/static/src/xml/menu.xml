@@ -437,9 +437,9 @@
 		</li>
 	</t>-->
 
-	<t t-name="AllAppsMenus" >
+	<!--<t t-name="AllAppsMenus" >
 		<ul id="accordion">
-			<!-- <t t-if="currentApp"> -->
+			 <t t-if="currentApp"> this was commented
 				<t t-foreach="menuService.getApps()" t-as="menu" t-key="menu.name">
 					<t t-if="menu">
 						<t t-if="!menu.childrenTree.length">
@@ -483,9 +483,9 @@
 						</t>
 					</t>
 				</t>
-			<!-- </t> -->
+			</t> this was commented
 		</ul>
-	</t>
+	</t>-->
 	
 	<t t-inherit="web.BurgerMenu" t-inherit-mode="extension" >
 		<xpath expr="//button[hasclass('o_mobile_menu_toggle')]" position="attributes">
