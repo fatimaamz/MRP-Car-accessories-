@@ -41,25 +41,36 @@ class WhatsAppMessage(models.Model):
         return clean_text
 
     def extract_key_value_pairs(self, text):
-        """Extract key-value pairs from the WhatsApp message using regex."""
         message_data = {}
-        
-        # Define a regex pattern to match key-value pairs
-        pattern = r'(\w[\w\s]*):\s*(.*)'
-        
-        # Find all key-value pairs in the text
-        matches = re.findall(pattern, text)
-        
-        # Populate the message_data dictionary with the found pairs
-        for match in matches:
-            key, value = match
-            key = key.strip()  # Remove leading/trailing whitespace
-            value = value.strip()  # Remove leading/trailing whitespace
-            message_data[key] = value
-        
+
+        # Define regex patterns for each label
+        patterns = {
+            'Représentant': re.compile(r'Représentant:\s*([^\n]+)', re.IGNORECASE),
+            'Marque': re.compile(r'Marque:\s*([^\n]+)', re.IGNORECASE),
+            'Modele': re.compile(r'Modele:\s*([^\n]+)', re.IGNORECASE),
+            'Année': re.compile(r'Année:\s*([^\n]+)', re.IGNORECASE),
+            'Style': re.compile(r'Style:\s*([^\n]+)', re.IGNORECASE),
+            'Color': re.compile(r'Color:\s*([^\n]+)', re.IGNORECASE),
+            'Destination': re.compile(r'Destination:\s*([^\n]+)', re.IGNORECASE),
+        }
+    
+        # Extract data for each label
+        for key, pattern in patterns.items():
+            match = pattern.search(text)
+            if match:
+                message_data[key] = match.group(1).strip()
+    
         # Log the parsed data for debugging
         _logger.info("Parsed message data: %s", message_data)
-        
+    
+        # Check if all required fields are present
+        required_fields = ['Représentant', 'Marque', 'Modele', 'Année', 'Style', 'Color', 'Destination']
+        missing_fields = [field for field in required_fields if field not in message_data]
+    
+        if missing_fields:
+            _logger.error("The message does not contain all the required information for an order: %s", missing_fields)
+            return None  # or handle the error appropriately
+    
         return message_data
 
         
