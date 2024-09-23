@@ -41,28 +41,21 @@ class WhatsAppMessage(models.Model):
         return clean_text
 
     def extract_key_value_pairs(self, text):
-        """Extract key-value pairs from the WhatsApp message by processing it line by line."""
+        """Extract key-value pairs from the WhatsApp message using regex."""
         message_data = {}
         
-        # List of expected keys and their formatting
-        expected_keys = ['Représentant', 'Marque', 'Modele', 'Année', 'Style', 'Color', 'Destination']
+        # Define a regex pattern to match key-value pairs
+        pattern = r'(\w[\w\s]*):\s*(.*)'
         
-        # Split the message body into lines
-        lines = text.splitlines()
+        # Find all key-value pairs in the text
+        matches = re.findall(pattern, text)
         
-        # Iterate over each line and check if it starts with a key
-        for line in lines:
-            line = line.strip()  # Remove leading/trailing spaces
-            for key in expected_keys:
-                # Check if the line starts with a key followed by ' :'
-                if line.startswith(key + " :"):
-                    try:
-                        # Extract the part after ' :'
-                        value = line.split(':', 1)[1].strip()
-                        # Assign the extracted value to the corresponding key
-                        message_data[key] = value
-                    except IndexError:
-                        _logger.error("Error extracting value for key '%s' from line: %s", key, line)
+        # Populate the message_data dictionary with the found pairs
+        for match in matches:
+            key, value = match
+            key = key.strip()  # Remove leading/trailing whitespace
+            value = value.strip()  # Remove leading/trailing whitespace
+            message_data[key] = value
         
         # Log the parsed data for debugging
         _logger.info("Parsed message data: %s", message_data)
