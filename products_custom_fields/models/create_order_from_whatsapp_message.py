@@ -41,14 +41,20 @@ class WhatsAppMessage(models.Model):
         return clean_text
 
     def extract_key_value_pairs(self, text):
-        """Extract key-value pairs from the text using ':' as the delimiter, with enhanced logging."""
+        """Extract key-value pairs from the text using specific keywords as delimiters."""
         message_data = {}
         
-        # Use regex to match each key-value pair pattern like 'Key : Value'
-        pattern = r"(\w+)\s*:\s*([^:]+)"  # Adjusted pattern to handle cases without newlines
+        # Define the keywords we expect in the message
+        expected_keys = ['Représentant', 'Marque', 'Modele', 'Année', 'Style', 'Color', 'Destination']
+        
+        # Create a pattern that matches each key followed by its value
+        # We specifically look for these keywords followed by a colon and any non-colon text as the value
+        pattern = r"(Représentant|Marque|Modele|Année|Style|Color|Destination)\s*:\s*([^\n:]*)"
+        
+        # Find all key-value pairs in the text
         matches = re.findall(pattern, text)
         
-        # Log matches for debugging
+        # Log the matches for debugging purposes
         _logger.info("Found key-value pairs: %s", matches)
         
         if not matches:
@@ -61,7 +67,7 @@ class WhatsAppMessage(models.Model):
             value = match[1].strip()  # Clean value
             message_data[key] = value
         
-        # Log the parsed message data for debugging
+        # Log the parsed message data for debugging purposes
         _logger.info("Parsed message data: %s", message_data)
         
         return message_data
