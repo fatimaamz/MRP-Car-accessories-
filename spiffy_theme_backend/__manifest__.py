@@ -42,7 +42,7 @@
         'web.assets_backend': [
             # Qweb files
             '/spiffy_theme_backend/static/src/xml/web_inherit.xml',
-            #'/spiffy_theme_backend/static/src/xml/menu.xml',
+            '/spiffy_theme_backend/static/src/xml/menu.xml',
             '/spiffy_theme_backend/static/src/xml/bookmark.xml',
             '/spiffy_theme_backend/static/src/xml/base.xml',
             '/spiffy_theme_backend/static/src/xml/fileviewer.xml',
