@@ -41,30 +41,34 @@ class WhatsAppMessage(models.Model):
         return clean_text
 
     def extract_key_value_pairs(self, text):
-        """Extract key-value pairs from the text by processing it line by line."""
+        """Extract key-value pairs from the WhatsApp message by processing it line by line."""
         message_data = {}
         
-        # List of expected keys
+        # List of expected keys and their formatting
         expected_keys = ['Représentant', 'Marque', 'Modele', 'Année', 'Style', 'Color', 'Destination']
         
-        # Split the text into lines and process each line individually
+        # Split the message body into lines
         lines = text.splitlines()
         
+        # Iterate over each line and check if it starts with a key
         for line in lines:
-            # For each line, try to find the key and its value
+            line = line.strip()  # Remove leading/trailing spaces
             for key in expected_keys:
-                if key in line:
-                    # Extract the value after the colon
+                # Check if the line starts with a key followed by ' :'
+                if line.startswith(key + " :"):
                     try:
-                        value = line.split(':', 1)[1].strip()  # Split only on the first colon
+                        # Extract the part after ' :'
+                        value = line.split(':', 1)[1].strip()
+                        # Assign the extracted value to the corresponding key
                         message_data[key] = value
                     except IndexError:
-                        _logger.error("No value found for key '%s' in line: %s", key, line)
+                        _logger.error("Error extracting value for key '%s' from line: %s", key, line)
         
-        # Log the parsed message data for debugging purposes
+        # Log the parsed data for debugging
         _logger.info("Parsed message data: %s", message_data)
         
         return message_data
+
         
     def create_order_from_whatsapp_data(self, message_data, mobile_number):
         """Creates a sale order from the parsed WhatsApp data"""
