@@ -444,7 +444,7 @@
 					<t t-if="menu">
 						<t t-if="!menu.childrenTree.length">
 							<li>
-								<!-- t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}" -->
+								 t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}"  **this was commented
 								<a t-attf-href="#menu_id={{menu.id}}&amp;action={{menu.actionID ? menu.actionID : ''}}"
 									t-att-data-menu="menu.id"
 									t-attf-data-action-model="{{menu.actionModel ? menu.actionModel : ''}}"
@@ -459,7 +459,7 @@
 						</t>
 						<t t-else="">
 							<li>
-								<!-- t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}" -->
+								 t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}" **this was commented
 								<a t-attf-href="#menu_id={{menu.id}}&amp;action={{menu.actionID ? menu.actionID : ''}}" t-att-data-menu="menu.id"
 									t-attf-data-action-model="{{menu.actionModel ? menu.actionModel : ''}}"
 									t-attf-data-action-id="{{menu.actionID ? menu.actionID : ''}}"
@@ -470,7 +470,7 @@
 									</span>
 									<span class="ri ri-arrow-right-s-line ms-auto dropdown_icon" />
 								</a>
-								<!-- <ul t-attf-class="{{currentApp.name == menu.name ? 'show':''}}"> -->
+								 <ul t-attf-class="{{currentApp.name == menu.name ? 'show':''}}"> **this was commented
 								<ul t-attf-class="header-sub-menus">
 									<t t-set="parent_menu_id" t-value="menu.id" />
 									<t t-foreach="menu.children" t-as="menuid" t-key="menuid">
