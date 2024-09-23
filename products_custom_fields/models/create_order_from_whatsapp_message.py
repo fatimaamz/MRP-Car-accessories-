@@ -48,8 +48,8 @@ class WhatsAppMessage(models.Model):
     
         # Define regex patterns for each label
         patterns = {
-            'Représentant': re.compile(r'Représentant\s*:\s*([^\n]+?)(?=\s*Marque\s*:|$)', re.IGNORECASE),
-            'Référence': re.compile(r'Référence\s*:\s*([^\n]+?)(?=\s*Référence\s*:|$)', re.IGNORECASE),
+            'Représentant': re.compile(r'Représentant\s*:\s*([^\n]+?)(?=\s*Référence\s*:|$)', re.IGNORECASE),
+            'Référence': re.compile(r'Référence\s*:\s*([^\n]+?)(?=\s*Marque\s*:|$)', re.IGNORECASE),
             'Marque': re.compile(r'Marque\s*:\s*([^\n]+?)(?=\s*Modele\s*:|$)', re.IGNORECASE),
             'Modele': re.compile(r'Modele\s*:\s*([^\n]+?)(?=\s*Année\s*:|$)', re.IGNORECASE),
             'Année': re.compile(r'Année\s*:\s*([^\n]+?)(?=\s*Style\s*:|$)', re.IGNORECASE),
