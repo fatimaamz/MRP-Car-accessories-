@@ -44,7 +44,7 @@
 							<h3>No Results Found!</h3>
 						</div>
 					</div>
-					<div class="flex-row-reverse modal-footer px-0">
+					<!--<div class="flex-row-reverse modal-footer px-0">
 						<div class="pb-3 px-3">
 							<span class="text-alternate d-inline-block m-0 me-3">
 								<span class="ri ri-arrow-up-down-line align-middle"></span>
@@ -55,7 +55,7 @@
 								<span class="align-middle text-medium">Select</span>
 							</span>
 						</div>
-					</div>
+					</div>-->
 				</div>
 			</div>
 		</div>
