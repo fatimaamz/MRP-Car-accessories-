@@ -58,8 +58,10 @@ class SaleOrder(models.Model):
     order_source = fields.Selection([
         ('shopify', 'Shopify'),
         ('whatsapp', 'WhatsApp'),
+        
     ], string='order Source',compute='_compute_order_source')
 
+    from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
     
     def _compute_order_source(self):
         for order in self:
@@ -68,8 +70,9 @@ class SaleOrder(models.Model):
                     order.order_source = 'shopify'
                 
                 else:
-                    pass
+                    order.order_source = False
+            elif order.from_whatsapp == True:
+                order.order_source = 'Whatsapp'
             else:
-                pass
- 
+                 order.order_source = False
   
