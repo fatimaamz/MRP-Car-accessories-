@@ -118,7 +118,7 @@ class WhatsAppMessage(models.Model):
         """Retrieve a product that matches the specified reference and attributes"""
         product_tmpl = self.env['product.template'].search([
             ('name', 'ilike', f'#{reference}'),  # Match by reference
-            ('attribute_line_ids.attribute_id.name', 'in', ['Marque', 'Modele', 'Année', 'Style', 'Color']),
+            ('attribute_line_ids.attribute_id.name', 'in', ['Marque', 'Modele', 'Année', 'Style', 'INSERT COLOR']),
             ('attribute_line_ids.value_ids.name', 'in', [brand, model, year, style, color])
         ], limit=1)
     
