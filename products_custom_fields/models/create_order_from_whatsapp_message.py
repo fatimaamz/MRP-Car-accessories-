@@ -18,27 +18,26 @@ class WhatsAppMessage(models.Model):
         return record
 
     def process_whatsapp_message(self, message):
+        # Required keys for order creation
         required_keys = ["Représentant", "Marque", "Modele", "Année", "Style", "Color", "Destination"]
-    
+
         # Clean the message body to remove HTML tags
         clean_message_body = self.clean_html_tags(message.body)
+
+        # Log cleaned message body for debugging
         _logger.info("Cleaned message body: %s", clean_message_body)
-    
-        # Extract key-value pairs
+
+        # Extract key-value pairs from the cleaned message
         message_data = self.extract_key_value_pairs(clean_message_body)
-    
-        # Log parsed data for debugging
-        _logger.info("Parsed message data: %s", message_data)
-    
+
         # Check if all required fields are present
-        missing_fields = [key for key in required_keys if key not in message_data]
-        if missing_fields:
-            _logger.error("Missing required fields: %s", missing_fields)
-            return  # Handle the error as appropriate
-    
-        # Create sale order based on the parsed data
-        self.create_order_from_whatsapp_data(message_data, message.mobile_number)
-        
+        if all(key in message_data for key in required_keys):
+            # Create sale order based on the parsed data
+            self.create_order_from_whatsapp_data(message_data, message.mobile_number)
+        else:
+            # Log the issue if the structure is incorrect
+            _logger.error("The message does not contain all the required information for an order: %s", clean_message_body)
+
     def clean_html_tags(self, text):
         """Remove HTML tags from the message body"""
         clean_text = re.sub(r'<.*?>', '', text)  # Regex to remove HTML tags
@@ -46,7 +45,7 @@ class WhatsAppMessage(models.Model):
 
     def extract_key_value_pairs(self, text):
         message_data = {}
-        
+
         # Define regex patterns for each label
         patterns = {
             'Représentant': re.compile(r'Représentant\s*:\s*([^\n]+)', re.IGNORECASE),
@@ -63,12 +62,21 @@ class WhatsAppMessage(models.Model):
             match = pattern.search(text)
             if match:
                 message_data[key] = match.group(1).strip()
-            else:
-                _logger.warning("Key not found in message: %s", key)
+                _logger.info("Matched %s: %s", key, message_data[key])
+    
+        # Log the parsed data for debugging
+        _logger.info("Parsed message data: %s", message_data)
+    
+        # Check if all required fields are present
+        required_fields = ['Représentant', 'Marque', 'Modele', 'Année', 'Style', 'Color', 'Destination']
+        missing_fields = [field for field in required_fields if field not in message_data]
+    
+        if missing_fields:
+            _logger.error("Missing fields in the message: %s", missing_fields)
+            return None  # or handle the error appropriately
     
         return message_data
 
-        
     def create_order_from_whatsapp_data(self, message_data, mobile_number):
         """Creates a sale order from the parsed WhatsApp data"""
         # Lookup representative (client) based on their WhatsApp mobile number
