@@ -104,6 +104,7 @@ class WhatsAppMessage(models.Model):
         # Create the sale order
         sale_order = self.env['sale.order'].create({
             'partner_id': client_partner.id,  # The representative (client)
+            'order_source':'whatsapp',
             'order_line': [(0, 0, {
                 'product_id': product.id,
                 'product_uom_qty': 1,  # Or dynamically set quantity
