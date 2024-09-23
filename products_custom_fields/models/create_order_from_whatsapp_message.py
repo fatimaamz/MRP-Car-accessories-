@@ -45,15 +45,15 @@ class WhatsAppMessage(models.Model):
 
     def extract_key_value_pairs(self, text):
         message_data = {}
-
+    
         # Define regex patterns for each label
         patterns = {
-            'Représentant': re.compile(r'Représentant\s*:\s*([^\n]+)', re.IGNORECASE),
-            'Marque': re.compile(r'Marque\s*:\s*([^\n]+)', re.IGNORECASE),
-            'Modele': re.compile(r'Modele\s*:\s*([^\n]+)', re.IGNORECASE),
-            'Année': re.compile(r'Année\s*:\s*([^\n]+)', re.IGNORECASE),
-            'Style': re.compile(r'Style\s*:\s*([^\n]+)', re.IGNORECASE),
-            'Color': re.compile(r'Color\s*:\s*([^\n]+)', re.IGNORECASE),
+            'Représentant': re.compile(r'Représentant\s*:\s*([^\n]+?)(?=\s*Marque\s*:|$)', re.IGNORECASE),
+            'Marque': re.compile(r'Marque\s*:\s*([^\n]+?)(?=\s*Modele\s*:|$)', re.IGNORECASE),
+            'Modele': re.compile(r'Modele\s*:\s*([^\n]+?)(?=\s*Année\s*:|$)', re.IGNORECASE),
+            'Année': re.compile(r'Année\s*:\s*([^\n]+?)(?=\s*Style\s*:|$)', re.IGNORECASE),
+            'Style': re.compile(r'Style\s*:\s*([^\n]+?)(?=\s*Color\s*:|$)', re.IGNORECASE),
+            'Color': re.compile(r'Color\s*:\s*([^\n]+?)(?=\s*Destination\s*:|$)', re.IGNORECASE),
             'Destination': re.compile(r'Destination\s*:\s*([^\n]+)', re.IGNORECASE),
         }
     
@@ -67,7 +67,7 @@ class WhatsAppMessage(models.Model):
         # Log the parsed data for debugging
         _logger.info("Parsed message data: %s", message_data)
     
-        # Check if all required fields are present
+        # Check for missing required fields
         required_fields = ['Représentant', 'Marque', 'Modele', 'Année', 'Style', 'Color', 'Destination']
         missing_fields = [field for field in required_fields if field not in message_data]
     
@@ -76,7 +76,7 @@ class WhatsAppMessage(models.Model):
             return None  # or handle the error appropriately
     
         return message_data
-
+    
     def create_order_from_whatsapp_data(self, message_data, mobile_number):
         """Creates a sale order from the parsed WhatsApp data"""
         # Lookup representative (client) based on their WhatsApp mobile number
