@@ -101,7 +101,7 @@ class WhatsAppMessage(models.Model):
         product = self.get_matching_product(reference,brand, model, year, style, color)
 
         if not product:
-            _logger.error("No matching product found for Brand: %s, Model: %s, Year: %s, Style: %s, Color: %s", brand, model, year, style, color)
+            _logger.error("No matching product found for reference:%s,  Brand: %s, Model: %s, Year: %s, Style: %s, Color: %s",reference, brand, model, year, style, color)
             return  # Exit without creating an order
 
         # Create the sale order
