@@ -41,21 +41,31 @@ class WhatsAppMessage(models.Model):
         return clean_text
 
     def extract_key_value_pairs(self, text):
-        """Extract key-value pairs from the text using ':' as the delimiter."""
+        """Extract key-value pairs from the text using ':' as the delimiter, with enhanced logging."""
         message_data = {}
         
         # Use regex to match each key-value pair pattern like 'Key : Value'
-        pattern = r"(\w+)\s*:\s*([^\n:]+)"  # Looks for 'Key: Value' pattern
+        pattern = r"(\w+)\s*:\s*([^:]+)"  # Adjusted pattern to handle cases without newlines
         matches = re.findall(pattern, text)
         
+        # Log matches for debugging
+        _logger.info("Found key-value pairs: %s", matches)
+        
+        if not matches:
+            _logger.error("No valid key-value pairs found in the message: %s", text)
+            return message_data
+    
         # Fill the message_data dictionary with extracted pairs
         for match in matches:
             key = match[0].strip()  # Clean key
             value = match[1].strip()  # Clean value
             message_data[key] = value
         
+        # Log the parsed message data for debugging
+        _logger.info("Parsed message data: %s", message_data)
+        
         return message_data
-
+    
     def create_order_from_whatsapp_data(self, message_data, mobile_number):
         """Creates a sale order from the parsed WhatsApp data"""
         # Lookup representative (client) based on their WhatsApp mobile number
