@@ -68,7 +68,7 @@ class SaleOrder(models.Model):
                     order.order_source = 'shopify'
                 
                 else:
-                    order.order_source = False
+                    pass
             else:
                 pass
  
