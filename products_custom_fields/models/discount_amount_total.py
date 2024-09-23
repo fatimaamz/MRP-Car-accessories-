@@ -56,8 +56,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
     order_source = fields.Selection([
-        ('luxwood-retailer', 'Luxwood Retailer'),
-        ('designer-trim', 'Designer Trim'),
+        ('shopify', 'Shopify'),
         ('whatsapp', 'WhatsApp'),
     ], string='order Source',compute='_compute_order_source')
 
@@ -65,10 +64,8 @@ class SaleOrder(models.Model):
     def _compute_order_source(self):
         for order in self:
             if order.shopify_instance_id:
-                if order.shopify_instance_id.id == 1: 
-                    order.order_source = 'designer-trim'
-                elif order.shopify_instance_id.id == 2: 
-                    order.order_source = 'luxwood-retailer'
+                if order.shopify_instance_id.id == 1 or order.shopify_instance_id.id == 2 : 
+                    order.order_source = 'shopify'
                 
                 else:
                     order.order_source = False
