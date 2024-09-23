@@ -1,5 +1,7 @@
+import logging
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+
+_logger = logging.getLogger(__name__)
 
 class WhatsAppMessage(models.Model):
     _inherit = 'whatsapp.message'  # Inheriting the existing model
@@ -35,18 +37,19 @@ class WhatsAppMessage(models.Model):
         # Check if all required fields are present
         if all(key in message_data for key in required_keys):
             # Create sale order based on the parsed data
-            self.create_order_from_whatsapp_data(message_data, message.from_number)
+            self.create_order_from_whatsapp_data(message_data, message.mobile_number)
         else:
-            # If the structure is incorrect, raise an exception or log the issue
-            raise ValidationError("The message does not contain all the required information for an order.")
+            # Log the issue if the structure is incorrect
+            _logger.error("The message does not contain all the required information for an order: %s", message.body)
 
-    def create_order_from_whatsapp_data(self, message_data, representative_number):
+    def create_order_from_whatsapp_data(self, message_data, mobile_number):
         """Creates a sale order from the parsed WhatsApp data"""
-        # Lookup representative based on their WhatsApp number
-        rep_partner = self.env['res.partner'].search([('phone', '=', representative_number)], limit=1)
+        # Lookup representative (client) based on their WhatsApp mobile number
+        client_partner = self.env['res.partner'].search([('phone', '=', mobile_number)], limit=1)
 
-        if not rep_partner:
-            raise ValidationError(f"Representative with phone {representative_number} not found.")
+        if not client_partner:
+            _logger.error("Representative (Client) with phone %s not found.", mobile_number)
+            return  # Exit without creating an order
 
         # Extract data from the message
         brand = message_data.get('Marque')
@@ -60,17 +63,18 @@ class WhatsAppMessage(models.Model):
         product = self.get_matching_product(brand, model, year, style, color)
 
         if not product:
-            raise ValidationError(f"No matching product found for Brand: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
+            _logger.error("No matching product found for Brand: %s, Model: %s, Year: %s, Style: %s, Color: %s", brand, model, year, style, color)
+            return  # Exit without creating an order
 
         # Create the sale order
         sale_order = self.env['sale.order'].create({
-            'partner_id': rep_partner.id,
+            'partner_id': client_partner.id,  # The representative (client)
             'order_line': [(0, 0, {
                 'product_id': product.id,
                 'product_uom_qty': 1,  # Or dynamically set quantity
                 'price_unit': product.list_price,  # Set price to product's list price
             })],
-            'partner_shipping_id': self.get_destination_partner(destination).id
+            'partner_shipping_id': self.get_destination_partner(destination).id  # The destination (delivery address)
         })
         return sale_order
 
