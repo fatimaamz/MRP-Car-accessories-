@@ -21,7 +21,7 @@
 				t-att-data-action-id="app_actionid"
 				t-att-title="app_name">
 
-				<div class="app-image">
+				<!--<div class="app-image">
 					<t t-if="use_icon">
 						<t t-if="icon_class_name">
 							<span t-attf-class="ri #{icon_class_name}"/>
@@ -57,7 +57,7 @@
 							</t>
 						</t>
 					</t>
-				</div>
+				</div>-->
 			</a>
 		</div>
 	</t>
