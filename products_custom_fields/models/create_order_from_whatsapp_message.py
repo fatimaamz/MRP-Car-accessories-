@@ -69,7 +69,7 @@ class WhatsAppMessage(models.Model):
     def create_order_from_whatsapp_data(self, message_data, mobile_number):
         """Creates a sale order from the parsed WhatsApp data"""
         # Lookup representative (client) based on their WhatsApp mobile number
-        client_partner = self.env['res.partner'].search([('phone', '=', mobile_number)], limit=1)
+        client_partner = self.env['res.partner'].search([('mobile', '=', mobile_number)], limit=1)
 
         if not client_partner:
             _logger.error("Representative (Client) with phone %s not found.", mobile_number)
