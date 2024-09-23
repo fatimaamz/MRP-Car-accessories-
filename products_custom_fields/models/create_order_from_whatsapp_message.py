@@ -114,19 +114,20 @@ class WhatsAppMessage(models.Model):
         })
         return sale_order
 
-    def get_matching_product(self, brand, model, year, style, color):
-        """Retrieve a product that matches the specified attributes"""
+    def get_matching_product(self, reference, brand, model, year, style, color):
+        """Retrieve a product that matches the specified reference and attributes"""
         product_tmpl = self.env['product.template'].search([
+            ('name', 'ilike', f'#{reference}'),  # Match by reference
             ('attribute_line_ids.attribute_id.name', 'in', ['Marque', 'Modele', 'Année', 'Style', 'Color']),
             ('attribute_line_ids.value_ids.name', 'in', [brand, model, year, style, color])
         ], limit=1)
-
+    
         if product_tmpl:
             # If product template is found, return the corresponding product variant (if applicable)
             product_variant = product_tmpl.product_variant_id
             return product_variant if product_variant else product_tmpl
         return None
-
+        
     def get_destination_partner(self, destination_name):
         """Retrieve or create a partner for the destination"""
         destination_partner = self.env['res.partner'].search([('name', '=', destination_name)], limit=1)
