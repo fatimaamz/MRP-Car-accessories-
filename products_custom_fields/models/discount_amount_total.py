@@ -70,6 +70,6 @@ class SaleOrder(models.Model):
                 else:
                     order.order_source = False
             else:
-                order.order_source = False
+                pass
  
   
