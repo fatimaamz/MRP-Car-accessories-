@@ -348,10 +348,10 @@
 
 
 
-	<t t-inherit="web.NavBar.AppsMenu" t-inherit-mode="extension" >
+	<!--<t t-inherit="web.NavBar.AppsMenu" t-inherit-mode="extension" >
 		<xpath expr="//Dropdown" position="replace">
 			<div class="o_navbar_apps_menu">
-				<!-- <t t-out="menu">jiohiugiu</t> -->
+				 <t t-out="menu">jiohiugiu</t> ** here was commented
 				<t t-call="AllAppsMenus"/>
 				<div class="appdrawer_section">
 					<div class="top_navbar_section mb-3 mb-md-5">
@@ -373,8 +373,8 @@
 								<t t-foreach="menuService.getApps()" t-as="app" t-key="app.id">
 									<div class="app-box mb16">
 										<a role="menuitem" t-attf-href="#menu_id={{app.id}}&amp;action={{app.actionID ? app.actionID : ''}}" class="d-block o_app text-center text-center" t-att-data-menu-id="app.id" t-att-data-menu-xmlid="app.xmlID" t-att-data-action-id="app.actionID">
-											<!--<div class="app-image mb8">
-											</div>-->
+											<div class="app-image mb8">
+											</div>
 											<div class="app-name">
 												<t t-esc="app.name" />
 											</div>
@@ -392,7 +392,7 @@
 				</div>
 			</div>
 		</xpath>
-	</t>
+	</t>-->
 
 	<t t-inherit="web.NavBar.SectionsMenu.Dropdown.MenuSlot" t-inherit-mode="extension" >
 		<!-- code commented for website module HTML editor and other link not working -->
