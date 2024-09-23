@@ -19,7 +19,7 @@ class WhatsAppMessage(models.Model):
 
     def process_whatsapp_message(self, message):
         # Required keys for order creation
-        required_keys = ["Représentant", "Marque", "Modele", "Année", "Style", "Color", "Destination"]
+        required_keys = ["Représentant","Référence","Marque", "Modele", "Année", "Style", "Color", "Destination"]
 
         # Clean the message body to remove HTML tags
         clean_message_body = self.clean_html_tags(message.body)
@@ -49,6 +49,7 @@ class WhatsAppMessage(models.Model):
         # Define regex patterns for each label
         patterns = {
             'Représentant': re.compile(r'Représentant\s*:\s*([^\n]+?)(?=\s*Marque\s*:|$)', re.IGNORECASE),
+            'Référence': re.compile(r'Référence\s*:\s*([^\n]+?)(?=\s*Référence\s*:|$)', re.IGNORECASE),
             'Marque': re.compile(r'Marque\s*:\s*([^\n]+?)(?=\s*Modele\s*:|$)', re.IGNORECASE),
             'Modele': re.compile(r'Modele\s*:\s*([^\n]+?)(?=\s*Année\s*:|$)', re.IGNORECASE),
             'Année': re.compile(r'Année\s*:\s*([^\n]+?)(?=\s*Style\s*:|$)', re.IGNORECASE),
@@ -68,7 +69,7 @@ class WhatsAppMessage(models.Model):
         _logger.info("Parsed message data: %s", message_data)
     
         # Check for missing required fields
-        required_fields = ['Représentant', 'Marque', 'Modele', 'Année', 'Style', 'Color', 'Destination']
+        required_fields = ['Représentant','Référence', 'Marque', 'Modele', 'Année', 'Style', 'Color', 'Destination']
         missing_fields = [field for field in required_fields if field not in message_data]
     
         if missing_fields:
@@ -93,9 +94,11 @@ class WhatsAppMessage(models.Model):
         style = message_data.get('Style')
         color = message_data.get('Color')
         destination = message_data.get('Destination')
+        reference = message_data.get('Référence')
+        
 
         # Search for a product that matches these attributes
-        product = self.get_matching_product(brand, model, year, style, color)
+        product = self.get_matching_product(reference,brand, model, year, style, color)
 
         if not product:
             _logger.error("No matching product found for Brand: %s, Model: %s, Year: %s, Style: %s, Color: %s", brand, model, year, style, color)
