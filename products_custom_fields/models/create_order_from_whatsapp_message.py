@@ -41,37 +41,31 @@ class WhatsAppMessage(models.Model):
         return clean_text
 
     def extract_key_value_pairs(self, text):
-        """Extract key-value pairs from the text using specific keywords as delimiters."""
+        """Extract key-value pairs from the text by processing it line by line."""
         message_data = {}
         
-        # Define the keywords we expect in the message
+        # List of expected keys
         expected_keys = ['Représentant', 'Marque', 'Modele', 'Année', 'Style', 'Color', 'Destination']
         
-        # Create a pattern that matches each key followed by its value
-        # We specifically look for these keywords followed by a colon and any non-colon text as the value
-        pattern = r"(Représentant|Marque|Modele|Année|Style|Color|Destination)\s*:\s*([^\n:]*)"
+        # Split the text into lines and process each line individually
+        lines = text.splitlines()
         
-        # Find all key-value pairs in the text
-        matches = re.findall(pattern, text)
-        
-        # Log the matches for debugging purposes
-        _logger.info("Found key-value pairs: %s", matches)
-        
-        if not matches:
-            _logger.error("No valid key-value pairs found in the message: %s", text)
-            return message_data
-    
-        # Fill the message_data dictionary with extracted pairs
-        for match in matches:
-            key = match[0].strip()  # Clean key
-            value = match[1].strip()  # Clean value
-            message_data[key] = value
+        for line in lines:
+            # For each line, try to find the key and its value
+            for key in expected_keys:
+                if key in line:
+                    # Extract the value after the colon
+                    try:
+                        value = line.split(':', 1)[1].strip()  # Split only on the first colon
+                        message_data[key] = value
+                    except IndexError:
+                        _logger.error("No value found for key '%s' in line: %s", key, line)
         
         # Log the parsed message data for debugging purposes
         _logger.info("Parsed message data: %s", message_data)
         
         return message_data
-    
+        
     def create_order_from_whatsapp_data(self, message_data, mobile_number):
         """Creates a sale order from the parsed WhatsApp data"""
         # Lookup representative (client) based on their WhatsApp mobile number
