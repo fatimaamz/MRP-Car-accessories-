@@ -141,15 +141,23 @@ class WhatsAppMessage(models.Model):
         marque_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_marque.id), ('name', '=', brand)], limit=1)
         if not  marque_value :
             raise ValueError("brand not found")
-            raise ValueError(marque_value.id)
+         
         annee_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_annee.id), ('name', '=', year)], limit=1)
+        if not annee_value:
+            raise ValueError("Year not found")
         modele_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_modele.id), ('name', '=', model)], limit=1)
+        if not  modele_value:
+            raise ValueError("Model not found")
         style_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_style.id), ('name', '=', style)], limit=1)
+        if not style_value:
+            raise ValueError("Style not found")
         color_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_color.id), ('name', '=', color)], limit=1)
+        if not color_value:
+             raise ValueError("color not found")
     
         # Step 5: Ensure all attribute values are found
         if not all([marque_value, annee_value, modele_value, style_value, color_value]):
-            raise ValueError("One or more attribute values not found")
+            raise ValueError("*** One or more attribute values not found")
     
         # Step 6: Search for the matching product variant by template and attribute values
         product_variant = self.env['product.product'].search([
