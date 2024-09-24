@@ -130,15 +130,15 @@ class WhatsAppMessage(models.Model):
         # Search for product variants with the matching attributes
         product_variant = self.env['product.product'].search([
             ('product_tmpl_id', '=', product_tmpl.id),
-            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Marque'),
+            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Marques'),
             ('product_template_attribute_value_ids.name', '=', brand),
-            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Modele'),
+            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Modèle'),
             ('product_template_attribute_value_ids.name', '=', model),
             ('product_template_attribute_value_ids.attribute_id.name', '=', 'Année'),
             ('product_template_attribute_value_ids.name', '=', year),
             ('product_template_attribute_value_ids.attribute_id.name', '=', 'Style'),
             ('product_template_attribute_value_ids.name', '=', style),
-            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Color'),
+            ('product_template_attribute_value_ids.attribute_id.name', '=', 'INSERT COLOR'),
             ('product_template_attribute_value_ids.name', '=', color),
         ], limit=1)
     
