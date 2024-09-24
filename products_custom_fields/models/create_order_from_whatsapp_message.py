@@ -117,10 +117,11 @@ class WhatsAppMessage(models.Model):
         })
         return sale_order
 
-    def get_matching_product(self, reference, brand, model, year, style, color):
-        
+
+    def get_matching_product(self, reference, brand, model, year, style, color): 
+        # Step 1: Search for the base product by reference
         product = self.env['product.product'].search([
-        ('name', 'ilike', f'#{reference}')
+            ('name', 'ilike', f'#{reference}')
         ], limit=1)
     
         if not product:
@@ -139,38 +140,42 @@ class WhatsAppMessage(models.Model):
     
         # Step 4: Search for specific attribute values using the corresponding attribute
         marque_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_marque.id), ('name', '=', brand)], limit=1)
-        if not  marque_value :
-            raise ValueError("brand not found")
-         
+        if not marque_value:
+            raise ValueError("Brand not found")
+    
         annee_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_annee.id), ('name', '=', year)], limit=1)
-        if not annee_value:
-            raise ValueError("Year not found")
         modele_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_modele.id), ('name', '=', model)], limit=1)
-        if not  modele_value:
-            raise ValueError("Model not found")
         style_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_style.id), ('name', '=', style)], limit=1)
-        if not style_value:
-            raise ValueError("Style not found")
         color_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_color.id), ('name', '=', color)], limit=1)
-        if not color_value:
-             raise ValueError("color not found")
     
-        # Step 5: Ensure all attribute values are found
-        if not all([marque_value, annee_value, modele_value, style_value, color_value]):
-            raise ValueError("*** One or more attribute values not found")
+        # Step 5: Find product variants based on instant attribute values (Marque and Modèle)
+        if marque_value and modele_value:
+            product_variant = self.env['product.product'].search([
+                ('product_tmpl_id', '=', product.product_tmpl_id.id),
+                ('product_template_attribute_value_ids', 'in', [marque_value.id, modele_value.id])
+            ], limit=1)
     
-        # Step 6: Search for the matching product variant by template and attribute values
-        product_variant = self.env['product.product'].search([
-            ('product_tmpl_id', '=', product.product_tmpl_id.id),
-            ('product_template_attribute_value_ids', 'in', [marque_value.id,  modele_value.id])
-        ], limit=1)
+           
+            if product_variant:
+                # Validate other non-instant attribute values manually (year, style, color)
+                missing_attributes = []
+                if annee_value and annee_value.id not in product_variant.product_template_attribute_value_ids.ids:
+                    missing_attributes.append('Year')
+                if style_value and style_value.id not in product_variant.product_template_attribute_value_ids.ids:
+                    missing_attributes.append('Style')
+                if color_value and color_value.id not in product_variant.product_template_attribute_value_ids.ids:
+                    missing_attributes.append('Color')
     
-        if product_variant:
-            return product_variant
+                if missing_attributes:
+                    raise ValueError(f"Variant found but attributes mismatch: {', '.join(missing_attributes)}")
+    
+                return product_variant
+            else:
+                raise ValueError(f"No matching variant found for reference: {reference}, Marque: {brand}, Modèle: {model}")
         else:
-            raise ValueError(f"No matching variant found for reference: {reference}, Marque: {brand}, Année: {year}, Modèle: {model}, Style: {style}, Color: {color}")
+            raise ValueError(f"No matching product for Marque: {brand}, Modèle: {model}")
 
-            
+    
     def get_destination_partner(self, destination_name):
         """Retrieve or create a partner for the destination"""
         destination_partner = self.env['res.partner'].search([('name', '=', destination_name)], limit=1)
