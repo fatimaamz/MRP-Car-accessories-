@@ -138,7 +138,7 @@ class WhatsAppMessage(models.Model):
         attribute_modele = self.env['product.attribute'].search([('name', '=', 'Modèle')], limit=1) if model else None
         attribute_annee = self.env['product.attribute'].search([('name', '=', 'Année')], limit=1)
         attribute_style = self.env['product.attribute'].search([('name', '=', 'Style')], limit=1)
-        attribute_color = self.env['product.attribute'].search([('name', '=', 'Color')], limit=1)
+        attribute_color = self.env['product.attribute'].search([('name', '=', 'INSERT COLOR')], limit=1)
     
         # Step 3: Ensure necessary attributes are found
         if not all([attribute_marque, attribute_annee, attribute_style, attribute_color]):
