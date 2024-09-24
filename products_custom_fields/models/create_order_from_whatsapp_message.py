@@ -118,6 +118,8 @@ class WhatsAppMessage(models.Model):
         return sale_order
 
 
+    import logging
+
     def get_matching_product(self, reference, brand, model, year, style, color): 
         _logger = logging.getLogger(__name__)
         
@@ -136,7 +138,7 @@ class WhatsAppMessage(models.Model):
         attribute_modele = self.env['product.attribute'].search([('name', '=', 'Modèle')], limit=1) if model else None
         attribute_annee = self.env['product.attribute'].search([('name', '=', 'Année')], limit=1)
         attribute_style = self.env['product.attribute'].search([('name', '=', 'Style')], limit=1)
-        attribute_color = self.env['product.attribute'].search([('name', '=', 'INSERT COLOR')], limit=1)
+        attribute_color = self.env['product.attribute'].search([('name', '=', 'Color')], limit=1)
     
         # Step 3: Ensure necessary attributes are found
         if not all([attribute_marque, attribute_annee, attribute_style, attribute_color]):
@@ -171,17 +173,25 @@ class WhatsAppMessage(models.Model):
             raise ValueError("Color not found")
         _logger.info(f"Color attribute value found: {color_value.name}")
     
-        # Step 5: Build search domain for product variants
-        attribute_value_ids = [marque_value.id, annee_value.id, style_value.id, color_value.id]
+        # Step 5: Build the domain to search for product variants
+        attribute_value_ids = [
+            marque_value.id,
+            annee_value.id,
+            style_value.id,
+            color_value.id
+        ]
+    
+        # Append model if it exists
         if modele_value:
             attribute_value_ids.append(modele_value.id)
     
         _logger.info(f"Attribute value IDs for search: {attribute_value_ids}")
     
-        # Step 6: Search for the matching product variant by template and attribute values
+        # Step 6: Search for the matching product variant by template and all attribute values
         product_variant = self.env['product.product'].search([
             ('product_tmpl_id', '=', product.product_tmpl_id.id),
-            ('product_template_attribute_value_ids.product_attribute_value_id', 'in', attribute_value_ids)
+            ('product_template_attribute_value_ids.product_attribute_value_id', 'in', attribute_value_ids),
+            ('product_template_attribute_value_ids', 'len', len(attribute_value_ids))  # Ensure all values match
         ], limit=1)
     
         if product_variant:
@@ -189,6 +199,7 @@ class WhatsAppMessage(models.Model):
             return product_variant
         else:
             raise ValueError(f"No matching variant found for reference: {reference}, Brand: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
+
 
     
     def get_destination_partner(self, destination_name):
