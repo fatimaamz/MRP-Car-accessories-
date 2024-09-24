@@ -119,10 +119,28 @@ class WhatsAppMessage(models.Model):
 
     def get_matching_product(self, reference, brand, model, year, style, color):
         """Retrieve a product variant that matches the specified reference and attributes"""
-        # Search in product.product instead of product.template
+        # First, we need to search for the relevant attribute values
+        attribute_value_obj = self.env['product.template.attribute.value']
+    
+        # Find the attribute values for each attribute
+        brand_value = attribute_value_obj.search([('name', '=', brand)], limit=1)
+        model_value = attribute_value_obj.search([('name', '=', model)], limit=1)
+        year_value = attribute_value_obj.search([('name', '=', year)], limit=1)
+        style_value = attribute_value_obj.search([('name', '=', style)], limit=1)
+        color_value = attribute_value_obj.search([('name', '=', color)], limit=1)
+    
+        # Log errors if any attribute is not found
+        if not all([brand_value, model_value, year_value, style_value, color_value]):
+            _logger.error("Missing attribute value: Brand=%s, Model=%s, Year=%s, Style=%s, Color=%s",
+                          brand_value, model_value, year_value, style_value, color_value)
+            return None  # Exit if any required attribute value is missing
+    
+        # Now search for the product.product variant based on the reference and attribute values
         product_variant = self.env['product.product'].search([
-            ('product_tmpl_id.name', 'ilike', f'#{reference}'),  # Match by reference in the product template's name
-            ('attribute_value_ids.name', 'in', [brand, model, year, style, color])  # Match product attributes
+            ('product_tmpl_id.name', 'ilike', f'#{reference}'),  # Match by product template name (with reference)
+            ('attribute_value_ids', 'in', [
+                brand_value.id, model_value.id, year_value.id, style_value.id, color_value.id
+            ])  # Match by attribute values
         ], limit=1)
     
         if product_variant:
