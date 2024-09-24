@@ -121,6 +121,7 @@ class WhatsAppMessage(models.Model):
     import logging
 
     def get_matching_product(self, reference, brand, model, year, style, color): 
+       
         _logger = logging.getLogger(__name__)
         
         # Step 1: Search for the base product by reference
@@ -138,7 +139,7 @@ class WhatsAppMessage(models.Model):
         attribute_modele = self.env['product.attribute'].search([('name', '=', 'Modèle')], limit=1) if model else None
         attribute_annee = self.env['product.attribute'].search([('name', '=', 'Année')], limit=1)
         attribute_style = self.env['product.attribute'].search([('name', '=', 'Style')], limit=1)
-        attribute_color = self.env['product.attribute'].search([('name', '=', 'INSERT COLOR')], limit=1)
+        attribute_color = self.env['product.attribute'].search([('name', '=', 'INSER COLOR')], limit=1)
     
         # Step 3: Ensure necessary attributes are found
         if not all([attribute_marque, attribute_annee, attribute_style, attribute_color]):
@@ -173,28 +174,20 @@ class WhatsAppMessage(models.Model):
             raise ValueError("Color not found")
         _logger.info(f"Color attribute value found: {color_value.name}")
     
-        # Step 5: Build the domain to search for product variants
-        attribute_value_ids = [
-            marque_value.id,
-            annee_value.id,
-            style_value.id,
-            color_value.id
-        ]
-    
-        # Append model if it exists
+        # Step 5: Build search domain for product variants
+        attribute_value_ids = [marque_value.id, annee_value.id, style_value.id, color_value.id]
         if modele_value:
             attribute_value_ids.append(modele_value.id)
     
         _logger.info(f"Attribute value IDs for search: {attribute_value_ids}")
     
-        # Step 6: Search for the matching product variant by template and all attribute values
+        # Step 6: Search for the matching product variant by template and attribute values
         product_variant = self.env['product.product'].search([
             ('product_tmpl_id', '=', product.product_tmpl_id.id),
             ('product_template_attribute_value_ids.product_attribute_value_id', 'in', attribute_value_ids)
         ], limit=1)
     
-        # Validate that all attributes match by comparing the count
-        if product_variant and len(product_variant.product_template_attribute_value_ids) == len(attribute_value_ids):
+        if product_variant:
             _logger.info(f"Product variant found: {product_variant.name}")
             return product_variant
         else:
