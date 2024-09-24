@@ -152,7 +152,7 @@ class WhatsAppMessage(models.Model):
         if  product_variant:
             return product_variant
         else:
-            raise ValueError(f"*** No matching variant found for reference: {reference}, Marque: {brand}, Année: {annee}, Modèle: {modele}, Style: {style}, Color: {color}")
+            raise ValueError(f"*** No matching variant found for reference: {reference}, Marque: {brand}, Année: {year}, Modèle: {model}, Style: {style}, Color: {color}")
 
             
     def get_destination_partner(self, destination_name):
