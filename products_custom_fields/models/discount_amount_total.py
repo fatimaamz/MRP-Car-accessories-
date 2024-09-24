@@ -72,7 +72,7 @@ class SaleOrder(models.Model):
                 else:
                     order.order_source = False
             elif order.from_whatsapp == True:
-                order.order_source = 'Whatsapp'
+                order.order_source = 'whatsapp'
             else:
                  order.order_source = False
   
