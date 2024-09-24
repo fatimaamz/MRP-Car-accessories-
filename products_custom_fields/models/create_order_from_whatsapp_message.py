@@ -132,20 +132,23 @@ class WhatsAppMessage(models.Model):
         # Log errors if any attribute is not found
         if not all([brand_value, model_value, year_value, style_value, color_value]):
             _logger.error("Missing attribute value: Brand=%s, Model=%s, Year=%s, Style=%s, Color=%s",
-                          brand_value, model_value, year_value, style_value, color_value)
+                          brand, model, year, style, color)
             return None  # Exit if any required attribute value is missing
     
         # Now search for the product.product variant based on the reference and attribute values
         product_variant = self.env['product.product'].search([
             ('product_tmpl_id.name', 'ilike', f'#{reference}'),  # Match by product template name (with reference)
-            ('attribute_value_ids', 'in', [
-                brand_value.id, model_value.id, year_value.id, style_value.id, color_value.id
-            ])  # Match by attribute values
+            ('attribute_value_ids.name', 'in', [brand, model, year, style, color])  # Match by attribute values
         ], limit=1)
     
         if product_variant:
+            _logger.info("Found matching product variant: %s", product_variant.display_name)
             return product_variant  # Return the found variant
-        return None  # Return None if no matching product variant is found
+        else:
+            _logger.error("No matching product variant found for reference:%s,  Brand: %s, Model: %s, Year: %s, Style: %s, Color: %s",
+                          reference, brand, model, year, style, color)
+            return None  # Return None if no matching product variant is found
+
             
     def get_destination_partner(self, destination_name):
         """Retrieve or create a partner for the destination"""
