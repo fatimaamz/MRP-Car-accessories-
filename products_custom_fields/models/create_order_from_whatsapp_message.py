@@ -139,8 +139,9 @@ class WhatsAppMessage(models.Model):
     
         # Step 4: Search for specific attribute values using the corresponding attribute
         marque_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_marque.id), ('name', '=', brand)], limit=1)
-        raise ValueError("Result")
-        raise ValueError(marque_value)
+        if not  marque_value :
+            raise ValueError("brand not found")
+            raise ValueError(marque_value.id)
         annee_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_annee.id), ('name', '=', year)], limit=1)
         modele_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_modele.id), ('name', '=', model)], limit=1)
         style_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_style.id), ('name', '=', style)], limit=1)
