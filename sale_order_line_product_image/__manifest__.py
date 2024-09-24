@@ -24,7 +24,7 @@
 	'data': [
 			'report/sale_order_report.xml',
 			'views/view_sale_order.xml',
-			'views/mrp_order_report.xml',
+			'report/mrp_order_report.xml',
 			],
 	'currency': "EUR",
 	'demo': [],
