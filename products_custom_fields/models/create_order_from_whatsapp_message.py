@@ -135,17 +135,17 @@ class WhatsAppMessage(models.Model):
 
         # Ensure all attributes exist
         if not all([attribute_marque, attribute_annee, attribute_modele, attribute_style, attribute_color]):
-            raise ValueError("One or more product attributes not found")
+            raise ValueError("*** One or more product attributes not found")
 
         # Step 3: Filter the variant by attribute values
         product_variant = self.env['product.product'].search([
             ('product_tmpl_id', '=', product.product_tmpl_id.id),
             ('product_template_attribute_value_ids', 'in', [
                 attribute_marque.value_ids.filtered(lambda v: v.name == brand).id,
-                attribute_annee.value_ids.filtered(lambda v: v.name == year).id,
+                #attribute_annee.value_ids.filtered(lambda v: v.name == year).id,
                 attribute_modele.value_ids.filtered(lambda v: v.name == model).id,
-                attribute_style.value_ids.filtered(lambda v: v.name == style).id,
-                attribute_color.value_ids.filtered(lambda v: v.name == color).id
+                #attribute_style.value_ids.filtered(lambda v: v.name == style).id,
+                #attribute_color.value_ids.filtered(lambda v: v.name == color).id
             ])
         ], limit=1)
 
