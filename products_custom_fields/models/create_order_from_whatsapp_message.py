@@ -138,7 +138,7 @@ class WhatsAppMessage(models.Model):
         attribute_modele = self.env['product.attribute'].search([('name', '=', 'Modèle')], limit=1) if model else None
         attribute_annee = self.env['product.attribute'].search([('name', '=', 'Année')], limit=1)
         attribute_style = self.env['product.attribute'].search([('name', '=', 'Style')], limit=1)
-        attribute_color = self.env['product.attribute'].search([('name', '=', 'INSERT COLOR')], limit=1)
+        attribute_color = self.env['product.attribute'].search([('name', '=', 'Color')], limit=1)
     
         # Step 3: Ensure necessary attributes are found
         if not all([attribute_marque, attribute_annee, attribute_style, attribute_color]):
@@ -190,11 +190,11 @@ class WhatsAppMessage(models.Model):
         # Step 6: Search for the matching product variant by template and all attribute values
         product_variant = self.env['product.product'].search([
             ('product_tmpl_id', '=', product.product_tmpl_id.id),
-            ('product_template_attribute_value_ids.product_attribute_value_id', 'in', attribute_value_ids),
-            ('product_template_attribute_value_ids', 'len', len(attribute_value_ids))  # Ensure all values match
+            ('product_template_attribute_value_ids.product_attribute_value_id', 'in', attribute_value_ids)
         ], limit=1)
     
-        if product_variant:
+        # Validate that all attributes match by comparing the count
+        if product_variant and len(product_variant.product_template_attribute_value_ids) == len(attribute_value_ids):
             _logger.info(f"Product variant found: {product_variant.name}")
             return product_variant
         else:
