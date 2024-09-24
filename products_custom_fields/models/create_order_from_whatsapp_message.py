@@ -119,36 +119,35 @@ class WhatsAppMessage(models.Model):
 
     def get_matching_product(self, reference, brand, model, year, style, color):
         """Retrieve a product variant that matches the specified reference and attributes"""
-        # First, we need to search for the relevant attribute values
-        attribute_value_obj = self.env['product.template.attribute.value']
-    
-        # Find the attribute values for each attribute
-        brand_value = attribute_value_obj.search([('name', '=', brand)], limit=1)
-        model_value = attribute_value_obj.search([('name', '=', model)], limit=1)
-        year_value = attribute_value_obj.search([('name', '=', year)], limit=1)
-        style_value = attribute_value_obj.search([('name', '=', style)], limit=1)
-        color_value = attribute_value_obj.search([('name', '=', color)], limit=1)
-    
-        # Log errors if any attribute is not found
-        if not all([brand_value, model_value, year_value, style_value, color_value]):
-            _logger.error("Missing attribute value: Brand=%s, Model=%s, Year=%s, Style=%s, Color=%s",
-                          brand, model, year, style, color)
-            return None  # Exit if any required attribute value is missing
-    
-        # Now search for the product.product variant based on the reference and attribute values
+        
+        # Search for the product template by the reference
+        product_tmpl = self.env['product.template'].search([('name', 'ilike', f'#{reference}')], limit=1)
+        
+        if not product_tmpl:
+            _logger.error(f"No product template found with reference: {reference}")
+            return None
+        
+        # Search for product variants with the matching attributes
         product_variant = self.env['product.product'].search([
-            ('product_tmpl_id.name', 'ilike', f'#{reference}'),  # Match by product template name (with reference)
-            ('attribute_value_ids.name', 'in', [brand, model, year, style, color])  # Match by attribute values
+            ('product_tmpl_id', '=', product_tmpl.id),
+            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Marque'),
+            ('product_template_attribute_value_ids.name', '=', brand),
+            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Modele'),
+            ('product_template_attribute_value_ids.name', '=', model),
+            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Année'),
+            ('product_template_attribute_value_ids.name', '=', year),
+            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Style'),
+            ('product_template_attribute_value_ids.name', '=', style),
+            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Color'),
+            ('product_template_attribute_value_ids.name', '=', color),
         ], limit=1)
     
         if product_variant:
-            _logger.info("Found matching product variant: %s", product_variant.display_name)
-            return product_variant  # Return the found variant
+            _logger.info(f"Found matching product variant: {product_variant.display_name}")
+            return product_variant
         else:
-            _logger.error("No matching product variant found for reference:%s,  Brand: %s, Model: %s, Year: %s, Style: %s, Color: %s",
-                          reference, brand, model, year, style, color)
-            return None  # Return None if no matching product variant is found
-
+            _logger.error(f"No matching product variant found for reference: {reference}, Brand: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
+            return None
             
     def get_destination_partner(self, destination_name):
         """Retrieve or create a partner for the destination"""
