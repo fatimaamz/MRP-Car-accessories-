@@ -126,7 +126,6 @@ class WhatsAppMessage(models.Model):
         if not product:
             raise ValueError(f"No product found with reference: {reference}")
 
-        # Step 2: Filter by product attribute values (Marque, Année, Modèle, Style, Color)
         # Get the attributes that correspond to these names
         attribute_marque = self.env['product.attribute'].search([('name', '=', 'Marques')], limit=1)
         attribute_annee = self.env['product.attribute'].search([('name', '=', 'Année')], limit=1)
@@ -153,8 +152,7 @@ class WhatsAppMessage(models.Model):
         if  product_variant:
             return product_variant
         else:
-            raise ValueError(f"*** No matching variant found for reference: {reference}, Marque: {marque}, Année: {annee}, Modèle: {modele}, Style: {style}, Color: {color}")
-
+            raise ValueError(f"*** No matching variant found for reference: {reference}, Marque: {brand}, Année: {annee}, Modèle: {modele}, Style: {style}, Color: {color}")
 
             
     def get_destination_partner(self, destination_name):
