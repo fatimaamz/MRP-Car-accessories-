@@ -36,10 +36,10 @@
                             <strong>Product:</strong><br/>
                             <span t-field="o.product_id">Laptop Model X</span>
                         </div>-->
-                        <div class="col-3" t-if="o.product_description_variants">
+                       <!-- <div class="col-3" t-if="o.product_description_variants">
                             <strong>Description:</strong><br/>
                             <span t-field="o.product_description_variants">Laptop with 16GB RAM</span>
-                        </div>
+                        </div>-->
                         <div class="col-3" t-if="o.selected_characteristics">
                             <strong>Produit:</strong><br/>
                             <span t-field="o.selected_characteristics">Laptop with 16GB RAM</span>
