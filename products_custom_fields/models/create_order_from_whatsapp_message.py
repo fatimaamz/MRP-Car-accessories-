@@ -119,39 +119,39 @@ class WhatsAppMessage(models.Model):
 
     def get_matching_product(self, reference, brand, model, year, style, color):
         
-        product = self.env['product.product'].search([('name', 'ilike', f'#{reference}')], limit=1)
-
+        product = self.env['product.product'].search([
+        ('name', 'ilike', f'#{reference}')
+        ], limit=1)
+    
         if not product:
             raise ValueError(f"No product found with reference: {reference}")
-
+    
         # Step 2: Search for the corresponding attributes by name
         attribute_marque = self.env['product.attribute'].search([('name', '=', 'Marques')], limit=1)
         attribute_annee = self.env['product.attribute'].search([('name', '=', 'Année')], limit=1)
         attribute_modele = self.env['product.attribute'].search([('name', '=', 'Modèle')], limit=1)
         attribute_style = self.env['product.attribute'].search([('name', '=', 'Style')], limit=1)
-        attribute_color = self.env['product.attribute'].search([('name', '=', 'INSERT COLOR')], limit=1)
+        attribute_color = self.env['product.attribute'].search([('name', '=', 'Color')], limit=1)
     
         # Step 3: Ensure all attributes are found
         if not all([attribute_marque, attribute_annee, attribute_modele, attribute_style, attribute_color]):
             raise ValueError("One or more product attributes not found")
     
-        # Step 4: Search for the specific attribute values
-        attribute_values = [
-            ('product_template_attribute_value_ids.attribute_id', '=', attribute_marque.id),
-            ('product_template_attribute_value_ids.name', '=', brand),
-            ('product_template_attribute_value_ids.attribute_id', '=', attribute_annee.id),
-            ('product_template_attribute_value_ids.name', '=', year),
-            ('product_template_attribute_value_ids.attribute_id', '=', attribute_modele.id),
-            ('product_template_attribute_value_ids.name', '=', model),
-            ('product_template_attribute_value_ids.attribute_id', '=', attribute_style.id),
-            ('product_template_attribute_value_ids.name', '=', style),
-            ('product_template_attribute_value_ids.attribute_id', '=', attribute_color.id),
-            ('product_template_attribute_value_ids.name', '=', color),
-        ]
+        # Step 4: Search for specific attribute values using the corresponding attribute
+        marque_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_marque.id), ('name', '=', brand)], limit=1)
+        annee_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_annee.id), ('name', '=', year)], limit=1)
+        modele_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_modele.id), ('name', '=', model)], limit=1)
+        style_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_style.id), ('name', '=', style)], limit=1)
+        color_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_color.id), ('name', '=', color)], limit=1)
     
+        # Step 5: Ensure all attribute values are found
+        if not all([marque_value, annee_value, modele_value, style_value, color_value]):
+            raise ValueError("One or more attribute values not found")
+    
+        # Step 6: Search for the matching product variant by template and attribute values
         product_variant = self.env['product.product'].search([
-        ('product_tmpl_id', '=', product.product_tmpl_id.id),
-        ('product_template_attribute_value_ids', 'in', [attribute_marque.id, attribute_modele.id])
+            ('product_tmpl_id', '=', product.product_tmpl_id.id),
+            ('product_template_attribute_value_ids', 'in', [marque_value.id, annee_value.id, modele_value.id, style_value.id, color_value.id])
         ], limit=1)
     
         if product_variant:
