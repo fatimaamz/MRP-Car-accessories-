@@ -119,6 +119,8 @@ class WhatsAppMessage(models.Model):
 
 
     def get_matching_product(self, reference, brand, model, year, style, color): 
+        _logger = logging.getLogger(__name__)
+        
         # Step 1: Search for the base product by reference
         product = self.env['product.product'].search([
             ('name', 'ilike', f'#{reference}')
@@ -126,54 +128,67 @@ class WhatsAppMessage(models.Model):
     
         if not product:
             raise ValueError(f"No product found with reference: {reference}")
+        
+        _logger.info(f"Product found: {product.name}")
     
         # Step 2: Search for the corresponding attributes by name
         attribute_marque = self.env['product.attribute'].search([('name', '=', 'Marques')], limit=1)
+        attribute_modele = self.env['product.attribute'].search([('name', '=', 'Modèle')], limit=1) if model else None
         attribute_annee = self.env['product.attribute'].search([('name', '=', 'Année')], limit=1)
-        attribute_modele = self.env['product.attribute'].search([('name', '=', 'Modèle')], limit=1)
         attribute_style = self.env['product.attribute'].search([('name', '=', 'Style')], limit=1)
         attribute_color = self.env['product.attribute'].search([('name', '=', 'INSERT COLOR')], limit=1)
     
-        # Step 3: Ensure all attributes are found
-        if not all([attribute_marque, attribute_annee, attribute_modele, attribute_style, attribute_color]):
+        # Step 3: Ensure necessary attributes are found
+        if not all([attribute_marque, attribute_annee, attribute_style, attribute_color]):
             raise ValueError("One or more product attributes not found")
     
         # Step 4: Search for specific attribute values using the corresponding attribute
         marque_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_marque.id), ('name', '=', brand)], limit=1)
         if not marque_value:
             raise ValueError("Brand not found")
+        
+        _logger.info(f"Brand attribute value found: {marque_value.name}")
+    
+        modele_value = None
+        if model and attribute_modele:
+            modele_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_modele.id), ('name', '=', model)], limit=1)
+            if not modele_value:
+                raise ValueError("Model not found")
+            _logger.info(f"Model attribute value found: {modele_value.name}")
     
         annee_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_annee.id), ('name', '=', year)], limit=1)
-        modele_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_modele.id), ('name', '=', model)], limit=1)
+        if not annee_value:
+            raise ValueError("Year not found")
+        _logger.info(f"Year attribute value found: {annee_value.name}")
+    
         style_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_style.id), ('name', '=', style)], limit=1)
+        if not style_value:
+            raise ValueError("Style not found")
+        _logger.info(f"Style attribute value found: {style_value.name}")
+    
         color_value = self.env['product.attribute.value'].search([('attribute_id', '=', attribute_color.id), ('name', '=', color)], limit=1)
+        if not color_value:
+            raise ValueError("Color not found")
+        _logger.info(f"Color attribute value found: {color_value.name}")
     
-        # Step 5: Find product variants based on instant attribute values (Marque and Modèle)
-        if marque_value and modele_value:
-            product_variant = self.env['product.product'].search([
-                ('product_tmpl_id', '=', product.product_tmpl_id.id),
-                ('product_template_attribute_value_ids', 'in', [marque_value.id, modele_value.id])
-            ], limit=1)
+        # Step 5: Build search domain for product variants
+        attribute_value_ids = [marque_value.id, annee_value.id, style_value.id, color_value.id]
+        if modele_value:
+            attribute_value_ids.append(modele_value.id)
     
-           
-            if product_variant:
-                # Validate other non-instant attribute values manually (year, style, color)
-                missing_attributes = []
-                if annee_value and annee_value.id not in product_variant.product_template_attribute_value_ids.ids:
-                    missing_attributes.append('Year')
-                if style_value and style_value.id not in product_variant.product_template_attribute_value_ids.ids:
-                    missing_attributes.append('Style')
-                if color_value and color_value.id not in product_variant.product_template_attribute_value_ids.ids:
-                    missing_attributes.append('Color')
+        _logger.info(f"Attribute value IDs for search: {attribute_value_ids}")
     
-                if missing_attributes:
-                    raise ValueError(f"Variant found but attributes mismatch: {', '.join(missing_attributes)}")
+        # Step 6: Search for the matching product variant by template and attribute values
+        product_variant = self.env['product.product'].search([
+            ('product_tmpl_id', '=', product.product_tmpl_id.id),
+            ('product_template_attribute_value_ids.attribute_value_id', 'in', attribute_value_ids)
+        ], limit=1)
     
-                return product_variant
-            else:
-                raise ValueError(f"No matching variant found for reference: {reference}, Marque: {brand}, Modèle: {model}")
+        if product_variant:
+            _logger.info(f"Product variant found: {product_variant.name}")
+            return product_variant
         else:
-            raise ValueError(f"No matching product for Marque: {brand}, Modèle: {model}")
+            raise ValueError(f"No matching variant found for reference: {reference}, Brand: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
 
     
     def get_destination_partner(self, destination_name):
