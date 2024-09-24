@@ -118,28 +118,40 @@ class WhatsAppMessage(models.Model):
         return sale_order
 
     def get_matching_product(self, reference, brand, model, year, style, color):
-        """Retrieve a product variant that matches the specified reference and attributes"""
         
-        # Search for the product template by the reference
         product_tmpl = self.env['product.template'].search([('name', 'ilike', f'#{reference}')], limit=1)
-        
+    
         if not product_tmpl:
             _logger.error(f"No product template found with reference: {reference}")
             return None
+    
         
-        # Search for product variants with the matching attributes
+        AttributeValue = self.env['product.attribute.value']
+        
+        # Find the attribute values based on their names
+        brand_value = AttributeValue.search([('name', '=', brand), ('attribute_id.name', '=', 'Marques')], limit=1)
+        model_value = AttributeValue.search([('name', '=', model), ('attribute_id.name', '=', 'Modèle')], limit=1)
+        year_value = AttributeValue.search([('name', '=', year), ('attribute_id.name', '=', 'Année')], limit=1)
+        style_value = AttributeValue.search([('name', '=', style), ('attribute_id.name', '=', 'Style')], limit=1)
+        color_value = AttributeValue.search([('name', '=', color), ('attribute_id.name', '=', 'INSERT COLOR')], limit=1)
+    
+        attribute_value_ids = []
+        
+        if brand_value:
+            attribute_value_ids.append(brand_value.id)
+        if model_value:
+            attribute_value_ids.append(model_value.id)
+        if year_value:
+            attribute_value_ids.append(year_value.id)
+        if style_value:
+            attribute_value_ids.append(style_value.id)
+        if color_value:
+            attribute_value_ids.append(color_value.id)
+    
+        # Step 3: Search for product variants with the matching attribute values
         product_variant = self.env['product.product'].search([
             ('product_tmpl_id', '=', product_tmpl.id),
-            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Marques'),
-            ('product_template_attribute_value_ids.name', '=', brand),
-            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Modèle'),
-            ('product_template_attribute_value_ids.name', '=', model),
-            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Année'),
-            ('product_template_attribute_value_ids.name', '=', year),
-            ('product_template_attribute_value_ids.attribute_id.name', '=', 'Style'),
-            ('product_template_attribute_value_ids.name', '=', style),
-            ('product_template_attribute_value_ids.attribute_id.name', '=', 'INSERT COLOR'),
-            ('product_template_attribute_value_ids.name', '=', color),
+            ('product_template_attribute_value_ids', 'in', attribute_value_ids)
         ], limit=1)
     
         if product_variant:
@@ -148,6 +160,7 @@ class WhatsAppMessage(models.Model):
         else:
             _logger.error(f"No matching product variant found for reference: {reference}, Brand: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
             return None
+
             
     def get_destination_partner(self, destination_name):
         """Retrieve or create a partner for the destination"""
