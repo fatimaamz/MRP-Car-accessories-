@@ -143,10 +143,10 @@ class WhatsAppMessage(models.Model):
             ('product_tmpl_id', '=', product.product_tmpl_id.id),
             ('attribute_value_ids', 'in', [
                 attribute_marque.value_ids.filtered(lambda v: v.name == brand).id,
-                attribute_annee.value_ids.filtered(lambda v: v.name == year).id,
+                #attribute_annee.value_ids.filtered(lambda v: v.name == year).id,
                 attribute_modele.value_ids.filtered(lambda v: v.name == model).id,
-                attribute_style.value_ids.filtered(lambda v: v.name == style).id,
-                attribute_color.value_ids.filtered(lambda v: v.name == color).id
+                #attribute_style.value_ids.filtered(lambda v: v.name == style).id,
+                #attribute_color.value_ids.filtered(lambda v: v.name == color).id
             ])
         ], limit=1)
 
