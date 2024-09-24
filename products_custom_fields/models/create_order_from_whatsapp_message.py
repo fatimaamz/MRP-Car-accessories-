@@ -5,11 +5,11 @@ from odoo import models, fields, api
 _logger = logging.getLogger(__name__)
 
 class WhatsAppMessage(models.Model):
-    _inherit = 'whatsapp.message'  # Inheriting the existing model
+    _inherit = 'whatsapp.message'  
 
     @api.model
     def create(self, vals):
-        # Create the record first
+       
         record = super(WhatsAppMessage, self).create(vals)
         
         # Process the message to create an order, if applicable
