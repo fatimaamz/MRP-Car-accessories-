@@ -107,7 +107,7 @@ class WhatsAppMessage(models.Model):
         # Create the sale order
         sale_order = self.env['sale.order'].create({
             'partner_id': client_partner.id,  # The representative (client)
-            'order_source':'whatsapp',
+            'from_whatsapp':True,
             'order_line': [(0, 0, {
                 'product_id': product.id,
                 'product_uom_qty': 1,  # Or dynamically set quantity
@@ -118,19 +118,17 @@ class WhatsAppMessage(models.Model):
         return sale_order
 
     def get_matching_product(self, reference, brand, model, year, style, color):
-        """Retrieve a product that matches the specified reference and attributes"""
-        product_tmpl = self.env['product.template'].search([
-            ('name', 'ilike', f'#{reference}'),  # Match by reference
-            ('attribute_line_ids.attribute_id.name', 'in', ['Marque', 'Modele', 'Année', 'Style', 'INSERT COLOR']),
-            ('attribute_line_ids.value_ids.name', 'in', [brand, model, year, style, color])
+        """Retrieve a product variant that matches the specified reference and attributes"""
+        # Search in product.product instead of product.template
+        product_variant = self.env['product.product'].search([
+            ('product_tmpl_id.name', 'ilike', f'#{reference}'),  # Match by reference in the product template's name
+            ('attribute_value_ids.name', 'in', [brand, model, year, style, color])  # Match product attributes
         ], limit=1)
     
-        if product_tmpl:
-            # If product template is found, return the corresponding product variant (if applicable)
-            product_variant = product_tmpl.product_variant_id
-            return product_variant if product_variant else product_tmpl
-        return None
-        
+        if product_variant:
+            return product_variant  # Return the found variant
+        return None  # Return None if no matching product variant is found
+            
     def get_destination_partner(self, destination_name):
         """Retrieve or create a partner for the destination"""
         destination_partner = self.env['res.partner'].search([('name', '=', destination_name)], limit=1)
