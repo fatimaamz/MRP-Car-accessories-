@@ -250,7 +250,7 @@ class WhatsAppMessage(models.Model):
         ])
     
         for variant in product_variants:
-            variant_attribute_ids = variant.product_template_attribute_value_ids.mapped('product_attribute_value_id.id')
+            variant_attribute_ids = variant.product_template_attribute_value_ids.mapped('product_attribute_value_id')
             
             # Check if the variant's attribute values for "Marque" and "Model" match the required ones
             if set(required_attribute_value_ids).issubset(set(variant_attribute_ids)):
