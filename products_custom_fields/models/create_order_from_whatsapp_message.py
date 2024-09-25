@@ -179,10 +179,10 @@ class WhatsAppMessage(models.Model):
     
         _logger.info(f"Attribute value IDs for search: {attribute_value_ids}")
     
-        # Step 6: Search for the matching product variant by template and attribute values
+        """
         product_variant = self.env['product.product'].search([
             ('product_tmpl_id', '=', product.product_tmpl_id.id),
-            ('product_template_attribute_value_ids.product_attribute_value_id.id', 'in', attribute_value_ids)
+            ('product_template_attribute_value_ids.product_attribute_value_id', 'in', attribute_value_ids)
         ], limit=1)
 
         
@@ -193,7 +193,25 @@ class WhatsAppMessage(models.Model):
             return product_variant
         else:
             raise ValueError(f"No matching variant found for reference: {reference}, Brand: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
+        """
+        required_attribute_value_ids = [marque_value.id, modele_value.id]
 
+        product_variants = self.env['product.product'].search([
+            ('product_tmpl_id', '=', product.product_tmpl_id.id),
+            ('product_template_attribute_value_ids.product_attribute_value_id', 'in', required_attribute_value_ids)
+        ])
+        
+        # Step 3: Filter the variants manually to ensure only "Marque" and "Model" are checked
+        for variant in product_variants:
+            variant_attribute_ids = variant.product_template_attribute_value_ids.mapped('product_attribute_value_id.id')
+            
+            # Check if the variant's attribute values for "Marque" and "Model" match the required ones
+            if set(required_attribute_value_ids).issubset(set(variant_attribute_ids)):
+                _logger.info(f"Product variant found: {variant.name}")
+                return variant
+
+        # If no matching variant is found, raise an error
+        raise ValueError(f"No matching variant found for reference: {reference}, Brand: {brand}, Model: {model}")
 
     
     def get_destination_partner(self, destination_name):
