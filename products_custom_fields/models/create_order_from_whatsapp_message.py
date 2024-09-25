@@ -190,9 +190,9 @@ class WhatsAppMessage(models.Model):
         
     
         if product_variant:
-             product_variant = product_variants[-1]
+             product_variants = product_variant[-1]
             _logger.info(f"Product variant found: {product_variant.name}")
-            return product_variant
+            return product_variants
         else:
             raise ValueError(f"No matching variant found for reference: {reference}, Brand: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
 
