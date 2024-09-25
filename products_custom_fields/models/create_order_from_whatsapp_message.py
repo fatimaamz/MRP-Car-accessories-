@@ -7,15 +7,13 @@ _logger = logging.getLogger(__name__)
 class WhatsAppMessage(models.Model):
     _inherit = 'whatsapp.message'  
 
-    @api.model
-    def create(self, vals):
+    #@api.model
+    #def create(self, vals):
        
-        record = super(WhatsAppMessage, self).create(vals)
-        
-        # Process the message to create an order, if applicable
-        record.process_whatsapp_message(record)
+        #record = super(WhatsAppMessage, self).create(vals)
+        #record.process_whatsapp_message(record)
 
-        return record
+        #return record
 
     def process_whatsapp_message(self, message):
         # Required keys for order creation
