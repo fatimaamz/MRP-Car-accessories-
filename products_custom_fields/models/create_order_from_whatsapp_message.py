@@ -185,7 +185,7 @@ class WhatsAppMessage(models.Model):
         product_variant = self.env['product.product'].search([
             ('product_tmpl_id', '=', product.product_tmpl_id.id),
             ('product_template_attribute_value_ids.product_attribute_value_id', 'in', attribute_value_ids)
-        ], limit=1)
+        ])
     
         if product_variant:
             _logger.info(f"Product variant found: {product_variant.name}")
