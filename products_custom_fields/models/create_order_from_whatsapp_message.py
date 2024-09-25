@@ -187,24 +187,13 @@ class WhatsAppMessage(models.Model):
             ('product_template_attribute_value_ids.product_attribute_value_id', 'in', attribute_value_ids)
         ])
 
-        for variant in product_variants:
-            variant_attribute_value_ids = variant.product_template_attribute_value_ids.mapped('product_attribute_value_id').ids
+        
     
-            _logger.info(f"Checking variant: {variant.name} with attributes: {variant_attribute_value_ids}")
-
-        # Check if all required attributes match the variant
-        if set(attribute_value_ids).issubset(variant_attribute_value_ids):
-            _logger.info(f"Found matching variant: {variant.name}")
-            return variant
-
+        if product_variant:
+            _logger.info(f"Product variant found: {product_variant.name}")
+            return product_variant[-1]
         else:
-            raise ValueError(f"No matching variant found for reference: {reference}, Marque: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
-    
-        #if product_variant:
-            #_logger.info(f"Product variant found: {product_variant.name}")
-            #return product_variant
-        #else:
-            #raise ValueError(f"No matching variant found for reference: {reference}, Brand: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
+            raise ValueError(f"No matching variant found for reference: {reference}, Brand: {brand}, Model: {model}, Year: {year}, Style: {style}, Color: {color}")
 
 
     
