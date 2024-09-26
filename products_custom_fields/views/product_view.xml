@@ -9,8 +9,9 @@
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="order_source"/>
             </xpath>
-            <xpath expr="//field[@name='state']" position="replace">
-                 <field name="state" widget="statusbar" statusbar_visible="draft,design,sent,sale"/>
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="widget">statusbar</attribute>
+                <attribute name="statusbar_visible">draft,design,sent,sale</attribute>
             </xpath>
           
            <xpath expr="//header/button[@name='action_confirm']" position="before">
@@ -20,9 +21,7 @@
                     class="btn-primary"
                     invisible="state != 'draft'"/>
            </xpath>
-           <xpath expr="//header/button[7]" position="replace">
-                <button name="action_confirm" id="action_confirm" data-hotkey="q" string="Confirm" class="btn-primary" type="object" context="{'validate_analytic': True}" invisible="state != 'sent' and state != 'design'"/>
-           </xpath>
+          
         </field>
     </record>
     
