@@ -9,10 +9,9 @@
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="order_source"/>
             </xpath>
-            <xpath expr="//field[@name='state']" position="attributes">
-                <attribute name="widget">statusbar</attribute>
-                <attribute name="statusbar_visible">draft,design,sent,sale</attribute>
-            </xpath>
+         <xpath expr="//header//field[3]" position="replace">
+            <field name="state" widget="statusbar" statusbar_visible="draft,design,sent,sale,done,cancel"/>
+        </xpath>
           
            <xpath expr="//header/button[@name='action_confirm']" position="before">
             <button name="action_set_design"
