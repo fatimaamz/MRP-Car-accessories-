@@ -9,6 +9,18 @@
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="order_source"/>
             </xpath>
+           <xpath expr="//header/button[@name='action_confirm']" position="before">
+            <button name="action_set_design"
+                    type="object"
+                    string="Passer à Design"
+                    states="draft"
+                    class="btn-primary"
+                    icon="fa-pencil"
+                    invisible="state != 'draft'"/>
+           </xpath>
+           <xpath expr="//header/button[8]" position="replace">
+              <button name="action_confirm" data-hotkey="q" string="Confirm" type="object" context="{'validate_analytic': True}" invisible="state != 'design'"/>
+           </xpath>
         </field>
     </record>
     
