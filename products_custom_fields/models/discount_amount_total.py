@@ -1,13 +1,7 @@
 from odoo import models, fields, api
 from datetime import date
 
-SALE_ORDER_STATE = [
-    ('draft', "Quotation"),
-    ('sent', "Quotation Sent"),
-    ('design', "Design"),
-    ('sale', "Sales Order"),
-    ('cancel', "Cancelled"),
-]
+
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -62,7 +56,9 @@ class SaleOrderLine(models.Model):
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
-    
+    state = fields.Selection(selection_add=[
+        ('design', 'Design')
+    ])
     order_source = fields.Selection([
         ('shopify', 'Shopify'),
         ('whatsapp', 'WhatsApp'),
@@ -70,12 +66,6 @@ class SaleOrder(models.Model):
     ], string='order Source',compute='_compute_order_source')
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
-    state = fields.Selection(
-        selection=SALE_ORDER_STATE,
-        string="Status",
-        readonly=True, copy=False, index=True,
-        tracking=3,
-        default='draft')
     
     def _compute_order_source(self):
         for order in self:
