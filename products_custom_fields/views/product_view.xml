@@ -21,7 +21,7 @@
                     invisible="state != 'draft'"/>
            </xpath>
            <xpath expr="//header/button[7]" position="replace">
-              <button name="action_confirm" data-hotkey="q" string="Confirm" type="object" context="{'validate_analytic': True}" invisible="state != 'design'"/>
+                <button name="action_confirm" id="action_confirm" data-hotkey="q" string="Confirm" class="btn-primary" type="object" context="{'validate_analytic': True}" invisible="state != 'sent' and state != 'design'"/>
            </xpath>
         </field>
     </record>
