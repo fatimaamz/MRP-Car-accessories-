@@ -62,6 +62,9 @@ class SaleOrder(models.Model):
     ], string='order Source',compute='_compute_order_source')
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
+    state = fields.Selection(selection_add=[
+        ('design', 'Design')
+    ])
     
     def _compute_order_source(self):
         for order in self:
@@ -75,4 +78,9 @@ class SaleOrder(models.Model):
                 order.order_source = 'whatsapp'
             else:
                  order.order_source = False
+    
+
+    def action_set_design(self):
+        self.state = 'design'
+
   
