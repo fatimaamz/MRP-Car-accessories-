@@ -16,7 +16,7 @@
                        type="object"
                        string="Passer à Design"
                        class="btn-primary"
-                       invisible="state != 'draft'"/>
+                      />
            </xpath>
           
         </field>
