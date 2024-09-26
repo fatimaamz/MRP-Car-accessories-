@@ -13,7 +13,6 @@
             <button name="action_set_design"
                     type="object"
                     string="Passer à Design"
-                    states="draft"
                     class="btn-primary"
                     icon="fa-pencil"
                     invisible="state != 'draft'"/>
