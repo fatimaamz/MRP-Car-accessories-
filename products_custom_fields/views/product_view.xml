@@ -9,16 +9,16 @@
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="order_source"/>
             </xpath>
-         <xpath expr="//header//field[3]" position="replace">
-            <field name="state" widget="statusbar" statusbar_visible="draft,design,sent,sale,done,cancel"/>
-        </xpath>
+            <xpath expr="//header//field[@name='state']" position="replace">
+               <field name="state" widget="statusbar" statusbar_visible="draft,design,sent,sale,done,cancel"/>
+           </xpath>
           
            <xpath expr="//header/button[@name='action_confirm']" position="before">
-            <button name="action_set_design"
-                    type="object"
-                    string="Passer à Design"
-                    class="btn-primary"
-                    invisible="state != 'draft'"/>
+               <button name="action_set_design"
+                       type="object"
+                       string="Passer à Design"
+                       class="btn-primary"
+                       invisible="state != 'draft'"/>
            </xpath>
           
         </field>
