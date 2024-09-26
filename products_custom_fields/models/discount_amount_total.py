@@ -56,9 +56,11 @@ class SaleOrderLine(models.Model):
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
-    state = fields.Selection(selection_add=[
-        ('design', 'Design')
-    ])
+    state = fields.Selection(selection_add_after={'draft': [('design', 'Design')]})
+
+    #state = fields.Selection(selection_add=[
+     #   ('design', 'Design')
+    #])
     order_source = fields.Selection([
         ('shopify', 'Shopify'),
         ('whatsapp', 'WhatsApp'),
