@@ -1,0 +1,12 @@
+<odoo>
+    <record id="view_whatsapp_message_tree_inherit" model="ir.ui.view">
+        <field name="name">whatsapp.message.tree.inherit</field>
+        <field name="model">whatsapp.message</field>
+        <field name="inherit_id" ref="whatsapp.whatsapp_message_view_tree"/> 
+        <field name="arch" type="xml">
+            <xpath expr="//tree//field[@name='body']" position="after">
+                <field name="is_synchronize"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
