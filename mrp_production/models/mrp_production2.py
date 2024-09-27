@@ -26,11 +26,12 @@ class MrpProduction(models.Model):
 
     @api.model
     def create(self, vals):
-        # Vérifier si l'ordre de fabrication est lié à une commande de vente
-        if vals.get('sale_order_id'):
-            sale_order = self.env['sale.order'].browse(vals['sale_order_id'])
-            vals['partner_id'] = sale_order.partner_id.id
-            vals['partner_shipping_id'] = sale_order.partner_shipping_id.id
+        # Vérifier si l'ordre de fabrication a une origine (nom de la commande de vente)
+        if vals.get('origin'):
+            sale_order = self.env['sale.order'].search([('name', '=', vals['origin'])], limit=1)
+            if sale_order:
+                vals['partner_id'] = sale_order.partner_id.id
+                vals['partner_shipping_id'] = sale_order.partner_shipping_id.id
         return super(MrpProduction, self).create(vals)
         
     @api.depends('origin', 'product_id')
