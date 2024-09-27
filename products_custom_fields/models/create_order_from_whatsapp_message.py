@@ -14,6 +14,8 @@ class WhatsAppMessage(models.Model):
         #record.process_whatsapp_message(record)
 
         #return record
+    is_synchronized = fields.Boolean(string='Synchronisé', default=False)
+    
 
     def process_whatsapp_message(self, message):
         # Required keys for order creation
@@ -31,7 +33,11 @@ class WhatsAppMessage(models.Model):
         # Check if all required fields are present
         if all(key in message_data for key in required_keys):
             # Create sale order based on the parsed data
-            self.create_order_from_whatsapp_data(message_data, message.mobile_number)
+            sale_order=self.create_order_from_whatsapp_data(message_data, message.mobile_number)
+            if sale_order:
+                self.is_synchronized=True
+            else:
+                self.is_synchronized=False
         else:
             # Log the issue if the structure is incorrect
             _logger.error("The message does not contain all the required information for an order: %s", clean_message_body)
