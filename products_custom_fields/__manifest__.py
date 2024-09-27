@@ -16,6 +16,7 @@
         'views/account_move_form_view.xml',
         'views/invoice_Nissan_edi.xml',
         'views/invoice_huyndai_edi.xml',
+        'views/whatsapp_message_view.xml',
     ],
     'installable': True,
 
