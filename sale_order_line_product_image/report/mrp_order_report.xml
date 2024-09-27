@@ -29,6 +29,15 @@
                             <strong>Deadline:</strong><br/>
                             <span t-field="o.date_deadline">2023-09-15</span>
                         </div>
+                        <div class="col-3" t-if="o.partner_id">
+                            <strong>Client:</strong><br/>
+                            <span t-esc="o.partner_id.name"/>
+                        </div>
+                         <div class="col-3" t-if="o.partner_shipping_id">
+                            <strong>Adresse de livraison :</strong><br/>
+                            <span t-esc="o.partner_shipping_id.contact_address"/>
+                        </div>
+                        
                     </div>
 
                     <div class="row mt32 mb32">
