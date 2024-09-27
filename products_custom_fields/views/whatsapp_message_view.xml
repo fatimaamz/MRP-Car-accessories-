@@ -5,7 +5,7 @@
         <field name="inherit_id" ref="whatsapp.whatsapp_message_view_tree"/> 
         <field name="arch" type="xml">
             <xpath expr="//tree//field[@name='body']" position="after">
-                <field name="is_synchronize"/>
+                <field name="is_synchronized"/>
             </xpath>
         </field>
     </record>
