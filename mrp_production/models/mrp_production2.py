@@ -16,15 +16,23 @@ class MrpProduction(models.Model):
     conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Statut Contrôle Qualité', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
     color = fields.Char(string='Couleur', default='No couleur')
-    
-
-
+    partner_id = fields.Many2one('res.partner', string='Client', help="Client liée a la commande")
+    partner_shipping_id = fields.Many2one('res.partner', string="Adresse de livraison", help="Adresse de livraison liée à la commande de vente")
     selected_characteristics = fields.Text(
         string="Caractéristiques",
         compute="_compute_selected_characteristics",
         store=True
     )
 
+    @api.model
+    def create(self, vals):
+        # Vérifier si l'ordre de fabrication est lié à une commande de vente
+        if vals.get('sale_order_id'):
+            sale_order = self.env['sale.order'].browse(vals['sale_order_id'])
+            vals['partner_id'] = sale_order.partner_id.id
+            vals['partner_shipping_id'] = sale_order.partner_shipping_id.id
+        return super(MrpProduction, self).create(vals)
+        
     @api.depends('origin', 'product_id')
     def _compute_selected_characteristics(self):
         
