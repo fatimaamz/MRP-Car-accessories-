@@ -69,6 +69,18 @@ class SaleOrder(models.Model):
     ], string='order Source',compute='_compute_order_source')
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
+    @api.model
+    def _default_state_selection(self):
+        return [
+            ('draft', 'Quotation'),
+            ('sent', 'Quotation Sent'),
+            ('design', 'Design'),  # Ajoutez "design" avant "sale"
+            ('sale', 'Sales Order'),
+            ('done', 'Locked'),
+            ('cancel', 'Cancelled')
+        ]
+
+    state = fields.Selection(selection=_default_state_selection, string="Status", readonly=True, copy=False, index=True, tracking=3, default='draft')
     
     def _compute_order_source(self):
         for order in self:
