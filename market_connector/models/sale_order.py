@@ -182,6 +182,11 @@ class SaleOrder(models.Model):
                 shopify_product = self.search_shopify_product_for_order_line(line, instance)
                 product = shopify_product.product_id
                 description = shopify_product.shopify_title
+                
+            print(line.get("properties"))
+                
+            for propertie in line.get("properties"):
+                description += f"\n {propertie['name']} : {propertie['value']}"
 
             order_line = self.shopify_create_sale_order_line(line, product, line.get("quantity"),
                                                              product.name, line.get("price"),
