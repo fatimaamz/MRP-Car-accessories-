@@ -1,6 +1,6 @@
 from odoo import fields, models, api
 
-
+import re
 
 
 class MrpProduction(models.Model):
@@ -69,7 +69,7 @@ class MrpProduction(models.Model):
                 color_info.append(f"Insert Color: {interior_color}")
 
             # Join all color information into a single string
-            record.color = ', '.join(color_info)
+            record.color = ', '.join(color_info) if color_info else 'No Color Information Available'
 
 
     @api.model
