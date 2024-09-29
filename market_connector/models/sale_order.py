@@ -66,6 +66,9 @@ class SaleOrder(models.Model):
     canceled_in_shopify = fields.Boolean("Annulé dans Shopify ?", default=False, copy=False)
     is_pos_order = fields.Boolean("Commande POS ?", copy=False, default=False)
     is_service_tracking_updated = fields.Boolean("Suivi de service mis à jour ?", default=False, copy=False)
+    tracking_company = fields.Char("Tracking Company")
+    tracking_number = fields.Char("Tracking Number")
+    shipping_status = fields.Char("Shipping Status")
 
 
     _sql_constraints = [('unique_shopify_order',
@@ -156,6 +159,10 @@ class SaleOrder(models.Model):
 
         return {"shopify_location_id": shopify_location and shopify_location.id or False,
                 "warehouse_id": warehouse_id, "is_pos_order": pos_order}
+        
+        
+    def update_from_queue(queue):
+        pass
 
     def create_shopify_order_lines(self, lines, order_response, instance):
         addons = ""
@@ -688,15 +695,14 @@ class SaleOrder(models.Model):
             tracking_numbers.append(tracking_no)
 
         return tracking_numbers, line_items
+    
+    
+    def update_order_status_in_odoo():
+        pass
 
     def update_order_status_in_shopify(self, instance):
-        return True
-        common_log_book_obj = self.env["common.log.book.ept"]
-        common_log_line_obj = self.env["common.log.lines.ept"]
+        return 
 
-        model_id = common_log_line_obj.get_model_id(self._name)
-        notify_customer = instance.notify_customer
-        log_book = common_log_book_obj.shopify_create_common_log_book("export", instance, model_id)
         _logger.info(_("Update Order Status process start for '%s' Instance") % instance.name)
 
         instance.connect_in_shopify()
@@ -717,7 +723,7 @@ class SaleOrder(models.Model):
                     "\n- This might have happen because user may have done changes in order "
                     "manually, after the order was imported.", sale_order.name))
                 _logger.info(message)
-                self.create_shopify_log_line(message, False, log_book, sale_order.client_order_ref)
+                self.create_shopify_log_line(message, False, instance, sale_order.client_order_ref)
                 continue
 
             tracking_numbers, line_items = sale_order.prepare_tracking_numbers_and_lines_for_fulfilment(picking)
@@ -729,9 +735,9 @@ class SaleOrder(models.Model):
                 self.create_shopify_log_line(message, False, log_book, sale_order.client_order_ref)
                 continue
 
-            # shopify_location_id = self.search_shopify_location_for_update_order_status(sale_order, instance, log_book)
+            shopify_location_id = self.search_shopify_location_for_update_order_status(sale_order, instance, log_book)
 
-            """ if not shopify_location_id:
+            if not shopify_location_id:
                 continue
 
             fulfillment_vals = self.prepare_vals_for_fulfillment(sale_order, shopify_location_id, tracking_numbers,
@@ -748,8 +754,6 @@ class SaleOrder(models.Model):
 
             sale_order.shopify_location_id = shopify_location_id
 
-        if not log_book.log_lines:
-            log_book.unlink() """
 
         self.closed_at(instance)
         return True
@@ -868,10 +872,9 @@ class SaleOrder(models.Model):
                              order_data.get("id"), instance.name)
             return True
 
-        shopify_order_queue_line_obj = self.env["shopify.order.data.queue.line.ept"]
-        shopify_order_queue_line_obj.create_order_data_queue_line([order_data],
-                                                                  instance,
-                                                                  created_by='webhook')
+        # TODO :  update order queue
+        order_data_queue = shopify_order_queue_obj.search([('shopify_id','=',order_data.get("id"))], limit=1)
+        order_data_queue.update_order(order_data)
         self._cr.commit()
         return True
 

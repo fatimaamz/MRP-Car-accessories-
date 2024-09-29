@@ -292,6 +292,45 @@ class ShopifyProductDataQueueEpt(models.Model):
     def force_sync(self):
         for record in self:
             self.matching_product_product(record)
+            
+            
+    def create_order_data_queue_line(self, orders_data, instance, created_by="import"):
+        count = 0
+        need_to_create_queue = True
+        orders_data.reverse()
+        order_queue_list = []
+
+        for order in orders_data:
+            if created_by == "webhook":
+                order_queue, need_to_create_queue = self.search_webhook_order_queue(created_by, instance, order,
+                                                                                    need_to_create_queue)
+            else:
+                order = order.to_dict()
+
+            if need_to_create_queue:
+                order_queue = self.shopify_create_order_queue(instance, created_by)
+                order_queue_list.append(order_queue.id)
+                message = "Order Queue %s created." % order_queue.name
+                # self.generate_simple_notification(message)
+                self._cr.commit()
+                need_to_create_queue = False
+                _logger.info(message)
+
+            data = json.dumps(order)
+            customer_name, customer_email = self.get_customer_name_and_email(order)
+            self.create_order_queue_line(order, instance, data, customer_name, customer_email, order_queue)
+            if created_by == "webhook" and len(order_queue.order_data_queue_line_ids) >= 50:
+                order_queue.order_data_queue_line_ids.process_import_order_queue_data(update_order=True)
+
+            count += 1
+            if count == 50:
+                count = 0
+                need_to_create_queue = True
+        if not order_queue.order_data_queue_line_ids:
+            order_queue.unlink()
+            order_queue_list.remove(order_queue.id)
+
+        return order_queue_list
     
     
     

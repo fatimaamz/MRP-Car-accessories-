@@ -58,6 +58,9 @@
                                 <field name="shopify_order_number" readonly="True"/>
                                 <field name="shopify_instance_id" options="{'no_create':True,'no_create_edit':True}" readonly="True"/>
                                 <field name="shopify_order_status" readonly="True"/>
+                                <field name="tracking_company" readonly="True"/>
+                                <field name="tracking_number" readonly="True"/>
+                                <field name="shipping_status" readonly="True"/>
                             </group>
                         </group>
                         

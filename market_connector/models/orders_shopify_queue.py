@@ -47,6 +47,19 @@ class ShopifyOrderQueue(models.Model):
             log_book.unlink()
         return order_ids
     
+    def update_order(self, order_data):
+        self.data = order_data
+        order_sale = self.env['sale.order'].search([('shopify_order_id',"=",order_data.get("id"))],limit=1)
+        order_sale.shopify_order_status = order_data.get("fulfillment_status") or "unfulfilled"
+        fulfillments = order_data.get('fulfillments',[])
+        if len(fulfillments)>0:
+            print(fulfillments[0].get("tracking_company"),fulfillments[0].get("tracking_number"),fulfillments[0].get("shipping_status"))
+            order_sale.tracking_company = fulfillments[0].get("tracking_company")
+            order_sale.tracking_number = fulfillments[0].get("tracking_number")
+            order_sale.shipping_status = fulfillments[0].get("shipping_status")
+        return True
+        
+    
     def force_sync(self):
         for record in self:
             if record.instance:
