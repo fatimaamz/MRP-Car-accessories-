@@ -24,7 +24,7 @@ class MrpProduction(models.Model):
         store=True
     )
 
-    color = fields.Char(string="Color", compute='_compute_color', store=True)
+    color = fields.Char(string="Couleur", compute='_compute_color', store=True)
     
     @api.depends('selected_characteristics')
     def _compute_color(self):
