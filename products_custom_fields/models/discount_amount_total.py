@@ -75,10 +75,9 @@ class SaleOrder(models.Model):
     def _default_state_selection(self):
         return [
             ('draft', _('Devis')),
-            ('sent', _('Devis envoyé')),
+            ('sent', _('Envoyé')),
             ('design', _('Désign')),  # Ajoutez _() pour la traduction
-            ('sale', _('Commande confirmée')),
-            ('done', _('Verrouillé')),
+            ('sale', _('Bon de commande')),
             ('cancel', _('Annulé'))
         ]
 
