@@ -23,22 +23,17 @@ class MrpProduction(models.Model):
         compute="_compute_selected_characteristics",
         store=True
     )
-    import re
 
-class MrpProduction(models.Model):
-    _inherit = 'mrp.production'
-
-    selected_characteristics = fields.Text(string="Selected Characteristics")
     color = fields.Char(string="Color", compute='_compute_color', store=True)
-
+    
     @api.depends('selected_characteristics')
     def _compute_color(self):
         for record in self:
             text = record.selected_characteristics or ''
 
-            # Extract main color
+            # Extract main color, ignoring "No Color"
             main_color_match = re.search(r'MAIN COLOR: ([\w\s]+)', text)
-            main_color = main_color_match.group(1) if main_color_match else ''
+            main_color = main_color_match.group(1) if main_color_match and "No Color" not in main_color_match.group(1) else ''
             
             # Extract carbon code
             carbon_code_match = re.search(r'CARBON CODE: ([\w\s]+)', text)
@@ -51,11 +46,12 @@ class MrpProduction(models.Model):
             # Extract insert color
             insert_color_match = re.search(r'INSERT COLOR: ([\w\s]+)', text)
             insert_color = insert_color_match.group(1) if insert_color_match else ''
-
+            
+            # Extract interior color (fixing the mistake in the provided example)
             interior_color_match = re.search(r'INTERIOR COLOR: ([\w\s]+)', text)
-            interior_color = interior_color_match.group(1) if insert_color_match else ''
+            interior_color = interior_color_match.group(1) if interior_color_match else ''
 
-            # Concatenate all colors into one field
+            # Concatenate all colors into one field, ignoring empty values
             color_info = []
             if main_color:
                 color_info.append(f"Main Color: {main_color}")
@@ -66,11 +62,12 @@ class MrpProduction(models.Model):
             if insert_color:
                 color_info.append(f"Insert Color: {insert_color}")
             if interior_color:
-                color_info.append(f"Insert Color: {interior_color}")
+                color_info.append(f"Interior Color: {interior_color}")
 
             # Join all color information into a single string
             record.color = ', '.join(color_info) if color_info else 'No Color Information Available'
 
+    
 
     @api.model
     def create(self, vals):
