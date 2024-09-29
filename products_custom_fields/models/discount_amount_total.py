@@ -69,6 +69,11 @@ class SaleOrder(models.Model):
     ], string='order Source',compute='_compute_order_source')
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
+
+    def _can_be_confirmed(self):
+        self.ensure_one()
+        # Ajout de l'état 'design' comme état pouvant être confirmé
+        return self.state in {'draft', 'sent', 'design'}
     
 
     @api.model
