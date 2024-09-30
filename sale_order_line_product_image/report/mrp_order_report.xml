@@ -83,7 +83,7 @@
                     </div>
 
                 <t t-if="o.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)">
-                    <h3>Notes Internes</h3>
+                    <strong>Notes Internes :</strong>
                     <t t-foreach="o.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)" t-as="message">
                         <div>
                             <strong><t t-esc="message.create_uid.name"/>:</strong>
@@ -95,7 +95,7 @@
                 </t>
 
                 <t t-if="o.message_ids.filtered(lambda m: m.message_type != 'notification')">
-            <h3>Messages du Chatter</h3>
+            <strong>Messages :</strong>
             <t t-foreach="o.message_ids.filtered(lambda m: m.message_type != 'notification')" t-as="message">
                 <div>
                     <strong><t t-esc="message.create_uid.name"/>:</strong>
