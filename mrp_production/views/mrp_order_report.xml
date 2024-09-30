@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+
+     <template id="report_picking_inherit_shopify_instance" inherit_id="stock.report_picking">
+        <xpath expr="//div[@class='row mt32 mb32']" position="inside">
+            
+            <div t-if="o.shopify_instance_id" class="col-auto" name="div_shopify_instance">
+                <strong>Origine :</strong>
+                <p t-field="o.shopify_instance_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+
+    
     <template id="report_mrporder_inherit" inherit_id="mrp.report_mrporder">
         
         
@@ -70,7 +83,7 @@
                             <span t-field="o.product_uom_id.name" groups="uom.group_uom">Units</span>
                         </div>
                          <div class="col-3" t-if="o.shopify_instance_id">
-                            <strong>Site:</strong><br/>
+                            <strong>Origine:</strong><br/>
                             <span t-field="o.shopify_instance_id">Site</span>
                         </div>
                        
