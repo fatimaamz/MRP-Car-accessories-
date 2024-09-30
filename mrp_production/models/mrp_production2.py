@@ -2,6 +2,19 @@ from odoo import fields, models, api
 
 import re
 
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+    shopify_instance_id = fields.Many2one('shopify.credentials', string="Instance Shopify", compute='_compute_shopify_instance')
+
+    @api.depends('origin')
+    def _compute_shopify_instance(self):
+        for picking in self:
+            sale_order = self.env['sale.order'].search([('name', '=', picking.origin)], limit=1)
+            if sale_order:
+                picking.shopify_instance_id = sale_order.shopify_instance_id
+            else:
+                picking.shopify_instance_id = False
 
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
