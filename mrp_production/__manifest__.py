@@ -12,6 +12,7 @@
         
         "views/mrp_production.xml",
         "views/etiquette_du_produit_fini.xml",
+        "views/mrp_order_report.xml",
         'security/ir.model.access.csv',
       
     ],
