@@ -29,10 +29,7 @@
                             <strong>Deadline:</strong><br/>
                             <span t-field="o.date_deadline">2023-09-15</span>
                         </div>
-                         <div class="col-3" t-if="o.shopify_instance_id">
-                            <strong>Site:</strong><br/>
-                            <span t-field="o.shopify_instance_id">Site</span>
-                        </div>
+                        
                         <div class="col-3" t-if="o.partner_id">
                             <strong>Client:</strong><br/>
                             <span t-esc="o.partner_id.name"/>
@@ -71,6 +68,10 @@
                             <strong>Quantity Producing:</strong><br/>
                             <span t-field="o.qty_producing">50</span>
                             <span t-field="o.product_uom_id.name" groups="uom.group_uom">Units</span>
+                        </div>
+                         <div class="col-3" t-if="o.shopify_instance_id">
+                            <strong>Site:</strong><br/>
+                            <span t-field="o.shopify_instance_id">Site</span>
                         </div>
                        
                     </div>
