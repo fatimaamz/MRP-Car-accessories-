@@ -1,6 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <odoo>
 
+  <record id="view_picking_form_inherit_shopify_instance" model="ir.ui.view">
+            <field name="name">stock.picking.form.shopify.instance</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <!-- Add the shopify_instance_id field under the origin field -->
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="shopify_instance_id" />
+                </xpath>
+            </field>
+  </record>
+
   <record id="view_mrp_bom_form_inherit" model="ir.ui.view">
     <field name="name">mrp.bom.form.inherit</field>
     <field name="model">mrp.bom</field>
