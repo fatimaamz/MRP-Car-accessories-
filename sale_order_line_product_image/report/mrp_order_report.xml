@@ -81,17 +81,9 @@
                             <strong>Image Produit:</strong><br/>
                             <img t-if="o.product_image" t-att-src="image_data_uri(o.product_image)" style="width: 90%"/>                       
                     </div>
-             
-                <h3>Notes de l'ordre de production</h3>
-                <div t-if="doc.note">
-                    <p t-esc="doc.note" />
-                </div>
-            
-        
-            
-           
-                <h3>Messages Internes</h3>
-                <t t-foreach="doc.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)" t-as="message">
+
+                <h3>Notes Internes</h3>
+                <t t-foreach="o.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)" t-as="message">
                     <div>
                         <strong><t t-esc="message.create_uid.name"/>:</strong>
                         <span t-raw="message.body" />
@@ -99,12 +91,22 @@
                         <small><t t-esc="message.date" /></small>
                     </div>
                 </t>
-  
-                    
-                    
 
-                   
-
+                
+                <h3>Messages du Chatter</h3>
+                <t t-foreach="o.message_ids.filtered(lambda m: m.message_type != 'notification')" t-as="message">
+                    <div>
+                        <strong><t t-esc="message.create_uid.name"/>:</strong>
+                        <span t-raw="message.body" />
+                        <br/>
+                        <small><t t-esc="message.date" /></small>
+                    </div>
+                </t>
+             
+              
+                
+                
+        
 
                     <div t-if="o.workorder_ids" groups="mrp.group_mrp_routings">
                         <h3>
