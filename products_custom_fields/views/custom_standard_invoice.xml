@@ -17,9 +17,9 @@
                                     <strong>Date: </strong><span t-field="o.invoice_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/><br/>
                                     <strong>Ref: </strong><span t-field="o.ref"/><br/>
                                     <strong>Client PO#: </strong><span t-field="o.invoice_origin"/><br/>
-                                    <strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/><br/>
+                                    <!--<strong>Payé le /Paid on: </strong><span t-field="o.invoice_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/><br/>
                                     <strong>Chéque#: </strong><span t-field="o.payment_reference"/><br/>
-                                    <strong>Invoice Discount: </strong><span t-field="o.invoice_line_ids[0].discount"/>%<br/>
+                                    <strong>Invoice Discount: </strong><span t-field="o.invoice_line_ids[0].discount"/>%<br/>-->
                                 </div>
                                 </div>
                 
@@ -451,7 +451,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt32 mb32">
+                   <!-- <div class="row mt32 mb32">
                                 <div class="col-6">
                                     <strong>PCS:</strong>
                                     <span t-field="o.pcs"/>
@@ -488,7 +488,7 @@
                                 </div>
                         </div>
 
-                </div>
+                </div>-->
             </t>
 
 
