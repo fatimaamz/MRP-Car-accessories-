@@ -5,7 +5,7 @@ import re
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    shopify_instance_id = fields.Many2one('shopify.credentials', string="Instance Shopify", compute='_compute_shopify_instance')
+    shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
 
     @api.depends('origin')
     def _compute_shopify_instance(self):
