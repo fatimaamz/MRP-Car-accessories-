@@ -50,8 +50,12 @@
         <xpath expr="//div[@name='bom_div']" position="after">
             <field name="design_ids"/>
         </xpath>
+      <xpath expr="//group[@name='group_extra_info']" position="inside">
+        <field name="shopify_instance_id"/>
+      </xpath>
        <xpath expr="//group[1]" position="after" >
          <group name="product_image_group" string="Détails du Produit" invisible="not product_id" >
+            
             <field name="product_image" widget="image"/>
             <field name="selected_characteristics" />
            <!-- <field name="product_variant_ids"  widget="many2many_tags"/>
