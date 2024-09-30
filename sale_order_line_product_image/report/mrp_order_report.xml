@@ -80,10 +80,10 @@
                      <div  t-if="o.product_image">
                             <strong>Image Produit:</strong><br/>
                             <img t-if="o.product_image" t-att-src="image_data_uri(o.product_image)" style="width: 90%"/>                       
-                    </div>
-
+                    </div></br>
+<div>
                 <t t-if="o.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)">
-                    <strong>Notes Internes :</strong>
+                    <h5>Notes Internes :</h5>
                     <t t-foreach="o.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)" t-as="message">
                         <div>
                             <strong><t t-esc="message.create_uid.name"/>:</strong>
@@ -95,7 +95,7 @@
                 </t>
 
                 <t t-if="o.message_ids.filtered(lambda m: m.message_type != 'notification')">
-            <strong>Messages :</strong>
+            <h5>Messages :</h5>
             <t t-foreach="o.message_ids.filtered(lambda m: m.message_type != 'notification')" t-as="message">
                 <div>
                     <strong><t t-esc="message.create_uid.name"/>:</strong>
@@ -105,7 +105,7 @@
                 </div>
             </t>
         </t>
-        
+</div>
 
                 <div t-if="o.workorder_ids" groups="mrp.group_mrp_routings">
                         <h3>
