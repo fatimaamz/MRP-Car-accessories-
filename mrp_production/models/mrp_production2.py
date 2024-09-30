@@ -25,6 +25,17 @@ class MrpProduction(models.Model):
     )
 
     color = fields.Char(string="Couleur", compute='_compute_color', store=True)
+
+    shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
+
+    @api.depends('origin')
+    def _compute_shopify_instance(self):
+        for production in self:
+            sale_order = self.env['sale.order'].search([('name', '=', production.origin)], limit=1)
+            if sale_order:
+                production.shopify_instance_id = sale_order.shopify_instance_id
+            else:
+                production.shopify_instance_id = False
     
     @api.depends('selected_characteristics')
     def _compute_color(self):
