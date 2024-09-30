@@ -82,33 +82,32 @@
                             <img t-if="o.product_image" t-att-src="image_data_uri(o.product_image)" style="width: 90%"/>                       
                     </div>
 
-                <h3>Notes Internes</h3>
-                <t t-foreach="o.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)" t-as="message">
-                    <div>
-                        <strong><t t-esc="message.create_uid.name"/>:</strong>
-                        <span t-raw="message.body" />
-                        <br/>
-                        <small><t t-esc="message.date" /></small>
-                    </div>
+                <t t-if="o.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)">
+                    <h3>Notes Internes</h3>
+                    <t t-foreach="o.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)" t-as="message">
+                        <div>
+                            <strong><t t-esc="message.create_uid.name"/>:</strong>
+                            <span t-raw="message.body" />
+                            <br/>
+                            <small><t t-esc="message.date" /></small>
+                        </div>
+                    </t>
                 </t>
 
-                
-                <h3>Messages du Chatter</h3>
-                <t t-foreach="o.message_ids.filtered(lambda m: m.message_type != 'notification')" t-as="message">
-                    <div>
-                        <strong><t t-esc="message.create_uid.name"/>:</strong>
-                        <span t-raw="message.body" />
-                        <br/>
-                        <small><t t-esc="message.date" /></small>
-                    </div>
-                </t>
-             
-              
-                
-                
+                <t t-if="o.message_ids.filtered(lambda m: m.message_type != 'notification')">
+            <h3>Messages du Chatter</h3>
+            <t t-foreach="o.message_ids.filtered(lambda m: m.message_type != 'notification')" t-as="message">
+                <div>
+                    <strong><t t-esc="message.create_uid.name"/>:</strong>
+                    <span t-raw="message.body" />
+                    <br/>
+                    <small><t t-esc="message.date" /></small>
+                </div>
+            </t>
+        </t>
         
 
-                    <div t-if="o.workorder_ids" groups="mrp.group_mrp_routings">
+                <div t-if="o.workorder_ids" groups="mrp.group_mrp_routings">
                         <h3>
                             <span t-if="o.state == 'done'">Operations Done</span>
                             <span t-elif="o.is_planned">Operations Planned</span>
