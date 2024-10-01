@@ -161,7 +161,7 @@ class MrpProduction(models.Model):
             else:
                 production.finalization_status = 'non_finalise'
                 
-     def _compute_palcement(self):
+    def _compute_palcement(self):
         for production in self:
             if production.product_place:
                 production.place_status = 'place'
