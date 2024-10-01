@@ -52,7 +52,7 @@ class MrpProduction(models.Model):
                 production.shopify_instance_id = sale_order.shopify_instance_id
             else:
                 production.shopify_instance_id = False
-    
+    """
     @api.depends('selected_characteristics')
     def _compute_color(self):
         for record in self:
@@ -94,7 +94,47 @@ class MrpProduction(models.Model):
             # Join all color information into a single string
             record.color = ', '.join(color_info) if color_info else 'No Color Information Available'
 
+        """
+    @api.depends('selected_characteristics')
+    def _compute_color(self):
+        for record in self:
+            text = record.selected_characteristics or ''
     
+            # Extract main color, ignoring "No Color"
+            main_color_match = re.search(r'MAIN COLOR: ([\w\s]+)', text)
+            main_color = main_color_match.group(1) if main_color_match and "No Color" not in main_color_match.group(1) else ''
+            
+            # Extract carbon code, ignoring "None"
+            carbon_code_match = re.search(r'CARBON CODE: ([\w\s]+)', text)
+            carbon_code = carbon_code_match.group(1) if carbon_code_match and "None" not in carbon_code_match.group(1) else ''
+            
+            # Extract paint code, ignoring "None"
+            paint_code_match = re.search(r'PAINT CODE: ([\w\s]+)', text)
+            paint_code = paint_code_match.group(1) if paint_code_match and "None" not in paint_code_match.group(1) else ''
+            
+            # Extract insert color, ignoring "No insert"
+            insert_color_match = re.search(r'INSERT COLOR: ([\w\s]+)', text)
+            insert_color = insert_color_match.group(1) if insert_color_match and "No insert" not in insert_color_match.group(1) else ''
+            
+            # Extract interior color, ignoring "No Color"
+            interior_color_match = re.search(r'INTERIOR COLOR: ([\w\s]+)', text)
+            interior_color = interior_color_match.group(1) if interior_color_match and "No Color" not in interior_color_match.group(1) else ''
+    
+            # Concatenate all colors into one field, ignoring empty values
+            color_info = []
+            if main_color:
+                color_info.append(f"Main Color: {main_color}")
+            if carbon_code:
+                color_info.append(f"Carbon Code: {carbon_code}")
+            if paint_code:
+                color_info.append(f"Paint Code: {paint_code}")
+            if insert_color:
+                color_info.append(f"Insert Color: {insert_color}")
+            if interior_color:
+                color_info.append(f"Interior Color: {interior_color}")
+    
+            # Join all color information into a single string
+            record.color = ', '.join(color_info) if color_info else 'No Color Information Available'
 
     @api.model
     def create(self, vals):
