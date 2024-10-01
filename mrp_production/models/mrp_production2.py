@@ -19,7 +19,7 @@ class StockPicking(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-     state = fields.Selection([
+    state = fields.Selection([
         ('draft', 'Commander'),
         ('confirmed', 'Coupé'),
         ('progress', 'En cours'),
