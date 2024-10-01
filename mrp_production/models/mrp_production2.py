@@ -36,6 +36,15 @@ class MrpProduction(models.Model):
         compute="_compute_selected_characteristics",
         store=True
     )
+    state = fields.Selection([
+        ('draft', 'Commander'),
+        ('confirmed', 'Coupé'),
+        ('progress', 'In Progress'),
+        ('to_close', 'À clôturer'),
+        ('done', 'Coler'),
+        ('cancel', 'Annulé')], string='State',
+        compute='_compute_state', copy=False, index=True, readonly=True,
+        store=True, tracking=True)
 
     color = fields.Char(string="Couleur", compute='_compute_color', store=True)
 
