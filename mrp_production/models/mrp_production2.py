@@ -36,14 +36,7 @@ class MrpProduction(models.Model):
         compute="_compute_selected_characteristics",
         store=True
     )
-    state = fields.Selection([
-        ('draft', 'Commander'),
-        ('confirmed', 'Coupé'),
-        ('progress', 'En cours'),
-        ('to_close', 'À clôturer'),
-        ('done', 'Coler'),
-        ('cancel', 'Annulé')], string='Status')
-
+   
     color = fields.Char(string="Couleur", compute='_compute_color', store=True)
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
