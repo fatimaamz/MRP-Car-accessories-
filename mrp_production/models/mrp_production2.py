@@ -42,9 +42,7 @@ class MrpProduction(models.Model):
         ('progress', 'En cours'),
         ('to_close', 'À clôturer'),
         ('done', 'Coler'),
-        ('cancel', 'Annulé')], string='State',
-        copy=False, index=True, readonly=True,
-        tracking=True)
+        ('cancel', 'Annulé')], string='Status')
 
     color = fields.Char(string="Couleur", compute='_compute_color', store=True)
 
