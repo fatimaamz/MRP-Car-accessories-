@@ -39,7 +39,7 @@ class MrpProduction(models.Model):
     state = fields.Selection([
         ('draft', 'Commander'),
         ('confirmed', 'Coupé'),
-        ('progress', 'In Progress'),
+        ('progress', 'En cours'),
         ('to_close', 'À clôturer'),
         ('done', 'Coler'),
         ('cancel', 'Annulé')], string='State',
