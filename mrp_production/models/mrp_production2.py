@@ -19,7 +19,7 @@ class StockPicking(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-
+    product_qty = fields.Float(string='Quantité', digits=(16, 0))
     design_ids = fields.Many2one('kit.design', string='Designs', domain="[('bom_id', '=',bom_id)]")
     remarque_controle_qualite = fields.Text('Remarque Contrôle Qualité')
     product_image=fields.Binary(related='product_id.image_1920' ,string='Image de prouit')
