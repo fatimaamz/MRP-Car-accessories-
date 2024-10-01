@@ -19,6 +19,20 @@ class StockPicking(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
+     state = fields.Selection([
+        ('draft', 'Commander'),
+        ('confirmed', 'Coupé'),
+        ('progress', 'En cours'),
+        ('to_close', 'À clôturer'),
+        ('done', 'Coler'),
+        ('cancel', 'Annulé')],
+        string='Status',
+        readonly=True,
+        copy=False,
+        index=True,
+        tracking=True
+    )
+
     design_ids = fields.Many2one('kit.design', string='Designs', domain="[('bom_id', '=',bom_id)]")
     remarque_controle_qualite = fields.Text('Remarque Contrôle Qualité')
     product_image=fields.Binary(related='product_id.image_1920' ,string='Image de prouit')
