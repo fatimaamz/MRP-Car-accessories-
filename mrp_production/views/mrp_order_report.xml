@@ -13,9 +13,11 @@
         <xpath expr="//span[@t-if='ml.product_id.description_picking']" position="replace">
             <!-- Replace the original span to filter out unwanted values -->
             <span t-if="ml.product_id.description_picking">
-                <t t-esc="
-                    ml.product_id.description_picking.replace('None', '').replace('No Color', '').replace('No insert', '').strip()
-                "/>
+                <t t-foreach="ml.product_id.description_picking.split('\n')" t-as="line">
+                    <t t-if="not ('None' in line or 'No Color' in line or 'No insert' in line)">
+                        <p t-esc="line.strip()"/>
+                    </t>
+                </t>
             </span>
         </xpath>
     </template>
