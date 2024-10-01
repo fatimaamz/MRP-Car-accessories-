@@ -45,7 +45,7 @@ class MrpProduction(models.Model):
     color = fields.Char(string='Couleur', default='No couleur')
     partner_id = fields.Many2one('res.partner', string='Client', help="Client liée a la commande")
     partner_shipping_id = fields.Many2one('res.partner', string="Adresse de livraison", help="Adresse de livraison liée à la commande de vente")
-    product_palce = fields.Boolean(string='Finition terminée')
+    product_place = fields.Boolean(string='Finition terminée')
     place_status = fields.Selection([('place', 'Placé'), ('non_place', 'Non placé')], string='Placement' ,compute='_compute_placement')
     selected_characteristics = fields.Text(
         string="Caractéristiques",
