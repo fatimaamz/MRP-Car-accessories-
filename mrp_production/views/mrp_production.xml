@@ -68,6 +68,12 @@
         <field name="shopify_instance_id"/>
       </xpath>
        <xpath expr="//group[1]" position="after" >
+         <group name="product_icontrol_group" string="Contrôle produits" invisible="state !='done'" >
+           <field name="product_place"/>
+            <field name="product_finalized"/>
+            <field name="is_conforme"/>
+           <field name="remarque_controle_qualite"/>
+         </group>
          <group name="product_image_group" string="Détails du Produit" invisible="not product_id" >
             
             <field name="product_image" widget="image"/>
@@ -75,11 +81,7 @@
            <!-- <field name="product_variant_ids"  widget="many2many_tags"/>
             <field name="product_tag_ids"  widget="many2many_tags"/>-->
          </group>
-         <group name="product_icontrol_group" string="Contrôle produits" invisible="state !='done'" >
-            <field name="product_finalized"/>
-            <field name="is_conforme"/>
-           <field name="remarque_controle_qualite"/>
-         </group>
+         
         </xpath>
        
     </field>
@@ -91,8 +93,11 @@
     <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
     <field name="arch" type="xml">
      <xpath expr="//field[@name='state']" position="after">
+        <field name="place_status" invisible="state !='done'"  widget="badge" decoration-success="finalization_status == 'place'"  decoration-danger="finalization_status== 'non_place'" />
+
         <field name="finalization_status" invisible="state !='done'"  widget="badge" decoration-success="finalization_status == 'finalise'"  decoration-danger="finalization_status== 'non_finalise'" />
-         <field name="conform_status" invisible="state !='done'"  widget="badge" decoration-success="conform_status == 'conforme'"  decoration-danger="conform_status == 'non_conforme'" />
+        
+       <field name="conform_status" invisible="state !='done'"  widget="badge" decoration-success="conform_status == 'conforme'"  decoration-danger="conform_status == 'non_conforme'" />
       </xpath>
       <xpath expr="//tree//field[@name='product_id']" position="after">
             <field name="color"/>
