@@ -93,7 +93,7 @@
     <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
     <field name="arch" type="xml">
      <xpath expr="//field[@name='state']" position="after">
-        <field name="place_status" invisible="state !='done'"  widget="badge" decoration-success="finalization_status == 'place'"  decoration-danger="finalization_status== 'non_place'" />
+        <field name="place_status" invisible="state !='done'"  widget="badge" decoration-success="place_status == 'place'"  decoration-danger="place_status== 'non_place'" />
 
         <field name="finalization_status" invisible="state !='done'"  widget="badge" decoration-success="finalization_status == 'finalise'"  decoration-danger="finalization_status== 'non_finalise'" />
         
