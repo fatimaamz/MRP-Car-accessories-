@@ -10,7 +10,7 @@
             </div>
         </xpath>
 
-        <xpath expr="//tbody[1]//tr[1]//td[1]//span[t-if='ml.product_id.description_picking']" position="replace">
+        <xpath expr="//div[@class='page'//table[1]//tbody[1]//tr[1]//td[1]//span[t-if='ml.product_id.description_picking']" position="replace">
             <!-- Replace the original span to filter out unwanted values -->
             <span t-if="ml.product_id.description_picking">
                 <t t-esc="
