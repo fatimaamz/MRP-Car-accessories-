@@ -38,13 +38,15 @@ class MrpProduction(models.Model):
     product_image=fields.Binary(related='product_id.image_1920' ,string='Image de prouit')
     product_variant_ids=fields.Many2many(related='product_id.product_template_variant_value_ids',string='Caractéristiques')
     product_finalized = fields.Boolean(string='Finition terminée')
-    finalization_status = fields.Selection([('finalise', 'Finition terminée'), ('non_finalise', 'Non finalisé')], string='Statut Finition' ,compute='_compute_finalization_status')
+    finalization_status = fields.Selection([('finalise', 'Finition terminée'), ('non_finalise', 'Non finalisé')], string='Finition' ,compute='_compute_finalization_status')
     is_conforme = fields.Boolean('Conforme')
     conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Statut Contrôle Qualité', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
     color = fields.Char(string='Couleur', default='No couleur')
     partner_id = fields.Many2one('res.partner', string='Client', help="Client liée a la commande")
     partner_shipping_id = fields.Many2one('res.partner', string="Adresse de livraison", help="Adresse de livraison liée à la commande de vente")
+    product_palce = fields.Boolean(string='Finition terminée')
+    place_status = fields.Selection([('place', 'Placé'), ('non_place', 'Non placé')], string='Placement' ,compute='_compute_placement')
     selected_characteristics = fields.Text(
         string="Caractéristiques",
         compute="_compute_selected_characteristics",
@@ -158,6 +160,13 @@ class MrpProduction(models.Model):
                 production.finalization_status = 'finalise'
             else:
                 production.finalization_status = 'non_finalise'
+                
+     def _compute_palcement(self):
+        for production in self:
+            if production.product_place:
+                production.place_status = 'place'
+            else:
+                production.place_status = 'non_place'
 
     
 
