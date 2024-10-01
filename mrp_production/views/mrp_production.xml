@@ -58,7 +58,9 @@
     <field name="model">mrp.production</field>
     <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
     <field name="arch" type="xml">
-       
+      <xpath expr="//header//field[@name='state']" position="replace">
+        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+      </xpath>
         <xpath expr="//div[@name='bom_div']" position="after">
             <field name="design_ids"/>
         </xpath>
