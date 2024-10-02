@@ -102,8 +102,8 @@ class MrpProduction(models.Model):
     def _compute_year(self):
         for record in self:
             text = record.selected_characteristics or ''
-            years = re.search(r'Année: ([\w\s]+)', text)
-            record.years = years
+            years_match = re.search(r'Année: ([\w\s]+)', text)
+            record.years = years_match.group(1) if years_match and "None" not in years_match.group(1) else ''
         
     @api.depends('selected_characteristics')
     def _compute_color(self):

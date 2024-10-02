@@ -181,15 +181,15 @@ class SaleOrder(models.Model):
             if prop['name'] == 'Insert Color':
                 insert_color = prop['value']
             elif prop['name'] == 'Paint Code':
-                paint_code = prop['value'] if prop['value'] else "SA/SB Silver Moon"
+                paint_code = prop['value']
             elif prop['name'] == 'Main Colors':
                 main_color = prop['value']
 
             # Formatting the string
             formatted_description = f"""{reference_code} ({car_model.split(' ')[1]}, {car_model.split(' ')[0]})
-INTERIOR COLOR: {main_color}
-PAINT CODE: {paint_code}
-INSERT COLOR: {insert_color}
+Interior Color: {main_color}
+Paint Code: {paint_code}
+Insert Color: {insert_color}
 Année: {car_year}"""
 
             print(formatted_description)
