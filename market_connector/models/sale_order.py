@@ -190,7 +190,6 @@ class SaleOrder(models.Model):
 INTERIOR COLOR: {main_color}
 PAINT CODE: {paint_code}
 INSERT COLOR: {insert_color}
-MAIN COLOR 
 Année: {car_year}"""
 
             print(formatted_description)
