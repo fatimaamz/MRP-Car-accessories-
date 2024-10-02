@@ -41,6 +41,7 @@ class MrpProduction(models.Model):
     )
    
     color = fields.Char(string="Couleur", compute='_compute_color', store=True)
+    years = fields.Char(string="Années", compute='_compute_year', store=True)
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
 
@@ -95,6 +96,15 @@ class MrpProduction(models.Model):
             record.color = ', '.join(color_info) if color_info else 'No Color Information Available'
 
         """
+
+
+    @api.depends('selected_characteristics')
+    def _compute_year(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            years = re.search(r'Année: ([\w\s]+)', text)
+            record.years = years
+        
     @api.depends('selected_characteristics')
     def _compute_color(self):
         for record in self:
