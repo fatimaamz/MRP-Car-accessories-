@@ -14,6 +14,7 @@ from odoo.exceptions import UserError
 from ..libs.pyactiveresource.util import xml_to_dict
 from ..libs import shopify
 from ..libs.pyactiveresource.connection import ClientError
+import re
 
 utc = pytz.utc
 
@@ -163,6 +164,38 @@ class SaleOrder(models.Model):
         
     def update_from_queue(queue):
         pass
+    
+    def reformat_description(self, title, properties):
+        # Extracting information from title
+        car_info = title.split(' | ')
+        car_model = car_info[0]  # e.g., Honda Civic (Hatchback)
+        car_year = car_info[1]   # e.g., 2022-2024
+        exterior_trim = car_info[2]  # e.g., Exterior Trim
+        reference_code = car_info[3]  # e.g., #HOC522SPO
+
+        # Extracting property values
+        insert_color = ""
+        paint_code = ""
+        main_color = ""
+        for prop in properties:
+            if prop['name'] == 'Insert Color':
+                insert_color = prop['value']
+            elif prop['name'] == 'Paint Code':
+                paint_code = prop['value'] if prop['value'] else "SA/SB Silver Moon"
+            elif prop['name'] == 'Main Colors':
+                main_color = prop['value']
+
+            # Formatting the string
+            formatted_description = f"""{reference_code} ({car_model.split(' ')[1]}, {car_model.split(' ')[0]})
+INTERIOR COLOR: {main_color}
+PAINT CODE: {paint_code}
+INSERT COLOR: {insert_color}
+MAIN COLOR 
+Année: {car_year}"""
+
+            print(formatted_description)
+            return formatted_description
+
 
     def create_shopify_order_lines(self, lines, order_response, instance):
         addons = ""
@@ -177,16 +210,15 @@ class SaleOrder(models.Model):
             
             if is_gift_card_line :
                 product = instance.gift_card_product_id
-                description = line.get('name')
+                title = line.get('name')
             else :
                 shopify_product = self.search_shopify_product_for_order_line(line, instance)
                 product = shopify_product.product_id
-                description = shopify_product.shopify_title
+                title = shopify_product.shopify_title
                 
-            print(line.get("properties"))
                 
-            for propertie in line.get("properties"):
-                description += f"\n {propertie['name']} : {propertie['value']}"
+                
+            description = self.reformat_description(title,line.get("properties"))
 
             order_line = self.shopify_create_sale_order_line(line, product, line.get("quantity"),
                                                              product.name, line.get("price"),
