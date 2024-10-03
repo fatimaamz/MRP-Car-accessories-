@@ -34,6 +34,7 @@
                                              <t t-esc="o.partner_id.website" />
                                         </li>
                                     </ul>
+                                </t>
                                 <t t-else="">
                                     <div class="row">
                                     <div class="col-6">
