@@ -1149,6 +1149,9 @@ Année: {car_year}"""
             'sale_line_id': order_line.id
         }
         return vals
+    
+    def generate_tracking_number():
+        pass
 
 
 class SaleOrderLine(models.Model):

@@ -232,7 +232,11 @@ class ShopifyProductDataQueueEpt(models.Model):
                           Brand : {shopify_product.brand} \n 
                           Search domain : {domain}
                           """)
-            product = self.env['product.product'].search([("name", "=", "default product")])
+            product = self.env['product.product'].create({
+                    'name': referance,
+                    'type': 'product',
+                })
+
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
         else:
