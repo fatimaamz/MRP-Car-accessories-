@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <template id="report_deliveryslip_document_inherit" inherit_id="stock.report_deliveryslip_document">
+      <xpath expr="//div[@class='col-auto']" position="before">
+          <div class="row mt32 mb32">
+              <div ct-if="o.numero_commande" class="col-auto">
+                  <strong>Numéro de commande :</strong> <p t-field="o.numero_commande"/>
+              </div>
+              <div t-if="o.numero_suivi" class="col-auto">
+                  <strong>Numéro de suivi :</strong> <p t-field="o.numero_suivi"/>
+              </div>
+
+           
+      </xpath>
+  </template>
+</odoo>
