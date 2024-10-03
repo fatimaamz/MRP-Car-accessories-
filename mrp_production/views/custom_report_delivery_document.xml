@@ -3,7 +3,7 @@
 
     <template id="report_deliveryslip_document_inherit" inherit_id="stock.report_delivery_document">
         <xpath expr="//div[@class='col-auto']" position="before">
-            <div class="row mt32 mb32">
+            
                 <div ct-if="o.numero_commande" class="col-auto">
                     <strong>Numéro de commande :</strong>
                     <p t-field="o.numero_commande"/>
@@ -12,7 +12,7 @@
                     <strong>Numéro de suivi :</strong>
                     <p t-field="o.numero_suivi"/>
                 </div>
-            </div>
+        
         </xpath>
 
         <xpath expr="//table[@name='stock_move_table']//thead[1]//tr[1]//th[@name='th_sm_product']" position="after">
