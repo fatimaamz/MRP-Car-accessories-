@@ -65,6 +65,15 @@
                                     </div>
                                 </div>
 
+                            <div class="col-5">
+                                <span class="text-end">
+                                    <span t-field="o.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:350px;height:60px'}">Package barcode</span>
+                                </span>
+                            </div>
+
+
+                                
+
                                 <!--
                                 <table class="my-0 table table-sm table-borderless" style="width: 100%; height: auto;">
                                     <t t-foreach="range(nRows)" t-as="row">
