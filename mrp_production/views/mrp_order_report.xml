@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-      
-<?xml version="1.0" encoding="UTF-8"?>
-<odoo>
+
     <template id="report_picking_custom_external_layout" inherit_id="web.external_layout_bold">
         <xpath expr="//div[@class='header o_company_#{company.id}_layout']" position="replace">
             <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
@@ -97,7 +95,7 @@
             </div>
         </xpath>
     </template>
-</odoo>
+
 
 
      
