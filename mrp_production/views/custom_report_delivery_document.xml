@@ -26,5 +26,15 @@
                 <img t-if="move.image_128" t-att-src="image_data_uri(move.image_128)" style="width: 90%"/>
             </td>
         </xpath>
+
+        <xpath expr="//table[@name='stock_move_table']//tbody[1]//tr[1]//td[2]//span[1]" position="replace">
+            <span t-field="move.product_uom_qty" t-options='{"widget": "float", "precision": 0}'/>
+        </xpath>
+
+        <xpath expr="//table[@name='stock_move_table']//tbody[1]//tr[1]//td[3]//span[1]" position="replace">
+            <span t-field="move.quantity" t-options='{"widget": "float", "precision": 0}'/>
+        </xpath>
+
+        
     </template>
 </odoo>
