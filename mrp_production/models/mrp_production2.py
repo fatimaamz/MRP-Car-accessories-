@@ -8,6 +8,7 @@ class StockPicking(models.Model):
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
     numero_commande = fields.Char(string="Numéro de commande")
     numero_suivi = fields.Char(string="Numéro de suivi")
+    
 
     @api.depends('origin')
     def _compute_shopify_instance(self):
@@ -17,6 +18,14 @@ class StockPicking(models.Model):
                 picking.shopify_instance_id = sale_order.shopify_instance_id
             else:
                 picking.shopify_instance_id = False
+
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+    
+    image_128 = fields.Image(related='product_id.image_128', string="Image", readonly=True)
+
+        
 
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
