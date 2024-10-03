@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-  <template id="report_deliveryslip_document_inherit" inherit_id="stock.report_deliveryslip_document">
-      <xpath expr="//div[@class='col-auto']" position="before">
-          <div class="row mt32 mb32">
-              <div ct-if="o.numero_commande" class="col-auto">
-                  <strong>Numéro de commande :</strong> <p t-field="o.numero_commande"/>
-              </div>
-              <div t-if="o.numero_suivi" class="col-auto">
-                  <strong>Numéro de suivi :</strong> <p t-field="o.numero_suivi"/>
-              </div>
-      </xpath>
+    <template id="report_deliveryslip_document_inherit" inherit_id="stock.report_deliveryslip_document">
+        <xpath expr="//div[@class='col-auto']" position="before">
+            <div class="row mt32 mb32">
+                <div ct-if="o.numero_commande" class="col-auto">
+                    <strong>Numéro de commande :</strong>
+                    <p t-field="o.numero_commande"/>
+                </div>
+                <div t-if="o.numero_suivi" class="col-auto">
+                    <strong>Numéro de suivi :</strong>
+                    <p t-field="o.numero_suivi"/>
+                </div>
+            </div>
+        </xpath>
 
-    <xpath expr="//table[@class='stock_move_table']//thead//tr//td[@name='th_sm_product']" position="after">
-      <th name="th_sm_image"><strong>Image</strong></th>
-    </xpath>
+        <xpath expr="//table[@class='stock_move_table']//thead//tr//td[@name='th_sm_product']" position="after">
+            <th name="th_sm_image">
+                <strong>Image</strong>
+            </th>
+        </xpath>
 
-    <xpath expr="//table[@class='stock_move_table']//tbody//tr//td[1]" position="after">
-      <td class="text-right"><img t-if="move.image_128" t-att-src="image_data_uri(move.image_128)" style="width: 90%"/></td>
-    </xpath>
-  </template>
+        <xpath expr="//table[@class='stock_move_table']//tbody//tr//td[1]" position="after">
+            <td class="text-right">
+                <img t-if="move.image_128" t-att-src="image_data_uri(move.image_128)" style="width: 90%"/>
+            </td>
+        </xpath>
+    </template>
 </odoo>
