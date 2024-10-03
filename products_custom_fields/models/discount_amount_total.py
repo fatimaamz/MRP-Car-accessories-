@@ -101,7 +101,7 @@ class SaleOrder(models.Model):
                         'partner_shipping_id': original_partner.id if partner_shipping_id is None else partner_shipping_id,
                     })
 
-            elif order_source == 'whatsApp':
+            elif order_source == 'whatsapp':
                 # Set the main partner as LUXWOOD REP and update shipping partner
                 luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
                 if luxwood_rep_partner:
