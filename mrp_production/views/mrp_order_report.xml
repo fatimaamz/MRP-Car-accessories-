@@ -1,38 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-      <template id="report_picking_custom_external_layout" inherit_id="web.external_layout">
-        <xpath expr="//div[@class='header']" position="replace">
-            <t t-if="doc._name == 'stock.picking'">
-                <!-- Check if the client is 'Design Trime' -->
-                <t t-if="o.partner_id and o.partner_id.id == 15488">
-                    <div class="header" style="text-align: center;">
-                        <!-- Affiche le logo du client -->
-                        <t t-if="o.partner_id.image_1920">
-                            <img t-att-src="'data:image/png;base64,' + o.partner_id.image_1920" style="max-height: 100px;" />
-                        </t>
-                        <!-- Affiche l'adresse du client -->
-                        <p t-esc="o.partner_id.contact_address" />
-                        <!-- Affiche l'email et le téléphone -->
-                        <p>Email: <t t-esc="o.partner_id.email" /></p>
-                        <p>Téléphone: <t t-esc="o.partner_id.phone" /></p>
+      
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_picking_custom_external_layout" inherit_id="web.external_layout_bold">
+        <xpath expr="//div[@class='header o_company_#{company.id}_layout']" position="replace">
+            <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+                <div class="o_clean_header">
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- Check if the model is stock.picking -->
+                            <t t-if="o._name == 'stock.picking'">
+                                <!-- Custom Logic for Design Trime -->
+                                <t t-if="o.partner_id and o.partner_id.id == 'DESIGNER TRIM'">
+                                    <!-- Display Custom Client Logo -->
+                                    <img t-if="o.partner_id.image_1920" 
+                                         t-att-src="'data:image/png;base64,' + o.partner_id.image_1920" 
+                                         alt="Design Trime Logo" 
+                                         style="max-height: 100px;" />
+                                    <!-- Display Custom Client Information -->
+                                    <p t-esc="o.partner_id.contact_address" />
+                                    <p>Email: <t t-esc="o.partner_id.email" /></p>
+                                    <p>Phone: <t t-esc="o.partner_id.phone" /></p>
+                                </t>
+                                <t t-else="">
+                                    <!-- Default Company Logo -->
+                                    <img t-if="company.logo" 
+                                         t-att-src="image_data_uri(company.logo)" 
+                                         alt="Logo"/>
+                                </t>
+                            </t>
+                        </div>
+
+                        <div class="col-5 offset-1" name="company_address"> 
+                            <ul class="list-unstyled" name="company_address_list">
+                                <t t-if="o._name == 'stock.picking'">
+                                    <t t-if="o.partner_id and o.partner_id.name == 'Design Trime'">
+                                        <p t-esc="o.partner_id.contact_address" />
+                                        <p>Email: <t t-esc="o.partner_id.email" /></p>
+                                        <p>Phone: <t t-esc="o.partner_id.phone" /></p>
+                                    </t>
+                                    <t t-else="">
+                                        <li t-if="company.is_company_details_empty">
+                                            <span t-field="company.partner_id" 
+                                                  t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}">
+                                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
+                                                    <strong>Company address block</strong>
+                                                    <div>Contains the company address.</div>
+                                                </div>
+                                            </span>
+                                        </li>
+                                        <li t-else="">
+                                            <span t-field="company.company_details">
+                                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
+                                                    <strong>Company details block</strong>
+                                                    <div>Contains the company details.</div>
+                                                </div>
+                                            </span>
+                                        </li>
+                                        <li t-if="not forced_vat"/>
+                                        <li t-else="">
+                                            <t t-esc="company.country_id.vat_label or 'Tax ID'">Tax ID</t>:
+                                            <span t-esc="forced_vat">US12345671</span>
+                                        </li>
+                                    </t>
+                                </t>
+                            </ul>
+                        </div>
                     </div>
-                </t>
-                <t t-else="">
-                    <!-- Default Header for Stock Picking -->
-                    <div class="header" style="text-align: center;">
-                        <h2>Default Header for Stock Picking</h2>
-                    </div>
-                </t>
-            </t>
-            <t t-else="">
-                <!-- Default Header for Other Reports -->
-                <div class="header" style="text-align: center;">
-                    <h2>Default Header for Other Reports</h2>
                 </div>
-            </t>
+            </div>
+        </xpath>
+
+        <xpath expr="//div[@class='footer o_clean_footer o_company_#{company.id}_layout']" position="replace">
+            <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout">
+                <div class="row">
+                    <div class="col-4">
+                        <span t-field="company.report_footer"/>
+                    </div>
+                    <div class="col-4">
+                        <span t-if="company.is_company_details_empty" 
+                              t-field="company.partner_id" 
+                              t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}"/>
+                        <span t-else="" t-field="company.company_details"/>
+                    </div>
+                    <div class="col-3">
+                        <div class="mt0 mb0 h5" t-if="company.report_header" t-field="company.report_header">Company tagline</div>
+                    </div>
+                    <div class="col-1">
+                        <ul t-if="report_type == 'pdf'" class="list-inline pagenumber float-end text-center">
+                            <li class="list-inline-item"><strong><span class="page"/></strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </xpath>
     </template>
+</odoo>
 
 
      
