@@ -12,10 +12,11 @@
                                 <t t-if="o.partner_id and (o.partner_id.name == 'DESIGNER TRIM' or o.partner_id.name == 'MYCAR TRIM' or o.partner_id.name == 'DYNA PERFORMANCE')">
 
                                     <!-- Display Custom Client Logo -->
-                                    <img t-if="o.partner_id.image_1920" 
-                                         t-att-src="'data:image/png;base64,' + o.partner_id.image_1920" 
-                                         alt="Design Trime Logo" 
-                                         style="max-height: 100px;" />
+                                     <t t-if="o.partner_id.image_1920">
+                                            <img t-att-src="image_data_uri(o.partner_id.image_1920)" 
+                                                 alt="Client Logo" 
+                                                 style="max-height: 100px;" />
+                                        </t>
                                     <!-- Display Custom Client Information -->
                                     <p t-esc="o.partner_id.contact_address" />
                                     <p>Email: <t t-esc="o.partner_id.email" /></p>
