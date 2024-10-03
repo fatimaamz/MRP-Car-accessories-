@@ -27,12 +27,26 @@
             </td>
         </xpath>
 
-        <xpath expr="//table[@name='stock_move_table']//tbody[1]//tr[1]//td[2]//span[1]" position="replace">
-            <span t-field="move.product_uom_qty" t-options='{"widget": "float", "precision": 0}'/>
+        <xpath expr="//table[@name='stock_move_table']//tbody[1]//tr[1]//td[2]" position="replace">
+           
+                  <span t-field="move.product_uom_qty" t-options='{"widget": "float", "precision": 0}'/>
+                <span t-field="move.product_uom" groups="uom.group_uom">units</span>
+                <span t-if="move.product_packaging_id">
+                    (<span t-field="move.product_packaging_qty" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/> <span t-field="move.product_packaging_id"/>)
+                </span>
         </xpath>
 
-        <xpath expr="//table[@name='stock_move_table']//tbody[1]//tr[1]//td[3]//span[1]" position="replace">
-            <span t-field="move.quantity" t-options='{"widget": "float", "precision": 0}'/>
+        <xpath expr="//table[@name='stock_move_table']//tbody[1]//tr[1]//td[3]" position="replace">
+
+            <td>
+                            <span t-field="move.quantity" t-options='{"widget": "float", "precision": 0}'/>
+                                    <span t-field="move.product_uom" groups="uom.group_uom">units</span>
+                                    <span t-if="move.product_packaging_id">
+                                        (<span t-field="move.product_packaging_quantity" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/> <span t-field="move.product_packaging_id"/>)
+                                    </span>
+                                </td>
+            
+            
         </xpath>
 
         
