@@ -3,7 +3,7 @@
 
 
     <template id="report_picking_custom_external_layout" inherit_id="web.external_layout_bold">
-        <xpath expr="//div[@class='header o_company_#{company.id}_layout']" position="replace">
+        <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']" position="replace">
             <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
                 <div class="o_clean_header">
                     <div class="row">
