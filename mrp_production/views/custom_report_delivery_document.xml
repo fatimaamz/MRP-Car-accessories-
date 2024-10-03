@@ -21,7 +21,7 @@
             </th>
         </xpath>
 
-        <xpath expr="//table[@class='stock_move_table']//tbody[1]//tr[1]//td[1]" position="after">
+        <xpath expr="//table[@name='stock_move_table']//tbody[1]//tr[1]//td[1]" position="after">
             <td class="text-right">
                 <img t-if="move.image_128" t-att-src="image_data_uri(move.image_128)" style="width: 90%"/>
             </td>
