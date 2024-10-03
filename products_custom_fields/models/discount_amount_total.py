@@ -70,6 +70,49 @@ class SaleOrder(models.Model):
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
 
+
+
+    @api.model
+    def create(self, vals):
+        order_source = vals.get('order_source')
+        shopify_instance_id = vals.get('shopify_instance_id')
+        partner_id = vals.get('partner_id')
+        partner_shipping_id = vals.get('partner_shipping_id')
+
+        if order_source:
+            # Store the original partner_id for shipping purposes
+            original_partner = self.env['res.partner'].browse(partner_id)
+
+            if order_source == 'shopify' and shopify_instance_id == 1:
+                # Set the main partner as DESIGNER TRIM and update shipping partner
+                designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
+                if designer_trim_partner:
+                    vals.update({
+                        'partner_id': designer_trim_partner.id,
+                        'partner_shipping_id': original_partner.id if partner_shipping_id is None else partner_shipping_id,
+                    })
+
+            elif order_source == 'shopify' and shopify_instance_id == 2:
+                # Set the main partner as LUXWOOD RETAILER and update shipping partner
+                luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
+                if luxwood_retailer_partner:
+                    vals.update({
+                        'partner_id': luxwood_retailer_partner.id,
+                        'partner_shipping_id': original_partner.id if partner_shipping_id is None else partner_shipping_id,
+                    })
+
+            elif order_source == 'whatsApp':
+                # Set the main partner as LUXWOOD REP and update shipping partner
+                luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
+                if luxwood_rep_partner:
+                    vals.update({
+                        'partner_id': luxwood_rep_partner.id,
+                        'partner_shipping_id': original_partner.id if partner_shipping_id is None else partner_shipping_id,
+                    })
+
+        return super(SaleOrder, self).create(vals)
+        
+
     def _can_be_confirmed(self):
         self.ensure_one()
         # Ajout de l'état 'design' comme état pouvant être confirmé
