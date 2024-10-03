@@ -10,8 +10,14 @@
               <div t-if="o.numero_suivi" class="col-auto">
                   <strong>Numéro de suivi :</strong> <p t-field="o.numero_suivi"/>
               </div>
-
-           
       </xpath>
+
+    <xpath expr="//table[@class='stock_move_table']//thead//tr//td[@name='th_sm_product']" position="after">
+      <th name="th_sm_image"><strong>Image</strong></th>
+    </xpath>
+
+    <xpath expr="//table[@class='stock_move_table']//tbody//tr//td[1]" position="after">
+      <td class="text-right"><img t-if="move.image_128" t-att-src="image_data_uri(move.image_128)" style="width: 90%"/></td>
+    </xpath>
   </template>
 </odoo>
