@@ -15,7 +15,7 @@
             </div>
         </xpath>
 
-        <xpath expr="//table[@class='stock_move_table']//thead[1]//tr[1]//td[@name='th_sm_product']" position="after">
+        <xpath expr="//table[@name='stock_move_table']//thead[1]//tr[1]//td[@name='th_sm_product']" position="after">
             <th name="th_sm_image">
                 <strong>Image</strong>
             </th>
