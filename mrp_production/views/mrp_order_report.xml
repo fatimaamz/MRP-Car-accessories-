@@ -19,53 +19,45 @@
                                         </t>
                                     <!-- Display Custom Client Information -->
                                     <p t-esc="o.partner_id.contact_address" />
-                                    <p>Email: <t t-esc="o.partner_id.email" /></p>
-                                    <p>Phone: <t t-esc="o.partner_id.phone" /></p>
+                                    <p><t t-esc="o.partner_id.email" /></p>
+                                    <p><t t-esc="o.partner_id.phone" /></p>
+                                     <p><t t-esc="o.partner_id.website" /></p>
                                 </t>
                                 <t t-else="">
-                                    <!-- Default Company Logo -->
-                                    <img t-if="company.logo" 
-                                         t-att-src="image_data_uri(company.logo)" 
-                                         alt="Logo"/>
-                                </t>
-                          <!--  </t>-->
-                        </div>
-
-                        <div class="col-5 offset-1" name="company_address"> 
-                            <ul class="list-unstyled" name="company_address_list">
-                               <!-- <t t-if="o._name == 'stock.picking'">-->
-                                    <t t-if="o.partner_id and o.partner_id.name == 'Design Trime'">
-                                        <p t-esc="o.partner_id.contact_address" />
-                                        <p>Email: <t t-esc="o.partner_id.email" /></p>
-                                        <p>Phone: <t t-esc="o.partner_id.phone" /></p>
-                                    </t>
-                                    <t t-else="">
-                                        <li t-if="company.is_company_details_empty">
-                                            <span t-field="company.partner_id" 
-                                                  t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}">
+                                    <div class="row">
+                                    <div class="col-6">
+                                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                                    </div>
+                                   
+                                </div>
+                                <div class="col-5 offset-1" name="company_address"> 
+                                        <ul class="list-unstyled" name="company_address_list">
+                                            <li t-if="company.is_company_details_empty"><span t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}">
                                                 <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
                                                     <strong>Company address block</strong>
                                                     <div>Contains the company address.</div>
                                                 </div>
-                                            </span>
-                                        </li>
-                                        <li t-else="">
-                                            <span t-field="company.company_details">
-                                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
-                                                    <strong>Company details block</strong>
-                                                    <div>Contains the company details.</div>
-                                                </div>
-                                            </span>
-                                        </li>
-                                        <li t-if="not forced_vat"/>
-                                        <li t-else="">
-                                            <t t-esc="company.country_id.vat_label or 'Tax ID'">Tax ID</t>:
-                                            <span t-esc="forced_vat">US12345671</span>
-                                        </li>
-                                    </t>
-                              <!--  </t>-->
-                            </ul>
+                                            </span></li>
+                                            <li t-else="">
+                                                <span t-field="company.company_details">
+                                                    <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
+                                                        <strong>Company details block</strong>
+                                                        <div>Contains the company details.</div>
+                                                    </div>
+                                                </span>
+                                            </li>
+                                            <li t-if="not forced_vat"/>
+                                            <li t-else="">
+                                                <t t-esc="company.country_id.vat_label or 'Tax ID'">Tax ID</t>:
+                                                <span t-esc="forced_vat">US12345671</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </t>
+                          <!--  </t>-->
                         </div>
+
+                        
                     </div>
                 </div>
             </div>
