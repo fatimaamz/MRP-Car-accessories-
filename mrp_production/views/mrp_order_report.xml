@@ -11,18 +11,29 @@
                            <!-- <t t-if="report_name == 'stock.picking'">-->
                                 <t t-if="o.partner_id and (o.partner_id.name == 'DESIGNER TRIM' or o.partner_id.name == 'MYCAR TRIM' or o.partner_id.name == 'DYNA PERFORMANCE')">
 
-                                    <!-- Display Custom Client Logo -->
+                                    <div class="row">
+                                    <div class="col-6">
                                      <t t-if="o.partner_id.image_1920">
                                             <img t-att-src="image_data_uri(o.partner_id.image_1920)" 
                                                  alt="Client Logo" 
                                                  style="max-height: 100px;" />
                                         </t>
-                                    <!-- Display Custom Client Information -->
-                                    <p t-esc="o.partner_id.contact_address" />
-                                    <p><t t-esc="o.partner_id.email" /></p>
-                                    <p><t t-esc="o.partner_id.phone" /></p>
-                                     <p><t t-esc="o.partner_id.website" /></p>
-                                </t>
+                                    </div>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <p t-esc="o.partner_id.contact_address" />
+                                        </li>
+                                        <li>
+                                            <t t-esc="o.partner_id.email" />
+                                        </li>
+                                        <li>
+                                             <t t-esc="o.partner_id.phone" />
+                                        </li>
+                                        <li>
+                                             <t t-esc="o.partner_id.website" />
+                                        </li>
+                                    </ul>
                                 <t t-else="">
                                     <div class="row">
                                     <div class="col-6">
