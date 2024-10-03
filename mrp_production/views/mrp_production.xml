@@ -8,6 +8,8 @@
             <field name="arch" type="xml">
                 <!-- Add the shopify_instance_id field under the origin field -->
                 <xpath expr="//field[@name='origin']" position="after">
+                    <field name="numero_commande"/>
+                    <field name="numero_suivi"/>
                     <field name="shopify_instance_id" />
                 </xpath>
             </field>

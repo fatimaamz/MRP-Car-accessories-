@@ -1,6 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
+
+    <template id="report_picking_custom_external_layout" inherit_id="web.external_layout_bold">
+        <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']" position="replace">
+            <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+                <div class="o_clean_header">
+                    <div class="row">
+                        <div class="col-6">
+                           <!-- <t t-if="report_name == 'stock.picking'">-->
+                                <t t-if="o.sale_id.partner_id and (o.sale_id.partner_id.name == 'DESIGNER TRIM' or o.sale_id.partner_id.name == 'MYCAR TRIM' or o.sale_id.partner_id.name == 'DYNA PERFORMANCE')">
+
+                                    <div class="row">
+                                    <div class="col-6">
+                                     <t t-if="o.sale_id.partner_id.image_1920">
+                                            <img t-att-src="image_data_uri(o.sale_id.partner_id.image_1920)" 
+                                                 alt="Client Logo" 
+                                                 style="max-height: 100px;" />
+                                        </t>
+                                    </div>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <p t-esc="o.sale_id.partner_id.contact_address" />
+                                        </li>
+                                        <li>
+                                            <t t-esc="o.sale_id.partner_id.email" />
+                                        </li>
+                                        <li>
+                                             <t t-esc="o.sale_id.partner_id.phone" />
+                                        </li>
+                                        <li>
+                                             <t t-esc="o.sale_id.partner_id.website" />
+                                        </li>
+                                    </ul>
+                                </t>
+                                <t t-else="">
+                                    <div class="row">
+                                    <div class="col-6">
+                                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                                    </div>
+                                   
+                                </div>
+                                <div class="col-5 offset-1" name="company_address"> 
+                                        <ul class="list-unstyled" name="company_address_list">
+                                            <li t-if="company.is_company_details_empty"><span t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}">
+                                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
+                                                    <strong>Company address block</strong>
+                                                    <div>Contains the company address.</div>
+                                                </div>
+                                            </span></li>
+                                            <li t-else="">
+                                                <span t-field="company.company_details">
+                                                    <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
+                                                        <strong>Company details block</strong>
+                                                        <div>Contains the company details.</div>
+                                                    </div>
+                                                </span>
+                                            </li>
+                                            <li t-if="not forced_vat"/>
+                                            <li t-else="">
+                                                <t t-esc="company.country_id.vat_label or 'Tax ID'">Tax ID</t>:
+                                                <span t-esc="forced_vat">US12345671</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </t>
+                          <!--  </t>-->
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+
+
+
+        <!-- Footer -->
+
+           <xpath expr="//div[@t-attf-class='footer o_clean_footer o_company_#{company.id}_layout']" position="replace">
+
+            <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout">
+                <t t-if="o.sale_id.partner_id.name and (o.sale_id.partner_id.name == 'DESIGNER TRIM' or o.sale_id.partner_id.name == 'MYCAR TRIM' or o.sale_id.partner_id.name == 'DYNA PERFORMANCE')">
+
+                    <div class="row">
+                        
+                        <div class="col-4">
+                           <ul class="list-unstyled">
+                                                <li>
+                                                    <p t-esc="o.sale_id.partner_id.contact_address" />
+                                                </li>
+                                                <li>
+                                                    <t t-esc="o.sale_id.partner_id.email" />
+                                                </li>
+                                               
+                                            </ul>
+                        </div>
+                        <div class="col-3">
+                              <ul class="list-unstyled">
+                                 <li>
+                                        <t t-esc="o.sale_id.partner_id.phone" />
+                                </li>
+                                <li>
+                                        <t t-esc="o.sale_id.partner_id.website" />
+                                </li>
+                              </ul>
+                        </div>
+                        <div class="col-1">
+                            <ul t-if="report_type == 'pdf'" class="list-inline pagenumber float-end text-center">
+                                <li class="list-inline-item"><strong><span class="page"/></strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </t>
+            <t t-else="">
+
+                <div class="row">
+                <div class="col-4">
+                    <span t-field="company.report_footer"/>
+                </div>
+                <div class="col-4">
+                    <span t-if="company.is_company_details_empty" t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}"/>
+                    <span t-else="" t-field="company.company_details"/>
+                </div>
+                <div class="col-3">
+                    <div class="mt0 mb0 h5" t-if="company.report_header" t-field="company.report_header">Company tagline</div>
+                </div>
+                <div class="col-1">
+                    <ul t-if="report_type == 'pdf'" class="list-inline pagenumber float-end text-center">
+                        <li class="list-inline-item"><strong><span class="page"/></strong></li>
+                    </ul>
+                </div>
+            </div>
+            </t>
+            </div>
+          </xpath>
+
+       
+    </template>
+
+
+
+     
+
      <template id="report_picking_inherit_shopify_instance" inherit_id="stock.report_picking">
         <xpath expr="//div[@class='row mt32 mb32']" position="inside">
             
@@ -174,6 +318,10 @@
                     <div class="oe_structure"/>
                 </div>
         </xpath>
+
+
+
+       
         
     </template>
 </odoo>

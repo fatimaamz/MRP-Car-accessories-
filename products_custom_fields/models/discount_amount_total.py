@@ -1,6 +1,6 @@
 from odoo import models, fields, api,_
 from datetime import date
-
+import logging
 
 
 class SaleOrderLine(models.Model):
@@ -69,6 +69,12 @@ class SaleOrder(models.Model):
     ], string='order Source',compute='_compute_order_source')
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
+
+
+
+   
+            
+    
 
     def _can_be_confirmed(self):
         self.ensure_one()
