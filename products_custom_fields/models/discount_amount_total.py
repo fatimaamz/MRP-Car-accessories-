@@ -96,10 +96,12 @@ class SaleOrder(models.Model):
                 # Set the main partner as LUXWOOD RETAILER and update shipping partner
                 luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
                 if luxwood_retailer_partner:
-                    vals.update({
-                        'partner_id': luxwood_retailer_partner.id,
-                        'partner_shipping_id': original_partner.id if partner_shipping_id is None else partner_shipping_id,
-                    })
+                    #vals.update({
+                        #'partner_id': luxwood_retailer_partner.id,
+                        #'partner_shipping_id': original_partner.id if partner_shipping_id is None else partner_shipping_id,
+                    #})
+                    vals.partner_id= luxwood_retailer_partner.id,
+                        #'partner_shipping_id': original_partner.id if partner_shipping_id is None else partner_shipping_id,
 
             elif order_source == 'whatsapp':
                 # Set the main partner as LUXWOOD REP and update shipping partner
