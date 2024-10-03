@@ -8,7 +8,7 @@
                 <div class="o_clean_header">
                     <div class="row">
                         <div class="col-6">
-                            <t t-if="report_name == 'stock.picking'">
+                           <!-- <t t-if="report_name == 'stock.picking'">-->
                                 <t t-if="o.partner_id and (o.partner_id.name == 'DESIGNER TRIM' or o.partner_id.name == 'MYCAR TRIM' or o.partner_id.name == 'DYNA PERFORMANCE')">
 
                                     <!-- Display Custom Client Logo -->
@@ -27,12 +27,12 @@
                                          t-att-src="image_data_uri(company.logo)" 
                                          alt="Logo"/>
                                 </t>
-                            </t>
+                          <!--  </t>-->
                         </div>
 
                         <div class="col-5 offset-1" name="company_address"> 
                             <ul class="list-unstyled" name="company_address_list">
-                                <t t-if="o._name == 'stock.picking'">
+                               <!-- <t t-if="o._name == 'stock.picking'">-->
                                     <t t-if="o.partner_id and o.partner_id.name == 'Design Trime'">
                                         <p t-esc="o.partner_id.contact_address" />
                                         <p>Email: <t t-esc="o.partner_id.email" /></p>
@@ -62,7 +62,7 @@
                                             <span t-esc="forced_vat">US12345671</span>
                                         </li>
                                     </t>
-                                </t>
+                              <!--  </t>-->
                             </ul>
                         </div>
                     </div>
