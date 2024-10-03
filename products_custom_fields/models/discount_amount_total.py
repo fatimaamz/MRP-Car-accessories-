@@ -75,6 +75,7 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals_list):
         # Liste pour stocker les nouveaux enregistrements
+        _logger = logging.getLogger(__name__)
         new_orders = []
         
         # Traitement de chaque dictionnaire de valeurs
