@@ -1,6 +1,6 @@
 from odoo import models, fields, api,_
 from datetime import date
-
+import logging
 
 
 class SaleOrderLine(models.Model):
