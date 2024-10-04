@@ -20,7 +20,7 @@
                     
                     <strong>Product:</strong>
                     <ul>
-                        <t t-foreach="object.move_lines" t-as="line">
+                        <t t-foreach="object.move_ids_without_package" t-as="line">
                             <li>
                                 <t t-out="line.product_id.name or 'Unknown Product'"/>: 
                                 <t t-out="line.quantity or 0"/>
