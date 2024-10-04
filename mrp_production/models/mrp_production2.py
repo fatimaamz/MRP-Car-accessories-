@@ -8,6 +8,8 @@ class StockPicking(models.Model):
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
     numero_commande = fields.Char(string="Numéro de commande")
     numero_suivi = fields.Char(string="Numéro de suivi")
+    sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande", store=True)
+
     
 
     @api.depends('origin')
