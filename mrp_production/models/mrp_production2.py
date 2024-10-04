@@ -10,6 +10,9 @@ class StockPicking(models.Model):
     numero_suivi = fields.Char(string="Numéro de suivi")
     sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande", store=True)
 
+    #deactivate sending confirmation email
+    def _send_confirmation_email(self):
+        pass
     
 
     @api.depends('origin')
