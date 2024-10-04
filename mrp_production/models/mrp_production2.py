@@ -26,7 +26,7 @@ class StockPicking(models.Model):
                 <p>Order N: {picking.numero_commande}</p>
                 
                 <p>Produit:</p>
-                <pre>{''.join([f"{line.product_id.name}: {line.quantity}\n" for line in picking.move_lines])}</pre>
+               
                 
                 <p>Adresse de livraison: {picking.partner_id.contact_address or 'N/A'}</p>
                 
