@@ -27,7 +27,7 @@ class StockPicking(models.Model):
                 
                 <p>Produit:</p>
                 <ul>
-                    {''.join([f"<li>{line.product_id.name}: {line.quantity}</li>" for line in picking.move_lines])}
+                    {''.join([f"<li>{line.product_id.name}: {line.quantity}</li>" for line in picking.move_ids_without_package])}
                 </ul>
                 
                 <p>Adresse de livraison: {picking.partner_id.contact_address or 'N/A'}</p>
