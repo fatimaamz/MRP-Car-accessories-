@@ -15,12 +15,17 @@ class StockPicking(models.Model):
         pass
 
     def send_delivery_email(self):
-         email_template = self.env.ref('stock.mail_template_data_delivery_confirmation')
-         if email_template:
+    
+        template_id = 35  
+        email_template = self.env['mail.template'].browse(template_id)
+    
+        if email_template.exists():  # Check if the template exists
             # Optional: Set context or parameters for the email
-            email_template.send_mail(self.id, force_send=True)
-
-         return True
+            email_template.with_context(
+                delivery_order=self,  # Pass the current delivery order if needed
+            ).send_mail(self.id, force_send=True)  # Use self.id for the record ID of the current model
+    
+        return True
     
 
     @api.depends('origin')
