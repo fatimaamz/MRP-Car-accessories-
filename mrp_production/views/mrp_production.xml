@@ -34,8 +34,9 @@
                     Please find your delivery order attached for more details.<br/><br/>
                     
                     <strong>Thank you,</strong><br/>
-                    <t t-if="object.user_id.name">
-                        <t t-out="object.user_id.name or ''"/>
+                   <t t-if="user.signature">
+                        <br />
+                        <t t-out="user.signature or ''">--<br/>Mitchell Admin</t>
                     </t>
                 </p>
             </div>
