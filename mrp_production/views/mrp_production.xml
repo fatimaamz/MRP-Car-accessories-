@@ -1,46 +1,54 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <odoo>
+    <record id="delivery_confirmation_email_template" model="mail.template">
+        <field name="name">Shipping order: Send by Email</field>
+        <field name="model_id" ref="model_stock_picking"/>
+        <field name="subject">{{ object.company_id.name }} Delivery Order (Ref {{ object.name or 'n/a' }})</field>
+        <field name="partner_to">{{ object.partner_id.email and object.partner_id.id or object.partner_id.parent_id.id }}</field>
+        <field name="description">Sent to the customers when orders are delivered, if the setting is enabled</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hello <t t-out="object.partner_id.name or 'Client'"> (Dyna performance),</t><br/><br/>
+                    We are glad to inform you that your order has been shipped.<br/>
+                    <t t-if="object.numero_suivi">
+                        Tracking number: <t t-out="object.numero_suivi or 'N/A'"/><br/>
+                    </t>
+                    <t t-if="object.numero_commande">
+                        Order N: <t t-out="object.numero_commande or 'N/A'"/><br/><br/>
+                    </t>
+                    
+                    <strong>Product:</strong>
+                    <ul>
+                        <t t-foreach="object.move_lines" t-as="line">
+                            <li>
+                                <t t-out="line.product_id.name or 'Unknown Product'"/>: 
+                                <t t-out="line.quantity or 0"/>
+                            </li>
+                        </t>
+                    </ul>
+                    
+                    <strong>Delivery address:</strong> 
+                    <t t-out="object.partner_id.contact_address or 'N/A'"/><br/><br/>
+                    
+                    Please find your delivery order attached for more details.<br/><br/>
+                    
+                    <strong>Thank you,</strong><br/>
+                    <t t-if="object.user_id.name">
+                        <t t-out="object.user_id.name or ''"/>
+                    </t>
+                </p>
+            </div>
+        </field>
+        <field name="report_template_ids" eval="[(4, ref('stock.action_report_delivery'))]"/>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+  
 
-  <record id="delivery_confirmation_email_template" model="mail.template">
-            <field name="name">Delivery Confirmation</field>
-            <field name="model_id" ref="stock.model_stock_picking"/>
-            <field name="email_from">${(object.user_id.email or user.email)}</field>
-            <field name="email_to">${object.partner_id.email}</field>
-            <field name="subject">Your Order Has Been Shipped!</field>
-            <field name="body_html">
-                <![CDATA[
-               <div style="margin: 0px; padding: 0px;">
-    <p style="box-sizing: border-box; margin: 0px; padding: 0px; font-size: 13px;">
-        Hello <t t-out="object.partner_id.name or 'Client'">, (Dyna performance),</t><br><br>
-        We are glad to inform you that your order has been shipped.<br>
-        Tracking number: <t t-out="object.numero_suivi or 'N/A'"></t><br>
-        Order N: <t t-out="object.numero_commande or 'N/A'"></t><br><br>
-         </p>
-        <strong style="box-sizing:border-box;font-weight:700;">Product:</strong>
-     <ul style="padding:0 0 0 28px;margin:0px 0 14px 0;box-sizing:border-box;list-style-type:disc;">
-            <t t-foreach="object.move_ids_without_package" t-as="line">
-                <li>
-                    <t t-out="line.product_id.name or 'Unknown Product'">: 
-                    <t t-out="line.quantity or 0">
-                </t></t></li>
-            </t>
-        </ul>
-        
-        <strong style="box-sizing:border-box;font-weight:700;">Delivery address:</strong> 
-        <t t-out="object.partner_id.contact_address or 'N/A'"><br><br>
-        
-        Please find your delivery order attached for more details.<br><br>
-        
-        <strong style="box-sizing:border-box;font-weight:700;">Thank you,</strong><br>
-        <t t-if="object.user_id.name">
-            <t t-out="object.user_id.name">
-        </t>
-    <p style="margin:0px 0 14px 0;box-sizing:border-box;"></p>
-</t></t></div>
+  
 
-                ]]>
-            </field>
-        </record>
+
   
 
   <record id="view_picking_form_inherit_shopify_instance" model="ir.ui.view">
