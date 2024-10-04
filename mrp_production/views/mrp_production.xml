@@ -6,8 +6,10 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
-                <!-- Add the shopify_instance_id field under the origin field -->
-                <xpath expr="//field[@name='origin']" position="after">
+            <xpath expr="//header" position="inside">
+                <button name="send_delivery_email" type="object" string="Envoyer email d'expédition" class="btn-primary"/>
+            </xpath>                
+            <xpath expr="//field[@name='origin']" position="after">
                     <field name="numero_commande"/>
                     <field name="numero_suivi"/>
                     <field name="shopify_instance_id" />
