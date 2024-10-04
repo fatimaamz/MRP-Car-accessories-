@@ -8,7 +8,7 @@
                 <div class="o_clean_header">
                     <div class="row">
                         <div class="col-6">
-                           <!-- <t t-if="report_name == 'stock.picking'">-->
+                            <t t-if="doc_name == 'stock.picking'">
                                 <t t-if="o.sale_order_partner_id and (o.sale_order_partner_id.name == 'DESIGNER TRIM' or o.sale_order_partner_id.name == 'MYCAR TRIM' or o.sale_order_partner_id.name == 'DYNA PERFORMANCE')">
 
                                     <div class="row">
@@ -66,7 +66,7 @@
                                         </ul>
                                     </div>
                                 </t>
-                          <!--  </t>-->
+                           </t>
                         </div>
 
                         
@@ -79,9 +79,9 @@
 
 
         <!-- Footer -->
-
+        
            <xpath expr="//div[@t-attf-class='footer o_clean_footer o_company_#{company.id}_layout']" position="replace">
-
+             <t t-if="doc_name == 'stock.picking'">
             <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout">
                 <t t-if="o.sale_order_partner_id.name and (o.sale_order_partner_id.name == 'DESIGNER TRIM' or o.sale_order_partner_id.name == 'MYCAR TRIM' or o.sale_order_partner_id.name == 'DYNA PERFORMANCE')">
 
@@ -136,6 +136,7 @@
             </div>
             </t>
             </div>
+             </t>
           </xpath>
 
        
