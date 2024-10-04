@@ -17,23 +17,22 @@ class StockPicking(models.Model):
     def send_delivery_email(self):
         for picking in self:
             if picking.partner_id:  
-               
+                # Prepare the email body
                 email_body = f"""
-                Hello {picking.partner_id.name},
+                <p>Hello {picking.partner_id.name},</p>
                 
-                We are glad to inform you that your order has been shipped.
-                Tracking number: {picking.numero_suivi or 'N/A'}
-                Order N: {picking.numero_commande}
+                <p>We are glad to inform you that your order has been shipped.</p>
+                <p>Tracking number: {picking.numero_suivi or 'N/A'}</p>
+                <p>Order N: {picking.numero_commande}</p>
                 
-                Produit:
-                {''.join([f"{line.product_id.name}: {line.quantity}\n" for line in picking.move_lines])}
+                <p>Produit:</p>
+                <pre>{''.join([f"{line.product_id.name}: {line.quantity}\n" for line in picking.move_lines])}</pre>
                 
-                Adresse de livraison: {picking.partner_id.contact_address or 'N/A'}
+                <p>Adresse de livraison: {picking.partner_id.contact_address or 'N/A'}</p>
                 
-                Please find your delivery order attached for more details.
+                <p>Please find your delivery order attached for more details.</p>
                 
-                Thank you,
-                {picking.user_id.name}
+                <p>Thank you,<br/>{picking.user_id.name}</p>
                 """
 
                
