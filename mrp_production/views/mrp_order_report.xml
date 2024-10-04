@@ -9,12 +9,12 @@
                     <div class="row">
                         <div class="col-6">
                            <!-- <t t-if="report_name == 'stock.picking'">-->
-                                <t t-if="o.sale_id.partner_id and (o.sale_id.partner_id.name == 'DESIGNER TRIM' or o.sale_id.partner_id.name == 'MYCAR TRIM' or o.sale_id.partner_id.name == 'DYNA PERFORMANCE')">
+                                <t t-if="o.sale_order_partner_id and (o.sale_order_partner_id.name == 'DESIGNER TRIM' or o.sale_order_partner_id.name == 'MYCAR TRIM' or o.sale_order_partner_id.name == 'DYNA PERFORMANCE')">
 
                                     <div class="row">
                                     <div class="col-6">
-                                     <t t-if="o.sale_id.partner_id.image_1920">
-                                            <img t-att-src="image_data_uri(o.sale_id.partner_id.image_1920)" 
+                                     <t t-if="o.sale_order_partner_id.image_1920">
+                                            <img t-att-src="image_data_uri(o.sale_order_partner_id.image_1920)" 
                                                  alt="Client Logo" 
                                                  style="max-height: 100px;" />
                                         </t>
@@ -22,16 +22,16 @@
                                     </div>
                                     <ul class="list-unstyled">
                                         <li>
-                                            <p t-esc="o.sale_id.partner_id.contact_address" />
+                                            <p t-esc="o.sale_order_partner_id.contact_address" />
                                         </li>
                                         <li>
-                                            <t t-esc="o.sale_id.partner_id.email" />
+                                            <t t-esc="o.sale_order_partner_id.email" />
                                         </li>
                                         <li>
-                                             <t t-esc="o.sale_id.partner_id.phone" />
+                                             <t t-esc="o.sale_order_partner_id.phone" />
                                         </li>
                                         <li>
-                                             <t t-esc="o.sale_id.partner_id.website" />
+                                             <t t-esc="o.sale_order_partner_id.website" />
                                         </li>
                                     </ul>
                                 </t>
@@ -83,17 +83,17 @@
            <xpath expr="//div[@t-attf-class='footer o_clean_footer o_company_#{company.id}_layout']" position="replace">
 
             <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout">
-                <t t-if="o.sale_id.partner_id.name and (o.sale_id.partner_id.name == 'DESIGNER TRIM' or o.sale_id.partner_id.name == 'MYCAR TRIM' or o.sale_id.partner_id.name == 'DYNA PERFORMANCE')">
+                <t t-if="o.sale_order_partner_id.name and (o.sale_order_partner_id.name == 'DESIGNER TRIM' or o.sale_order_partner_id.name == 'MYCAR TRIM' or o.sale_order_partner_id.name == 'DYNA PERFORMANCE')">
 
                     <div class="row">
                         
                         <div class="col-4">
                            <ul class="list-unstyled">
                                                 <li>
-                                                    <p t-esc="o.sale_id.partner_id.contact_address" />
+                                                    <p t-esc="o.sale_order_partner_id.contact_address" />
                                                 </li>
                                                 <li>
-                                                    <t t-esc="o.sale_id.partner_id.email" />
+                                                    <t t-esc="o.sale_order_partner_id.email" />
                                                 </li>
                                                
                                             </ul>
@@ -101,10 +101,10 @@
                         <div class="col-3">
                               <ul class="list-unstyled">
                                  <li>
-                                        <t t-esc="o.sale_id.partner_id.phone" />
+                                        <t t-esc="o.sale_order_partner_id.phone" />
                                 </li>
                                 <li>
-                                        <t t-esc="o.sale_id.partner_id.website" />
+                                        <t t-esc="o.sale_order_partner_id.website" />
                                 </li>
                               </ul>
                         </div>
