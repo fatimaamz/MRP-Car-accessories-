@@ -6,13 +6,56 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
-    numero_commande = fields.Char(string="Numéro de commande")
-    numero_suivi = fields.Char(string="Numéro de suivi")
+    numero_commande = fields.Char(string="Order Number")
+    numero_suivi = fields.Char(string="Tracking number")
     sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande", store=True)
 
     #deactivate sending confirmation email
     def _send_confirmation_email(self):
         pass
+
+    def send_delivery_email(self):
+        for picking in self:
+            if picking.partner_id:  
+               
+                email_body = f"""
+                Hello {picking.partner_id.name},
+                
+                We are glad to inform you that your order has been shipped.
+                Tracking number: {picking.numero_suivi or 'N/A'}
+                Order N: {picking.numero_commande}
+                
+                Produit:
+                {''.join([f"{line.product_id.name}: {line.quantity}\n" for line in picking.move_lines])}
+                
+                Adresse de livraison: {picking.partner_id.contact_address or 'N/A'}
+                
+                Please find your delivery order attached for more details.
+                
+                Thank you,
+                {picking.user_id.name}
+                """
+
+               
+                mail_values = {
+                    'subject': f'Delivery Slip: {picking.name}',
+                    'email_to': picking.partner_id.email,
+                    'email_from': self.env.user.email,
+                    'body_html': email_body,  
+                }
+                mail = self.env['mail.mail'].create(mail_values)
+
+                pdf_content = self.env['report'].get_pdf(picking, 'stock.report_deliveryslip')
+                attachment = self.env['ir.attachment'].create({
+                    'name': f'Delivery_Slip_{picking.name}.pdf',
+                    'type': 'binary',
+                    'datas': pdf_content,
+                    'res_model': 'stock.picking',
+                    'res_id': picking.id,
+                })
+
+                mail.attachment_ids = [(4, attachment.id)] 
+                mail.send()  # Send the email
     
 
     @api.depends('origin')
