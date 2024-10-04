@@ -15,53 +15,14 @@ class StockPicking(models.Model):
         pass
 
     def send_delivery_email(self):
-        for picking in self:
-            if picking.partner_id:  
-                # Prepare the email body
-                email_body = f"""
-                <p>Hello {picking.partner_id.name},</p>
-                
-                <p>We are glad to inform you that your order has been shipped.</p>
-                <p>Tracking number: {picking.numero_suivi or 'N/A'}</p>
-                <p>Order N: {picking.numero_commande}</p>
-                
-                <p>Produit:</p>
-                <ul>
-                    {''.join([f"<li>{line.product_id.name}: {line.quantity}</li>" for line in picking.move_ids_without_package])}
-                </ul>
-                
-                <p>Adresse de livraison: {picking.partner_id.contact_address or 'N/A'}</p>
-                
-                <p>Please find your delivery order attached for more details.</p>
-                
-                <p>Thank you,</p>
-                <p>{picking.user_id.name}</p>
-            """
+         email_template = self.env.ref('stock.mail_template_data_delivery_confirmation')
 
-               
-                mail_values = {
-                    'subject': f'Delivery Slip: {picking.name}',
-                    'email_to': picking.partner_id.email,
-                    'email_from': self.env.user.email,
-                    'body_html': email_body,  
-                }
-                mail = self.env['mail.mail'].create(mail_values)
+        # Send the email
+        if email_template:
+            # Optional: Set context or parameters for the email
+            email_template.send_mail(self.id, force_send=True)
 
-                
-
-                report_action = self.env['ir.actions.report'].search([('report_name', '=', 'stock.report_deliveryslip')], limit=1)
-                pdf_content, _ = report_action.render_qweb_pdf([picking.id])
-              
-                attachment = self.env['ir.attachment'].create({
-                    'name': f'Delivery_Slip_{picking.name}.pdf',
-                    'type': 'binary',
-                    'datas': pdf_content.decode('utf-8'),
-                    'res_model': 'stock.picking',
-                    'res_id': picking.id,
-                })
-
-                mail.attachment_ids = [(4, attachment.id)] 
-                mail.send()  # Send the email
+        return True
     
 
     @api.depends('origin')
