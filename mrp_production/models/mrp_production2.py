@@ -16,13 +16,11 @@ class StockPicking(models.Model):
 
     def send_delivery_email(self):
          email_template = self.env.ref('stock.mail_template_data_delivery_confirmation')
-
-        # Send the email
-        if email_template:
+         if email_template:
             # Optional: Set context or parameters for the email
             email_template.send_mail(self.id, force_send=True)
 
-        return True
+         return True
     
 
     @api.depends('origin')
