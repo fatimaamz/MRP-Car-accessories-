@@ -32,7 +32,7 @@ class StockPicking(models.Model):
                 
                 <p>Please find your delivery order attached for more details.</p>
                 
-                <p>Thank you,<br/>{picking.user_id.name}</p>
+                <p>Thank you,</p>
                 """
 
                
