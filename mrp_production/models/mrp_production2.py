@@ -47,11 +47,14 @@ class StockPicking(models.Model):
                 }
                 mail = self.env['mail.mail'].create(mail_values)
 
-                pdf_content = self.env['report'].get_pdf(picking, 'stock.report_deliveryslip')
+                report_action = self.env.ref('stock.report_deliveryslip')
+                pdf_content, _ = report_action.render_qweb_pdf([picking.id])
+    
+              
                 attachment = self.env['ir.attachment'].create({
                     'name': f'Delivery_Slip_{picking.name}.pdf',
                     'type': 'binary',
-                    'datas': pdf_content,
+                    'datas': pdf_content.decode('utf-8'),
                     'res_model': 'stock.picking',
                     'res_id': picking.id,
                 })
