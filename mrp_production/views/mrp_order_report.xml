@@ -8,7 +8,8 @@
                 <div class="o_clean_header">
                     <div class="row">
                         <div class="col-6">
-                            <t t-if="o.display_name.find('WH/OUT') != -1">
+                            <t t-set="is_wh_out" t-value="'WH/OUT' in o.display_name"/>
+                            <t t-if="is_wh_out">
                                 <t t-if="o.sale_order_partner_id and (o.sale_order_partner_id.name == 'DESIGNER TRIM' or o.sale_order_partner_id.name == 'MYCAR TRIM' or o.sale_order_partner_id.name == 'DYNA PERFORMANCE')">
 
                                     <div class="row">
