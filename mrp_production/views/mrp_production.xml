@@ -117,7 +117,7 @@
         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
       </xpath>
       <xpath expr="//div[@name='bom_div']" position="after">
-          <group>
+          
                <group>
                     <field name="design_ids"/>
                     <field name="note_interne" />
@@ -125,7 +125,7 @@
                 <group>
                     <field name="logo_inscription" />
                 </group>
-          </group>
+          
         </xpath>
         
 
