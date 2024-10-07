@@ -18,6 +18,8 @@ class SaleOrderLine(models.Model):
                     ('origin', '=', line.order_id.name),
                     ('product_id', '=', line.product_id.id)
                 ], limit=1))
+            else:
+                pass
 
     def action_view_related_mrp(self):
         production_order = self.env['mrp.production'].search([
