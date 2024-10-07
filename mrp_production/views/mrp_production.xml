@@ -212,7 +212,7 @@
                 class="oe_highlight"
                 string="Work Order"
                
-                attrs="{'invisible': [('has_mrp_production', '=', False)]}" />
+                invisible="has_mrp_production == False" />
         </xpath>
     </field>
 </record>
