@@ -8,7 +8,7 @@ class SaleOrderLine(models.Model):
     has_mrp_production = fields.Boolean(
         string="",
         compute="_compute_has_mrp_production",
-        store=True
+        default=False
     )
 
     def _compute_has_mrp_production(self):
