@@ -46,6 +46,20 @@ class StockPicking(models.Model):
     numero_suivi = fields.Char(string="Tracking number")
     sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande", store=True)
 
+
+    def write(self, vals):
+        """Override the write method to update the related manufacturing order's picking_scheduled_date when the picking's scheduled date changes."""
+        res = super(StockPicking, self).write(vals)
+
+        if 'scheduled_date' in vals:
+            for picking in self:
+                productions = self.env['mrp.production'].search([('origin', '=', picking.origin)])
+
+                for production in productions:
+                    production.write({'picking_scheduled_date': picking.scheduled_date})
+
+        return res
+
     #deactivate sending confirmation email
     def _send_confirmation_email(self):
         pass
@@ -106,6 +120,23 @@ class MrpProduction(models.Model):
     years = fields.Char(string="Années", compute='_compute_year', store=True)
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
+    po_client = fields.Char(string="PO client")
+    picking_scheduled_date = fields.Date(string="Must ship by")
+
+    
+    def create(self, vals):
+        production = super(MrpProduction, self).create(vals)
+        
+        production.update_picking_scheduled_date()
+
+        return production
+
+    def update_picking_scheduled_date(self):
+        for production in self:
+            pickings = self.env['stock.picking'].search([('origin', '=', production.name)], limit=1)
+            if pickings:
+                production.picking_scheduled_date = pickings.scheduled_date
+                
 
     @api.depends('origin')
     def _compute_shopify_instance(self):
