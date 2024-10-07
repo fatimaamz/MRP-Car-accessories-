@@ -207,10 +207,12 @@
     <field name="inherit_id" ref="sale.view_order_form"/>
     <field name="arch" type="xml">
         <xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']" position="after">
-            <button name="action_view_related_mrp" type="object"
-                string="View Manufacturing Order"
-                icon="fa-industry"
-                attrs="{'invisible': [('product_id', '=', False)]}" />
+            <button name="action_view_related_mrp" 
+                type="object" 
+                class="oe_highlight"
+                string="Work Order"
+               
+                attrs="{'invisible': [('has_mrp_production', '=', False)]}" />
         </xpath>
     </field>
 </record>
