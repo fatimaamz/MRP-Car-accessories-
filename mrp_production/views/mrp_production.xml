@@ -118,7 +118,20 @@
       </xpath>
         <xpath expr="//div[@name='bom_div']" position="after">
             <field name="design_ids"/>
+             <div class="row">
+                <div class="col-6">
+                    <field name="note_interne" />
+                </div>
+                <div class="col-6">
+                    <field name="logo_inscription" />
+                </div>
+            </div>
+            
+            
         </xpath>
+        
+
+        
       <xpath expr="//group[@name='group_extra_info']" position="inside">
         <field name="shopify_instance_id"/>
       </xpath>
