@@ -2,6 +2,29 @@ from odoo import fields, models, api
 
 import re
 
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    def action_view_related_mrp(self):
+        production_order = self.env['mrp.production'].search([
+            ('origin', '=', self.order_id.name),
+            ('product_id', '=', self.product_id.id),
+        ], limit=1)
+
+        if production_order:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Manufacturing Order',
+                'res_model': 'mrp.production',
+                'view_mode': 'form',
+                'res_id': production_order.id,
+                'target': 'current',
+            }
+        else:
+            return {
+                'type': 'ir.actions.act_window_close'
+            }
+
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
