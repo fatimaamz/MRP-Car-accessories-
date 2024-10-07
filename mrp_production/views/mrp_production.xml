@@ -116,18 +116,17 @@
       <xpath expr="//header//field[@name='state']" position="replace">
         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
       </xpath>
-        <xpath expr="//div[@name='bom_div']" position="after">
-            <field name="design_ids"/>
-             <div class="row">
+      <xpath expr="//div[@name='bom_div']" position="after">
+            
+            <div class="row">
                 <div class="col-6">
+                    <field name="design_ids"/>
                     <field name="note_interne" />
                 </div>
                 <div class="col-6">
                     <field name="logo_inscription" />
                 </div>
             </div>
-            
-            
         </xpath>
         
 
@@ -225,7 +224,6 @@
                 type="object" 
                 class="oe_highlight"
                 string="Work Order"
-               
                 invisible="has_mrp_production == False" />
         </xpath>
     </field>
