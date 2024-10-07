@@ -5,6 +5,19 @@ import re
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    has_mrp_production = fields.Boolean(
+        string="Has Manufacturing Order",
+        compute="_compute_has_mrp_production",
+        store=True
+    )
+
+    def _compute_has_mrp_production(self):
+        for line in self:
+            line.has_mrp_production = bool(self.env['mrp.production'].search([
+                ('origin', '=', line.order_id.name),
+                ('product_id', '=', line.product_id.id)
+            ], limit=1))
+
     def action_view_related_mrp(self):
         production_order = self.env['mrp.production'].search([
             ('origin', '=', self.order_id.name),
