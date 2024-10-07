@@ -118,13 +118,11 @@
       </xpath>
       <xpath expr="//div[@name='bom_div']" position="after">
           
-               <group>
                     <field name="design_ids"/>
                     <field name="note_interne" />
-                </group>
-                <group>
+                
                     <field name="logo_inscription" />
-                </group>
+               
           
         </xpath>
         
