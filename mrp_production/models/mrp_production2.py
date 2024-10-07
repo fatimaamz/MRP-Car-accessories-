@@ -19,7 +19,7 @@ class SaleOrderLine(models.Model):
                     ('product_id', '=', line.product_id.id)
                 ], limit=1))
             else:
-                pass
+                line.has_mrp_production = False
 
     def action_view_related_mrp(self):
         production_order = self.env['mrp.production'].search([
