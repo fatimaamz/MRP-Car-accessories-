@@ -125,6 +125,16 @@ class MrpProduction(models.Model):
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
     po_client = fields.Char(string="PO client")
     picking_scheduled_date = fields.Date(string="Must ship by")
+    ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
+
+    @api.depends('origin')
+    def _compute_ship_to_id(self):
+        for production in self:
+            sale_order = self.env['sale.order'].search([('name', '=', production.origin)], limit=1)
+            if sale_order:
+                production.ship_to_id = sale_order.partner_shipping_id
+            else:
+                production.ship_to_id = False
 
     
     def create(self, vals):
