@@ -189,7 +189,7 @@
                     <field name="ship_to_id"/>
                     <field name="po_client"/>
                     <field name="product_qty" sum="Total Qty" widget="float"  string="Quantité" readonly="1" optional="show"/>
-                   
+                    <field name="is_coped"/>
 
                     <field name="place_status" invisible="state !='done'"  widget="badge" decoration-success="place_status == 'place'"  decoration-danger="place_status== 'non_place'" />
 
