@@ -246,8 +246,7 @@ class MrpProduction(models.Model):
                 vals['partner_id'] = sale_order.partner_id.id
                 vals['partner_shipping_id'] = sale_order.partner_shipping_id.id
         picking = self.env['stock.picking'].search([
-            ('origin', '=', vals['origin']),  
-            ('state', '!=', 'cancel')
+            ('origin', '=', vals['origin'])
         ], limit=1)
         
         if picking:
