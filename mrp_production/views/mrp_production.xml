@@ -186,7 +186,7 @@
                     <field name="product_id" readonly="1" optional="show"/>
                     <field name="color"/>
                     <field name="partner_id"/>
-                   <!-- <field name="ship_to_id"/>
+                    <field name="ship_to_id"/>
                     <field name="po_client"/>
                     <field name="product_qty" sum="Total Qty" widget="float"  string="Quantité" readonly="1" optional="show"/>
                     <field name="is_coped"/>
@@ -212,7 +212,7 @@
                     <field name="company_id" readonly="1" groups="base.group_multi_company" optional="show"/>
                     <field name="activity_exception_decoration" widget="activity_exception"/>
                     <field name="delay_alert_date" column_invisible="True"/>
-                    <field nolabel="1" name="json_popover" widget="stock_rescheduling_popover" invisible="not json_popover"/>-->
+                    <field nolabel="1" name="json_popover" widget="stock_rescheduling_popover" invisible="not json_popover"/>
                 </tree>
            
         </xpath>
