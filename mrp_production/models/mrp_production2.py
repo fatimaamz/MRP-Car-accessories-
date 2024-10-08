@@ -123,9 +123,9 @@ class MrpProduction(models.Model):
     def _compute_is_coped(self):
         for production in self:
             if production.state == 'confirmed':
-                product.is_coped=True
+                production.is_coped=True
             else:
-               product.is_coped=False 
+               production.is_coped=False 
             
   
 
