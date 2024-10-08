@@ -117,7 +117,16 @@ class MrpProduction(models.Model):
     ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
-  
+    is_coped= fields.Boolean(string="Coupé", compute="_compute_is_coped")
+
+    @api.depends('state')  
+    def _compute_is_closed(self):
+        for production in self:
+            if production.state == 'confirmed':
+                product.is_coped=True
+            else:
+               product.is_coped=False 
+            
   
 
     @api.depends('origin')  
