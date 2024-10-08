@@ -247,10 +247,10 @@ class MrpProduction(models.Model):
                 vals['partner_shipping_id'] = sale_order.partner_shipping_id.id
         picking = self.env['stock.picking'].search([
             ('origin', '=', vals['origin'])
-        ], limit=1)
+        ])
         
         if picking:
-            vals['picking_id'] = picking.id
+            vals['picking_id'] = picking[0].id
         return super(MrpProduction, self).create(vals)
         
     @api.depends('origin', 'product_id')
