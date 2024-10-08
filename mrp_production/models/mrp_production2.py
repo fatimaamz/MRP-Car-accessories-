@@ -115,7 +115,8 @@ class MrpProduction(models.Model):
     po_client = fields.Char(string="PO client")
   
     ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
-    picking_scheduled_date = fields.Datetime(string="Must Ship By", compute="_compute_picking_scheduled_date", store=True)
+    picking_id = fields.Many2one('stock.picking', string="Stock Picking")
+    picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By", store=True)
 
     @api.depends('picking_ids.scheduled_date')
     def _compute_picking_scheduled_date(self):
@@ -246,11 +247,19 @@ class MrpProduction(models.Model):
     @api.model
     def create(self, vals):
         # Vérifier si l'ordre de fabrication a une origine (nom de la commande de vente)
+         
         if vals.get('origin'):
             sale_order = self.env['sale.order'].search([('name', '=', vals['origin'])], limit=1)
             if sale_order:
                 vals['partner_id'] = sale_order.partner_id.id
                 vals['partner_shipping_id'] = sale_order.partner_shipping_id.id
+        picking = self.env['stock.picking'].search([
+            ('origin', '=', vals.get('name')),  
+            ('state', 'not in', ['cancel'])
+        ], limit=1)
+        
+        if picking:
+            vals['picking_id'] = picking.id
         return super(MrpProduction, self).create(vals)
         
     @api.depends('origin', 'product_id')
