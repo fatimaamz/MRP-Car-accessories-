@@ -47,7 +47,7 @@ class StockPicking(models.Model):
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
     numero_commande = fields.Char(string="Order Number")
     numero_suivi = fields.Char(string="Tracking number")
-    sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande", store=True)
+    sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande")
 
 
   
