@@ -120,7 +120,7 @@ class MrpProduction(models.Model):
     is_coped= fields.Boolean(string="Coupé", compute="_compute_is_coped")
 
     @api.depends('state')  
-    def _compute_is_closed(self):
+    def _compute_is_coped(self):
         for production in self:
             if production.state == 'confirmed':
                 product.is_coped=True
