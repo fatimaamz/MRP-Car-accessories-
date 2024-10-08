@@ -50,18 +50,7 @@ class StockPicking(models.Model):
     sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande", store=True)
 
 
-    def write(self, vals):
-        """Override the write method to update the related manufacturing order's picking_scheduled_date when the picking's scheduled date changes."""
-        res = super(StockPicking, self).write(vals)
-
-        if 'scheduled_date' in vals:
-            for picking in self:
-                productions = self.env['mrp.production'].search([('origin', '=', picking.origin)])
-
-                for production in productions:
-                    production.write({'picking_scheduled_date': picking.scheduled_date})
-
-        return res
+  
 
     #deactivate sending confirmation email
     def _send_confirmation_email(self):
@@ -124,8 +113,19 @@ class MrpProduction(models.Model):
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
     po_client = fields.Char(string="PO client")
-    picking_scheduled_date = fields.Date(string="Must ship by")
+  
     ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
+    picking_scheduled_date = fields.Datetime(string="Must Ship By", compute="_compute_picking_scheduled_date", store=True)
+
+    @api.depends('picking_ids')
+    def _compute_picking_scheduled_date(self):
+        for production in self:
+            pickings = production.picking_ids.filtered(lambda p: p.state != 'cancel')
+            if pickings:
+                production.picking_scheduled_date = pickings[0].scheduled_date  
+            else:
+                production.picking_scheduled_date = False
+    
 
     @api.depends('origin')
     def _compute_ship_to_id(self):
@@ -137,18 +137,8 @@ class MrpProduction(models.Model):
                 production.ship_to_id = False
 
     
-    def create(self, vals):
-        production = super(MrpProduction, self).create(vals)
-        
-        production.update_picking_scheduled_date()
+   
 
-        return production
-
-    def update_picking_scheduled_date(self):
-        for production in self:
-            pickings = self.env['stock.picking'].search([('origin', '=', production.name)], limit=1)
-            if pickings:
-                production.picking_scheduled_date = pickings.scheduled_date
                 
 
     @api.depends('origin')
