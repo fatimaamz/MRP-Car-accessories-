@@ -131,7 +131,6 @@
        </xpath>
       <xpath expr="//div[@name='oe_title']//h1//field[@name='name']" position="replace">
           <field name="name" placeholder="Work order" nolabel="1"/>
-          
       </xpath>
           
       <xpath expr="//group[@name='group_extra_info']" position="inside">
