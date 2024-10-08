@@ -95,7 +95,7 @@ class MrpProduction(models.Model):
     product_finalized = fields.Boolean(string='Finition terminée')
     finalization_status = fields.Selection([('finalise', 'Finition terminée'), ('non_finalise', 'Non finalisé')], string='Finition' ,compute='_compute_finalization_status')
     is_conforme = fields.Boolean('Conforme')
-    conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Contrôle Qualité', compute='_compute_conforme_status')
+    conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Quality Control', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
     color = fields.Char(string='Color', default='No couleur')
     partner_id = fields.Many2one('res.partner', string='Client', help="Client liée a la commande")
