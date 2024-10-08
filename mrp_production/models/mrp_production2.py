@@ -117,12 +117,13 @@ class MrpProduction(models.Model):
     ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
     picking_scheduled_date = fields.Datetime(string="Must Ship By", compute="_compute_picking_scheduled_date", store=True)
 
-    @api.depends('picking_ids')
+    @api.depends('picking_ids.scheduled_date')
     def _compute_picking_scheduled_date(self):
         for production in self:
             pickings = production.picking_ids.filtered(lambda p: p.state != 'cancel')
             if pickings:
-                production.picking_scheduled_date = pickings[0].scheduled_date  
+                # Get the earliest scheduled date from all related pickings
+                production.picking_scheduled_date = min(pickings.mapped('scheduled_date'))
             else:
                 production.picking_scheduled_date = False
     
