@@ -446,7 +446,7 @@
 
 	<t t-name="AllAppsMenus" >
 		<ul id="accordion">
-			<!-- <t t-if="currentApp"> -->
+			 <t t-if="currentApp"> 
 				<t t-foreach="menuService.getApps()" t-as="menu" t-key="menu.name">
 					<t t-if="menu">
 						<t t-if="!menu.childrenTree.length">
@@ -490,7 +490,7 @@
 						</t>
 					</t>
 				</t>
-			<!--</t> -->
+			</t> 
 		</ul>
 	</t>
 	
