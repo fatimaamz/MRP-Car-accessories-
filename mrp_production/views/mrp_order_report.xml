@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="col-6">
                             
-                            <t t-if="doc_name=='stock.report_deliveryslip'">
+                            <t t-if="doc_model=='report_deliveryslip'">
                                 <t t-if="o.sale_order_partner_id and (o.sale_order_partner_id.name == 'DESIGNER TRIM' or o.sale_order_partner_id.name == 'MYCAR TRIM' or o.sale_order_partner_id.name == 'DYNA PERFORMANCE')">
 
                                     <div class="row">
