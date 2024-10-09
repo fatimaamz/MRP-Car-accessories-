@@ -5,11 +5,12 @@
     <template id="report_picking_custom_external_layout" inherit_id="web.external_layout_bold">
         <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']" position="replace">
             <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
-                <div class="o_clean_header">
+                <div class="o_clean_header"> 
+                    <t t-if="o._name == 'stock.picking'">
                     <div class="row">
                         <div class="col-6">
                             
-                            <t t-if="o._name == 'stock.picking'">
+                           
                                 <t t-if="o.sale_order_partner_id and (o.sale_order_partner_id.name == 'DESIGNER TRIM' or o.sale_order_partner_id.name == 'MYCAR TRIM' or o.sale_order_partner_id.name == 'DYNA PERFORMANCE')">
 
                                     <div class="row">
@@ -67,12 +68,47 @@
                                         </ul>
                                     </div>
                                 </t>
-                          </t>
+                          
                         </div>
 
                         
                     </div>
+                    </t>
+
+
+                <t t-else="">
+                <div class="row">
+                    <div class="col-6">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                    </div>
+                   
                 </div>
+                <div class="col-5 offset-1" name="company_address"> 
+                        <ul class="list-unstyled" name="company_address_list">
+                            <li t-if="company.is_company_details_empty"><span t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}">
+                                <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
+                                    <strong>Company address block</strong>
+                                    <div>Contains the company address.</div>
+                                </div>
+                            </span></li>
+                            <li t-else="">
+                                <span t-field="company.company_details">
+                                    <div class="bg-light border-1 rounded h-100 d-flex flex-column align-items-center justify-content-center p-4 w-100 opacity-75 text-muted text-center">
+                                        <strong>Company details block</strong>
+                                        <div>Contains the company details.</div>
+                                    </div>
+                                </span>
+                            </li>
+                            <li t-if="not forced_vat"/>
+                            <li t-else="">
+                                <t t-esc="company.country_id.vat_label or 'Tax ID'">Tax ID</t>:
+                                <span t-esc="forced_vat">US12345671</span>
+                            </li>
+                        </ul>
+                    </div>
+                </t>
+                </div>
+            
             </div>
         </xpath>
 
@@ -82,8 +118,9 @@
         <!-- Footer -->
         
            <xpath expr="//div[@t-attf-class='footer o_clean_footer o_company_#{company.id}_layout']" position="replace">
-             <t t-if="o.display_name.find('WH/OUT') != -1">
+           
             <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout">
+                  <t t-if="o._name == 'stock.picking'">
                 <t t-if="o.sale_order_partner_id.name and (o.sale_order_partner_id.name == 'DESIGNER TRIM' or o.sale_order_partner_id.name == 'MYCAR TRIM' or o.sale_order_partner_id.name == 'DYNA PERFORMANCE')">
 
                     <div class="row">
@@ -116,6 +153,7 @@
                         </div>
                     </div>
                 </t>
+            </t>
             <t t-else="">
 
                 <div class="row">
@@ -135,7 +173,7 @@
                     </ul>
                 </div>
             </div>
-            </t>
+          
             </div>
              </t>
           </xpath>
