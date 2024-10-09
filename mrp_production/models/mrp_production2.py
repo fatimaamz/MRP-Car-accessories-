@@ -135,7 +135,7 @@ class MrpProduction(models.Model):
     @api.depends('state')  
     def _compute_is_coped(self):
         for production in self:
-            if production.state == 'confirmed':
+            if production.state in ['confirmed','done']:
                 production.is_coped=True
             else:
                production.is_coped=False 
