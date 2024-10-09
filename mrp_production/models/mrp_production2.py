@@ -119,6 +119,19 @@ class MrpProduction(models.Model):
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
     is_coped= fields.Boolean(string="Coupé", compute="_compute_is_coped")
 
+    def action_view_delivery_order(self):
+        delivery_order = self.env['stock.picking'].search([('origin', '=', self.name)], limit=1)
+        if delivery_order:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Bon de Livraison',
+                'view_mode': 'form',
+                'res_model': 'stock.picking',
+                'res_id': delivery_order.id,
+            }
+        else:
+            return {'type': 'ir.actions.act_window_close'}
+
     @api.depends('state')  
     def _compute_is_coped(self):
         for production in self:
