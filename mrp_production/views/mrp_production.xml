@@ -140,19 +140,17 @@
       </xpath>
        <xpath expr="//group[1]" position="after" >
          <group name="product_icontrol_group" string="Contrôle produits" invisible="state !='done'" >
-           <field name="product_place"/>
+            <field name="product_place"/>
             <field name="product_finalized"/>
-                  <div class="o_row">
-                            <button name="action_view_delivery_order" 
+            <field name="is_conforme" class="o_inline"/>
+            <button name="action_view_delivery_order" 
                                     type="object" 
                                     class="oe_highlight"
                                     string="Bon de livraison"
                                     invisible="is_conforme == False" />
                             
-                            <field name="is_conforme" class="o_inline"/>
-                  </div>
           
-                   <field name="remarque_controle_qualite"/>
+            <field name="remarque_controle_qualite"/>
          </group>
          <group name="product_image_group" string="Détails du Produit" invisible="not product_id" >
             
