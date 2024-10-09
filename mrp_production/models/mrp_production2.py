@@ -128,9 +128,13 @@ class MrpProduction(models.Model):
                 'view_mode': 'form',
                 'res_model': 'stock.picking',
                 'res_id': delivery_order.id,
+                'target': 'current',
             }
         else:
             return {'type': 'ir.actions.act_window_close'}
+
+
+            
 
     @api.depends('state')  
     def _compute_is_coped(self):
