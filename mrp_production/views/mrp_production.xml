@@ -142,16 +142,18 @@
          <group name="product_icontrol_group" string="Contrôle produits" invisible="state !='done'" >
             <field name="product_place"/>
             <field name="product_finalized"/>
+            
+         </group>
+        <group>
             <field name="is_conforme" class="o_inline"/>
+            <field name="remarque_controle_qualite"/>
             <button name="action_view_delivery_order" 
                                     type="object" 
                                     class="oe_highlight"
                                     string="Bon de livraison"
                                     invisible="is_conforme == False" />
-                            
-          
-            <field name="remarque_controle_qualite"/>
-         </group>
+        </group>
+           
          <group name="product_image_group" string="Détails du Produit" invisible="not product_id" >
             
             <field name="product_image" widget="image"/>
