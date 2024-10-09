@@ -151,6 +151,9 @@
                                     class="oe_highlight"
                                     string="Bon de livraison"
                                     invisible="is_conforme == False" />
+        </group>
+        <group>
+            
             <field name="remarque_controle_qualite"/>
             
         </group>
