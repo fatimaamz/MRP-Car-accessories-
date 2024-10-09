@@ -120,7 +120,7 @@ class MrpProduction(models.Model):
     is_coped= fields.Boolean(string="Coupé", compute="_compute_is_coped")
 
     def action_view_delivery_order(self):
-        delivery_order = self.env['stock.picking'].search([('origin', '=', self.name)], limit=1)
+        delivery_order = self.env['stock.picking'].search([('origin', '=', self.origin)], limit=1)
         if delivery_order:
             return {
                 'type': 'ir.actions.act_window',
