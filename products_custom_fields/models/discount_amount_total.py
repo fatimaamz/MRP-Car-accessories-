@@ -70,6 +70,7 @@ class SaleOrder(models.Model):
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
 
+    """
     @api.model
     def create(self, vals):
         # Check if order_source exists in the vals dictionary
@@ -110,12 +111,36 @@ class SaleOrder(models.Model):
                     pass
 
         return super(SaleOrder, self).create(vals)
-
+        """
 
 
 
    
-            
+    @api.model
+    def create(self, vals):
+        if vals.get('order_source'):
+            partner_id = self._get_partner_id_based_on_source(vals['order_source'], vals.get('shopify_instance_id'))
+            if partner_id:
+                vals['partner_id'] = partner_id
+        return super(SaleOrder, self).create(vals)
+
+    def write(self, vals):
+        if 'order_source' in vals:
+            partner_id = self._get_partner_id_based_on_source(vals['order_source'], vals.get('shopify_instance_id', self.shopify_instance_id))
+            if partner_id:
+                vals['partner_id'] = partner_id
+        return super(SaleOrder, self).write(vals)
+
+    def _get_partner_id_based_on_source(self, order_source, shopify_instance_id):
+        if order_source == 'shopify' and shopify_instance_id == 1:
+            partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
+        elif order_source == 'shopify' and shopify_instance_id == 2:
+            partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
+        elif order_source == 'whatsApp':
+            partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
+        else:
+            partner = None
+        return partner.id if partner else False
     
 
     def _can_be_confirmed(self):
