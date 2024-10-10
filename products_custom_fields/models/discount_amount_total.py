@@ -88,7 +88,7 @@ class SaleOrder(models.Model):
                 luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
                 if luxwood_retailer_partner:
                     rec.partner_id = luxwood_retailer_partner.id
-            elif rec.order_source == 'whatsApp':
+            elif rec.order_source == 'whatsapp':
                 luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
                 if luxwood_rep_partner:
                     rec.partner_id = luxwood_rep_partner.id
