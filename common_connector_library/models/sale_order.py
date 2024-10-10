@@ -49,7 +49,7 @@ class SaleOrder(models.Model):
         sale_order = self.env['sale.order']
         order_vals = {
             'company_id': vals.get('company_id', False),
-            'partner_id': partner.id if partner else vals.get('partner_id', False) #vals.get('partner_id', False),
+            'partner_id': partner.id if partner else vals.get('partner_id', False), #vals.get('partner_id', False),
             'partner_invoice_id': vals.get('partner_invoice_id', False),
             'partner_shipping_id': vals.get('partner_shipping_id', False),
             'warehouse_id': vals.get('warehouse_id', False),
