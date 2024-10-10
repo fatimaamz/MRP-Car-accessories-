@@ -69,14 +69,47 @@ class SaleOrder(models.Model):
     ], string='order Source',compute='_compute_order_source')
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
-    partner_id = fields.Many2one(
-        'res.partner', 
-        string='Client', 
-        required=True, 
-        compute='_compute_partner_id'
-       
-    )
 
+    def create(self, vals):
+        if 'order_source' in vals or 'shopify_instance_id' in vals:
+            if vals.get('order_source') == 'shopify':
+                if vals.get('shopify_instance_id') == 1:
+                    designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
+                    if designer_trim_partner:
+                        vals['partner_id'] = designer_trim_partner.id
+                elif vals.get('shopify_instance_id') == 2:
+                    luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
+                    if luxwood_retailer_partner:
+                        vals['partner_id'] = luxwood_retailer_partner.id
+            elif vals.get('order_source') == 'whatsapp':
+                luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
+                if luxwood_rep_partner:
+                    vals['partner_id'] = luxwood_rep_partner.id
+
+        order = super(SaleOrder, self).create(vals)
+        return order
+
+    def write(self, vals):
+        for order in self:
+            if 'order_source' in vals or 'shopify_instance_id' in vals:
+                if vals.get('order_source') == 'shopify':
+                    if vals.get('shopify_instance_id') == 1:
+                        designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
+                        if designer_trim_partner:
+                            vals['partner_id'] = designer_trim_partner.id
+                    elif vals.get('shopify_instance_id') == 2:
+                        luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
+                        if luxwood_retailer_partner:
+                            vals['partner_id'] = luxwood_retailer_partner.id
+                elif vals.get('order_source') == 'whatsapp':
+                    luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
+                    if luxwood_rep_partner:
+                        vals['partner_id'] = luxwood_rep_partner.id
+
+        result = super(SaleOrder, self).write(vals)
+        return result
+    
+    """
     @api.depends('order_source', 'shopify_instance_id')
     def _compute_partner_id(self):
         for rec in self:
@@ -111,47 +144,7 @@ class SaleOrder(models.Model):
     
 
     """
-    @api.model
-    def create(self, vals):
-        # Check if order_source exists in the vals dictionary
-        if 'order_source' in vals:
-            # Prepare to set the original partner_id as shipping partner
-            partner_id = vals.get('partner_id')
-
-            if vals['order_source'] == 'shopify' and vals.get('shopify_instance_id') == 1:
-                designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
-                if designer_trim_partner:
-                    vals.update({
-                        'partner_id': designer_trim_partner.id,
-                        'partner_shipping_id': partner_id.id
-                    })
-                else:
-                    raise UserError(_("Partner 'DESIGNER TRIM' not found."))
-
-            elif vals['order_source'] == 'shopify' and vals.get('shopify_instance_id') == 2:
-                # Set the main partner as LUXWOOD RETAILER and update shipping partner
-                luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
-                if luxwood_retailer_partner:
-                    vals.update({
-                        'partner_id': luxwood_retailer_partner.id,
-                        'partner_shipping_id': partner_id.id
-                    })
-                else:
-                    raise UserError(_("Partner 'LUXWOOD RETAILER' not found."))
-
-            elif vals['order_source'] == 'whatsapp':
-                luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
-                if luxwood_rep_partner:
-                    vals.update({
-                        'partner_id': luxwood_rep_partner.id,
-                        #'partner_shipping_id': partner_id
-                    })
-                    
-                else:
-                    pass
-
-        return super(SaleOrder, self).create(vals)
-        """
+   
 
 
 
