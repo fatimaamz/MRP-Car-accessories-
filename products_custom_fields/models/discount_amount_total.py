@@ -70,22 +70,22 @@ class SaleOrder(models.Model):
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
 
-    @api.model_create_multi
-    def create(self, vals):
+    @api.model
+    def _get_partner_id(self, vals):
         if vals.get('order_source') == 'shopify':
             if vals.get('shopify_instance_id') == 1:
-                designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
-                if designer_trim_partner:
-                    vals['partner_id'] = designer_trim_partner.id
+                return self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1).id
             elif vals.get('shopify_instance_id') == 2:
-                luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
-                if luxwood_retailer_partner:
-                    vals['partner_id'] = luxwood_retailer_partner.id
+                return self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1).id
         elif vals.get('order_source') == 'whatsapp':
-            luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
-            if luxwood_rep_partner:
-                vals['partner_id'] = luxwood_rep_partner.id
+            return self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1).id
+        return False
     
+    @api.model_create_multi
+    def create(self, vals):
+        partner_id = self._get_partner_id(vals)
+        if partner_id:
+            vals['partner_id'] = partner_id
         return super(SaleOrder, self).create(vals)
 
     
