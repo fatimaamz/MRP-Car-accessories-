@@ -92,9 +92,7 @@ class SaleOrder(models.Model):
                 luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
                 if luxwood_rep_partner:
                     rec.partner_id = luxwood_rep_partner.id
-            else:
-               
-                pass
+           
 
     """
     @api.model
