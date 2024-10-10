@@ -70,7 +70,7 @@ class SaleOrder(models.Model):
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('order_source') == 'shopify':
             if vals.get('shopify_instance_id') == 1:
