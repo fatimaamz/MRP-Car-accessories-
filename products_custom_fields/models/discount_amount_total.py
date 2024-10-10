@@ -94,7 +94,7 @@ class SaleOrder(models.Model):
                     rec.partner_id = luxwood_rep_partner.id
             else:
                
-                rec.partner_id = rec.partner_id.id or False
+                pass
 
     """
     @api.model
