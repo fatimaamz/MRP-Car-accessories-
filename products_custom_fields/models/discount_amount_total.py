@@ -98,7 +98,7 @@ class SaleOrder(models.Model):
                 else:
                     raise UserError(_("Partner 'LUXWOOD RETAILER' not found."))
 
-            elif vals['order_source'] == 'whatsApp':
+            elif vals['order_source'] == 'whatsapp':
                 luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
                 if luxwood_rep_partner:
                     #vals.update({
