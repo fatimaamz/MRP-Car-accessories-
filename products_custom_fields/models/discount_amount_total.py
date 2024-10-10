@@ -98,12 +98,9 @@ class SaleOrder(models.Model):
                 luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
                 if luxwood_rep_partner:
                     new_partner_id = luxwood_rep_partner.id
-            
-            # Assign only if the new partner is different
-            if new_partner_id != current_partner_id:
-                rec.partner_id = new_partner_id
+              
             else:
-                pass
+               rec.partner_id = new_partner_id
     
 
     """
