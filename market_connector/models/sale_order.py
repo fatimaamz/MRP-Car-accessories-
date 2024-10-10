@@ -438,9 +438,9 @@ Année: {car_year}"""
         date_order = self.convert_order_date(order_response)
         pricelist_id = self.shopify_set_pricelist(order_response=order_response, instance=instance)
         partner_id=0                 
-        if self.shopify_instance_id == 1:
+        if instance.shopify_instance_id.id == 1:
             partner_id = 15919
-        elif self.shopify_instance_id == 2:
+        elif instance.shopify_instance_id.id == 2:
             partner_id = 15920
         else:
             partner_id = partner.id if partner else False
