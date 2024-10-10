@@ -73,8 +73,8 @@ class SaleOrder(models.Model):
         'res.partner', 
         string='Client', 
         required=True, 
-        compute='_compute_partner_id', 
-        
+        compute='_compute_partner_id'
+       
     )
 
     @api.depends('order_source', 'shopify_instance_id')
@@ -88,7 +88,8 @@ class SaleOrder(models.Model):
                     designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
                     if designer_trim_partner:
                         rec.partner_id = designer_trim_partner.id
-                elif rec.shopify_instance_id == 2:
+                        
+                if rec.shopify_instance_id == 2:
                     luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
                     if luxwood_retailer_partner:
                         rec.partner_id = luxwood_retailer_partner.id
@@ -99,6 +100,14 @@ class SaleOrder(models.Model):
               
             else:
                rec.partner_id = current_partner_id
+                
+    def create(self, vals):
+        # Call super to create the order first
+        order = super(SaleOrder, self).create(vals)
+
+        # Recompute the partner_id after creation
+        order._compute_partner_id()
+        return order
     
 
     """
