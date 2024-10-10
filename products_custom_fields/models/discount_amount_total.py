@@ -81,7 +81,6 @@ class SaleOrder(models.Model):
     def _compute_partner_id(self):
         for rec in self:
             current_partner_id = rec.partner_id.id  # Keep the existing partner if no new partner found
-            _logger.info(f"Processing Sale Order: {rec.id} with order_source: {rec.order_source}")
             
             # Initialize partner variable
             new_partner_id = current_partner_id
