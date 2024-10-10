@@ -80,27 +80,25 @@ class SaleOrder(models.Model):
     @api.depends('order_source', 'shopify_instance_id')
     def _compute_partner_id(self):
         for rec in self:
-            current_partner_id = rec.partner_id.id  # Keep the existing partner if no new partner found
+            current_partner_id = rec.partner_id.id  
             
-            # Initialize partner variable
-            new_partner_id = current_partner_id
-
+           
             if rec.order_source == 'shopify':
                 if rec.shopify_instance_id == 1:
                     designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
                     if designer_trim_partner:
-                        new_partner_id = designer_trim_partner.id
+                        rec.partner_id = designer_trim_partner.id
                 elif rec.shopify_instance_id == 2:
                     luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
                     if luxwood_retailer_partner:
-                        new_partner_id = luxwood_retailer_partner.id
+                        rec.partner_id = luxwood_retailer_partner.id
             elif rec.order_source == 'whatsapp':
                 luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
                 if luxwood_rep_partner:
-                    new_partner_id = luxwood_rep_partner.id
+                    rec.partner_id = luxwood_rep_partner.id
               
             else:
-               rec.partner_id = new_partner_id
+               rec.partner_id = current_partner_id
     
 
     """
