@@ -69,33 +69,7 @@ class SaleOrder(models.Model):
     ], string='order Source',compute='_compute_order_source')
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
-    partner_id = fields.Many2one(
-        'res.partner', 
-        string='Client', 
-        required=True, 
-        compute='_compute_partner_id', 
-        
-    )
-
-    @api.depends('order_source', 'shopify_instance_id')
-    def _compute_partner_id(self):
-        for rec in self:
-            if rec.order_source:
-                if rec.order_source == 'shopify' and rec.shopify_instance_id == 1:
-                    designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
-                    if designer_trim_partner:
-                        rec.partner_id = designer_trim_partner.id
-                elif rec.order_source == 'shopify' and rec.shopify_instance_id == 2:
-                    luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
-                    if luxwood_retailer_partner:
-                        rec.partner_id = luxwood_retailer_partner.id
-                elif rec.order_source == 'whatsapp':
-                    luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
-                    if luxwood_rep_partner:
-                        rec.partner_id = luxwood_rep_partner.id
-        
-            else:
-                pass
+    
 
     """
     @api.model
