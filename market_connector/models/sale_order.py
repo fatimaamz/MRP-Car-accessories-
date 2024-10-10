@@ -437,17 +437,11 @@ Année: {car_year}"""
                                    invoice_address, order_response):
         date_order = self.convert_order_date(order_response)
         pricelist_id = self.shopify_set_pricelist(order_response=order_response, instance=instance)
-        partner_id=0                 
-        if order_response.shopify_instance_id.id == 1:
-            partner_id = 15919
-        elif order_response.shopify_instance_id.id == 2:
-            partner_id = 15920
-        else:
-            partner_id = partner.id if partner else False
+        
     
         ordervals = {
             "company_id": 1,
-            "partner_id":partner_id ,#partner.ids[0],
+            "partner_id":partner.ids[0],
             "partner_invoice_id": invoice_address.ids[0],
             "partner_shipping_id": shipping_address.ids[0],
             "warehouse_id": 1,
