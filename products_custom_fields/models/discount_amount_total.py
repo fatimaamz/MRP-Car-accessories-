@@ -70,6 +70,48 @@ class SaleOrder(models.Model):
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
 
+    @api.model
+    def create(self, vals):
+        # Check if order_source exists in the vals dictionary
+        if 'order_source' in vals:
+            # Prepare to set the original partner_id as shipping partner
+            partner_id = vals.get('partner_id')
+
+            if vals['order_source'] == 'shopify' and vals.get('shopify_instance_id') == 1:
+                designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
+                if designer_trim_partner:
+                    vals.update({
+                        'partner_id': designer_trim_partner.id,
+                        'partner_shipping_id': partner_id.id
+                    })
+                else:
+                    raise UserError(_("Partner 'DESIGNER TRIM' not found."))
+
+            elif vals['order_source'] == 'shopify' and vals.get('shopify_instance_id') == 2:
+                # Set the main partner as LUXWOOD RETAILER and update shipping partner
+                luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
+                if luxwood_retailer_partner:
+                    vals.update({
+                        'partner_id': luxwood_retailer_partner.id,
+                        'partner_shipping_id': partner_id.id
+                    })
+                else:
+                    raise UserError(_("Partner 'LUXWOOD RETAILER' not found."))
+
+            elif vals['order_source'] == 'whatsApp':
+                # Set the main partner as LUXWOOD REP and update shipping partner
+                luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
+                if luxwood_rep_partner:
+                    vals.update({
+                        'partner_id': luxwood_rep_partner.id,
+                        'partner_shipping_id': partner_id
+                    })
+                else:
+                    pass
+
+        return super(SaleOrder, self).create(vals)
+
+
 
 
    
