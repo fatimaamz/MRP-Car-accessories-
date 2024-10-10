@@ -70,28 +70,7 @@ class SaleOrder(models.Model):
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
 
-    @api.model_create_multi
-    def create(self, vals):
-        # Check the type of vals for debugging
-        if not isinstance(vals, dict):
-            raise ValueError("Expected vals to be a dictionary, got: {}".format(type(vals)))
     
-        # Proceed with your logic
-        if vals.get('order_source') == 'shopify':
-            if vals.get('shopify_instance_id') == 1:
-                partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
-                if partner:
-                    vals['partner_id'] = partner.id
-            elif vals.get('shopify_instance_id') == 2:
-                partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
-                if partner:
-                    vals['partner_id'] = partner.id
-        elif vals.get('order_source') == 'whatsapp':
-            partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
-            if partner:
-                vals['partner_id'] = partner.id
-    
-        return super(SaleOrder, self).create(vals)
     
     
    
