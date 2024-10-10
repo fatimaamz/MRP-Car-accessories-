@@ -101,7 +101,7 @@ class SaleOrder(models.Model):
             elif vals['order_source'] == 'whatsapp':
                 luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
                 if luxwood_rep_partner:
-                    vals.write({
+                    vals.update({
                         'partner_id': luxwood_rep_partner.id,
                         #'partner_shipping_id': partner_id
                     })
