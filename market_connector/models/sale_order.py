@@ -438,9 +438,9 @@ Année: {car_year}"""
         date_order = self.convert_order_date(order_response)
         pricelist_id = self.shopify_set_pricelist(order_response=order_response, instance=instance)
         if self.shopify_instance_id == 1:
-            partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
+            partner = self.env['res.partner'].search([('id', '=', 15919)])
         elif self.shopify_instance_id == 2:
-            partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
+            partner = self.env['res.partner'].search([('id', '=', 15920)])
     
         ordervals = {
             "company_id": 1,
