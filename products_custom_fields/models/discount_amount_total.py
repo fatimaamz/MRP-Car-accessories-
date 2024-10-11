@@ -2,6 +2,8 @@ from odoo import models, fields, api,_
 from datetime import date
 import logging
 
+_logger = logging.getLogger(__name__)
+
 """
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
