@@ -95,8 +95,9 @@ class SaleOrder(models.Model):
                         else:
                             new_total = sum(line.price_subtotal * 0.75 for line in order.order_line)
 
-                        # Update the total amount
-                        order.amount_total = new_total
+                        if order.amount_total != new_total:
+                            _logger.info(f"Updating total amount from {order.amount_total} to {new_total} for order {order.id}")
+                            order.amount_total = new_total
 
     @api.model
     def create(self, vals):
@@ -106,9 +107,10 @@ class SaleOrder(models.Model):
 
     def write(self, vals):
         result = super(SaleOrder, self).write(vals)
-        self._update_total_amount_based_on_shipping_country()
+        # Avoid recursive call if amount_total is already being updated
+        if 'amount_total' not in vals:
+            self._update_total_amount_based_on_shipping_country()
         return result
-
    
 
 
