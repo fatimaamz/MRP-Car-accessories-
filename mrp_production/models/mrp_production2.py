@@ -112,7 +112,7 @@ class MrpProduction(models.Model):
     years = fields.Char(string="Années", compute='_compute_year', store=True)
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
-    po_client = fields.Char(string="PO client")
+    po_client = fields.Char(string="PO client",related='picking_id.numero_commande')
   
     ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
@@ -170,16 +170,6 @@ class MrpProduction(models.Model):
                 production.ship_to_id = False
 
     
-   
-    @api.depends('origin')
-    def _compute_po_client(self):
-        for production in self:
-            stock_picking = self.env['stock.picking'].search([('origin', '=', production.origin)], limit=1)
-            if stock_picking:
-                production.po_client = sale_order.numero_commande
-            else:
-                production.po_client = False
-                
 
     @api.depends('origin')
     def _compute_shopify_instance(self):
