@@ -144,6 +144,17 @@ class SaleOrder(models.Model):
                         if order.amount_total != new_total:
                             _logger.info(f"Updating total amount from {order.amount_total} to {new_total} for order {order.id}")
                             order.amount_total = new_total  # Update the total
+    @api.model
+    def create(self, vals):
+        order = super(SaleOrder, self).create(vals)
+        order._compute_amount()  # Recompute the amount after creation
+        return order
+
+    def write(self, vals):
+        result = super(SaleOrder, self).write(vals)
+        if 'order_line' in vals or 'partner_shipping_id' in vals:
+            self._compute_amount()  # Recompute the amount on write if relevant fields are updated
+        return result
 
     
     
