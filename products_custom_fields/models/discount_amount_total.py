@@ -2,7 +2,7 @@ from odoo import models, fields, api,_
 from datetime import date
 import logging
 
-
+"""
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
@@ -53,7 +53,7 @@ class SaleOrderLine(models.Model):
             if product_template_id != 'discount':
                 vals['price_unit'] = float(vals.get('price_unit', 0)) * 0.75
 
-
+"""
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
@@ -70,49 +70,52 @@ class SaleOrder(models.Model):
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
 
-    
-    
-    
-   
-    """
-    @api.depends('order_source', 'shopify_instance_id')
-    def _compute_partner_id(self):
-        for rec in self:
-            current_partner_id = rec.partner_id.id  
-            
-           
-            if rec.order_source == 'shopify':
-                if rec.shopify_instance_id == 1:
-                    designer_trim_partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
-                    if designer_trim_partner:
-                        rec.partner_id = designer_trim_partner.id
-                        
-                if rec.shopify_instance_id == 2:
-                    luxwood_retailer_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
-                    if luxwood_retailer_partner:
-                        rec.partner_id = luxwood_retailer_partner.id
-            elif rec.order_source == 'whatsapp':
-                luxwood_rep_partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD REP')], limit=1)
-                if luxwood_rep_partner:
-                    rec.partner_id = luxwood_rep_partner.id
-              
-            else:
-               rec.partner_id = current_partner_id
-                
+  
+
+    def _update_total_amount_based_on_shipping_country(self):
+        for order in self:
+            if order.partner_shipping_id:
+                country_code = order.partner_shipping_id.country_id.code
+
+                # Get the USD currency
+                usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+
+                if usd_currency:
+                    today = date.today()
+                    rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
+                    if not rate_record:
+                        rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+
+                    if rate_record:
+                        usd_to_cad_rate = float(rate_record.inverse_company_rate)
+
+                        # Calculate the new total based on country
+                        if country_code == 'US':
+                            new_total = sum(line.price_subtotal * usd_to_cad_rate * 0.75 for line in order.order_line)
+                        else:
+                            new_total = sum(line.price_subtotal * 0.75 for line in order.order_line)
+
+                        # Update the total amount
+                        order.amount_total = new_total
+
+    @api.model
     def create(self, vals):
-        # Call super to create the order first
         order = super(SaleOrder, self).create(vals)
-
-        # Recompute the partner_id after creation
-        order._compute_partner_id()
+        order._update_total_amount_based_on_shipping_country()
         return order
-    
 
-    """
+    def write(self, vals):
+        result = super(SaleOrder, self).write(vals)
+        self._update_total_amount_based_on_shipping_country()
+        return result
+
    
 
 
-
+    
+    
+   
+  
    
  
     
