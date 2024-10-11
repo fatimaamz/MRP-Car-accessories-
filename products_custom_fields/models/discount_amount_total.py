@@ -72,7 +72,7 @@ class SaleOrder(models.Model):
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
 
-  
+    """
 
     def _update_total_amount_based_on_shipping_country(self):
         for order in self:
@@ -114,7 +114,36 @@ class SaleOrder(models.Model):
             self._update_total_amount_based_on_shipping_country()
         return result
    
+    """
+    @api.depends('order_line.price_subtotal', 'partner_shipping_id.country_id')
+    def _compute_amount(self):
+        super(SaleOrder, self)._compute_amount()  # Call the standard method
 
+        for order in self:
+            if order.partner_shipping_id:
+                country_code = order.partner_shipping_id.country_id.code
+
+                # Get the USD currency
+                usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+
+                if usd_currency:
+                    today = date.today()
+                    rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
+                    if not rate_record:
+                        rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+
+                    if rate_record:
+                        usd_to_cad_rate = float(rate_record.inverse_company_rate)
+
+                        # Calculate the adjusted total based on the country
+                        if country_code == 'US':
+                            new_total = sum(line.price_subtotal * usd_to_cad_rate * 0.75 for line in order.order_line)
+                        else:
+                            new_total = sum(line.price_subtotal * 0.75 for line in order.order_line)
+
+                        if order.amount_total != new_total:
+                            _logger.info(f"Updating total amount from {order.amount_total} to {new_total} for order {order.id}")
+                            order.amount_total = new_total  # Update the total
 
     
     
