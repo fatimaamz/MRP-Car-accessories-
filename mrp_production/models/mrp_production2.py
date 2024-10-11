@@ -171,7 +171,14 @@ class MrpProduction(models.Model):
 
     
    
-
+    @api.depends('origin')
+    def _compute_po_client(self):
+        for production in self:
+            stock_picking = self.env['stock.picking'].search([('origin', '=', production.origin)], limit=1)
+            if stock_picking:
+                production.po_client = sale_order.numero_commande
+            else:
+                production.po_client = False
                 
 
     @api.depends('origin')
