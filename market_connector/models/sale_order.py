@@ -177,7 +177,9 @@ class SaleOrder(models.Model):
         insert_color = ""
         paint_code = ""
         main_color = ""
+        print(properties)
         for prop in properties:
+            # print("=========pprod====================>",prop)
             if prop['name'] == 'Insert Color':
                 insert_color = prop['value']
             elif prop['name'] == 'Paint Code':
@@ -186,14 +188,14 @@ class SaleOrder(models.Model):
                 main_color = prop['value']
 
             # Formatting the string
-            formatted_description = f"""{reference_code} ({car_model.split(' ')[1]}, {car_model.split(' ')[0]})
+        formatted_description = f"""{reference_code} ({car_model.split(' ')[1]}, {car_model.split(' ')[0]})
 Interior Color: {main_color}
 Paint Code: {paint_code}
 Insert Color: {insert_color}
 Année: {car_year}"""
 
-            print(formatted_description)
-            return formatted_description
+        print('======================>',formatted_description)
+        return formatted_description
 
 
     def create_shopify_order_lines(self, lines, order_response, instance):
