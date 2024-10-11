@@ -2,12 +2,68 @@ from odoo import fields, models, api
 
 import re
 
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    has_mrp_production = fields.Boolean(
+        string="",
+        compute="_compute_has_mrp_production",
+        default=False
+    )
+
+    def _compute_has_mrp_production(self):
+        for line in self:
+            if line.order_id.state=='sale':
+                line.has_mrp_production = bool(self.env['mrp.production'].search([
+                    ('origin', '=', line.order_id.name),
+                    ('product_id', '=', line.product_id.id)
+                ], limit=1))
+            else:
+                line.has_mrp_production = False
+
+    def action_view_related_mrp(self):
+        production_order = self.env['mrp.production'].search([
+            ('origin', '=', self.order_id.name),
+            ('product_id', '=', self.product_id.id),
+        ], limit=1)
+
+        if production_order:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Manufacturing Order',
+                'res_model': 'mrp.production',
+                'view_mode': 'form',
+                'res_id': production_order.id,
+                'target': 'current',
+            }
+        else:
+            return {
+                'type': 'ir.actions.act_window_close'
+            }
+
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
-    numero_commande = fields.Char(string="Numéro de commande")
-    numero_suivi = fields.Char(string="Numéro de suivi")
+    numero_commande = fields.Char(string="Order Number")
+    numero_suivi = fields.Char(string="Tracking number")
+    sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande")
+
+
+  
+
+    #deactivate sending confirmation email
+    def _send_confirmation_email(self):
+        pass
+
+    def send_delivery_email(self):
+         email_template = self.env.ref('mrp_production.delivery_confirmation_email_template')
+         if email_template:
+            # Optional: Set context or parameters for the email
+            email_template.send_mail(self.id, force_send=True)
+
+         return True
+    
 
     @api.depends('origin')
     def _compute_shopify_instance(self):
@@ -18,10 +74,20 @@ class StockPicking(models.Model):
             else:
                 picking.shopify_instance_id = False
 
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+    
+    image_128 = fields.Image(related='product_id.image_128', string="Image", readonly=True)
+
+        
+
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
     product_qty = fields.Float(string='Quantité', digits=(16, 0))
+    note_interne = fields.Text(string="Note")
+    logo_inscription = fields.Text(string="Logo/Inscription")
     design_ids = fields.Many2one('kit.design', string='Designs', domain="[('bom_id', '=',bom_id)]")
     remarque_controle_qualite = fields.Text('Remarque Contrôle Qualité')
     product_image=fields.Binary(related='product_id.image_1920' ,string='Image de prouit')
@@ -29,12 +95,12 @@ class MrpProduction(models.Model):
     product_finalized = fields.Boolean(string='Finition terminée')
     finalization_status = fields.Selection([('finalise', 'Finition terminée'), ('non_finalise', 'Non finalisé')], string='Finition' ,compute='_compute_finalization_status')
     is_conforme = fields.Boolean('Conforme')
-    conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Contrôle Qualité', compute='_compute_conforme_status')
+    conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Quality Control', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
-    color = fields.Char(string='Couleur', default='No couleur')
+    color = fields.Char(string='Color', default='No couleur')
     partner_id = fields.Many2one('res.partner', string='Client', help="Client liée a la commande")
     partner_shipping_id = fields.Many2one('res.partner', string="Adresse de livraison", help="Adresse de livraison liée à la commande de vente")
-    product_place = fields.Boolean(string='Placement')
+    product_place = fields.Boolean(string='Placé')
     place_status = fields.Selection([('place', 'Placé'), ('non_place', 'Non placé')], string='Placement' ,compute='_compute_placement')
     selected_characteristics = fields.Text(
         string="Caractéristiques",
@@ -46,6 +112,64 @@ class MrpProduction(models.Model):
     years = fields.Char(string="Années", compute='_compute_year', store=True)
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
+    po_client = fields.Char(string="PO client",related='picking_id.numero_commande')
+  
+    ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
+    picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
+    picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
+    is_coped= fields.Boolean(string="Coupé", compute="_compute_is_coped")
+
+    def action_view_delivery_order(self):
+        delivery_order = self.env['stock.picking'].search([('origin', '=', self.origin)], limit=1)
+        if delivery_order:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Bon de Livraison',
+                'view_mode': 'form',
+                'res_model': 'stock.picking',
+                'res_id': delivery_order.id,
+                'target': 'current',
+            }
+        else:
+            return {'type': 'ir.actions.act_window_close'}
+
+
+            
+
+    @api.depends('state')  
+    def _compute_is_coped(self):
+        for production in self:
+            if production.state in ['confirmed','done']:
+                production.is_coped=True
+            else:
+               production.is_coped=False 
+            
+  
+
+    @api.depends('origin')  
+    def _compute_picking_id(self):
+        for production in self:
+            picking = self.env['stock.picking'].search([
+                ('origin', '=', production.origin),  
+                ('state', 'not in', ['cancel'])
+            ], limit=1)
+
+            production.picking_id = picking.id if picking else False
+
+
+ 
+    
+
+    @api.depends('origin')
+    def _compute_ship_to_id(self):
+        for production in self:
+            sale_order = self.env['sale.order'].search([('name', '=', production.origin)], limit=1)
+            if sale_order:
+                production.ship_to_id = sale_order.partner_shipping_id
+            else:
+                production.ship_to_id = False
+
+    
 
     @api.depends('origin')
     def _compute_shopify_instance(self):
@@ -151,11 +275,13 @@ class MrpProduction(models.Model):
     @api.model
     def create(self, vals):
         # Vérifier si l'ordre de fabrication a une origine (nom de la commande de vente)
+         
         if vals.get('origin'):
             sale_order = self.env['sale.order'].search([('name', '=', vals['origin'])], limit=1)
             if sale_order:
                 vals['partner_id'] = sale_order.partner_id.id
                 vals['partner_shipping_id'] = sale_order.partner_shipping_id.id
+      
         return super(MrpProduction, self).create(vals)
         
     @api.depends('origin', 'product_id')

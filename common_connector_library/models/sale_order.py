@@ -37,10 +37,19 @@ class SaleOrder(models.Model):
         picking_policy,date_order
         Migration done by twinkalc August 2020
         """
+        partner=False
+        
+        if vals.get('shopify_instance_id') == 1:
+            partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
+                
+        elif vals.get('shopify_instance_id') == 2:
+            partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
+               
+            
         sale_order = self.env['sale.order']
         order_vals = {
             'company_id': vals.get('company_id', False),
-            'partner_id': vals.get('partner_id', False),
+            'partner_id': partner.id if partner else vals.get('partner_id', False), #vals.get('partner_id', False),
             'partner_invoice_id': vals.get('partner_invoice_id', False),
             'partner_shipping_id': vals.get('partner_shipping_id', False),
             'warehouse_id': vals.get('warehouse_id', False),
@@ -53,6 +62,14 @@ class SaleOrder(models.Model):
         new_record = sale_order.new(order_vals)
         # Return Fiscal Position
         # new_record.onchange_partner_shipping_id()
+        partner=False
+        
+        if vals.get('shopify_instance_id') == 1:
+            partner = self.env['res.partner'].search([('name', '=', 'DESIGNER TRIM')], limit=1)
+                
+        elif vals.get('shopify_instance_id') == 2:
+            partner = self.env['res.partner'].search([('name', '=', 'LUXWOOD RETAILER')], limit=1)
+            
         order_vals = sale_order._convert_to_write({name: new_record[name] for name in new_record._cache})
 
         fpos = order_vals.get('fiscal_position_id') or vals.get('fiscal_position_id', False)
@@ -60,7 +77,7 @@ class SaleOrder(models.Model):
             'company_id': vals.get('company_id', False),
             'picking_policy': vals.get('picking_policy'),
             'partner_invoice_id': vals.get('partner_invoice_id', False),
-            'partner_id': vals.get('partner_id', False),
+            'partner_id': partner.id if partner else vals.get('partner_id', False),
             'partner_shipping_id': vals.get('partner_shipping_id', False),
             'date_order': vals.get('date_order', False),
             'state': 'draft',

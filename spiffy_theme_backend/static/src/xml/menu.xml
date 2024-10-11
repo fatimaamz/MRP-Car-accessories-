@@ -195,13 +195,13 @@
 			<t t-call="SearchModalPopup"/>
 			<div class="dynamic_data" />
 			<div class="new_systray d-none">
-				<!--<div class="o_app_drawer d-block d-lg-none">
+				<div class="o_app_drawer d-block d-lg-none">
 					<li class="list-unstyled">
 						<a class="appDrawerToggle me-3" accesskey="A">
 							<span class="ri ri-apps-2-line"/>
 						</a>
 					</li>
-				</div>-->
+				</div>
 				<div class="company_logo_brand d-none d-md-flex align-items-center">
 					<div class="o_company_logo d-none d-md-block">
 						<t t-if="currentCompany">
@@ -446,7 +446,7 @@
 
 	<t t-name="AllAppsMenus" >
 		<ul id="accordion">
-			<!-- <t t-if="currentApp"> -->
+			 <!--<t t-if="currentApp"> -->
 				<t t-foreach="menuService.getApps()" t-as="menu" t-key="menu.name">
 					<t t-if="menu">
 						<t t-if="!menu.childrenTree.length">

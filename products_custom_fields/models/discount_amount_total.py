@@ -2,7 +2,9 @@ from odoo import models, fields, api,_
 from datetime import date
 import logging
 
+_logger = logging.getLogger(__name__)
 
+"""
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
@@ -53,7 +55,7 @@ class SaleOrderLine(models.Model):
             if product_template_id != 'discount':
                 vals['price_unit'] = float(vals.get('price_unit', 0)) * 0.75
 
-
+"""
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
@@ -70,10 +72,96 @@ class SaleOrder(models.Model):
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
 
+    """
 
+    def _update_total_amount_based_on_shipping_country(self):
+        for order in self:
+            if order.partner_shipping_id:
+                country_code = order.partner_shipping_id.country_id.code
 
+                # Get the USD currency
+                usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+
+                if usd_currency:
+                    today = date.today()
+                    rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
+                    if not rate_record:
+                        rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+
+                    if rate_record:
+                        usd_to_cad_rate = float(rate_record.inverse_company_rate)
+
+                        # Calculate the new total based on country
+                        if country_code == 'US':
+                            new_total = sum(line.price_subtotal * usd_to_cad_rate * 0.75 for line in order.order_line)
+                        else:
+                            new_total = sum(line.price_subtotal * 0.75 for line in order.order_line)
+
+                        if order.amount_total != new_total:
+                            _logger.info(f"Updating total amount from {order.amount_total} to {new_total} for order {order.id}")
+                            order.amount_total = new_total
+
+    @api.model
+    def create(self, vals):
+        order = super(SaleOrder, self).create(vals)
+        order._update_total_amount_based_on_shipping_country()
+        return order
+
+    def write(self, vals):
+        result = super(SaleOrder, self).write(vals)
+        # Avoid recursive call if amount_total is already being updated
+        if 'amount_total' not in vals:
+            self._update_total_amount_based_on_shipping_country()
+        return result
    
-            
+    """
+    @api.depends('order_line.price_subtotal', 'partner_shipping_id.country_id')
+    def _compute_amounts(self):
+        super(SaleOrder, self)._compute_amounts()  # Call the standard method
+
+        for order in self:
+            if order.partner_shipping_id:
+                country_code = order.partner_shipping_id.country_id.code
+
+                # Get the USD currency
+                usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+
+                if usd_currency:
+                    today = date.today()
+                    rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
+                    if not rate_record:
+                        rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+
+                    if rate_record:
+                        usd_to_cad_rate = float(rate_record.inverse_company_rate)
+
+                        # Calculate the adjusted total based on the country
+                        if country_code == 'US':
+                            new_total = sum(line.price_subtotal * usd_to_cad_rate * 0.75 for line in order.order_line)
+                        else:
+                            new_total = sum(line.price_subtotal * 0.75 for line in order.order_line)
+
+                        if order.amount_total != new_total:
+                            _logger.info(f"Updating total amount from {order.amount_total} to {new_total} for order {order.id}")
+                            order.amount_total = new_total  # Update the total
+    @api.model
+    def create(self, vals):
+        order = super(SaleOrder, self).create(vals)
+        order._compute_amounts()  # Recompute the amount after creation
+        return order
+
+    def write(self, vals):
+        result = super(SaleOrder, self).write(vals)
+        if 'order_line' in vals or 'partner_shipping_id' in vals:
+            self._compute_amounts()  # Recompute the amount on write if relevant fields are updated
+        return result
+
+    
+    
+   
+  
+   
+ 
     
 
     def _can_be_confirmed(self):
