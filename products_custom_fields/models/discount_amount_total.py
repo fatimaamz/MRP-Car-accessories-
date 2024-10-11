@@ -116,8 +116,8 @@ class SaleOrder(models.Model):
    
     """
     @api.depends('order_line.price_subtotal', 'partner_shipping_id.country_id')
-    def _compute_amount(self):
-        super(SaleOrder, self)._compute_amount()  # Call the standard method
+    def _compute_amounts(self):
+        super(SaleOrder, self)._compute_amounts()  # Call the standard method
 
         for order in self:
             if order.partner_shipping_id:
@@ -147,13 +147,13 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
-        order._compute_amount()  # Recompute the amount after creation
+        order._compute_amounts()  # Recompute the amount after creation
         return order
 
     def write(self, vals):
         result = super(SaleOrder, self).write(vals)
         if 'order_line' in vals or 'partner_shipping_id' in vals:
-            self._compute_amount()  # Recompute the amount on write if relevant fields are updated
+            self._compute_amounts()  # Recompute the amount on write if relevant fields are updated
         return result
 
     
