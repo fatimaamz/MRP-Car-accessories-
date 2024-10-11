@@ -110,7 +110,7 @@ class WhatsAppMessage(models.Model):
 
         # Create the sale order
         sale_order = self.env['sale.order'].create({
-            'partner_id': 15921 #client_partner.id,  
+            'partner_id': 15921, #client_partner.id,  
             'from_whatsapp':True,
             'order_line': [(0, 0, {
                 'product_id': product.id,
