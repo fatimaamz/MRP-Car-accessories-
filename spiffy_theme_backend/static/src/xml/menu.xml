@@ -232,8 +232,8 @@
 			<nav class="o_main_navbar" t-on-dropdown-item-selected="onNavBarDropdownItemSelection" data-command-category="navbar">
 				<div class="o_app_drawer">
 					<li class="list-unstyled">
-						<a class="appDrawerToggle me-3" accesskey="A">
-							<span class="ri ri-apps-2-line"/>
+						<a class="appDrawerToggle me-3" accesskey="A" href="/web#menu_id=apps">
+							<span class="ri ri-apps-2-line" style="color: white;"/>
 						</a>
 					</li>
 				</div>
