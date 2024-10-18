@@ -116,8 +116,6 @@ class SaleOrder(models.Model):
    
     """
 
-    class SaleOrder(models.Model):
-    _inherit = 'sale.order'
 
     @api.depends('order_line.price_subtotal', 'order_line.price_tax', 'order_line.price_total', 'partner_shipping_id.country_id')
     def _compute_amounts(self):
