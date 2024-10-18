@@ -115,9 +115,10 @@ class SaleOrder(models.Model):
         return result
    
     """
-    @api.depends('order_line.price_subtotal', 'partner_shipping_id.country_id')
+    @api.depends('order_line.price_subtotal', 'order_line.price_tax', 'order_line.price_total', 'partner_shipping_id.country_id')
     def _compute_amounts(self):
-        super(SaleOrder, self)._compute_amounts()  # Call the standard method
+        """Compute the total amounts of the SO and apply discounts based on shipping country."""
+        super(SaleOrder, self)._compute_amounts()  # Call the original method
 
         for order in self:
             if order.partner_shipping_id:
@@ -137,13 +138,25 @@ class SaleOrder(models.Model):
 
                         # Calculate the adjusted total based on the country
                         if country_code == 'US':
-                            new_total = sum(line.price_subtotal * usd_to_cad_rate * 0.75 for line in order.order_line)
+                            # Apply discount for US customers
+                            discount_multiplier = 0.75
+                            new_total = sum(line.price_subtotal * usd_to_cad_rate * discount_multiplier for line in order.order_line)
                         else:
-                            new_total = sum(line.price_subtotal * 0.75 for line in order.order_line)
+                            # Apply default discount for other countries
+                            discount_multiplier = 0.75
+                            new_total = sum(line.price_subtotal * discount_multiplier for line in order.order_line)
 
+                        # Calculate the final amount including taxes
+                        new_total += order.amount_tax
+
+                        # Ensure total is rounded and updated
+                        new_total = round(new_total, 2)
+
+                        # Log and update the total if necessary
                         if order.amount_total != new_total:
                             _logger.info(f"Updating total amount from {order.amount_total} to {new_total} for order {order.id}")
                             order.amount_total = new_total  # Update the total
+                            
     @api.model
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
