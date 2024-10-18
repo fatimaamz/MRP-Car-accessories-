@@ -115,12 +115,31 @@ class SaleOrder(models.Model):
         return result
    
     """
+
+    class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
     @api.depends('order_line.price_subtotal', 'order_line.price_tax', 'order_line.price_total', 'partner_shipping_id.country_id')
     def _compute_amounts(self):
-        """Compute the total amounts of the SO and apply discounts based on shipping country."""
-        super(SaleOrder, self)._compute_amounts()  # Call the original method
-
+        """Compute the total amounts of the SO and apply discounts and conversions based on shipping country."""
         for order in self:
+            order = order.with_company(order.company_id)
+            order_lines = order.order_line.filtered(lambda x: not x.display_type)
+
+            # Calculate untaxed and tax amounts
+            if order.company_id.tax_calculation_rounding_method == 'round_globally':
+                tax_results = order.env['account.tax']._compute_taxes([line._convert_to_tax_base_line_dict() for line in order_lines])
+                totals = tax_results['totals']
+                amount_untaxed = totals.get(order.currency_id, {}).get('amount_untaxed', 0.0)
+                amount_tax = totals.get(order.currency_id, {}).get('amount_tax', 0.0)
+            else:
+                amount_untaxed = sum(order_lines.mapped('price_subtotal'))
+                amount_tax = sum(order_lines.mapped('price_tax'))
+
+            order.amount_untaxed = amount_untaxed
+            order.amount_tax = amount_tax
+
+            # Currency conversion and discount logic
             if order.partner_shipping_id:
                 country_code = order.partner_shipping_id.country_id.code
 
@@ -136,26 +155,26 @@ class SaleOrder(models.Model):
                     if rate_record:
                         usd_to_cad_rate = float(rate_record.inverse_company_rate)
 
-                        # Calculate the adjusted total based on the country
+                        # Apply discount based on country
                         if country_code == 'US':
-                            # Apply discount for US customers
-                            discount_multiplier = 0.75
-                            new_total = sum(line.price_subtotal * usd_to_cad_rate * discount_multiplier for line in order.order_line)
+                            discount_multiplier = 0.75  # Example discount for US customers
                         else:
-                            # Apply default discount for other countries
-                            discount_multiplier = 0.75
-                            new_total = sum(line.price_subtotal * discount_multiplier for line in order.order_line)
+                            discount_multiplier = 0.75  # Default discount for other countries
 
-                        # Calculate the final amount including taxes
-                        new_total += order.amount_tax
-
-                        # Ensure total is rounded and updated
-                        new_total = round(new_total, 2)
+                        # Calculate new total after applying discount and conversion
+                        new_total = (amount_untaxed * discount_multiplier) + amount_tax
+                        new_total = round(new_total, 2)  # Ensure rounding
 
                         # Log and update the total if necessary
                         if order.amount_total != new_total:
                             _logger.info(f"Updating total amount from {order.amount_total} to {new_total} for order {order.id}")
-                            order.amount_total = new_total  # Update the total
+                            order.amount_total = new_total
+                        else:
+                            order.amount_total = amount_untaxed + amount_tax  # Fallback to the original total if no change
+            else:
+                # If no shipping address, keep the original total
+                order.amount_total = amount_untaxed + amount_tax
+                
                             
     @api.model
     def create(self, vals):
