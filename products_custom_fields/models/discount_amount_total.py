@@ -71,6 +71,50 @@ class SaleOrder(models.Model):
     ], string='order Source',compute='_compute_order_source')
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
+    discounted_total = fields.Monetary(string='Discounted Total', compute='_compute_discounted_total', store=True)
+
+    @api.depends('order_line.price_subtotal', 'order_line.price_tax', 'order_line.price_total', 'partner_shipping_id.country_id')
+    def _compute_discounted_total(self):
+        """Compute the discounted total based on the shipping country."""
+        for order in self:
+            order_lines = order.order_line.filtered(lambda x: not x.display_type)
+            amount_untaxed = sum(order_lines.mapped('price_subtotal'))
+            amount_tax = sum(order_lines.mapped('price_tax'))
+
+            # Initialize new_total to the standard total
+            new_total = amount_untaxed + amount_tax
+
+            if order.partner_shipping_id:
+                country_code = order.partner_shipping_id.country_id.code
+
+                # Get the USD currency
+                usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+
+                # Apply discount and conversion if the country is US
+                if country_code == 'US':
+                    if usd_currency:
+                        today = date.today()
+                        rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
+                        if not rate_record:
+                            rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+
+                        if rate_record:
+                            usd_to_cad_rate = float(rate_record.inverse_company_rate)
+
+                            # Apply discount for US customers
+                            discount_multiplier = 0.75
+                            discounted_untaxed = amount_untaxed * discount_multiplier
+
+                            # Calculate new total after applying discount and conversion
+                            new_total = (discounted_untaxed * usd_to_cad_rate) + amount_tax
+                else:
+                    # For non-US countries, only apply discount
+                    discount_multiplier = 0.75
+                    discounted_untaxed = amount_untaxed * discount_multiplier
+                    new_total = discounted_untaxed + amount_tax
+
+            # Round the total and assign to the discounted_total field
+            order.discounted_total = round(new_total, 2)
 
     """
 
