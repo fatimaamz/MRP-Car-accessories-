@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- # Part of Odoo Module Developed by Bizople Solutions Pvt. Ltd.
+# See LICENSE file for full copyright and licensing details. -->
+<templates xml:space="preserve">
+    <t t-inherit="web_enterprise.HomeMenu" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_home_menu')]" position="attributes">
+            <attribute name="t-att-class"></attribute>
+        </xpath>
+
+        <xpath expr="//div[@t-foreach='displayedApps']" position="replace">
+            <div t-foreach="displayedApps" t-as="app" t-key="app.id" class="col-4 col-md-2 o_draggable mb-3 px-0">
+                <a t-att-id="'result_app_' + app_index"
+                    role="option"
+                    t-att-aria-selected="state.focusedIndex === app_index ? 'true' : 'false'"
+                    class="o_app o_menuitem d-flex flex-column rounded-3 justify-content-start align-items-center w-100 p-1 p-md-2"
+                    t-att-class="{o_focused: state.focusedIndex === app_index}"
+                    t-att-data-menu-xmlid="app.xmlid"
+                    t-att-href="app.href || ('#menu_id='+app.id+'&amp;action_id='+app.actionID)"
+                    t-on-click.prevent="() => this._onAppClick(app)"
+                    >
+                    <div t-if="app.webIconData" class="app-image mb8"/>
+                    <div t-else="" class="app-image position-relative d-flex justify-content-center align-items-center w-75 p-2 rounded-3 ratio ratio-1x1">
+                        <i t-attf-class="{{app.webIcon.iconClass}} position-relative w-auto h-auto" t-attf-style="color: {{app.webIcon.color}};"/>
+                    </div>
+                    <div class="o_caption w-100 text-center text-truncate mt-2" t-esc="app.label or app.name"/>
+                </a>
+            </div>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,30 @@
+.o-voip-SoftphoneContainer {
+    .o-voip-Softphone {
+        .o-voip-Softphone-topbar{
+            padding: 0 10px;
+            background-color: var(--biz-theme-primary-color) !important;
+            color: var(--biz-theme-primary-text-color) !important;
+            border-top-left-radius: var(--border-radius-lg) !important;
+            border-top-right-radius: var(--border-radius-lg) !important;   
+            @media (max-width: 767px){
+                height: 60px; 
+            }
+        }
+        .o-voip-Softphone-content {
+            .nav{
+                background-color: transparent;
+                border: 0;
+            }
+            .nav-tabs {
+                li {
+                    .o_dial_tab {
+                        width: 100% !important;
+                    }
+                    padding: 0 4px !important;
+                }
+            }
+        }
+        border-top-left-radius: var(--border-radius-lg);
+        border-top-right-radius: var(--border-radius-lg);
+    }
+}
