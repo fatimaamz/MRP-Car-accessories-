@@ -116,11 +116,6 @@
 	<!-- T10246 end -->
 	
 	<t t-inherit="web.NavBar" t-inherit-mode="extension" >
-
-
-
-
-
 		<xpath expr="//nav[hasclass('o_main_navbar')]" position="before">
 			<!-- SPIFFY MULTI TAB START -->
 			<div class="multi_tab_section"/>
@@ -233,14 +228,12 @@
 			</div>
 			<div class="navbar_to_do_list_data" />
 		</xpath>
-
-		
 		<xpath expr="//nav[hasclass('o_main_navbar')]" position="replace">
 			<nav class="o_main_navbar" t-on-dropdown-item-selected="onNavBarDropdownItemSelection" data-command-category="navbar">
 				<div class="o_app_drawer">
 					<li class="list-unstyled">
 						<a class="appDrawerToggle me-3" accesskey="A" href="/web#menu_id=apps">
-							<span class="ri ri-apps-2-line" style="color: white;" />
+							<span class="ri ri-apps-2-line" style="color: white;"/>
 						</a>
 					</li>
 				</div>
@@ -255,7 +248,7 @@
 				<div class="o_menu_systray" role="menu">
 
 					<t t-foreach="systrayItems" t-as="item" t-key="item.key">
-					
+						<!-- This ensures the correct order of the systray items -->
 						<div t-att-data-index="item.index"/>
 						<ErrorHandler onError="error => this.handleItemError(error, item)">
 							<t t-component="item.Component" t-props="item.props"/>
@@ -264,27 +257,27 @@
 				</div>
 
 				<!-- Apps Menu -->
-				<t t-call="web.NavBar.AppsMenu" >
+				<t t-call="web.NavBar.AppsMenu">
 					<t t-set="apps" t-value="menuService.getApps()" />
 				</t>
 
 				<div class="favorite_apps_section d-none"></div>
 
-				 <div class="mobile-header-toggle d-lg-none d-block">
+				<!-- <div class="mobile-header-toggle d-lg-none d-block">
 					<a id="mobileMenuToggleBtn" class="menu-button">
 						<span class="ri ri-menu-line align-middle"></span>
 					</a>
-				</div> 
+				</div> -->
 
 				<!-- App Brand -->
-				<!--<DropdownItem
+				<DropdownItem
 					t-if="currentApp"
 					href="getMenuItemHref(currentApp)"
 					t-esc="currentApp.name"
 					class="'o_menu_brand d-none d-md-block'"
 					dataset="{ menuXmlid: currentApp.xmlid, section: currentApp.id }"
 					onSelected="() => this.onNavBarDropdownItemSelection(currentApp)"
-				/>-->
+				/>
 
 				<!-- Current App Sections -->
 				<t t-if="currentAppSections.length and !env.isSmall and !isIpad" t-call="web.NavBar.SectionsMenu">
@@ -358,7 +351,7 @@
 	<t t-inherit="web.NavBar.AppsMenu" t-inherit-mode="extension" >
 		<xpath expr="//Dropdown" position="replace">
 			<div class="o_navbar_apps_menu">
-				<!-- <t t-out="menu">jiohiugiu</t>--> 
+				<!-- <t t-out="menu">jiohiugiu</t> -->
 				<t t-call="AllAppsMenus"/>
 				<div class="appdrawer_section">
 					<div class="top_navbar_section mb-3 mb-md-5">
@@ -446,12 +439,12 @@
 
 	<t t-name="AllAppsMenus" >
 		<ul id="accordion">
-			 <!--<t t-if="currentApp"> -->
+			<!-- <t t-if="currentApp"> -->
 				<t t-foreach="menuService.getApps()" t-as="menu" t-key="menu.name">
 					<t t-if="menu">
 						<t t-if="!menu.childrenTree.length">
 							<li>
-								<!-- t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}"  -->
+								<!-- t-attf-class="main_link {{currentApp.name == menu.name ? 'active':''}}" -->
 								<a t-attf-href="#menu_id={{menu.id}}&amp;action={{menu.actionID ? menu.actionID : ''}}"
 									t-att-data-menu="menu.id"
 									t-attf-data-action-model="{{menu.actionModel ? menu.actionModel : ''}}"
@@ -477,7 +470,7 @@
 									</span>
 									<span class="ri ri-arrow-right-s-line ms-auto dropdown_icon" />
 								</a>
-								 <!--<ul t-attf-class="{{currentApp.name == menu.name ? 'show':''}}"> -->
+								<!-- <ul t-attf-class="{{currentApp.name == menu.name ? 'show':''}}"> -->
 								<ul t-attf-class="header-sub-menus">
 									<t t-set="parent_menu_id" t-value="menu.id" />
 									<t t-foreach="menu.children" t-as="menuid" t-key="menuid">
@@ -490,7 +483,7 @@
 						</t>
 					</t>
 				</t>
-			<!--</t> -->
+			<!-- </t> -->
 		</ul>
 	</t>
 	

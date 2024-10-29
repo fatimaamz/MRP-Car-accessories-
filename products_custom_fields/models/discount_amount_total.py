@@ -71,6 +71,50 @@ class SaleOrder(models.Model):
     ], string='order Source',compute='_compute_order_source')
 
     from_whatsapp = fields.Boolean(string="Whatsapp", default=False)
+    discounted_total = fields.Monetary(string='Discounted Total', compute='_compute_discounted_total', store=True)
+
+    @api.depends('order_line.price_subtotal', 'order_line.price_tax', 'order_line.price_total', 'partner_shipping_id.country_id')
+    def _compute_discounted_total(self):
+        """Compute the discounted total based on the shipping country."""
+        for order in self:
+            order_lines = order.order_line.filtered(lambda x: not x.display_type)
+            amount_untaxed = sum(order_lines.mapped('price_subtotal'))
+            amount_tax = sum(order_lines.mapped('price_tax'))
+
+            # Initialize new_total to the standard total
+            new_total = amount_untaxed + amount_tax
+
+            if order.partner_shipping_id:
+                country_code = order.partner_shipping_id.country_id.code
+
+                # Get the USD currency
+                usd_currency = self.env['res.currency'].search([('name', '=', 'USD')], limit=1)
+
+                # Apply discount and conversion if the country is US
+                if country_code == 'US':
+                    if usd_currency:
+                        today = date.today()
+                        rate_record = usd_currency.rate_ids.filtered(lambda r: r.name == today)
+                        if not rate_record:
+                            rate_record = usd_currency.rate_ids.sorted(key=lambda r: r.name, reverse=True)[:1]
+
+                        if rate_record:
+                            usd_to_cad_rate = float(rate_record.inverse_company_rate)
+
+                            # Apply discount for US customers
+                            discount_multiplier = 0.75
+                            discounted_untaxed = amount_untaxed * discount_multiplier
+
+                            # Calculate new total after applying discount and conversion
+                            new_total = (discounted_untaxed * usd_to_cad_rate) + amount_tax
+                else:
+                    # For non-US countries, only apply discount
+                    discount_multiplier = 0.75
+                    discounted_untaxed = amount_untaxed * discount_multiplier
+                    new_total = discounted_untaxed + amount_tax
+
+            # Round the total and assign to the discounted_total field
+            order.discounted_total = round(new_total, 2)
 
     """
 
@@ -115,11 +159,29 @@ class SaleOrder(models.Model):
         return result
    
     """
-    @api.depends('order_line.price_subtotal', 'partner_shipping_id.country_id')
-    def _compute_amounts(self):
-        super(SaleOrder, self)._compute_amounts()  # Call the standard method
 
+
+    @api.depends('order_line.price_subtotal', 'order_line.price_tax', 'order_line.price_total', 'partner_shipping_id.country_id')
+    def _compute_amounts(self):
+        """Compute the total amounts of the SO and apply discounts and conversions based on shipping country."""
         for order in self:
+            order = order.with_company(order.company_id)
+            order_lines = order.order_line.filtered(lambda x: not x.display_type)
+
+            # Calculate untaxed and tax amounts
+            if order.company_id.tax_calculation_rounding_method == 'round_globally':
+                tax_results = order.env['account.tax']._compute_taxes([line._convert_to_tax_base_line_dict() for line in order_lines])
+                totals = tax_results['totals']
+                amount_untaxed = totals.get(order.currency_id, {}).get('amount_untaxed', 0.0)
+                amount_tax = totals.get(order.currency_id, {}).get('amount_tax', 0.0)
+            else:
+                amount_untaxed = sum(order_lines.mapped('price_subtotal'))
+                amount_tax = sum(order_lines.mapped('price_tax'))
+
+            order.amount_untaxed = amount_untaxed
+            order.amount_tax = amount_tax
+
+            # Currency conversion and discount logic
             if order.partner_shipping_id:
                 country_code = order.partner_shipping_id.country_id.code
 
@@ -135,15 +197,27 @@ class SaleOrder(models.Model):
                     if rate_record:
                         usd_to_cad_rate = float(rate_record.inverse_company_rate)
 
-                        # Calculate the adjusted total based on the country
+                        # Apply discount based on country
                         if country_code == 'US':
-                            new_total = sum(line.price_subtotal * usd_to_cad_rate * 0.75 for line in order.order_line)
+                            discount_multiplier = 0.75  # Example discount for US customers
                         else:
-                            new_total = sum(line.price_subtotal * 0.75 for line in order.order_line)
+                            discount_multiplier = 0.75  # Default discount for other countries
 
+                        # Calculate new total after applying discount and conversion
+                        new_total = (amount_untaxed * discount_multiplier) + amount_tax
+                        new_total = round(new_total, 2)  # Ensure rounding
+
+                        # Log and update the total if necessary
                         if order.amount_total != new_total:
                             _logger.info(f"Updating total amount from {order.amount_total} to {new_total} for order {order.id}")
-                            order.amount_total = new_total  # Update the total
+                            order.amount_total = new_total
+                        else:
+                            order.amount_total = amount_untaxed + amount_tax  # Fallback to the original total if no change
+            else:
+                # If no shipping address, keep the original total
+                order.amount_total = amount_untaxed + amount_tax
+                
+                            
     @api.model
     def create(self, vals):
         order = super(SaleOrder, self).create(vals)
