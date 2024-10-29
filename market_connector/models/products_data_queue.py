@@ -184,6 +184,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                         result +=f"==> No Image \n"
                         data_dict = json.loads(self.data)
                         self.default_image_url = data_dict.get('image',{'src':None}).get('src')
+                        self.add_images_from_dict(products[0],data_dict.get('images',[]))
                         result +=f"==> Url : {self.default_image_url} \n"
                     check_image = self.import_shopify_product_image(products[0], self.default_image_url)
                     if self.default_image_url:
@@ -246,6 +247,8 @@ class ShopifyProductDataQueueEpt(models.Model):
             product.shopify_id = shopify_product.shopify_id
         _logger.info(f"product : {product}")
         self.import_shopify_product_image(product, shopify_product.default_image_url)
+        data_dict = json.loads(shopify_product.data)
+        self.add_images_from_dict(product, data_dict.get('images',[]))
         return product
     
     def matching_product_template(self, shopify_product):
@@ -264,6 +267,20 @@ class ShopifyProductDataQueueEpt(models.Model):
         shopify_product = self.env['shopify.sync'].process_single_product(shopify_id)
         _logger.info(f"New product {shopify_product}")
         return shopify_product
+    
+    
+    def add_images_from_dict(self,product_product, images):
+        print("========================================================>",images)
+        for image_info in images:
+            response = requests.get(image_info['src'])
+            if response.status_code == 200:
+                image_base64 = base64.b64encode(response.content)
+                self.env['product.image'].create({
+                    'product_id': product_product.id,
+                    'image': image_base64,
+                    'name': image_info.get('alt', ''),
+                    'is_default': image_info.get('position', 0) == 1 
+                })
     
     
     def import_shopify_product_image(self, product_product, image_url):

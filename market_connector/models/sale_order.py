@@ -177,6 +177,7 @@ class SaleOrder(models.Model):
         insert_color = ""
         paint_code = ""
         main_color = ""
+        special_notes = ""
         print(properties)
         for prop in properties:
             # print("=========pprod====================>",prop)
@@ -186,13 +187,18 @@ class SaleOrder(models.Model):
                 paint_code = prop['value']
             elif prop['name'] == 'Main Colors':
                 main_color = prop['value']
+            elif prop['name'] == 'Special Notes':
+                special_notes = prop['value']
+                
 
             # Formatting the string
         formatted_description = f"""{reference_code} ({car_model.split(' ')[1]}, {car_model.split(' ')[0]})
 Interior Color: {main_color}
 Paint Code: {paint_code}
 Insert Color: {insert_color}
-Année: {car_year}"""
+Année: {car_year}
+Notes : {special_notes}
+"""
 
         print('======================>',formatted_description)
         return formatted_description

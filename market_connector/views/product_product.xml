@@ -1,0 +1,24 @@
+<odoo>
+<record id="view_product_form_inherit_images" model="ir.ui.view">
+    <field name="name">product.product.form.inherit.images</field>
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_normal_form_view"/>
+    <field name="arch" type="xml">
+        <xpath expr="//sheet" position="inside">
+            <group string="Main Image">
+                <field name="default_image" widget="image"/>
+            </group>
+            <group string="Additional Images">
+                <field name="product_images" widget="one2many_list">
+                    <tree editable="bottom">
+                        <field name="image" widget="image"/>
+                        <field name="name"/>
+                        <field name="is_default"/>
+                    </tree>
+                </field>
+            </group>
+        </xpath>
+    </field>
+</record>
+
+</odoo>
