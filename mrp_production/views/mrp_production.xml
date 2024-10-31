@@ -121,13 +121,7 @@
                     <field name="design_ids"/>
                     <field name="note_interne" />
                     <field name="logo_inscription" />
-          <group>
-        <label for="selected_image_id" string="Selected Image"/>
-        <field name="selected_image_id" domain="[('product_id', '=', product_id)]" />
-        <div t-if="selected_image_id">
-            <img t-att-src="'data:image/png;base64,%s' % selected_image_id.image.decode()"/>
-        </div>
-    </group>
+
         </xpath>
         
       <xpath expr="//group[@name='group_extra_info']" position="inside">
