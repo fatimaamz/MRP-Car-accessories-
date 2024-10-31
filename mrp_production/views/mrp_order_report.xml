@@ -290,9 +290,9 @@
                         </t>
                     </div>-->
                     
-                     <div  t-if="o.product_image">
+                     <div  t-if="o.selected_image">
                             <strong>Image Produit:</strong><br/>
-                            <img t-if="o.selected_image" t-att-src="image_data_uri(o.product_image)" style="width: 90%"/>                       
+                            <img t-if="o.selected_image" t-att-src="image_data_uri(o.selected_image)" style="width: 90%"/>                       
                     </div><br/>
 <div>
                 <t t-if="o.message_ids.filtered(lambda m: m.message_type == 'comment' and not m.subtype_id)">
