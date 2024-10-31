@@ -84,13 +84,22 @@ class StockMove(models.Model):
 
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
-    
+
+    product_template_id = fields.Many2one(
+        related='product_id.product_tmpl_id',
+        string="Product Template",
+        store=True,
+        readonly=True
+    )
+
     selected_image_id = fields.Many2one(
         'common.product.image.ept',
         string="Selected Image",
-        domain="[('product_id.template_id', '=', product_id.product_tmpl_id)]",
+        domain="[('template_id', '=', product_template_id)]",  # Now this works
         help="Select an image for this production."
     )
+    
+  
     selected_image = fields.Image(
         string="Image",
         related='selected_image_id.image',
