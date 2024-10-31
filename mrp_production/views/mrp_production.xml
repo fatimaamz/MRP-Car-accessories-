@@ -117,13 +117,17 @@
         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
       </xpath>
       <xpath expr="//div[@name='bom_div']" position="after">
-                    <field name="ept_image_ids" widget="many2many_image" options="{'no_create': True}"/>
-                    <field name="selected_image_id" 
-                               domain="[('product_id', '=', product_id)]"
-                               widget="many2one_image"/>
+                    
                     <field name="design_ids"/>
                     <field name="note_interne" />
                     <field name="logo_inscription" />
+          <group>
+        <label for="selected_image_id" string="Selected Image"/>
+        <field name="selected_image_id" domain="[('product_id', '=', product_id)]" />
+        <t t-if="selected_image_id">
+            <img t-att-src="'data:image/png;base64,%s' % selected_image_id.image.decode()"/>
+        </t>
+    </group>
         </xpath>
         
       <xpath expr="//group[@name='group_extra_info']" position="inside">
