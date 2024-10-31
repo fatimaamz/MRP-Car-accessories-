@@ -124,9 +124,9 @@
           <group>
         <label for="selected_image_id" string="Selected Image"/>
         <field name="selected_image_id" domain="[('product_id', '=', product_id)]" />
-        <t t-if="selected_image_id">
+        <div t-if="selected_image_id">
             <img t-att-src="'data:image/png;base64,%s' % selected_image_id.image.decode()"/>
-        </t>
+        </div>
     </group>
         </xpath>
         
