@@ -84,12 +84,18 @@ class StockMove(models.Model):
 
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
-
+    
     selected_image_id = fields.Many2one(
         'common.product.image.ept',
         string="Selected Image",
         domain="[('product_id', '=', product_id)]",
         help="Select an image for this production."
+    )
+    selected_image = fields.Image(
+        string="Image",
+        related='selected_image_id.image',
+        store=True,
+        help="Image selected for this production."
     )
 
     product_qty = fields.Float(string='Quantité', digits=(16, 0))
