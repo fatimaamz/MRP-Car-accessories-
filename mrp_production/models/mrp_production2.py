@@ -90,6 +90,13 @@ class MrpProduction(models.Model):
         string="Selected Image"
     )
 
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        for record in self:
+            if record.product_id:
+                # Get images from the product template
+                record.selected_image_id = False 
+
     product_qty = fields.Float(string='Quantité', digits=(16, 0))
     note_interne = fields.Text(string="Note")
     logo_inscription = fields.Text(string="Logo/Inscription")
