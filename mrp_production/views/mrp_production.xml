@@ -117,7 +117,9 @@
         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
       </xpath>
       <xpath expr="//div[@name='bom_div']" position="after">
-          
+                    <field name="selected_image_id" 
+                               domain="[('product_id', '=', product_id)]"
+                               widget="many2one_image"/>
                     <field name="design_ids"/>
                     <field name="note_interne" />
                     <field name="logo_inscription" />
