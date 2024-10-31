@@ -85,6 +85,11 @@ class StockMove(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
+    selected_image_id = fields.Many2one(
+        'common.product.image.ept',
+        string="Selected Image"
+    )
+
     product_qty = fields.Float(string='Quantité', digits=(16, 0))
     note_interne = fields.Text(string="Note")
     logo_inscription = fields.Text(string="Logo/Inscription")
