@@ -85,17 +85,16 @@ class StockMove(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
+    ept_image_ids = fields.One2many(
+        related='product_id.ept_image_ids',
+        string="Product Images",
+        readonly=True
+    )
+
     selected_image_id = fields.Many2one(
         'common.product.image.ept',
         string="Selected Image"
     )
-
-    @api.onchange('product_id')
-    def _onchange_product_id(self):
-        for record in self:
-            if record.product_id:
-                # Get images from the product template
-                record.selected_image_id = False 
 
     product_qty = fields.Float(string='Quantité', digits=(16, 0))
     note_interne = fields.Text(string="Note")
