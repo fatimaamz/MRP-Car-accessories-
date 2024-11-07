@@ -3,8 +3,8 @@ from datetime import datetime
 import os
 
 class InvoiceExport(models.Model):
-    _name = 'invoice.export'
-    _description = 'Export Invoices to TXT File'
+     _inherit = "account.move'
+ 
 
     # Method to generate the TXT file for selected invoices
     def generate_invoice_txt(self, selected_invoice_ids):
