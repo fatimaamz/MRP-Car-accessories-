@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 
 class InvoiceExport(models.Model):
-     _inherit = "account.move'
+     _inherit = "account.invoice'
  
 
     # Method to generate the TXT file for selected invoices
