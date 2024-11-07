@@ -2,7 +2,7 @@ from odoo import models, fields, api
 from datetime import datetime
 import os
 
-class InvoiceExport(models.Model):
+class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     # Method to generate the TXT file for selected invoices
