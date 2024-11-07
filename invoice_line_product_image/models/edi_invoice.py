@@ -1,6 +1,5 @@
-from odoo import models, fields, api
-from datetime import datetime
 import os
+from datetime import datetime
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -16,7 +15,10 @@ class AccountMove(models.Model):
         # Generate the file name with vendor name and timestamp
         current_time = datetime.now().strftime('%Y%m%d_%H%M')
         file_name = f"{vendor_name}_{current_time}.txt"
-        file_path = os.path.join('/tmp', file_name)
+        
+        # Save the file to the home directory
+        home_dir = os.path.expanduser("~")  # Get the current user's home directory
+        file_path = os.path.join(home_dir, file_name)  # Create the full file path
 
         # Open the file to write the invoice data
         with open(file_path, 'w') as file:
@@ -27,7 +29,7 @@ class AccountMove(models.Model):
                         record_data = {
                             'bill': invoice.partner_id.name[:5].ljust(5),  # Example: Dealer Code (fixed length of 5 characters)
                             'part': line.product_id.default_code[:16].ljust(16) if line.product_id.default_code else "        ",  # Part Number (fixed length of 16)
-                            'ordd': invoice.date.replace("-", "") if invoice.date_order else "        ",  # Order Date
+                            'ordd': invoice.date_order.replace("-", "") if invoice.date_order else "        ",  # Order Date
                             'shpd': invoice.invoice_date.replace("-", ""),  # Ship Date (YYYYMMDD)
                             'inv': invoice.name[:12].ljust(12),  # Invoice Number
                             'qty': str(line.quantity).zfill(7),  # Quantity (right-justified with zero fill)
@@ -58,21 +60,3 @@ class AccountMove(models.Model):
                         continue
 
         return file_path  # Return file path for further use (e.g., FTP upload)
-
-    # Method to trigger FTP upload (example)
-    def upload_file_to_ftp(self, file_path):
-        # Assuming we have FTP credentials and Python's ftplib to upload files
-        import ftplib
-        ftp = ftplib.FTP("ftp.hyundaicanada.com")
-        ftp.login("username", "password")  # Use actual credentials
-        with open(file_path, "rb") as file:
-            ftp.storbinary(f"STOR {os.path.basename(file_path)}", file)
-        ftp.quit()
-
-    # Action method triggered from the list view to export invoices
-    def action_export_invoice(self):
-        selected_invoice_ids = self.env.context.get('active_ids')  # Get selected invoice IDs
-        if selected_invoice_ids:
-            file_path = self.generate_invoice_txt(selected_invoice_ids)
-            self.upload_file_to_ftp(file_path)
-        return True
