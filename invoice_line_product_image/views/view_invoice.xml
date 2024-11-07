@@ -18,7 +18,7 @@
         <field name="inherit_id" ref="account.view_move_tree"/>
         <field name="arch" type="xml">
             <!-- Add the export button to the action bar -->
-            <xpath expr="//header" position="inside">
+            <xpath expr="//tree" position="before">
                 <button name="action_export_invoice" 
                         type="object" 
                         string="Export Selected Invoices" 
