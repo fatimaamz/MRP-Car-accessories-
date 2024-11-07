@@ -2,12 +2,12 @@ from odoo import models, fields, api
 from datetime import datetime
 import os
 
-class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+class AccountMove(models.Model):
+    _inherit = "account.move"
 
     # Method to generate the TXT file for selected invoices
     def generate_invoice_txt(self, selected_invoice_ids):
-        invoices = self.env['account.invoice'].browse(selected_invoice_ids)
+        invoices = self.env['account.move'].browse(selected_invoice_ids)
 
         # Fetch the vendor name dynamically from the first invoice (assuming all selected invoices are from the same vendor)
         vendor_name = invoices[0].partner_id.name if invoices else "UnknownVendor"
