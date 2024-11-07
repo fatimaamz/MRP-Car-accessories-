@@ -12,12 +12,11 @@
     </record>
 
 
-    <record id="view_invoice_tree_inherit_export" model="ir.ui.view">
+   <!-- <record id="view_invoice_tree_inherit_export" model="ir.ui.view">
         <field name="name">account.invoice.tree.inherit.export</field>
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_tree"/>
         <field name="arch" type="xml">
-            <!-- Add the export button to the action bar -->
             <xpath expr="//tree" position="before">
                 <button name="action_export_invoice" 
                         type="object" 
@@ -26,7 +25,7 @@
                        />
             </xpath>
         </field>
-    </record>
+    </record>-->
 </odoo>
 
 
