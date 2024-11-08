@@ -30,7 +30,7 @@ class AccountMove(models.Model):
                             'bill': invoice.partner_id.name[:5].ljust(5),  # Example: Dealer Code (fixed length of 5 characters)
                             'part': line.product_id.default_code[:16].ljust(16) if line.product_id.default_code else "        ",  # Part Number (fixed length of 16)
                             'ordd': invoice.date ,
-                            'shpd': invoice.invoice_date.replace("-", ""),  # Ship Date (YYYYMMDD)
+                            'shpd': invoice.invoice_date,  # Ship Date (YYYYMMDD)
                             'inv': invoice.name[:12].ljust(12),  # Invoice Number
                             'qty': str(line.quantity).zfill(7),  # Quantity (right-justified with zero fill)
                             'prce': str(line.price_unit).zfill(7),  # Price (right-justified with zero fill)
@@ -42,12 +42,12 @@ class AccountMove(models.Model):
                             'frgt': "000000000",  # Freight (zero-filled)
                             'carr': "Purolator".ljust(30),  # Carrier (left-justified)
                             'ordr': "123456789".ljust(9),  # Vendor Order Number
-                            'invd': invoice.invoice_date.replace("-", ""),  # Vendor Invoice Date
+                            'invd': invoice.invoice_date,  # Vendor Invoice Date
                             'desc': line.name[:30].ljust(30),  # Description (left-justified)
                             'dpo': invoice.purchase_id.name[:30].ljust(30) if invoice.purchase_id else " " * 30,  # Dealer P/O Number
                             'dbcr': "D",  # Debit or Credit (D for Debit)
                             'war': "W",  # Warranty (W for Warranty)
-                            'crdt': invoice.create_date.replace("-", ""),  # Vendor Creation Date
+                            'crdt': invoice.create_date,  # Vendor Creation Date
                             'err': ""  # Error Message (empty for now)
                         }
 
