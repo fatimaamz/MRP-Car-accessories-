@@ -18,7 +18,7 @@
         <field name="inherit_id" ref="account.view_invoice_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//header//button[1]" position="before">
-                <button name="action_export_invoice" 
+                <button name="action_export_edi_invoice" 
                         type="object" 
                         string="Export Selected Invoices" 
                         class="btn-primary" 
