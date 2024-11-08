@@ -29,7 +29,7 @@ class AccountMove(models.Model):
                         record_data = {
                             'bill': invoice.partner_id.name[:5].ljust(5),  # Example: Dealer Code (fixed length of 5 characters)
                             'part': line.product_id.default_code[:16].ljust(16) if line.product_id.default_code else "        ",  # Part Number (fixed length of 16)
-                            'ordd': invoice.date.replace("-", "") if invoice.date_order else "        ",  # Order Date
+                            'ordd': invoice.date.replace("-", "") if invoice.date else "        ",  # Order Date
                             'shpd': invoice.invoice_date.replace("-", ""),  # Ship Date (YYYYMMDD)
                             'inv': invoice.name[:12].ljust(12),  # Invoice Number
                             'qty': str(line.quantity).zfill(7),  # Quantity (right-justified with zero fill)
