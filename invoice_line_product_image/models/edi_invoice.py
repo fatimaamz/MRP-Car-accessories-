@@ -1,12 +1,13 @@
 import os
 from datetime import datetime
-from odoo import api, fields, models,_
+from odoo import api, fields, models, _
+
 class AccountMove(models.Model):
     _inherit = "account.move"
 
     # Method to generate the TXT file for selected invoices
     def action_export_invoice(self):
-        invoices =self.browse(self.env.context.get('active_ids', []))
+        invoices = self.browse(self.env.context.get('active_ids', []))
 
         # Fetch the vendor name dynamically from the first invoice (assuming all selected invoices are from the same vendor)
         vendor_name = invoices[0].partner_id.name if invoices else "UnknownVendor"
@@ -26,11 +27,17 @@ class AccountMove(models.Model):
                 for line in invoice.invoice_line_ids:
                     # Prepare each field
                     if line.product_id:  # Ensure product_id is valid (not False)
+                        # Handle the invoice_date correctly, default to an empty string if False or None
+                        invoice_date = invoice.invoice_date or ""
+                        # If invoice_date is a valid date, format it; otherwise, use a default value
+                        formatted_invoice_date = invoice_date.replace("-", "") if invoice_date else "        "
+                        
+                        # Prepare the record data with the fixed length and formatting
                         record_data = {
                             'bill': invoice.partner_id.name[:5].ljust(5),  # Example: Dealer Code (fixed length of 5 characters)
                             'part': line.product_id.default_code[:16].ljust(16) if line.product_id.default_code else "        ",  # Part Number (fixed length of 16)
                             'ordd': invoice.date ,
-                            'shpd': invoice.invoice_date,  # Ship Date (YYYYMMDD)
+                            'shpd': formatted_invoice_date,  # Ship Date (YYYYMMDD)
                             'inv': invoice.name[:12].ljust(12),  # Invoice Number
                             'qty': str(line.quantity).zfill(7),  # Quantity (right-justified with zero fill)
                             'prce': str(line.price_unit).zfill(7),  # Price (right-justified with zero fill)
@@ -42,7 +49,7 @@ class AccountMove(models.Model):
                             'frgt': "000000000",  # Freight (zero-filled)
                             'carr': "Purolator".ljust(30),  # Carrier (left-justified)
                             'ordr': "123456789".ljust(9),  # Vendor Order Number
-                            'invd': invoice.invoice_date,  # Vendor Invoice Date
+                            'invd': formatted_invoice_date,  # Vendor Invoice Date
                             'desc': line.name[:30].ljust(30),  # Description (left-justified)
                             'dpo': invoice.purchase_id.name[:30].ljust(30) if invoice.purchase_id else " " * 30,  # Dealer P/O Number
                             'dbcr': "D",  # Debit or Credit (D for Debit)
