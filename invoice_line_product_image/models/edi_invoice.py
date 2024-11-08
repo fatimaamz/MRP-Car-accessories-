@@ -27,17 +27,18 @@ class AccountMove(models.Model):
                 for line in invoice.invoice_line_ids:
                     # Prepare each field
                     if line.product_id:  # Ensure product_id is valid (not False)
-                        # Handle the invoice_date correctly, default to an empty string if False or None
-                        invoice_date = invoice.invoice_date or ""
-                        # If invoice_date is a valid date, format it; otherwise, use a default value
-                        formatted_invoice_date = invoice_date.replace("-", "") if invoice_date else "        "
                         
+                        # Format dates correctly as strings (YYYYMMDD)
+                        invoice_date = invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "        "
+                        created_date = invoice.create_date.strftime('%Y%m%d') if invoice.create_date else "        "
+                        order_date = invoice.date.strftime('%Y%m%d') if invoice.date else "        "
+
                         # Prepare the record data with the fixed length and formatting
                         record_data = {
                             'bill': invoice.partner_id.name[:5].ljust(5),  # Example: Dealer Code (fixed length of 5 characters)
                             'part': line.product_id.default_code[:16].ljust(16) if line.product_id.default_code else "        ",  # Part Number (fixed length of 16)
-                            'ordd': invoice.date ,
-                            'shpd': formatted_invoice_date,  # Ship Date (YYYYMMDD)
+                            'ordd': order_date,  # Order Date (formatted YYYYMMDD)
+                            'shpd': invoice_date,  # Ship Date (formatted YYYYMMDD)
                             'inv': invoice.name[:12].ljust(12),  # Invoice Number
                             'qty': str(line.quantity).zfill(7),  # Quantity (right-justified with zero fill)
                             'prce': str(line.price_unit).zfill(7),  # Price (right-justified with zero fill)
@@ -49,12 +50,12 @@ class AccountMove(models.Model):
                             'frgt': "000000000",  # Freight (zero-filled)
                             'carr': "Purolator".ljust(30),  # Carrier (left-justified)
                             'ordr': "123456789".ljust(9),  # Vendor Order Number
-                            'invd': formatted_invoice_date,  # Vendor Invoice Date
+                            'invd': invoice_date,  # Vendor Invoice Date (formatted YYYYMMDD)
                             'desc': line.name[:30].ljust(30),  # Description (left-justified)
                             'dpo': invoice.purchase_id.name[:30].ljust(30) if invoice.purchase_id else " " * 30,  # Dealer P/O Number
                             'dbcr': "D",  # Debit or Credit (D for Debit)
                             'war': "W",  # Warranty (W for Warranty)
-                            'crdt': invoice.create_date,  # Vendor Creation Date
+                            'crdt': created_date,  # Vendor Creation Date (formatted YYYYMMDD)
                             'err': ""  # Error Message (empty for now)
                         }
 
