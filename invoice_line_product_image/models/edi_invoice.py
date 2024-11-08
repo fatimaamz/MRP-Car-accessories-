@@ -1,4 +1,5 @@
 import os
+import base64
 from datetime import datetime
 from odoo import models, fields, api
 from odoo.exceptions import UserError
@@ -6,18 +7,18 @@ from odoo.exceptions import UserError
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    # Method to export the EDI invoice
     def action_export_edi_invoice(self):
         selected_invoice_ids = self.env.context.get('active_ids', [])
         if not selected_invoice_ids:
             raise UserError("No invoices selected for export.")
-        
-        # Iterate over each selected invoice to generate the EDI file and create attachments
-        for invoice in self.env['account.move'].browse(selected_invoice_ids):  # Now `invoice` is a record, not an ID
-            # Generate the EDI file for this invoice
-            file_path = self.generate_edi_invoice_file(invoice)  # Passing a single invoice record
+
+        for invoice in self.env['account.move'].browse(selected_invoice_ids):
+            # Generate the EDI file
+            file_path = self.generate_edi_invoice_file(invoice)
             
             # Ensure the file is accessible for download
-            attachment_id = self.create_attachment(file_path, invoice)  # Pass the invoice record here
+            attachment_id = self.create_attachment(file_path, invoice)
             
             # Provide the download URL for the file
             return {
@@ -27,7 +28,7 @@ class AccountMove(models.Model):
             }
 
     def generate_edi_invoice_file(self, invoice):
-        """Generate the EDI file for a specific invoice."""
+        """ Generate the EDI invoice file based on the given invoice """
         vendor_name = invoice.partner_id.name.replace(" ", "") if invoice.partner_id else "UnknownVendor"
         current_time = datetime.now().strftime('%Y%m%d_%H%M')
         file_name = f"{vendor_name}_{current_time}.txt"
@@ -67,28 +68,27 @@ class AccountMove(models.Model):
                     # Write the formatted record data to the file
                     line_data = ''.join(record_data.values()) + '\n'
                     file.write(line_data)
-                else:
-                    # Handle lines with no product associated (if required)
-                    continue
-        
-        return file_path 
+
+        return file_path
 
     def create_attachment(self, file_path, invoice):
         """ Creates an attachment for the generated file and stores it in Odoo """
         # Read the file and create a binary attachment
         file_name = os.path.basename(file_path)
         with open(file_path, 'rb') as file:
-            file_data = file.read()
+            file_data = file.read()  # Read the file content
 
+        # Base64 encode the binary file data before saving it to Odoo
+        encoded_file_data = base64.b64encode(file_data).decode('utf-8')
+
+        # Create the attachment record
         attachment = self.env['ir.attachment'].create({
             'name': file_name,
             'type': 'binary',
-            'datas': file_data,
+            'datas': encoded_file_data,  # Store the Base64 encoded content here
             'mimetype': 'text/plain',
             'res_model': 'account.move',
             'res_id': invoice.id,  # Attach it to the current invoice
         })
 
-        return attachment 
-
-      
+        return attachment  # Return the attachment record
