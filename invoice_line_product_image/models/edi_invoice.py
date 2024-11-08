@@ -1,70 +1,88 @@
 import os
 from datetime import datetime
-from odoo import api, fields, models, _
+from odoo import models, fields, api
+from odoo.exceptions import UserError
 
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    # Method to generate the TXT file for selected invoices
-    def action_export_invoice(self):
-        invoices = self.browse(self.env.context.get('active_ids', []))
+    # Method to export the EDI invoice
+    def action_export_edi_invoice(self):
+        selected_invoice_ids = self.env.context.get('active_ids', [])
+        if selected_invoice_ids:
+            # Generate the EDI file
+            file_path = self.generate_edi_invoice_file(selected_invoice_ids)
+            
+            # Ensure the file is accessible for download
+            attachment_id = self.create_attachment(file_path)
+            
+            # Provide the download URL for the file
+            return {
+                'type': 'ir.actions.act_url',
+                'url': '/web/content/%s?download=true' % attachment_id.id,  # URL for downloading the file
+                'target': 'self',  # Open in the same window
+            }
+        else:
+            raise UserError("No invoices selected for export.")
 
-        # Fetch the vendor name dynamically from the first invoice (assuming all selected invoices are from the same vendor)
-        vendor_name = invoices[0].partner_id.name if invoices else "UnknownVendor"
-        vendor_name = vendor_name.replace(" ", "")  # Remove spaces for file name compatibility
-        
-        # Generate the file name with vendor name and timestamp
+    def generate_edi_invoice_file(self, selected_invoice_ids):
+        invoices = self.env['account.move'].browse(selected_invoice_ids)
+
+        # Get the vendor name (first invoice's partner name)
+        vendor_name = invoices[0].partner_id.name.replace(" ", "") if invoices else "UnknownVendor"
         current_time = datetime.now().strftime('%Y%m%d_%H%M')
         file_name = f"{vendor_name}_{current_time}.txt"
-        
-        # Save the file to the home directory
-        home_dir = os.path.expanduser("~")  # Get the current user's home directory
-        file_path = os.path.join(home_dir, file_name)  # Create the full file path
+        file_path = os.path.join('/tmp', file_name)  # Store file in /tmp or use another directory
 
-        # Open the file to write the invoice data
+        # Open the file to write invoice data
         with open(file_path, 'w') as file:
             for invoice in invoices:
                 for line in invoice.invoice_line_ids:
-                    # Prepare each field
-                    if line.product_id:  # Ensure product_id is valid (not False)
-                        
-                        # Format dates correctly as strings (YYYYMMDD)
-                        invoice_date = invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "        "
-                        created_date = invoice.create_date.strftime('%Y%m%d') if invoice.create_date else "        "
-                        order_date = invoice.date.strftime('%Y%m%d') if invoice.date else "        "
-
-                        # Prepare the record data with the fixed length and formatting
+                    if line.product_id:
                         record_data = {
-                            'bill': invoice.partner_id.name[:5].ljust(5),  # Example: Dealer Code (fixed length of 5 characters)
-                            'part': line.product_id.default_code[:16].ljust(16) if line.product_id.default_code else "        ",  # Part Number (fixed length of 16)
-                            'ordd': order_date,  # Order Date (formatted YYYYMMDD)
-                            'shpd': invoice_date,  # Ship Date (formatted YYYYMMDD)
-                            'inv': invoice.name[:12].ljust(12),  # Invoice Number
-                            'qty': str(line.quantity).zfill(7),  # Quantity (right-justified with zero fill)
-                            'prce': str(line.price_unit).zfill(7),  # Price (right-justified with zero fill)
-                            'amnt': str(line.price_subtotal).zfill(11),  # Amount (right-justified with zero fill)
-                            'pstqst': str(invoice.amount_tax).zfill(7),  # PST/QST (right-justified with zero fill)
-                            'gst': str(invoice.amount_tax).zfill(7),  # GST (right-justified with zero fill)
-                            'totl': str(invoice.amount_total).zfill(11),  # Total (right-justified with zero fill)
-                            'wght': "000000000",  # Weight (optional, right-justified with zero fill)
-                            'frgt': "000000000",  # Freight (zero-filled)
-                            'carr': "Purolator".ljust(30),  # Carrier (left-justified)
-                            'ordr': "123456789".ljust(9),  # Vendor Order Number
-                            'invd': invoice_date,  # Vendor Invoice Date (formatted YYYYMMDD)
-                            'desc': line.name[:30].ljust(30),  # Description (left-justified)
-                            'dpo': invoice.purchase_id.name[:30].ljust(30) if invoice.purchase_id else " " * 30,  # Dealer P/O Number
+                            'bill': str(invoice.partner_id.id).zfill(5),  # Dealer Code (5 digits)
+                            'part': line.product_id.default_code[:16].ljust(16),  # Part Number (left justified, 16 chars)
+                            'ordd': invoice.date.strftime('%Y%m%d') if invoice.date else "        ",  # Order Date (YYYYMMDD)
+                            'shpd': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "        ",  # Ship Date (YYYYMMDD)
+                            'inv': invoice.name[:12].ljust(12),  # Invoice Number (left justified, 12 chars)
+                            'qty': str(line.quantity).zfill(7),  # Shipped Quantity (right justified, zero filled, 7 chars)
+                            'prce': str(line.price_unit).zfill(7),  # Unit Price (right justified, zero filled, 7 chars)
+                            'amnt': str(line.price_subtotal).zfill(11),  # Amount (subtotal, right justified, zero filled, 11 chars)
+                            'pstqst': str(invoice.amount_tax).zfill(7),  # PST/QST (7 chars, zero filled)
+                            'gst': str(invoice.amount_tax).zfill(7),  # GST (7 chars, zero filled)
+                            'totl': str(invoice.amount_total).zfill(11),  # Total (right justified, zero filled, 11 chars)
+                            'wght': "000000000",  # Weight (optional, filled with zeros if not provided)
+                            'frgt': "000000000",  # Freight (optional, filled with zeros if not provided)
+                            'carr': "Purolator".ljust(30),  # Carrier (left justified, 30 chars)
+                            'ordr': "123456789".ljust(9),  # Vendor Order Number (9 chars, left justified)
+                            'invd': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "        ",  # Vendor Invoice Date (YYYYMMDD)
+                            'desc': line.name[:30].ljust(30),  # Description (left justified, 30 chars)
+                            'dpo': invoice.purchase_id.name[:30].ljust(30) if invoice.purchase_id else " " * 30,  # Dealer P/O Number (left justified, 30 chars)
                             'dbcr': "D",  # Debit or Credit (D for Debit)
                             'war': "W",  # Warranty (W for Warranty)
-                            'crdt': created_date,  # Vendor Creation Date (formatted YYYYMMDD)
-                            'err': ""  # Error Message (empty for now)
+                            'crdt': invoice.create_date.strftime('%Y%m%d') if invoice.create_date else "        ",  # Vendor Creation Date (YYYYMMDD)
+                            'err': ""  # Error message (empty for now)
                         }
-
-                        # Write the formatted line to the file
+                        # Write the formatted record data to the file
                         line_data = ''.join(record_data.values()) + '\n'
                         file.write(line_data)
-                    else:
-                        # Handle lines with no product associated (if required)
-                        # You can skip these lines or write a placeholder in the file
-                        continue
 
-        return file_path  # Return file path for further use (e.g., FTP upload)
+        return file_path  # Return the file path for further processing
+
+    def create_attachment(self, file_path):
+        """ Creates an attachment for the generated file and stores it in Odoo """
+        # Read the file and create a binary attachment
+        file_name = os.path.basename(file_path)
+        with open(file_path, 'rb') as file:
+            file_data = file.read()
+
+        attachment = self.env['ir.attachment'].create({
+            'name': file_name,
+            'type': 'binary',
+            'datas': file_data,
+            'mimetype': 'text/plain',
+            'res_model': 'account.move',
+            'res_id': self.id,  # Attach it to the current invoice
+        })
+
+        return attachment  # Return the attachment record
