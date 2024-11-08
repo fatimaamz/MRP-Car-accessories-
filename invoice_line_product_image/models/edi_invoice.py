@@ -27,21 +27,24 @@ class AccountMove(models.Model):
 
     def generate_edi_invoice_file(self, selected_invoice_ids):
         invoices = self.env['account.move'].browse(selected_invoice_ids)
-
+    
         # Get the vendor name (first invoice's partner name)
         vendor_name = invoices[0].partner_id.name.replace(" ", "") if invoices else "UnknownVendor"
         current_time = datetime.now().strftime('%Y%m%d_%H%M')
         file_name = f"{vendor_name}_{current_time}.txt"
         file_path = os.path.join('/tmp', file_name)  # Store file in /tmp or use another directory
-
+    
         # Open the file to write invoice data
         with open(file_path, 'w') as file:
             for invoice in invoices:
                 for line in invoice.invoice_line_ids:
-                    if line.product_id:
+                    if line.product_id:  # Check if product_id is set for the line
+                        # Ensure we handle missing default_code gracefully
+                        part_number = line.product_id.default_code if line.product_id.default_code else " " * 16
+                        # Prepare the record data
                         record_data = {
                             'bill': str(invoice.partner_id.id).zfill(5),  # Dealer Code (5 digits)
-                            'part': line.product_id.default_code[:16].ljust(16),  # Part Number (left justified, 16 chars)
+                            'part': part_number[:16].ljust(16),  # Part Number (left justified, 16 chars)
                             'ordd': invoice.date.strftime('%Y%m%d') if invoice.date else "        ",  # Order Date (YYYYMMDD)
                             'shpd': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "        ",  # Ship Date (YYYYMMDD)
                             'inv': invoice.name[:12].ljust(12),  # Invoice Number (left justified, 12 chars)
@@ -66,8 +69,12 @@ class AccountMove(models.Model):
                         # Write the formatted record data to the file
                         line_data = ''.join(record_data.values()) + '\n'
                         file.write(line_data)
-
-        return file_path  # Return the file path for further processing
+                    else:
+                        # Handle lines with no product associated (if required)
+                        continue
+    
+        return file_path 
+       
 
     def create_attachment(self, file_path):
         """ Creates an attachment for the generated file and stores it in Odoo """
