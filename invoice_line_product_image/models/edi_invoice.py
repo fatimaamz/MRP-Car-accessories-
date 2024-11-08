@@ -6,7 +6,7 @@ class AccountMove(models.Model):
 
     # Method to generate the TXT file for selected invoices
     def action_export_invoice(self):
-        invoices = self.env['account.move'].browse(selected_invoice_ids)
+        invoices =self.browse(self.env.context.get('active_ids', []))
 
         # Fetch the vendor name dynamically from the first invoice (assuming all selected invoices are from the same vendor)
         vendor_name = invoices[0].partner_id.name if invoices else "UnknownVendor"
