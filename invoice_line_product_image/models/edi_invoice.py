@@ -67,7 +67,7 @@ class AccountMove(models.Model):
                         'totl': str(invoice.amount_total).zfill(11),  # Total (right justified, zero filled, 11 chars)
                         'wght': str(invoice.weight).zfill(9),  # Weight (optional, filled with zeros if not provided)
                         'frgt': str(int(invoice.freight_cost)).zfill(9) if invoice.freight_cost else "000000000",  # Freight (optional, filled with zeros if not provided)
-                        'carr': str(invoice.carrier_id).ljust(30),  # Carrier (left justified, 30 chars)
+                        'carr': str(invoice.carrier_id).ljust(30) if invoice.carrier_id else "        ",  # Carrier (left justified, 30 chars)
                         'ordr': order_number[:9].ljust(9),  # Vendor Order Number (9 chars, left justified)
                         'invd': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "        ",  # Vendor Invoice Date (YYYYMMDD)
                         'desc': line.name[:30].ljust(30),  # Description (left justified, 30 chars)
