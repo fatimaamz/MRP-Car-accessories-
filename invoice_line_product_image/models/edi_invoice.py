@@ -8,7 +8,7 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     freight_cost = fields.Float(string="Freight Cost")
-    #carrier_id = fields.Many2one('delivery.carrier', string="Carrier")
+    carrier_id = fields.Many2one('delivery.carrier', string="Carrier")
 
     # Method to export the EDI invoice
     def action_export_edi_invoice(self):
