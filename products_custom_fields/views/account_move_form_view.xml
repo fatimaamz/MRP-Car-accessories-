@@ -32,7 +32,7 @@
             <xpath expr="//header//button[1]" position="before">
                 <button name="action_export_edi_invoice" 
                         type="object" 
-                        string="Export Selected Invoices" 
+                        string="Export EDI Invoice" 
                         class="btn-primary" 
                        />
             </xpath>
