@@ -44,7 +44,7 @@ class AccountMove(models.Model):
                 order_number = sale_order.name
             else:
                 purchase_order = self.env['purchase.order'].search([('name', '=', invoice.origin)], limit=1)
-                order_number = purchase_order.name if purchase_order else "UnknownOrder"
+                order_number = purchase_order.name 
         
         # Open the file to write invoice data
         with open(file_path, 'w') as file:
