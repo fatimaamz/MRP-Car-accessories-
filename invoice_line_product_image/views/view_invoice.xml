@@ -9,7 +9,7 @@
                 <field name = "image_128" widget="image" class="oe_avatar"/>
             </xpath>
              <xpath expr="//page[@id='other_tab']//group[@id='other_tab_group']" position="inside" >
-               <!-- <field name = "carrier_id"/>-->
+                 <field name = "carrier_id"/>
                  <field name = "freight_cost"/>
             </xpath>
         </field>
