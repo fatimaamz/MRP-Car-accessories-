@@ -1,4 +1,7 @@
 from odoo import models, fields
+import os
+import base64
+from datetime import datetime
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
