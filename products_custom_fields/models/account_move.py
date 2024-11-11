@@ -41,7 +41,7 @@ class AccountMove(models.Model):
         file_name = f"{vendor_name}_{current_time}.txt"
         file_path = os.path.join('/tmp', file_name)  # Store file in /tmp or use another directory
         order_number = ""
-        if invoice.origin:
+        if invoice.invoice_origin:
             # Check if the origin is linked to a sale order (customer order)
             sale_order = self.env['sale.order'].search([('name', '=', invoice.invoice_origin)], limit=1)
             if sale_order:
