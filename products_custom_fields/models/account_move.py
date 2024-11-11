@@ -8,4 +8,4 @@ class AccountMove(models.Model):
     tracking = fields.Char(string='Suivi')
     custom_clearance = fields.Char(string='Dédouanement')
     transport = fields.Char(string='Transport')
-    carrier = fields.Char(string='Transporteur')
+    #carrier = fields.Char(string='Transporteur')
