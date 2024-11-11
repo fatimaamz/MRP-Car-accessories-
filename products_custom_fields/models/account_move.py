@@ -43,11 +43,11 @@ class AccountMove(models.Model):
         order_number = ""
         if invoice.origin:
             # Check if the origin is linked to a sale order (customer order)
-            sale_order = self.env['sale.order'].search([('name', '=', invoice.origin)], limit=1)
+            sale_order = self.env['sale.order'].search([('name', '=', invoice.invoice_origin)], limit=1)
             if sale_order:
                 order_number = sale_order.name
             else:
-                purchase_order = self.env['purchase.order'].search([('name', '=', invoice.origin)], limit=1)
+                purchase_order = self.env['purchase.order'].search([('name', '=', invoice.invoice_origin)], limit=1)
                 order_number = purchase_order.name 
         
         # Open the file to write invoice data
