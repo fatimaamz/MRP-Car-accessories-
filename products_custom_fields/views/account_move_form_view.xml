@@ -14,6 +14,8 @@
                                 <field name="tracking"/>
                                 <field name="custom_clearance"/>
                                 <field name="transport"/>
+                                 <field name = "carrier_id"/>
+                                 <field name = "freight_cost"/>
                                <!-- <field name="carrier"/>-->
                             </group>
                         
@@ -21,5 +23,20 @@
                 </xpath>
             </field>
         </record>
+
+    <record id="view_invoice_tree_inherit_export" model="ir.ui.view">
+        <field name="name">account.invoice.tree.inherit.export</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header//button[1]" position="before">
+                <button name="action_export_edi_invoice" 
+                        type="object" 
+                        string="Export Selected Invoices" 
+                        class="btn-primary" 
+                       />
+            </xpath>
+        </field>
+    </record>
     </data>
 </odoo>
