@@ -32,7 +32,7 @@ class AccountMove(models.Model):
 
     def generate_edi_invoice_file(self, invoice):
         """ Generate the EDI invoice file based on the given invoice """
-        vendor_name = invoice.partner_id.name.replace(" ", "") if invoice.partner_id else "UnknownVendor"
+        vendor_name = invoice.partner_id.name.replace(" ", "") 
         current_time = datetime.now().strftime('%Y%m%d_%H%M')
         file_name = f"{vendor_name}_{current_time}.txt"
         file_path = os.path.join('/tmp', file_name)  # Store file in /tmp or use another directory
