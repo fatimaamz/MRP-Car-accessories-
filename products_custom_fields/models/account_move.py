@@ -39,7 +39,9 @@ class AccountMove(models.Model):
         vendor_name = invoice.partner_id.name.replace(" ", "") 
         current_time = datetime.now().strftime('%Y%m%d_%H%M')
         file_name = f"{vendor_name}_{current_time}.txt"
-        file_path = os.path.join('/tmp', file_name)  # Store file in /tmp or use another directory
+        #file_path = os.path.join('/tmp', file_name)  # Store file in /tmp or use another directory
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        file_path = os.path.join(desktop_path, file_name) 
         order_number = ""
         if invoice.invoice_origin:
             # Check if the origin is linked to a sale order (customer order)
