@@ -14,7 +14,7 @@
                                 <field name="tracking"/>
                                 <field name="custom_clearance"/>
                                 <field name="transport"/>
-                                <field name="carrier"/>
+                               <!-- <field name="carrier"/>-->
                             </group>
                         
                     
