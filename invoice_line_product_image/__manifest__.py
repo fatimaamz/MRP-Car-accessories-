@@ -20,7 +20,7 @@
 	""",
 	'author': "BrowseInfo",
 	"website" : "https://www.browseinfo.com",
-    'depends': ['account','base'],
+    'depends': ['account','base','delivery'],
 	'data': [
 			'report/invoice_report.xml',
 			'views/view_invoice.xml',
