@@ -121,7 +121,7 @@
                     <field name="selected_image_id" />
                      <field name="selected_image" widget="image" />
           
-                    <field name="design_ids"/>
+                    <<!--field name="design_ids"/>-->
                     <field name="note_interne" />
                     <field name="logo_inscription" />
 
@@ -130,9 +130,9 @@
       <xpath expr="//group[@name='group_extra_info']" position="inside">
            <field name="picking_scheduled_date" readonly="1"/>
        </xpath>
-       <xpath expr="//group[1]//group[1]//field[@name='product_id']" position="after">
+       <!--<xpath expr="//group[1]//group[1]//field[@name='product_id']" position="after">
            <field name="color" readonly="1"/>
-       </xpath>
+       </xpath>-->
       <xpath expr="//div[@class='oe_title']//label[1]" position="replace">
           <label class="o_form_label" for="name" string="Work Order"/>
       </xpath>
@@ -164,7 +164,7 @@
            
          <group name="product_image_group" string="Détails du Produit" invisible="not product_id" >
             
-            <field name="product_image" widget="image"/>
+            <!--<field name="product_image" widget="image"/>-->
             <field name="selected_characteristics" />
            <!-- <field name="product_variant_ids"  widget="many2many_tags"/>
             <field name="product_tag_ids"  widget="many2many_tags"/>-->
