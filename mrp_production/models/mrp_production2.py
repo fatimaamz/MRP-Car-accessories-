@@ -85,29 +85,7 @@ class StockMove(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-    selected_image_id = fields.Many2one(
-        'common.product.image.ept',
-        string='Selected Image',
-        domain="[('product_id', '=', product_id)]",
-        help='Select an image for the product.'
-    )
-
-    # Computed field to store the image of the selected image
-    selected_image = fields.Image(
-        related='selected_image_id.image',
-        string='Image',
-        store=True,
-        readonly=True,
-        help='The image of the selected product image.'
-    )
-
-    @api.onchange('product_id')
-    def _onchange_product_id(self):
-        """ Update domain for the selected_image_id field. """
-        if self.product_id:
-            return {
-                'domain': {'selected_image_id': [('product_id', '=', self.product_template_id.id)]}
-            }
+    
 
     product_template_id = fields.Many2one(
         related='product_id.product_tmpl_id',
@@ -116,20 +94,20 @@ class MrpProduction(models.Model):
         readonly=True
     )
 
-    #selected_image_id = fields.Many2one(
-    #    'common.product.image.ept',
-    #    string="Selected Image",
-    #    domain="[('template_id', '=', product_template_id)]",  # Now this works
-    #    help="Select an image for this production."
-    #)
+    selected_image_id = fields.Many2one(
+        'common.product.image.ept',
+        string="Selected Image",
+        domain="[('template_id', '=', product_template_id)]",  # Now this works
+        help="Select an image for this production."
+    )
     
   
-    #selected_image = fields.Image(
-        #string="Image",
-        #related='selected_image_id.image',
-        #store=True,
-        #help="Image selected for this production."
-    #)
+    selected_image = fields.Image(
+        string="Image",
+        related='selected_image_id.image',
+        store=True,
+        help="Image selected for this production."
+    )
 
     product_qty = fields.Float(string='Quantité', digits=(16, 0))
     note_interne = fields.Text(string="Note")
