@@ -4,10 +4,10 @@ import base64
 from datetime import datetime
 from odoo.exceptions import ValidationError
 
-#class ResPartner(models.Model):
-    #_inherit = 'res.partner'
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
     
-    #dealer_code = fields.Char(string="Dealer Code",  help="Unique HACC Dealer Code")
+    dealer_code = fields.Char(string="Dealer Code",  help="Unique HACC Dealer Code")
     #dealer_code = fields.Char(string='Suivi')
 
     #@api.constrains('dealer_code')
