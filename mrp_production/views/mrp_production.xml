@@ -152,8 +152,7 @@
             <group>
                  <field name="product_template_id" invisible="1"/>
                         <field name="selected_image_id" />
-                         <field name="selected_image" widget="image" />
-              
+                        <field name="selected_image" widget="image" options="{'size': [50, 50]}"/>              
                         <!--field name="design_ids"/>-->
                         <field name="note_interne" />
                         <field name="logo_inscription" />
