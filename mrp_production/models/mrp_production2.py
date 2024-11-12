@@ -106,7 +106,7 @@ class MrpProduction(models.Model):
         """ Update domain for the selected_image_id field. """
         if self.product_id:
             return {
-                'domain': {'selected_image_id': [('product_id', '=', self.product_id.id)]}
+                'domain': {'selected_image_id': [('product_id', '=', self.product_template_id.id)]}
             }
 
     product_template_id = fields.Many2one(
