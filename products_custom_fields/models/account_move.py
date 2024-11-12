@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields,api,_
 import os
 import base64
 from datetime import datetime
