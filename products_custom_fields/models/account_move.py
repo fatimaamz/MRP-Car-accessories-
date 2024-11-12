@@ -2,6 +2,7 @@ from odoo import models, fields,api,_
 import os
 import base64
 from datetime import datetime
+from odoo.exceptions import ValidationError
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
