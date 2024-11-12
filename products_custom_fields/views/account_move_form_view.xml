@@ -1,17 +1,16 @@
 <odoo>
     <data>
 
-        <record id="view_partner_form_inherit_dealer_code" model="ir.ui.view">
+        <!--  <record id="view_partner_form_inherit_dealer_code" model="ir.ui.view">
             <field name="name">res.partner.form.dealer.code</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <!-- Adding dealer_code field after the VAT field in the form view -->
                 <field name="vat" position="after">
                     <field name="dealer_code" placeholder="Dealer Code"/>
                 </field>
             </field>
-        </record>
+        </record>-->
         
         <record id="view_move_form_inherit" model="ir.ui.view">
             <field name="name">account.move.form.inherit</field>
