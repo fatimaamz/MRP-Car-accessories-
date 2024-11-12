@@ -151,10 +151,10 @@
         <group>
             <group>
                  <field name="product_template_id" invisible="1"/>
-                                    <field name="selected_image" widget="many2one" />
+                                    
 
-                                   <field name="selected_image_id" widget="image"/>
-                       <!-- <field name="selected_image" widget="image"/>    -->          
+                                   <field name="selected_image_id" />
+                                   <field name="selected_image" widget="image"/>          
                         <!--field name="design_ids"/>-->
                         <field name="note_interne" />
                         <field name="logo_inscription" />
