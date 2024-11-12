@@ -41,7 +41,10 @@ class AccountMove(models.Model):
         file_name = f"{vendor_name}_{current_time}.txt"
         #file_path = os.path.join('/tmp', file_name)  # Store file in /tmp or use another directory
         desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-        file_path = os.path.join(desktop_path, file_name) 
+        if not os.path.exists(desktop_path):
+            os.makedirs(desktop_path)  # Crée le répertoire si nécessaire
+
+        file_path = os.path.join(desktop_path, file_name)
         order_number = ""
         if invoice.invoice_origin:
             # Check if the origin is linked to a sale order (customer order)
