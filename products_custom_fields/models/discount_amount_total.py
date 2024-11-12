@@ -59,7 +59,10 @@ class SaleOrderLine(models.Model):
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
-   
+    representative_id = fields.Many2one(
+        'res.users', string="Représentant",
+        help="Sélectionnez le représentant pour cette commande."
+    )
 
     state = fields.Selection(selection_add=[
         ('design',  _('Désign'))
