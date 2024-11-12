@@ -116,16 +116,16 @@
       <xpath expr="//header//field[@name='state']" position="replace">
         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
       </xpath>
-      <xpath expr="//div[@name='bom_div']" position="after">
+      <!--<xpath expr="//div[@name='bom_div']" position="after">
                     <field name="product_template_id" invisible="1"/>
                     <field name="selected_image_id" />
                      <field name="selected_image" widget="image" />
           
-                    <!--field name="design_ids"/>-->
+                    <field name="design_ids"/>
                     <field name="note_interne" />
                     <field name="logo_inscription" />
 
-        </xpath>
+        </xpath>-->
         
       <xpath expr="//group[@name='group_extra_info']" position="inside">
            <field name="picking_scheduled_date" readonly="1"/>
@@ -149,12 +149,21 @@
             
          </group>
         <group>
-            <field name="is_conforme" class="o_inline"/>
-            <button name="action_view_delivery_order" 
-                                    type="object" 
-                                    class="oe_highlight"
-                                    string="Bon de livraison"
-                                    invisible="is_conforme == False" />
+            <group>
+                 <field name="product_template_id" invisible="1"/>
+                        <field name="selected_image_id" />
+                         <field name="selected_image" widget="image" />
+              
+                        <!--field name="design_ids"/>-->
+                        <field name="note_interne" />
+                        <field name="logo_inscription" />
+                <field name="is_conforme" class="o_inline"/>
+                <button name="action_view_delivery_order" 
+                                        type="object" 
+                                        class="oe_highlight"
+                                        string="Bon de livraison"
+                                        invisible="is_conforme == False" />
+            </group>
         </group>
         <group>
             
