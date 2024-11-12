@@ -9,7 +9,7 @@ class ResPartner(models.Model):
     
     dealer_code = fields.Char(string="Dealer Code", unique=True, help="Unique HACC Dealer Code")
 
-    @api.constrains('dealer_code')
+    #@api.constrains('dealer_code')
     def _check_dealer_code_unique(self):
         for record in self:
             if record.dealer_code:
