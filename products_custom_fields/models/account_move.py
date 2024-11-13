@@ -170,7 +170,7 @@ class AccountMove(models.Model):
             for line in invoice.invoice_line_ids:
                 # Build the new record data based on the specified format
                 record_data = {
-                    '#dealer_code': str(invoice.partner_id.dealer_code).zfill(5),
+                    #'dealer_code': str(invoice.partner_id.dealer_code).zfill(5),
                     'dealer_code': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,  # Dealer Code (5 chars, left justified)
                     'invoice_number': invoice.name[:20].ljust(20),
                     'invoice_date': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,
