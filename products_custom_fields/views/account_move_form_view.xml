@@ -47,7 +47,7 @@
                         string="Export Hyundai EDI Invoice" 
                         class="btn-primary" 
                        />
-                <button name="action_export_nissan_edi_invoice" 
+                <button name="action_export_custom_edi_nissan_invoice" 
                         type="object" 
                         string="Export Nissan EDI Invoice" 
                         class="btn-primary" 
