@@ -171,7 +171,7 @@ class AccountMove(models.Model):
                 # Build the new record data based on the specified format
                 record_data = {
                     '#dealer_code': str(invoice.partner_id.dealer_code).zfill(5),
-                    'bill': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,  # Dealer Code (5 chars, left justified)
+                    'dealer_code': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,  # Dealer Code (5 chars, left justified)
                     'invoice_number': invoice.name[:20].ljust(20),
                     'invoice_date': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,
                     'item_ref_number': (line.product_id.default_code[:20].ljust(20) if line.product_id and line.product_id.default_code else " " * 20),
