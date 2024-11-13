@@ -8,18 +8,18 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     dealer_code = fields.Char(string="Dealer Code",  help="Unique HACC Dealer Code")
-    #dealer_code = fields.Char(string='Suivi')
+ 
 
-    #@api.constrains('dealer_code')
-    #def _check_dealer_code_unique(self):
-        #for record in self:
-            #if record.dealer_code:
-                #existing = self.search([
-                    #('dealer_code', '=', record.dealer_code),
-                    #('id', '!=', record.id)
-                #], limit=1)
-                #if existing:
-                    #raise ValidationError("The Dealer Code must be unique.")
+    @api.constrains('dealer_code')
+    def _check_dealer_code_unique(self):
+        for record in self:
+            if record.dealer_code:
+                existing = self.search([
+                    ('dealer_code', '=', record.dealer_code),
+                    ('id', '!=', record.id)
+                ], limit=1)
+                if existing:
+                    raise ValidationError("The Dealer Code must be unique.")
     
 class AccountMove(models.Model):
     _inherit = 'account.move'
