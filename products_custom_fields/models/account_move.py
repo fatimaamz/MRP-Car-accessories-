@@ -49,7 +49,7 @@ class AccountMove(models.Model):
             return {
                 'type': 'ir.actions.act_url',
                 'url': '/web/content/%s?download=true' % attachment_id.id,  # URL for downloading the file
-                'target': 'self',  # Open in the same window
+                'target': 'new',  # Open in the same window
             }
 
     def generate_edi_invoice_file(self, invoice):
@@ -151,7 +151,7 @@ class AccountMove(models.Model):
             return {
                 'type': 'ir.actions.act_url',
                 'url': '/web/content/%s?download=true' % attachment_id.id,
-                'target': 'self',
+                'target': 'new',
             }
 
     def generate_custom_edi_nissan_invoice_file(self, invoice):
