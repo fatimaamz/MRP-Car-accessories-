@@ -172,7 +172,7 @@ class AccountMove(models.Model):
                     'dealer_code': str(invoice.partner_id.dealer_code).zfill(5),
                     'invoice_number': invoice.name[:20].ljust(20),
                     'invoice_date': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,
-                    'item_ref_number': line.product_id.default_code[:20].ljust(20) if line.product_id else " " * 20,
+                    'item_ref_number': (line.product_id.default_code[:20].ljust(20) if line.product_id and line.product_id.default_code else " " * 20),
                     'num_items': str(line.quantity).zfill(7),
                     'wholesale_amount': str(int(line.price_subtotal * 100)).zfill(9),  # Assuming 2 decimal places
                     'dealer_net_amount': "0" * 9,  # Placeholder; customize if needed
