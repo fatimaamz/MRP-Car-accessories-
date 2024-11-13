@@ -81,7 +81,8 @@ class AccountMove(models.Model):
                     part_number = line.product_id.default_code if line.product_id.default_code else " " * 16
                     # Prepare the record data
                     record_data = {
-                        'bill': str(invoice.partner_id.dealer_code).zfill(5),  # Dealer Code (5 digits)
+                        #'bill': str(invoice.partner_id.dealer_code).zfill(5),  # Dealer Code (5 digits)
+                        'bill': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,  # Dealer Code (5 chars, left justified)
                         'part': part_number[:16].ljust(16),  # Part Number (left justified, 16 chars)
                         'ordd': invoice.date.strftime('%Y%m%d') if invoice.date else "        ",  # Order Date (YYYYMMDD)
                         'shpd': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "        ",  # Ship Date (YYYYMMDD)
@@ -169,7 +170,8 @@ class AccountMove(models.Model):
             for line in invoice.invoice_line_ids:
                 # Build the new record data based on the specified format
                 record_data = {
-                    'dealer_code': str(invoice.partner_id.dealer_code).zfill(5),
+                    '#dealer_code': str(invoice.partner_id.dealer_code).zfill(5),
+                    'bill': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,  # Dealer Code (5 chars, left justified)
                     'invoice_number': invoice.name[:20].ljust(20),
                     'invoice_date': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,
                     'item_ref_number': (line.product_id.default_code[:20].ljust(20) if line.product_id and line.product_id.default_code else " " * 20),
