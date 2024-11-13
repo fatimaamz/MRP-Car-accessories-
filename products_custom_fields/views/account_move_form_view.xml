@@ -44,7 +44,12 @@
             <xpath expr="//header//button[1]" position="before">
                 <button name="action_export_edi_invoice" 
                         type="object" 
-                        string="Export EDI Invoice" 
+                        string="Export Hyundai EDI Invoice" 
+                        class="btn-primary" 
+                       />
+                <button name="action_export_nissan_edi_invoice" 
+                        type="object" 
+                        string="Export Nissan EDI Invoice" 
                         class="btn-primary" 
                        />
             </xpath>
