@@ -63,6 +63,11 @@ class SaleOrder(models.Model):
         'res.users', string="Représentant",
         help="Sélectionnez le représentant pour cette commande."
     )
+    vendor_name = fields.Char(
+        string="Vendor Name",
+        related='partner_id.name',  # Assuming vendor_id is linked to partner_id
+        store=True  # Store the value in the database for performance
+    )
 
     state = fields.Selection(selection_add=[
         ('design',  _('Désign'))
