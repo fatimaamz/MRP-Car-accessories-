@@ -1,0 +1,82 @@
+<odoo>
+    <record id="view_sales_territory_form" model="ir.ui.view">
+        <field name="name">sales.territory.form</field>
+        <field name="model">sales.territory</field>
+        <field name="arch" type="xml">
+            <form string="Sales Territory">
+                <sheet>
+                    <group>
+                        <field name="name" string="Territory Name"/>
+                        <field name="weekly_target" string="Weekly Sales Target"/>
+                    </group>
+                    <group>
+                        <field name="representative_ids" widget="many2many_tags" string="Representatives"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sales_territory_tree" model="ir.ui.view">
+        <field name="name">sales.territory.tree</field>
+        <field name="model">sales.territory</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Territories">
+                <field name="name"/>
+                <field name="weekly_target"/>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem id="sales_territory_menu" name="Territoires de vente" parent="sales_team.menu_sales" action="action_sales_territory"/>
+
+    <record id="action_sales_territory" model="ir.actions.act_window">
+        <field name="name">Sales Territories</field>
+        <field name="res_model">sales.territory</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+
+
+    <record id="view_sales_commission_form" model="ir.ui.view">
+        <field name="name">sales.commission.form</field>
+        <field name="model">sales.commission</field>
+        <field name="arch" type="xml">
+            <form string="Sales Commission">
+                <sheet>
+                    <group>
+                        <field name="user_id" string="Representative"/>
+                        <field name="invoice_id" string="Invoice"/>
+                        <field name="commission_amount" string="Commission Amount"/>
+                    </group>
+                    <group>
+                        <field name="commission_date" string="Commission Date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sales_commission_tree" model="ir.ui.view">
+        <field name="name">sales.commission.tree</field>
+        <field name="model">sales.commission</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Commissions">
+                <field name="user_id"/>
+                <field name="invoice_id"/>
+                <field name="commission_amount"/>
+                <field name="commission_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem id="sales_commission_menu" name="Comissions Vente" parent="sales_team.menu_sales" action="action_sales_commission"/>
+
+    <record id="action_sales_commission" model="ir.actions.act_window">
+        <field name="name">Sales Commissions</field>
+        <field name="res_model">sales.commission</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+
+</odoo>

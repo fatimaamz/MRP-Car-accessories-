@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sales_territory,sales.territory,model_sales_territory,,1,1,1,1
+access_sales_commission,sales.commission,model_sales_commission,,1,1,1,1
+
