@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Partner Statement Report",
+    'name': "Commission des vendeurs",
 
     'summary': """
-       Partner Statement Report""",
+      Commission des vendeurs""",
 
     'description': """
          
