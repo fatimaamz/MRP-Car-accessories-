@@ -6,7 +6,7 @@
 
             <xpath expr="//group[1]" position="inside">                
                         
-                        <field name="region" invisible="1"/>
+                        <field name="territory_id" />
                      
                
             </xpath>
