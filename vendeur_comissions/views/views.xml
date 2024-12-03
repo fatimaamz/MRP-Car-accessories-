@@ -71,7 +71,6 @@
         </field>
     </record>
 
-    <menuitem id="sales_commission_menu" name="Comissions Vente" parent="sale.sale_order_menu" action="action_sales_commission"/>
 
     <record id="action_sales_commission" model="ir.actions.act_window">
         <field name="name">Sales Commissions</field>
@@ -79,5 +78,6 @@
         <field name="view_mode">tree,form</field>
         <field name="target">current</field>
     </record>
+    <menuitem id="sales_commission_menu" name="Comissions Vente" parent="sale.sale_order_menu" action="action_sales_commission"/>
 
 </odoo>
