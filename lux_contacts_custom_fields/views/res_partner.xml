@@ -12,7 +12,7 @@
                         
                         <field name="type_client" invisible="supplier_rank &gt;= 1"/>
                         <field name="type_fournisseur" invisible="customer_rank &gt;= 1"/>
-                        <field name="region"/>
+                        <field name="region" invisible="1"/>
                         <field name="type_paiement"/>
                         <field name="oem"/>
                         <field name="dealer_Code"/>
