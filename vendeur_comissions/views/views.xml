@@ -28,7 +28,7 @@
         </field>
     </record>
 
-    <menuitem id="sales_territory_menu" name="Territoires de vente" parent="sale.sale_menu_root" action="action_sales_territory"/>
+    <menuitem id="sales_territory_menu" name="Territoires de vente" parent="sale.sale_order_menu" action="action_sales_territory"/>
 
     <record id="action_sales_territory" model="ir.actions.act_window">
         <field name="name">Sales Territories</field>
@@ -70,7 +70,7 @@
         </field>
     </record>
 
-    <menuitem id="sales_commission_menu" name="Comissions Vente" parent="sales_team.menu_sales" action="action_sales_commission"/>
+    <menuitem id="sales_commission_menu" name="Comissions Vente" parent="sale.sale_order_menu" action="action_sales_commission"/>
 
     <record id="action_sales_commission" model="ir.actions.act_window">
         <field name="name">Sales Commissions</field>
