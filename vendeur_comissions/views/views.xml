@@ -28,7 +28,7 @@
         </field>
     </record>
 
-    <menuitem id="sales_territory_menu" name="Territoires de vente" parent="sale.sale_order_menu" action="action_sales_territory"/>
+    
 
     <record id="action_sales_territory" model="ir.actions.act_window">
         <field name="name">Sales Territories</field>
@@ -36,6 +36,7 @@
         <field name="view_mode">tree,form</field>
         <field name="target">current</field>
     </record>
+    <menuitem id="sales_territory_menu" name="Territoires de vente" parent="sale.sale_order_menu" action="action_sales_territory"/>
 
 
     <record id="view_sales_commission_form" model="ir.ui.view">
