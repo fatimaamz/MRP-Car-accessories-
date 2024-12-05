@@ -18,7 +18,7 @@
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
 
-            <xpath expr="//group[@name='order_details']//field[@name='order_details']" position="after">                
+            <xpath expr="//group[1]" position="inside">                
                         
                 <field name="installation_effectuee" />
                 <field name=" installateurs_ids" />
