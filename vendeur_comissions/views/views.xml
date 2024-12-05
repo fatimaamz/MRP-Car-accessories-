@@ -13,12 +13,12 @@
         </field>
     </record>
 
-     <record id="view_saleorder_form" model="ir.ui.view">
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form" />
+     <record id="view_account_move_form" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
 
-            <xpath expr="//group[1]" position="inside">                
+            <xpath expr="//group[@id='header_left_group']" position="inside">                
                         
                 <field name="installation_effectuee" />
                 <field name=" installateurs_ids" />
