@@ -70,10 +70,4 @@ class SalesCommission(models.Model):
 
         return rapports_commissions
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
 
-    territoire_id = fields.Many2one('territoire', string="Territoire", required=True)
-    installation_effectuee = fields.Boolean(string="Installation Effectuée", default=False)
-    installateurs_ids = fields.Many2many('res.users', string="Installateurs")
-    vente_oem = fields.Boolean(string="Vente OEM", default=False)
