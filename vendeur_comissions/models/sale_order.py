@@ -73,11 +73,11 @@ class AccountMove(models.Model):
                 })
 
             # Répartition du *Commission Pool* selon les jours travaillés
-            total_days_worked = sum(rep.days_worked for rep in territory.representatives_ids)
-            for representative in territory.representatives_ids:
-                share = representative.days_worked / total_days_worked if total_days_worked else 0
-                self.env['sales.commission'].create({
-                    'user_id': representative.id,
-                    'territory_id': territory.id,
-                    'commission_amount': share * commission_pool,
-                })
+            #total_days_worked = sum(rep.days_worked for rep in territory.representatives_ids)
+            #for representative in territory.representatives_ids:
+                #share = representative.days_worked / total_days_worked if total_days_worked else 0
+                #self.env['sales.commission'].create({
+                  #  'user_id': representative.id,
+                  #  'territory_id': territory.id,
+                   # 'commission_amount': share * commission_pool,
+               # })
