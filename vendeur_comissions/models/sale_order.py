@@ -21,6 +21,11 @@ class SaleOrder(models.Model):
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+   
+    installation_effectuee = fields.Boolean(string="Installation Effectuée", default=False)
+    installateurs_ids = fields.Many2many('res.users', string="Installateurs")
+    vente_oem = fields.Boolean(string="Vente OEM", default=False)
+
     territory_id = fields.Many2one(
         'sales.territory', string="Territory",
         related="partner_id.territory_id", store=True
