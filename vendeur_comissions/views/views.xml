@@ -21,7 +21,7 @@
             <xpath expr="//group[@id='header_left_group']" position="inside">                
                         
                 <field name="installation_effectuee" />
-                <field name=" installateurs_ids" />
+                <field name="installateurs_ids" />
                <field name="vente_oem" /> 
                      
                
