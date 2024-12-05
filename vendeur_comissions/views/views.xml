@@ -13,8 +13,22 @@
         </field>
     </record>
 
-    
+     <record id="view_saleorder_form" model="ir.ui.view">
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
 
+            <xpath expr="//field[@name='order_source']" position="after">                
+                        
+                        <field name="installation_effectuee" />
+                 <field name=" installateurs_ids" />
+               <field name="vente_oem" /> 
+                     
+               
+            </xpath>
+        </field>
+    </record>
+    
     
     <record id="view_sales_territory_form" model="ir.ui.view">
         <field name="name">sales.territory.form</field>
