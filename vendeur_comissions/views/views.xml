@@ -18,7 +18,7 @@
            <field name="company_id" position="after">
                 <label for="weekly_target"/>
                 <div class="o_row">
-                    <field name=" weekly_target" widget="monetary" options="{'currency_field': 'currency_id'}" class="oe_inline"/>
+                    <field name="weekly_target" widget="monetary" options="{'currency_field': 'currency_id'}" class="oe_inline"/>
                     <span class="flex-grow-1">/ Semaine</span>
                 </div>
             </field>
