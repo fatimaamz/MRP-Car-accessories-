@@ -25,27 +25,7 @@
         </field>
     </record>
 
-        <!-- Formulaire pour enregistrer les jours travaillés des vendeurs -->
-        <record id="view_sales_rep_attendance_form" model="ir.ui.view">
-            <field name="name">sales.rep.attendance.form</field>
-            <field name="model">sales.rep.attendance</field>
-            <field name="arch" type="xml">
-                <form string="Jours Travaillés par Semaine">
-                    <sheet>
-                        <group>
-                            <field name="team_id" required="1"/>
-                            <field name="sales_rep_id" required="1"/>
-                            <field name="week_start_date" required="1"/>
-                            <field name="days_worked" required="1"/>
-                        </group>
-                        <footer>
-                            <button string="Enregistrer" type="object" name="action_save_attendance" class="btn-primary"/>
-                            <button string="Annuler" special="cancel" class="btn-secondary"/>
-                        </footer>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+      
 
         <!-- Vue de liste pour afficher les jours travaillés -->
         <record id="view_sales_rep_attendance_tree" model="ir.ui.view">
