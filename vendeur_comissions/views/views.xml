@@ -49,7 +49,7 @@
             <field name="view_id" ref="view_sales_rep_attendance_tree"/>
         </record>
         <menuitem id="menu_sales_rep_attendance" name="Jours Travaillés/Vendeurs"
-                  parent="sales_team.menu_sales_team" action="action_sales_rep_attendance"/>
+                  parent="sale.menu_sale_config" action="action_sales_rep_attendance"/>
    
 </odoo>
 
