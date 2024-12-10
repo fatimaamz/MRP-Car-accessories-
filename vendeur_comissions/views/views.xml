@@ -1,6 +1,6 @@
 <odoo>
     <record id="view_sale_order" model="ir.ui.view">
-        <field name="model">sale.orderfield>
+        <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
 
@@ -10,7 +10,20 @@
             </xpath>
         </field>
     </record>
+ <record id="view_form_crm_lead" model="ir.ui.view">
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_form" />
+        <field name="arch" type="xml">
 
+           <field name="company_id" position="after">
+                <label for="weekly_target"/>
+                <div class="o_row">
+                    <field name=" weekly_target" widget="monetary" options="{'currency_field': 'currency_id'}" class="oe_inline"/>
+                    <span class="flex-grow-1">/ Semaine</span>
+                </div>
+            </field>
+        </field>
+    </record>
 
         <!-- Formulaire pour enregistrer les jours travaillés des vendeurs -->
         <record id="view_sales_rep_attendance_form" model="ir.ui.view">
