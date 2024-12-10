@@ -1,114 +1,68 @@
 <odoo>
-    <record id="view_partner_form_comission" model="ir.ui.view">
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form" />
+    <record id="view_sale_order" model="ir.ui.view">
+        <field name="model">sale.orderfield>
+        <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
 
-            <xpath expr="//group[1]//field[@name='vat']" position="after">                
-                        
-                        <field name="territory_id" />
-                     
-               
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="commission_pool"/>
+               <field name="individual_commissions"/>
             </xpath>
         </field>
     </record>
 
-     <record id="view_account_move_form" model="ir.ui.view">
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form" />
-        <field name="arch" type="xml">
 
-            <xpath expr="//group[@id='header_left_group']" position="inside">                
-                        
-                <field name="installation_effectuee" />
-                <field name="installateurs_ids" />
-               <field name="vente_oem" /> 
-                     
-               
-            </xpath>
-        </field>
-    </record>
-    
-    
-    <record id="view_sales_territory_form" model="ir.ui.view">
-        <field name="name">sales.territory.form</field>
-        <field name="model">sales.territory</field>
-        <field name="arch" type="xml">
-            <form string="Sales Territory">
-                <sheet>
-                    <group>
-                        <field name="name" string="Territory Name"/>
-                        <field name="weekly_target" string="Weekly Sales Target"/>
-                    </group>
-                    <group>
-                        <field name="representative_ids" widget="many2many_tags" string="Representatives"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
+        <!-- Formulaire pour enregistrer les jours travaillés des vendeurs -->
+        <record id="view_sales_rep_attendance_form" model="ir.ui.view">
+            <field name="name">sales.rep.attendance.form</field>
+            <field name="model">sales.rep.attendance</field>
+            <field name="arch" type="xml">
+                <form string="Jours Travaillés par Semaine">
+                    <sheet>
+                        <group>
+                            <field name="team_id" required="1"/>
+                            <field name="sales_rep_id" required="1"/>
+                            <field name="week_start_date" required="1"/>
+                            <field name="days_worked" required="1"/>
+                        </group>
+                        <footer>
+                            <button string="Enregistrer" type="object" name="action_save_attendance" class="btn-primary"/>
+                            <button string="Annuler" special="cancel" class="btn-secondary"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
-    <record id="view_sales_territory_tree" model="ir.ui.view">
-        <field name="name">sales.territory.tree</field>
-        <field name="model">sales.territory</field>
-        <field name="arch" type="xml">
-            <tree string="Sales Territories">
-                <field name="name"/>
-                <field name="weekly_target"/>
-            </tree>
-        </field>
-    </record>
+        <!-- Vue de liste pour afficher les jours travaillés -->
+        <record id="view_sales_rep_attendance_tree" model="ir.ui.view">
+            <field name="name">sales.rep.attendance.tree</field>
+            <field name="model">sales.rep.attendance</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="team_id"/>
+                    <field name="sales_rep_id"/>
+                    <field name="week_start_date"/>
+                    <field name="days_worked"/>
+                </tree>
+            </field>
+        </record>
 
-    
-
-    <record id="action_sales_territory" model="ir.actions.act_window">
-        <field name="name">Sales Territories</field>
-        <field name="res_model">sales.territory</field>
-        <field name="view_mode">tree,form</field>
-        <field name="target">current</field>
-    </record>
-    <menuitem id="sales_territory_menu" name="Territoires de vente" parent="sale.sale_order_menu" action="action_sales_territory"/>
-
-
-    <record id="view_sales_commission_form" model="ir.ui.view">
-        <field name="name">sales.commission.form</field>
-        <field name="model">sales.commission</field>
-        <field name="arch" type="xml">
-            <form string="Sales Commission">
-                <sheet>
-                    <group>
-                        <field name="user_id" string="Representative"/>
-                        <field name="invoice_id" string="Invoice"/>
-                        <field name="commission_amount" string="Commission Amount"/>
-                    </group>
-                    <group>
-                        <field name="commission_date" string="Commission Date"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <record id="view_sales_commission_tree" model="ir.ui.view">
-        <field name="name">sales.commission.tree</field>
-        <field name="model">sales.commission</field>
-        <field name="arch" type="xml">
-            <tree string="Sales Commissions">
-                <field name="user_id"/>
-                <field name="invoice_id"/>
-                <field name="commission_amount"/>
-                <field name="commission_date"/>
-            </tree>
-        </field>
-    </record>
-
-
-    <record id="action_sales_commission" model="ir.actions.act_window">
-        <field name="name">Sales Commissions</field>
-        <field name="res_model">sales.commission</field>
-        <field name="view_mode">tree,form</field>
-        <field name="target">current</field>
-    </record>
-    <menuitem id="sales_commission_menu" name="Comissions Vente" parent="sale.sale_order_menu" action="action_sales_commission"/>
-
+        <!-- Action pour ouvrir la vue de liste des jours travaillés -->
+        <record id="action_sales_rep_attendance" model="ir.actions.act_window">
+            <field name="name">Jours Travaillés des Vendeurs</field>
+            <field name="res_model">sales.rep.attendance</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_sales_rep_attendance_tree"/>
+        </record>
+        <menuitem id="menu_sales_rep_attendance" name="Jours Travaillés/Vendeurs"
+                  parent="sales_team.menu_sales_team" action="action_sales_rep_attendance"/>
+   
 </odoo>
+
+
+
+  
+
+
+
