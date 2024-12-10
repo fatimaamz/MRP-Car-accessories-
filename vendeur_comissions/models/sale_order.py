@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api,_
 from datetime import timedelta
 
 class CrmTeam(models.Model):
@@ -11,33 +11,37 @@ class CrmTeam(models.Model):
 
 class SalesRepAttendance(models.Model):
     _name = 'sales.rep.attendance'
-    _description = 'Gestion des Jours Travaillés des Vendeurs'
+    _description = 'Attendance des Vendeurs'
 
-    team_id = fields.Many2one('crm.team', string="Équipe", required=True)
     sales_rep_id = fields.Many2one(
         'res.users',
         string="Vendeur",
         required=True,
-        domain="[('sales_team_id', '=', team_id)]"  # Le domaine pour lier les vendeurs à l'équipe
+        domain="[('id', 'in', allowed_sales_reps)]"
     )
+    team_id = fields.Many2one('crm.team', string="Équipe", required=True)
     week_start_date = fields.Date(string="Début de la Semaine", required=True)
     days_worked = fields.Integer(string="Jours Travaillés", required=True)
 
-    # Vérifier qu'il n'existe pas d'enregistrement du même vendeur et équipe pour la même semaine
-    _sql_constraints = [
-        ('unique_attendance', 'unique(sales_rep_id, team_id, week_start_date)',
-         'Un enregistrement existe déjà pour ce vendeur, cette équipe, et cette semaine.')
-    ]
-    
+    allowed_sales_reps = fields.Many2many(
+        'res.users',
+        compute='_compute_allowed_sales_reps',
+        string="Vendeurs Disponibles"
+    )
+
     @api.depends('team_id')
     def _compute_allowed_sales_reps(self):
         """Calculer les vendeurs autorisés en fonction de l'équipe sélectionnée."""
         for record in self:
             if record.team_id:
-                # Lier le domaine de vendeur à l'équipe choisie
-                record.sales_rep_id = record.team_id.member_ids
+                record.allowed_sales_reps = record.team_id.member_ids
             else:
-                record.sales_rep_id = self.env['res.users'].browse()
+                record.allowed_sales_reps = self.env['res.users'].browse()
+
+    _sql_constraints = [
+        ('unique_attendance', 'unique(sales_rep_id, team_id, week_start_date)',
+         'Un enregistrement existe déjà pour ce vendeur, cette équipe, et cette semaine.')
+    ]
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
