@@ -1,6 +1,14 @@
 from odoo import models, fields, api
 from datetime import timedelta
 
+class CrmTeam(models.Model):
+    _inherit = 'crm.team'
+
+    weekly_target = fields.Float(
+        string="Objectif Hebdomadaire ($)",
+        help="Définir l'objectif hebdomadaire pour cette équipe."
+    )
+
 class SalesRepAttendance(models.Model):
     _name = 'sales.rep.attendance'
     _description = 'Gestion des Jours Travaillés des Vendeurs'
