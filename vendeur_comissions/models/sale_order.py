@@ -1,83 +1,89 @@
 from odoo import models, fields, api
 from datetime import timedelta
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
+class SalesRepAttendance(models.Model):
+    _name = 'sales.rep.attendance'
+    _description = 'Gestion des Jours Travaillés des Vendeurs'
 
-    installation_effectuee = fields.Boolean(string="Installation Effectuée", default=False)
-    installateurs_ids = fields.Many2many('res.users', string="Installateurs")
-    vente_oem = fields.Boolean(string="Vente OEM", default=False)
-    territory_id = fields.Many2one(
-        'sales.territory', string="Territory",
-        related="partner_id.territory_id", store=True
+    team_id = fields.Many2one('crm.team', string="Équipe", required=True)
+    sales_rep_id = fields.Many2one(
+        'res.users',
+        string="Vendeur",
+        required=True,
+        domain="[('sales_team_id', '=', team_id)]"  # Le domaine pour lier les vendeurs à l'équipe
+    )
+    week_start_date = fields.Date(string="Début de la Semaine", required=True)
+    days_worked = fields.Integer(string="Jours Travaillés", required=True)
+
+    # Vérifier qu'il n'existe pas d'enregistrement du même vendeur et équipe pour la même semaine
+    _sql_constraints = [
+        ('unique_attendance', 'unique(sales_rep_id, team_id, week_start_date)',
+         'Un enregistrement existe déjà pour ce vendeur, cette équipe, et cette semaine.')
+    ]
+    
+    @api.depends('team_id')
+    def _compute_allowed_sales_reps(self):
+        """Calculer les vendeurs autorisés en fonction de l'équipe sélectionnée."""
+        for record in self:
+            if record.team_id:
+                # Lier le domaine de vendeur à l'équipe choisie
+                record.sales_rep_id = record.team_id.member_ids
+            else:
+                record.sales_rep_id = self.env['res.users'].browse()
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    team_weekly_target = fields.Float(
+        string="Objectif Hebdomadaire ($)",
+        compute='_compute_team_weekly_target',
+        store=True
+    )
+    commission_pool = fields.Float(
+        string="Commission Pool",
+        compute='_compute_commission_pool',
+        store=True
+    )
+    individual_commissions = fields.Float(
+        string="Commissions Individuelles",
+        compute='_compute_individual_commissions',
+        store=True
     )
 
-    @api.model
-    def create(self, vals):
-        invoice = super(AccountMove, self).create(vals)
-        invoice._calculate_commissions()
-        return invoice
+    @api.depends('user_id')
+    def _compute_team_weekly_target(self):
+        """Récupérer l'objectif hebdomadaire de l'équipe du vendeur associé."""
+        for order in self:
+            if order.user_id and order.user_id.sales_team_id:
+                order.team_weekly_target = order.user_id.sales_team_id.weekly_target
+            else:
+                order.team_weekly_target = 0  # Si pas d'équipe définie, l'objectif est 0
 
-    def _calculate_commissions(self):
-        for invoice in self:
-            # Définir les taux de commission
-            commission_rate_installed = 0.10
-            commission_rate_oem = 0.05
-            commission_pool_rate = 0.10
-            bonus_rate_high = 0.15
+    @api.depends('amount_total', 'team_weekly_target')
+    def _compute_commission_pool(self):
+        """Calcul du commission pool en fonction des objectifs atteints."""
+        for order in self:
+            if order.amount_total > order.team_weekly_target:
+                bonus_rate = 0.15 if order.amount_total >= 1.5 * order.team_weekly_target else 0.10
+                order.commission_pool = (order.amount_total - order.team_weekly_target) * bonus_rate
+            else:
+                order.commission_pool = 0
 
-            # Récupérer le territoire et l'objectif
-            territory = invoice.territory_id
-            if not territory:
-                continue
-
-            # Calcul des ventes hebdomadaires pour le territoire
-            start_of_week = fields.Date.today() - timedelta(days=fields.Date.today().weekday())
-            end_of_week = start_of_week + timedelta(days=6)
-            weekly_invoices = self.env['account.move'].search([
-                ('territory_id', '=', territory.id),
-                ('state', '=', 'posted'),
-                ('invoice_date', '>=', start_of_week),
-                ('invoice_date', '<=', end_of_week),
+    @api.depends('user_id', 'commission_pool', 'team_id')
+    def _compute_individual_commissions(self):
+        """Calcul des commissions individuelles basées sur les jours travaillés."""
+        for order in self:
+            attendances = self.env['sales.rep.attendance'].search([
+                ('team_id', '=', order.team_id.id),
+                ('week_start_date', '<=', fields.Date.today()),
+                ('week_start_date', '>=', fields.Date.today() - timedelta(days=7))
             ])
-
-            total_installed_sales = sum(inv.amount_total for inv in weekly_invoices if inv.installation_effectuee)
-            total_oem_sales_real = sum(inv.amount_total for inv in weekly_invoices if inv.vente_oem)
-
-            # Limiter les ventes OEM à 30% des ventes installées
-            total_oem_sales_permitted = min(total_oem_sales_real, total_installed_sales * 0.30)
-            total_weekly_sales = total_installed_sales + total_oem_sales_permitted
-
-            # Calcul du *Commission Pool*
-            commission_pool = 0
-            if total_weekly_sales > territory.weekly_target * 1.5:
-                commission_pool = (total_weekly_sales - territory.weekly_target * 1.5) * bonus_rate_high
-            elif total_weekly_sales > territory.weekly_target:
-                commission_pool = (total_weekly_sales - territory.weekly_target) * commission_pool_rate
-
-            # Calcul des commissions individuelles
-            for installer in invoice.installateurs_ids:
-                commission_amount_installed = invoice.amount_total * commission_rate_installed / len(invoice.installateurs_ids)
-                self.env['sales.commission'].create({
-                    'user_id': installer.id,
-                    'invoice_id': invoice.id,
-                    'commission_amount': commission_amount_installed,
-                })
-
-            if invoice.vente_oem:
-                commission_amount_oem = invoice.amount_total * commission_rate_oem
-                self.env['sales.commission'].create({
-                    'user_id': invoice.user_id.id,
-                    'invoice_id': invoice.id,
-                    'commission_amount': commission_amount_oem,
-                })
-
-            # Répartition du *Commission Pool* selon les jours travaillés
-            #total_days_worked = sum(rep.days_worked for rep in territory.representatives_ids)
-            #for representative in territory.representatives_ids:
-                #share = representative.days_worked / total_days_worked if total_days_worked else 0
-                #self.env['sales.commission'].create({
-                  #  'user_id': representative.id,
-                  #  'territory_id': territory.id,
-                   # 'commission_amount': share * commission_pool,
-               # })
+            total_days_worked = sum(attendances.mapped('days_worked'))
+            if total_days_worked > 0:
+                per_day_rate = order.commission_pool / total_days_worked
+                order.individual_commissions = sum([
+                    att.days_worked * per_day_rate
+                    for att in attendances if att.sales_rep_id == order.user_id
+                ])
+            else:
+                order.individual_commissions = 0
