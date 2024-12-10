@@ -54,10 +54,12 @@ class SaleOrder(models.Model):
     def _compute_team_weekly_target(self):
         """Récupérer l'objectif hebdomadaire de l'équipe du vendeur associé."""
         for order in self:
-            if order.user_id and order.user_id.sales_team_id:
-                order.team_weekly_target = order.user_id.sales_team_id.weekly_target
+            # Trouver l'équipe de vente associée à l'utilisateur
+            team = self.env['crm.team'].search([('member_ids', 'in', order.user_id.id)], limit=1)
+            if team:
+                order.team_weekly_target = team.weekly_target
             else:
-                order.team_weekly_target = 0  # Si pas d'équipe définie, l'objectif est 0
+                order.team_weekly_target = 0 
 
     @api.depends('amount_total', 'team_weekly_target')
     def _compute_commission_pool(self):
