@@ -10,6 +10,20 @@
             </xpath>
         </field>
     </record>
+
+  <record id="view_tree_sale_order" model="ir.ui.view">
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//tree" position="inside">
+                <field name="commission_pool"/>
+               <field name="individual_commissions"/>
+            </xpath>
+        </field>
+    </record>
+    
+    
  <record id="view_form_crm_lead" model="ir.ui.view">
         <field name="model">crm.team</field>
         <field name="inherit_id" ref="sales_team.crm_team_view_form" />
