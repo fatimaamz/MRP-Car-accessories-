@@ -47,12 +47,14 @@
         <form>
             <sheet>
                 <group>
+                    
                     <field name="team_id"/>
                     <field name="sales_rep_id"/>
                 </group>
                 <group>
                     <field name="week_start_date"/>
                     <field name="days_worked"/>
+                    <field name="allowed_sales_reps"/>
                 </group>
             </sheet>
         </form>
