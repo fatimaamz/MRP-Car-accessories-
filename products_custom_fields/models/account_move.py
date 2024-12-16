@@ -8,6 +8,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     dealer_code = fields.Char(string="Dealer Code",  help="Unique HACC Dealer Code")
+    Po = fields.Char(string="PO",  help="PO client")
  
 
     @api.constrains('dealer_code')
