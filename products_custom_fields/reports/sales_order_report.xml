@@ -4,7 +4,7 @@
     <template id="report_saleorder_new_design">
 
         <t t-foreach="docs" t-as="doc">
-            <main>
+         
 
                 <!-- Header Section -->
                 <div class="header"
@@ -106,7 +106,7 @@
 </div>
 
 
-            </main>
+         
 
         </t>
     </template>
