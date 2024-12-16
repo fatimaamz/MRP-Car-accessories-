@@ -49,7 +49,7 @@
                     
                                 <!-- Center Block: Ship To -->
                                 <td style="padding: 10px; background-color: #f9fbff; border-radius: 10px; border: 1px solid #ddd; vertical-align: top; width: 40%; font-size: 14px;">
-                                    <span><strong >Ship to / Expédié à :</strong</span><br/>
+                                    <span><strong>Ship to / Expédié à :</strong</span><br/>
                                     <t t-esc="doc.partner_shipping_id.name or ''" style="font-weight: bold;"/><br/>
                                     <t t-esc="doc.partner_shipping_id.street or ''"/><br/>
                                     <t t-esc="doc.partner_shipping_id.city or ''"/>, 
