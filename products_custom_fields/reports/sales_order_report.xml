@@ -56,7 +56,7 @@
                                         <t t-esc="doc.partner_shipping_id.phone or ''"/>
                                     </span><br/>
                                     <span>Ship Date : 
-                                        <t t-esc="doc.commitment_date or ''"/>
+                                        <t t-esc="doc.date_order or ''"/>
                                     </span>
                                 </td>
                     
