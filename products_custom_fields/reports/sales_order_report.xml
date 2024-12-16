@@ -2,7 +2,7 @@
 <odoo>
     <!-- Nouveau Template pour le rapport -->
     <template id="report_saleorder_new_design">
-        <t t-call="web.external_layout">
+        
             <t t-set="doc" t-value="doc"/>
 
             <!-- Ensure content is inside a valid <main> or appropriate structure -->
@@ -33,7 +33,7 @@
                 </t>
             </main>
 
-        </t>
+        
     </template>
 
     <!-- Register the report -->
