@@ -29,14 +29,14 @@
         </t>
     </template>
 
-    <!-- Déclaration du Rapport -->
-    <report
-        id="action_report_saleorder_new_design"
-        string="Sales Order (New Design)"
-        model="sale.order"
-        report_type="qweb-pdf"
-        name="products_custom_fields.report_saleorder_new_design"
-        file="products_custom_fields.report_saleorder_new_design"
-        print_report_name="'Sales Order - %s' % (object.name)"
-    />
+    <record id="action_report_saleorder_new_design" model="ir.actions.report">
+        <field name="name">Sales Order (New Design)</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">products_custom_fields.report_saleorder_new_design</field>
+        <field name="report_file">products_custom_fields.report_saleorder_new_design</field>
+        <field name="print_report_name">'Sales Order - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+    </record>
+
 </odoo>
