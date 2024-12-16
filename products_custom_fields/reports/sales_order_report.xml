@@ -1,6 +1,6 @@
 <odoo>
    <template id="report_saleorder_new_design" inherit_id="sale.report_saleorder_document">
-	<xpath expr="//t[1]" position="replace">
+	<xpath expr="." position="replace">
 		<div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding: 10px 0;">
 	            
 		            <div>
