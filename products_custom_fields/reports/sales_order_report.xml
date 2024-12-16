@@ -63,7 +63,7 @@
                                 <!-- Right Block: Order Details -->
                                 <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;">
                                     <strong style="font-size: 16px;">Order Details:</strong><br/>
-                                    Date: <Date: <t t-esc="doc.date_order and doc.date_order.strftime('%B %d, %Y') or ''"/><br/>
+                                    Date: <t t-esc="doc.date_order and doc.date_order.strftime('%B %d, %Y') or ''"/><br/>
                                     Order N°: <t t-esc="doc.name"/><br/>
                                     PO Client: <t t-esc="doc.client_order_ref or ''"/><br/>
                                     Facture N°: <t t-esc="doc.invoice_ids[0].name or ''"/>
