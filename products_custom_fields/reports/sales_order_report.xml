@@ -24,7 +24,7 @@
                         </div>
                     </div>
                                     <!-- Content Section (order details) -->
-                <t t-foreach="docs" t-as="doc">
+                
                    <div style="margin-top: 20px;">
                         <table style="width: 100%; border-spacing: 0; margin-bottom: 10px;">
                             <tr>
@@ -64,12 +64,15 @@
                                     Date: <t t-esc="doc.date_order and doc.date_order.strftime('%B %d, %Y') or ''"/><br/>
                                     Order N°: <t t-esc="doc.name"/><br/>
                                     PO Client: <t t-esc="doc.client_order_ref or ''"/><br/>
-                                    Facture N°: <t t-esc="doc.invoice_ids[0].name or ''"/>
+                                   <t t-if="doc.invoice_ids">
+                                        Facture N°: <t t-esc="doc.invoice_ids[0].name or ''"/>
+                                    </t>
+                                    
                                 </td>
                             </tr>
                         </table>
                     </div>
-                </t>
+               
 
                
             </main>
