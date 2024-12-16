@@ -1,0 +1,16 @@
+<odoo>
+	<template id="account_invoice_report_add_field" inherit_id="account.report_invoice_document">
+		<xpath expr="//th[@name='th_taxes']" position="after">
+
+			<th name="th_coefficient" class="text-end">Coefficient</th>
+		</xpath>
+
+		<xpath expr="//tbody[1]//t[3]//tr[1]//td[5]" position="after">
+
+			<td name="td_coefficient" class="text-end">
+				<span t-field="line.coefficient"/>
+			</td>
+		</xpath>
+
+	</template>
+</odoo>

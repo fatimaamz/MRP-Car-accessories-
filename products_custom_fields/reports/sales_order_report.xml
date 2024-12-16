@@ -1,0 +1,22 @@
+<odoo>
+	<template id="report_saleorder_customized" inherit_id="sale.report_saleorder_document">
+
+		<xpath expr="//th[@name='th_taxes']" position="after">
+
+			<th name="th_coefficient" class="text-end">Coefficient</th>
+		</xpath>
+
+		<xpath expr="//td[@name='td_taxes']" position="after">
+
+			<td name="td_coefficient" class="text-end">
+				<span t-field="line.coefficient"/>
+			</td>
+		</xpath>
+
+
+
+
+
+
+	</template>
+</odoo>
