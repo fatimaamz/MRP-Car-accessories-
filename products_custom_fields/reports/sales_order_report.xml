@@ -2,9 +2,7 @@
     <!-- Nouveau Template pour le rapport -->
     <template id="report_saleorder_new_design">
         
-            <t t-set="doc" t-value="doc"/>
-
-            <!-- Ensure content is inside a valid <main> or appropriate structure -->
+            <t t-foreach="docs" t-as="doc">
             <main style="width: 100%; padding: 10px;">
 
                 <!-- Header Section -->
@@ -77,7 +75,7 @@
                
             </main>
 
-        
+            </t>
     </template>
 
     <!-- Register the report -->
