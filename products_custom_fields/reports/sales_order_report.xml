@@ -10,22 +10,21 @@
 
                 <!-- Header Section -->
                 <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; flex-direction: row-reverse;">
-                    <!-- Company Details (now on the left) -->
-                    <div style="text-align: left; font-size: 14px;">
-                        <strong style="font-size: 16px;">
-                            <t t-esc="user.company_id.name"/>
-                        </strong><br/>
-                        <span><t t-esc="user.company_id.email or ''"/> / <t t-esc="user.company_id.phone or ''"/></span><br/>
+                        <!-- Company Details (now on the left) -->
+                        <div style="text-align: left; font-size: 14px;">
+                            <strong style="font-size: 16px;">
+                                <t t-esc="user.company_id.name"/>
+                            </strong><br/>
+                            <span><t t-esc="user.company_id.email or ''"/> / <t t-esc="user.company_id.phone or ''"/></span><br/>
+                        </div>
+                    
+                        <!-- Logo and Title (now on the right) -->
+                        <div style="text-align: right;">
+                            <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)" style="height: 60px;" alt="Company Logo"/>
+                            <h2>Sales Order</h2>
+                        </div>
                     </div>
-                
-                    <!-- Logo and Title (now on the right) -->
-                    <div style="text-align: right;">
-                        <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)" style="height: 60px;" alt="Company Logo"/>
-                        <h2>Sales Order</h2>
-                    </div>
-                </div>
-
-                <!-- Content Section (order details) -->
+                                    <!-- Content Section (order details) -->
                 <t t-foreach="docs" t-as="doc">
                    <div style="margin-top: 20px;">
                         <table style="width: 100%; border-spacing: 0; margin-bottom: 10px;">
