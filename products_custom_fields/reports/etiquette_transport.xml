@@ -59,18 +59,18 @@
                                 <span>
                                     <strong>Ship to / Expédié à :</strong>
                                 </span>
-                                <br/>
+                                <br/><br/>
                                 <t t-esc="doc.partner_shipping_id.name or ''" style="font-weight: bold;"/>
-                                <br/>
+                                <br/><br/>
                                 <t t-esc="doc.partner_shipping_id.street or ''"/>
                                 <br/>
                                 <t t-esc="doc.partner_shipping_id.city or ''"/>,
                                 <t t-esc="doc.partner_shipping_id.state_id.name or ''"/>,
                                 <t t-esc="doc.partner_shipping_id.zip or ''"/>
                                 <br/><br/>
-                                <t t-esc="doc.partner_shipping_id.country_id.name or ''"/>
-                                <br/>
-                                <span style="font-size: 13px;">Téléphone :
+                                <!--<t t-esc="doc.partner_shipping_id.country_id.name or ''"/>-->
+                                <br/><br/>
+                                <span>Téléphone :
                                     <t t-esc="doc.partner_shipping_id.phone or ''"/>
                                 </span>
                                 <br/><br/>
@@ -85,12 +85,12 @@
                                 <br/><br/>
                                 Date:
                                 <t t-esc="doc.date_order and doc.date_order.strftime('%B %d, %Y') or ''"/>
-                                <br/>
+                                <br/><br/>
                                 Order N°:
                                 <t t-esc="doc.name"/>
-                                <br/>
+                                <br/><br/>
                                 PO Client:
-                                <t t-esc="doc.client_order_ref or ''"/>
+                                <t t-esc="doc.partner_shipping_id.po or ''"/>
                                 <br/><br/>
                                 <t t-if="doc.invoice_ids">
                                     Facture N°:
