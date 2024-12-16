@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<record id="multiples_achat_purchase_order_line" model="ir.ui.view">
+            <field name="name">purchase.order.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree//field[@name='product_packaging_id']" position="after">
+                    <field name="multiples_achat" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+	<record model="ir.actions.report" id="etiquette_transport_template">
+		<field name="name">Etiquette d'Articles</field>
+		<field name="model">stock.picking</field>
+		<field name="report_type">qweb-pdf</field>
+		<field name="report_name">etiquette_transport.etiquette_transport</field>
+		<field name="report_file">etiquette_transport.etiquette_transport</field>
+		<field name="binding_model_id" ref="model_stock_picking"/>
+		<field name="binding_type">report</field>
+	</record>
+
+	
+	<template id="etiquette_transport">
+		<t t-call="web.basic_layout">
+			<div class="page">
+				<t t-foreach="docs" t-as="o">
+
+					<t t-set="o.nombre_consigne" t-value="1"/>
+					<t t-set="company" t-value="user.company_id"/>
+					<t t-foreach="range(1,len(o.move_line_ids_without_package)+1)" t-as="item">
+						  <div style="display: inline-table;">
+						<table class="table table-bordered" style="border: 2px solid black;">
+							<tr>
+
+								<td class="text-center align-middle" style="text-align:center;">
+									<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" class="float-left" alt="Logo"/><br/><br/>
+									<div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;name&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+									<t t-if="o.partner_id">
+										<div name="div_outgoing_address">
+											<div t-if="o.move_ids_without_package and o.move_ids_without_package[0].partner_id">
+												<div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+											</div>
+
+										</div>
+									</t>
+														<br/><br/>
+									<div style="text-align:center"><span t-esc="item" />/<span t-esc="o.nombre_consigne"/></div>
+
+								</td>
+							</tr>
+						</table>
+						  </div>
+					</t>
+
+				</t>
+			</div>
+		</t>
+	</template>
+
+</odoo>
