@@ -17,7 +17,7 @@
         'views/invoice_Nissan_edi.xml',
         'views/invoice_huyndai_edi.xml',
         'views/whatsapp_message_view.xml',
-        'reports/sales_order_report.xml',
+        'reports/etiquette_transport.xml',
     ],
     'installable': True,
 
