@@ -6,7 +6,7 @@
             <main style="width: 100%; padding: 10px;">
 
                 <!-- Header Section -->
-                <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; flex-direction: row-reverse;">
+                <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
                         <!-- Company Details (now on the left) -->
                         <div style="text-align: left; font-size: 14px;">
                             <strong style="font-size: 16px;">
