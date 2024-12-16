@@ -3,7 +3,7 @@
     <template id="report_saleorder_new_design">
         
             <t t-foreach="docs" t-as="doc">
-            <main style="width: 100%; padding: 10px;">
+            <main >
 
                 <!-- Header Section -->
                 <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
