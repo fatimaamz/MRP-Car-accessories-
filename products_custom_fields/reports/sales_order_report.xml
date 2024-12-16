@@ -3,7 +3,7 @@
 	<div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding: 10px 0;">
             
 	            <div>
-	                <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)" style="height: 60px;" alt="Company Logo"/></br>
+	                <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)" style="height: 60px;" alt="Company Logo"/><br/>
 			<h1> Sales Order</h1>
 	            </div>
 	            
