@@ -1,62 +1,118 @@
 <?xml version="1.0"?>
 <odoo>
 
-	<record id="multiples_achat_purchase_order_line" model="ir.ui.view">
-            <field name="name">purchase.order.inherit</field>
-            <field name="model">purchase.order</field>
-            <field name="inherit_id" ref="purchase.purchase_order_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//tree//field[@name='product_packaging_id']" position="after">
-                    <field name="multiples_achat" optional="show"/>
-                </xpath>
-            </field>
-        </record>
-	<record model="ir.actions.report" id="etiquette_transport_template">
-		<field name="name">Etiquette d'Articles</field>
-		<field name="model">stock.picking</field>
-		<field name="report_type">qweb-pdf</field>
-		<field name="report_name">etiquette_transport.etiquette_transport</field>
-		<field name="report_file">etiquette_transport.etiquette_transport</field>
-		<field name="binding_model_id" ref="model_stock_picking"/>
-		<field name="binding_type">report</field>
-	</record>
+	 <template id="report_saleorder_new_design">
 
-	
-	<template id="etiquette_transport">
-		<t t-call="web.basic_layout">
-			<div class="page">
-				<t t-foreach="docs" t-as="o">
+        <t t-foreach="docs" t-as="doc">
+            <main>
+                <!-- Header Section -->
+                <div class="header"
+                     style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
+                    <table style="width: 100%; border: none; padding: 10px 0;">
+                        <tr>
+                            <td style="text-align: left; vertical-align: middle; padding-right: 20px;">
+                                <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
+                                     style="height: 60px;" alt="Company Logo"/>
+                                <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
+                                    Sales Order
+                                </h2>
+                            </td>
+                            <td style="text-align: right; vertical-align: middle;">
+                                <div style="text-align: justify; width: 100%;">
+                                    <strong style="font-size: 16px;">
+                                        <t t-esc="user.company_id.name"/>
+                                    </strong>
+                                    <br/>
+                                    <span style="font-size: 14px;">
+                                        <t t-esc="user.company_id.email or ''"/>
+                                        /
+                                        <t t-esc="user.company_id.phone or ''"/>
+                                    </span>
+                                    <br/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
-					<t t-set="o.nombre_consigne" t-value="1"/>
-					<t t-set="company" t-value="user.company_id"/>
-					<t t-foreach="range(1,len(o.move_line_ids_without_package)+1)" t-as="item">
-						  <div style="display: inline-table;">
-						<table class="table table-bordered" style="border: 2px solid black;">
-							<tr>
+                <div style="margin-top: 30px;">
+                    <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
+                        <tr>
+                            <!-- Left Block: Customer Information -->
+                            <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;">
+                                <strong style="font-size: 16px;">
+                                    <t t-esc="doc.partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <t t-esc="doc.partner_id.phone or ''"/>
+                                <br/>
+                                <t t-esc="doc.partner_id.street or ''"/>,
+                                <t t-esc="doc.partner_id.city or ''"/>,
+                                <t t-esc="doc.partner_id.state_id.name or ''"/>
+                                <br/><br/>
+                                <t t-esc="doc.partner_id.zip or ''"/>
+                                <t t-esc="doc.partner_id.country_id.name or ''"/>
+                            </td>
 
-								<td class="text-center align-middle" style="text-align:center;">
-									<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" class="float-left" alt="Logo"/><br/><br/>
-									<div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;name&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-									<t t-if="o.partner_id">
-										<div name="div_outgoing_address">
-											<div t-if="o.move_ids_without_package and o.move_ids_without_package[0].partner_id">
-												<div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-											</div>
+                            <!-- Center Block: Ship To -->
+                            <td style="padding: 10px; background-color: #f9fbff; border-radius: 10px; border: 1px solid #ddd; vertical-align: top; width: 40%; font-size: 14px;">
+                                <span>
+                                    <strong>Ship to / Expédié à :</strong>
+                                </span>
+                                <br/>
+                                <t t-esc="doc.partner_shipping_id.name or ''" style="font-weight: bold;"/>
+                                <br/>
+                                <t t-esc="doc.partner_shipping_id.street or ''"/>
+                                <br/>
+                                <t t-esc="doc.partner_shipping_id.city or ''"/>,
+                                <t t-esc="doc.partner_shipping_id.state_id.name or ''"/>,
+                                <t t-esc="doc.partner_shipping_id.zip or ''"/>
+                                <br/><br/>
+                                <t t-esc="doc.partner_shipping_id.country_id.name or ''"/>
+                                <br/>
+                                <span style="font-size: 13px;">Téléphone :
+                                    <t t-esc="doc.partner_shipping_id.phone or ''"/>
+                                </span>
+                                <br/><br/>
+                                <span>Ship Date :
+                                    <t t-esc="doc.date_order.strftime('%B %d, %Y')"/>
+                                </span>
+                            </td>
 
-										</div>
-									</t>
-														<br/><br/>
-									<div style="text-align:center"><span t-esc="item" />/<span t-esc="o.nombre_consigne"/></div>
+                            <!-- Right Block: Order Details -->
+                            <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;">
+                                <strong style="font-size: 16px;">Order Details:</strong>
+                                <br/><br/>
+                                Date:
+                                <t t-esc="doc.date_order and doc.date_order.strftime('%B %d, %Y') or ''"/>
+                                <br/>
+                                Order N°:
+                                <t t-esc="doc.name"/>
+                                <br/>
+                                PO Client:
+                                <t t-esc="doc.client_order_ref or ''"/>
+                                <br/><br/>
+                                <t t-if="doc.invoice_ids">
+                                    Facture N°:
+                                    <t t-esc="doc.invoice_ids[0].name or ''"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </main>
+        </t>
+    </template>
 
-								</td>
-							</tr>
-						</table>
-						  </div>
-					</t>
-
-				</t>
-			</div>
-		</t>
-	</template>
+    <!-- Register the report -->
+    <record id="action_report_saleorder_new_design" model="ir.actions.report">
+        <field name="name">Sales Order (New Design)</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">products_custom_fields.report_saleorder_new_design</field>
+        <field name="report_file">products_custom_fields.report_saleorder_new_design</field>
+        <field name="print_report_name">'Sales Order - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+    </record>
 
 </odoo>
