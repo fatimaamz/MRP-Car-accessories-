@@ -100,6 +100,70 @@
                         </tr>
                     </table>
                 </div>
+		 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr style="background-color: #f9fbff;">
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking Number</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship By</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">S1</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">AAAX3SDCA85TY</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">July 31, 2024</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">FEDEX</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Product Details Table (Table 2) -->
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr style="background-color: #f9fbff;">
+                        <th style="border: 1px solid #ddd; padding: 10px;">N°</th>
+                        <th style="border: 1px solid #ddd; padding: 10px;">Image</th>
+                        <th style="border: 1px solid #ddd; padding: 10px;">Description</th>
+                        <th style="border: 1px solid #ddd; padding: 10px;">Couleur</th>
+                        <th style="border: 1px solid #ddd; padding: 10px;">EnStock</th>
+                        <th style="border: 1px solid #ddd; padding: 10px;">Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="doc.order_line" t-as="line" t-enumerate="index">
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px;">
+                                <t t-esc="index + 1"/>
+                            </td>
+                            <!-- Image Column -->
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <img t-att-src="'/web/image/product.product/%s/image_1920' % (line.product_id.id)"
+                                     style="height: 50px; width: 50px;" alt="Product Image"/>
+                            </td>
+                            <!-- Description Column -->
+                            <td style="border: 1px solid #ddd; padding: 10px;">
+                                <t t-esc="line.name or ''"/><br/>
+                                <t t-esc="'Arrivée : %s' % (line.product_id.product_tmpl_id.default_code or '')"/>
+                            </td>
+                            <!-- Couleur -->
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="line.product_id.color or 'N/A'"/>
+                            </td>
+                            <!-- EnStock -->
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="line.product_id.qty_available or 0"/>
+                            </td>
+                            <!-- Qty -->
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="line.product_uom_qty"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+		    
             </main>
         </t>
     </template>
