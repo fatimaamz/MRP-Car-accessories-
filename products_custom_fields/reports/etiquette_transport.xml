@@ -2,7 +2,7 @@
 <odoo>
 
 	 <template id="report_saleorder_new_design">
-
+	
         <t t-foreach="docs" t-as="doc">
             <main>
                 <!-- Header Section -->
@@ -132,10 +132,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <t t-foreach="doc.order_line" t-as="line" t-enumerate="index">
+			<t t-set="counter" t-value="0"/>
+                    <t t-foreach="doc.order_line" t-as="line" >
+			     <t t-set="counter" t-value="counter + 1"/>
                         <tr>
                             <td style="border: 1px solid #ddd; padding: 10px;">
-                                <t t-esc="index + 1"/>
+                                <t t-esc="counter"/>
                             </td>
                             <!-- Image Column -->
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
