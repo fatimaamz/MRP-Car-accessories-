@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     "depends": ['base','sale','purchase'],
     "data": ["views/res_partner.xml",
-             #"views/res_partner_inherit.xml",
+             "views/sale_order_new_design.xml",
             ],
     "installable": True,
 }
