@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <odoo>
     <record id="action_report_saleorder_new_template" model="ir.actions.report">
