@@ -141,7 +141,7 @@
                             </td>
                             <!-- Image Column -->
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                <img t-att-src="'/web/image/product.product/%s/image_1920' % (line.product_id.id)"
+                                <img t-att-src="'/web/image/product.product/%s/line.product_id.image_128' % (line.product_id.id)"
                                      style="height: 50px; width: 50px;" alt="Product Image"/>
                             </td>
                             <!-- Description Column -->
