@@ -158,7 +158,7 @@
 	                            </td>
 	                            <!-- Couleur -->
 	                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-	                                <t t-esc="line.product_id.color or 'N/A'"/>
+	                                <t t-esc="line.product_id.color or ' '"/>
 	                            </td>
 	                            <!-- EnStock -->
 	                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
