@@ -160,7 +160,7 @@
                                 <t t-esc="line.product_uom_qty"/>
                             </td>
                         </tr>
-			<tr>
+			<tr style="background-color: #f9fbff;">
 			    <td colspan="5" style="text-align: right; font-weight: bold; padding: 10px; border-top: 2px solid #000;">
 			        Total de la commande :
 			    </td>
