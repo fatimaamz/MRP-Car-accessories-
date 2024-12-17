@@ -71,10 +71,10 @@ class SaleOrder(models.Model):
             ).strftime("%U")  # Calcul du numéro de semaine
             
             delivery_data.append({
-                'N° semaine': week_number,
-                'Tracking number': picking.carrier_tracking_ref or 'N/A',
-                'Must ship by': picking.scheduled_date.strftime("%Y-%m-%d") if picking.scheduled_date else 'N/A',
-                'Ship via': picking.carrier_id.name if picking.carrier_id else 'N/A',
+                'N° semaine': 'S'+ week_number,
+                'Tracking number': picking.numero_suivi or ' ',
+                'Must ship by': picking.scheduled_date.strftime("%Y-%m-%d") if picking.scheduled_date else ' ',
+                'Ship via': picking.carrier_id.name if picking.carrier_id else ' ',
             })
         
         return delivery_data
