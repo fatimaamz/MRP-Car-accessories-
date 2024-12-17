@@ -194,7 +194,7 @@
         </t>
 	 </t>
     </template>
-
+<odoo>
     <!-- Register the report -->
     <record id="action_report_saleorder_new_design" model="ir.actions.report">
         <field name="name">Sales Order (New Design)</field>
@@ -206,4 +206,4 @@
         <field name="binding_model_id" ref="model_sale_order"/>
     </record>
 
-
+</odoo>
