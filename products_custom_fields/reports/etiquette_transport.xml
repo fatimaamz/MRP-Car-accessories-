@@ -140,14 +140,12 @@
                                 <t t-esc="counter"/>
                             </td>
                             <!-- Image Column -->
-                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                <img t-att-src="'/web/image/product.product/%s/line.product_id.image_128' % (line.product_id.id)"
-                                     style="height: 50px; width: 50px;" alt="Product Image"/>
-                            </td>
+                           <td class="text-right"><img t-if="line.image_128" t-att-src="image_data_uri(line.image_128)"  style="width: 200px; height: 200px;" /></td>
+
+			
                             <!-- Description Column -->
                             <td style="border: 1px solid #ddd; padding: 10px;">
-                                <t t-esc="line.name or ''"/><br/>
-                                <t t-esc="'Arrivée : %s' % (line.product_id.product_tmpl_id.default_code or '')"/>
+                                <t t-esc="line.name or ''"/>
                             </td>
                             <!-- Couleur -->
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
@@ -162,9 +160,23 @@
                                 <t t-esc="line.product_uom_qty"/>
                             </td>
                         </tr>
+			<tr>
+			    <td colspan="5" style="text-align: right; font-weight: bold; padding: 10px; border-top: 2px solid #000;">
+			        Total de la commande :
+			    </td>
+			    <td style="text-align: center; font-weight: bold; padding: 10px; border-top: 2px solid #000;">
+			        <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/>
+			    </td>
+			</tr>
                     </t>
                 </tbody>
             </table>
+	<t t-if="doc.note">
+		<div style="margin-top: 20px; padding: 10px; font-size: 14px;">
+		    <strong>Special note :</strong><br/>
+		    <t t-esc="doc.note or ''"/>
+		</div>
+	</t>
 		    
             </main>
         </t>
