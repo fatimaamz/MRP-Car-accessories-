@@ -7,7 +7,7 @@
         <field name="report_name">lux_contacts_custom_fields.report_saleorder_new_design</field>
         <field name="report_file">lux_contacts_custom_fields.report_saleorder_new_design</field>
         <field name="print_report_name">"Sales Order - %s" % (object.name)</field>      
-        <field name="binding_model_id" ref="base.model_sale_order"/>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
     </record>
 
 
