@@ -58,6 +58,25 @@ class SaleOrderLine(models.Model):
 """
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
+
+    def get_delivery_details(self):
+    
+        delivery_data = []
+        
+        # Parcourir tous les livraisons liées à cette commande
+        for picking in self.picking_ids.filtered(lambda p: p.state != 'cancel'):
+            week_number = datetime.strptime(
+                str(picking.scheduled_date), "%Y-%m-%d %H:%M:%S"
+            ).strftime("%U")  # Calcul du numéro de semaine
+            
+            delivery_data.append({
+                'N° semaine': week_number,
+                'Tracking number': picking.carrier_tracking_ref or 'N/A',
+                'Must ship by': picking.scheduled_date.strftime("%Y-%m-%d") if picking.scheduled_date else 'N/A',
+                'Ship via': picking.carrier_id.name if picking.carrier_id else 'N/A',
+            })
+        
+        return delivery_data
     
     representative_id = fields.Many2one(
         'res.users', string="Représentant",
