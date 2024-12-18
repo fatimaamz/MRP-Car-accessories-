@@ -70,7 +70,7 @@
                                     </td>
 
                                     <!-- Center Block: Ship To -->
-                                    <td style="padding: 10px; background-color: #f9fbff; border-radius: 10px; border: 1px solid #ddd; vertical-align: top; width: 40%; font-size: 14px;">
+                                    <td style="padding: 10px; background-color: #e0eaff; border-radius: 10px; border: 1px solid #ddd; vertical-align: top; width: 40%; font-size: 14px;">
                                         <span>
                                             <strong>
                                                 <span t-esc="'Ship to / Expédié à :'"/>
@@ -132,7 +132,7 @@
 
 
                                 <thead>
-                                    <tr style="background-color: #f9fbff;">
+                                    <tr style="background-color: #edeff2;">
                                         <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
                                         <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
                                             Number
@@ -212,7 +212,7 @@
 
 
                             </tbody>
-                            <tr style="background-color: #f9fbff;">
+                           <!-- <tr style="background-color: #edeff2;">
                                 <td colspan="5"
                                     style="text-align: right; font-weight: bold; padding: 10px; border-top: 2px solid #000;">
                                     Total de la commande :
@@ -220,7 +220,16 @@
                                 <td style="text-align: center; font-weight: bold; padding: 10px; border-top: 2px solid #000;">
                                     <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/>
                                 </td>
-                            </tr>
+                            </tr>-->
+                          <tr style="background-color: #edeff2;">
+                              <td colspan="5"
+                                  style="text-align: right; font-weight: bold; padding: 10px; border: none;">
+                                  Total de la commande :
+                              </td>
+                              <td style="text-align: center; font-weight: bold; padding: 10px; border: none;">
+                                  <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/>
+                              </td>
+                          </tr>
                         </table>
                         <t t-if="doc.note">
                             <div style="margin-top: 20px; padding: 10px; font-size: 14px;">
