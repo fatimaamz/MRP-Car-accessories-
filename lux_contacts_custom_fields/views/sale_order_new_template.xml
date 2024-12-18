@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <odoo>
-    <data>
+  
         <record id="action_report_saleorder_new_template" model="ir.actions.report">
             <field name="name">Sales Order</field>
             <field name="model">sale.order</field>
@@ -232,8 +232,8 @@
 
                     </main>
                 </t>
-            </div>
+            
         </template>
-    </data>
+    
 
 </odoo>
