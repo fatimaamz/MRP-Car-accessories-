@@ -21,7 +21,7 @@
                 <t t-foreach="docs" t-as="doc">
                     <main>
                         <!-- Header Section -->
-                      <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0;border: none;">
+                      <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; ">
                         <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;cellspacing=0; cellpadding=0">
                             <tr style="border: none;">
                                 <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: none;">
