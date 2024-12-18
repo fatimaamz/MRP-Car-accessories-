@@ -22,18 +22,18 @@
                 <t t-foreach="docs" t-as="doc">
                     <main>
                         <!-- Header Section -->
-                      <div  class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center;border: 1px solid white;">
+                      <div  class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                         <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
-                            <tr style="border: none;">
-                                <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: none;">
+                            <tr style="border: 1px solid white;">
+                                <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                     <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
                                          style="height: 60px;" alt="Company Logo"/>
                                     <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
                                         Sales Order
                                     </h2>
                                 </td>
-                                <td style="text-align: right; vertical-align: middle; border: none;">
-                                    <div style="text-align: justify; width: 100%; border: none;">
+                                <td style="text-align: right; vertical-align: middle; border: 1px solid white;">
+                                    <div style="text-align: justify; width: 100%; border: 1px solid white;">
                                         <strong style="font-size: 16px;">
                                             <t t-esc="user.company_id.name"/>
                                         </strong>
