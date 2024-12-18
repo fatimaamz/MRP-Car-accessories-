@@ -19,10 +19,10 @@
              <t t-call="web.basic_layout">
              
                 <t t-foreach="docs" t-as="doc">
-                    <main>
+                    <!--<main>-->
                         <!-- Header Section -->
                         <div class="header"
-                             style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border: none !important;">
+                             style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border: none;">
                             <table style="width: 100%; border: none; padding: 10px 0;">
                                 <tr>
                                     <td style="text-align: left; vertical-align: middle; padding-right: 20px;">
@@ -231,7 +231,7 @@
                             </div>
                         </t>
 
-                    </main>
+                   <!-- </main>-->
                 </t>
             </t>
         </template>
