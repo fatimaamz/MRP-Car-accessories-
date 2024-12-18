@@ -21,34 +21,32 @@
                 <t t-foreach="docs" t-as="doc">
                     <!--<main>-->
                         <!-- Header Section -->
-                        <div class="header"
-                             style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border: none;">
-                            <table style="width: 100%; border: none; padding: 10px 0;">
-                                <tr>
-                                    <td style="text-align: left; vertical-align: middle; padding-right: 20px;">
-                                        <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                             style="height: 60px;" alt="Company Logo"/>
-                                        <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
-                                            Sales Order
-                                        </h2>
-                                    </td>
-                                    <td style="text-align: right; vertical-align: middle;">
-                                        <div style="text-align: justify; width: 100%;">
-                                            <strong style="font-size: 16px;">
-                                                <t t-esc="user.company_id.name"/>
-                                            </strong>
-                                            <br/>
-                                            <span style="font-size: 14px;">
-                                                <t t-esc="user.company_id.email or ''"/>
-                                                /
-                                                <t t-esc="user.company_id.phone or ''"/>
-                                            </span>
-                                            <br/>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                      <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
+                        <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
+                            <tr style="border: none;">
+                                <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: none;">
+                                    <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
+                                         style="height: 60px;" alt="Company Logo"/>
+                                    <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
+                                        Sales Order
+                                    </h2>
+                                </td>
+                                <td style="text-align: right; vertical-align: middle; border: none;">
+                                    <div style="text-align: justify; width: 100%; border: none;">
+                                        <strong style="font-size: 16px;">
+                                            <t t-esc="user.company_id.name"/>
+                                        </strong>
+                                        <br/>
+                                        <span style="font-size: 14px;">
+                                            <t t-esc="user.company_id.email or ''"/>
+                                            /
+                                            <t t-esc="user.company_id.phone or ''"/>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
 
                         <div style="margin-top: 30px;">
                             <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
