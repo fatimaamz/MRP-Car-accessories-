@@ -1,7 +1,23 @@
 
 from odoo import api, fields, models
 
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
 
+    insert_color = fields.Char(string="Insert Color", compute="_compute_insert_color", store=True)
+
+    @api.depends('name')
+    def _compute_insert_color(self):
+        """
+        Extract the "Insert Color" value from the description.
+        """
+        pattern = r"Insert Color:\s*(.+)\s*\((\w+)\)"
+        for line in self:
+            match = re.search(pattern, line.name or '')
+            if match:
+                line.insert_color = f"{match.group(1).strip()} ({match.group(2).strip()})"
+            else:
+                line.insert_color = False
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
