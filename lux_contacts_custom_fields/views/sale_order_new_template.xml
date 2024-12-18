@@ -53,7 +53,7 @@
                             <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
                                 <tr>
                                     <!-- Left Block: Customer Information -->
-                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px; border: none !important;">
+                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;  border: 1px solid white;">
                                         <strong style="font-size: 16px;">
                                             <t t-esc="doc.partner_id.name"/>
                                         </strong>
@@ -70,7 +70,7 @@
                                     </td>
 
                                     <!-- Center Block: Ship To -->
-                                    <td style="padding: 10px; background-color: #e0eaff; border-radius: 10px; border: 1px solid #ddd; vertical-align: top; width: 40%; font-size: 14px;">
+                                    <td style="padding: 10px; background-color: #e0eaff;  border: 1px solid #ddd; vertical-align: top; width: 40%; font-size: 14px;">
                                         <span>
                                             <strong>
                                                 <span t-esc="'Ship to / Expédié à :'"/>
@@ -102,7 +102,7 @@
                                     </td>
 
                                     <!-- Right Block: Order Details -->
-                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px; border: none !important;">
+                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;   border: 1px solid white;">
                                         <strong style="font-size: 16px;">Order Details:</strong>
                                         <br/>
                                         <br/>
@@ -221,7 +221,7 @@
                                     <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/>
                                 </td>
                             </tr>-->
-                          <tr style="background-color: #edeff2; border: none !important;">
+                          <tr style="background-color: #edeff2; border: 1px solid white;">
                               <td colspan="5"
                                   style="text-align: right; font-weight: bold; padding: 10px; border: none !important;">
                                   Total de la commande :
