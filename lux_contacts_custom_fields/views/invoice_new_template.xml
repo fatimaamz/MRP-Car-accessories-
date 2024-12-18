@@ -6,7 +6,7 @@
         <field name="name">Facture/Invoice</field>
         <field name="model">account.move</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">lux_contacts_custom_fields.report_invocie_new_template</field>
+        <field name="report_name">lux_contacts_custom_fields.report_invoice_new_template</field>
         <field name="report_file">lux_contacts_custom_fields.report_invoice_new_template</field>
         <field name="print_report_name">"Facture- %s" % (object.name)</field>
         <field name="binding_model_id" ref="account.model_account_move"/>
