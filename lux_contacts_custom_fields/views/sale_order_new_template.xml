@@ -16,7 +16,7 @@
         <template id="report_saleorder_new_template">
 
 
-             <t t-call="web.basic_layout">
+             <t t-call="web.minimal_layout">
              
                 <t t-foreach="docs" t-as="doc">
                     <!--<main>-->
