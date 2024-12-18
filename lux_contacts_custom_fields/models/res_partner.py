@@ -1,6 +1,31 @@
 
 from odoo import api, fields, models
 import re
+
+class AccountMove(models.Model):
+    _inherit = "account.move"
+
+    sale_order_partner_info = fields.Text(
+        string="Sale Order Partner Info",
+        compute="_compute_sale_order_partner_info",
+        store=True
+    )
+
+    @api.depends("invoice_origin")
+    def _compute_sale_order_partner_info(self):
+        for record in self:
+            partner_info = ""
+            if record.invoice_origin:
+                # Search for the related sale order using invoice_origin
+                sale_order = self.env["sale.order"].search([("name", "=", record.invoice_origin)], limit=1)
+                if sale_order and sale_order.partner_id:
+                    partner = sale_order.partner_id
+                    # Format the partner address information
+                    address = f"{partner.name or ''}\n"
+                    address += f"{partner.street or ''}, {partner.city or ''}\n"
+                    address += f"{partner.zip or ''}, {partner.country_id.name or ''}"
+                    partner_info = address
+            record.sale_order_partner_info = partner_info
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
