@@ -136,7 +136,7 @@
                                         <br/>
                                         <br/>
                                         PO Client:
-                                        <t t-esc="doc.partner_shipping_id.po or ''"/>
+                                        <t t-esc="doc.partner_id.po or ''"/>
                                         <br/>
                                         <br/>
                                         <t t-if="doc.invoice_ids">
