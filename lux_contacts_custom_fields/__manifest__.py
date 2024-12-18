@@ -11,6 +11,7 @@
     "depends": ['base','sale','purchase'],
     "data": ["views/res_partner.xml",
              "views/sale_order_new_template.xml",
+             "views/invoice_new_template.xml",
             ],
     "installable": True,
 }
