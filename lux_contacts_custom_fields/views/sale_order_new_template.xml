@@ -209,10 +209,14 @@
                                             <img t-if="line.image_128" t-att-src="image_data_uri(line.image_128)"
                                                  style="width: 200px; height: 200px;"/>
                                         </td>-->
-                                      <td class="text-right" style="background-color: #d3d3d3; text-align: center; padding: 10px;">
-                                            <img t-if="line.image_128" t-att-src="image_data_uri(line.image_128)"
-                                                 style="width: 100px; height: 100px; object-fit: contain;"/>
-                                        </td>
+                                     <td class="text-right">
+                                          <t t-if="line.image_128">
+                                              <div style="background-color: #d3d3d3; text-align: center; padding: 10px;">
+                                                  <img t-att-src="image_data_uri(line.image_128)"
+                                                       style="width: 100px; height: 100px; object-fit: contain; display: block; border: none;"/>
+                                              </div>
+                                          </t>
+                                      </td>
 
 
                                         <!-- Description Column -->
