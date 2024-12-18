@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <odoo>
+    <data>
     <record id="action_report_saleorder_new_template" model="ir.actions.report">
         <field name="name">Sales Order</field>
         <field name="model">sale.order</field>
@@ -13,8 +14,9 @@
 
 
     <template id="report_saleorder_new_template">
-       <t t-call="web.basic_layout">
-          <!--   <t t-call="web.external_layout">-->
+       
+
+       
             <t t-foreach="docs" t-as="doc">
                 <main>
                     <!-- Header Section -->
@@ -189,7 +191,7 @@
                                     </td>
                                     <!-- Couleur -->
                                     <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                        <t t-esc="line.product_id.color or ' '"/>
+                                        <t t-esc="line.insert_color  or ' '"/>
                                     </td>
                                     <!-- EnStock -->
                                     <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
@@ -227,6 +229,6 @@
             </t>
         </t>
     </template>
-
+    </data>
 
 </odoo>
