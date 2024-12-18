@@ -17,6 +17,26 @@
 
 
              <t t-call="web.basic_layout">
+                <t t-set="styles">
+        <style>
+            /* Remove borders from header and details */
+            .o_main_content, .header, table {
+                border: none !important;
+            }
+
+            .header td, .header th {
+                border: none !important;
+            }
+
+            .header {
+                border-bottom: none !important;
+            }
+
+            table th, table td {
+                border: none !important;
+            }
+        </style>
+    </t>
                 <t t-foreach="docs" t-as="doc">
                     <main>
                         <!-- Header Section -->
