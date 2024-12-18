@@ -16,7 +16,7 @@
         <template id="report_saleorder_new_template">
 
 
-            <div class="">
+             <t t-call="web.internal_layout">
                 <t t-foreach="docs" t-as="doc">
                     <main>
                         <!-- Header Section -->
