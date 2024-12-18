@@ -34,7 +34,9 @@ class AccountMove(models.Model):
     transport = fields.Char(string='Transport')
     freight_cost = fields.Float(string="Freight Cost")
     carrier_id = fields.Many2one('delivery.carrier', string="Carrier")
-
+    numero_serie = fields.Char(string='Numéro Série')
+    tvp = fields.Char(string='TVP/P.S.T')
+    tps = fields.Char(string='TPS/Q.S.T ')
 
      
 
