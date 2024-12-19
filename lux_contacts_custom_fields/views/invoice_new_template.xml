@@ -129,7 +129,7 @@
                                         <br/>
                                         <br/>
                                         <span>Ship Date :
-                                            <t t-esc="doc.invoice_date.strftime('%B %d, %Y')"/>
+                                            <t t-esc="doc.invoice_date"/>
                                         </span>
                                     </td>
 
