@@ -286,7 +286,7 @@
                             <div style="margin-top: 20px; padding: 10px; font-size: 14px;">
                                 <strong>Special note :</strong>
                                 <br/>
-                                <t t-esc="doc.note or ''"/>
+                                <t t-esc="doc.narration or ''"/>
                             </div>
                         </t>
 
