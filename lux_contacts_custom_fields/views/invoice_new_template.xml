@@ -28,7 +28,7 @@
                                 <tr style="border: 1px solid white;">
                                     <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                         <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                             style="height: 60px;" alt="Company Logo"/>
+                                             style="height: 60px;" alt="Company Logo"/><<br/>
                                         <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
                                             Invoice
                                         </h2>
@@ -201,6 +201,10 @@
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="line.quantity - (line.product_id.qty_available or 0)"/>
                                         </td>
+                                         <!-- Unit cost -->
+                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                            <t t-esc="line.price_unit"/>
+                                        </td>
                                         <!-- Disc -->
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="line.discount"/>
@@ -217,7 +221,7 @@
 
                             </tbody>
                         </table>
-                        <table style="width: 100%; margin-top: 20px; border-spacing: 5;">
+                        <table style="width: 100%; margin-top: 20px; border-spacing: 5;background-color: #edeff2; ">
                             <tr>
                                 <td style="text-align: left; font-size: 14px; padding: 5px;">
                                     <strong>PCS :</strong>
@@ -264,15 +268,14 @@
                                     <strong>Serial Number :</strong>
                                     <t t-esc="doc.numero_serie"/>
                                 </td>
-                                <td style="text-align: right; font-size: 16px; font-weight: bold; padding: 5px;">
+                                <td style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
                                     GRAND TOTAL :
-                                    <t t-esc="'$ {:.2f} CAN'.format(doc.amount_total)"/>
+                                    <t t-esc="'$ {:.2f}'.format(doc.amount_total)"/>
                                 </td>
                             </tr>
 
-                            <tr style="background-color: #edeff2; border: 1px solid white;">
-                                <td colspan="5"
-                                    style="text-align: right; font-weight: bold; padding: 10px; border: none !important;">
+                            <tr style="border: 1px solid white;">
+                                <td style="text-align: right; font-weight: bold; padding: 10px; border: none !important;">
                                     <strong>Stock :</strong>
                                     <t t-esc="sum(line.quantity for line in doc.invoice_line_ids)"/>
 
