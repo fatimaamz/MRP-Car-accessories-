@@ -275,8 +275,8 @@
                                 </td>
                             </tr>
 
-                            <tr style="border: 1px solid white;">
-                                <td style="text-align: right; font-weight: bold; padding: 10px; border: none !important;">
+                            <tr >
+                                <td style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
                                     <strong>Stock :</strong>
                                     <t t-esc="sum(line.quantity for line in doc.invoice_line_ids)"/>
 
