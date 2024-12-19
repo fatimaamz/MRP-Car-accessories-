@@ -186,34 +186,35 @@
 
 
                                         <!-- Description Column -->
-                                        <td style="border: 1px solid #ddd; padding: 10px;">
-                                            <t t-esc="line.name or ''"/>
-                                        </td>
-                                        <!-- Qty -->
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                            <t t-esc="line.quantity"/>
-                                        </td>
-                                        <!-- EnStock -->
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                            <t t-esc="line.product_id.qty_available or 0"/>
-                                        </td>
-                                        <!-- To prod -->
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                            <t t-esc="line.quantity - (line.product_id.qty_available or 0)"/>
-                                        </td>
-                                         <!-- Unit cost -->
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                            <t t-esc="line.price_unit"/>
-                                        </td>
-                                        <!-- Disc -->
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                            <t t-esc="line.discount"/>
-                                        </td>
-                                        <!-- Subtotal -->
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                            <t t-esc="line.price_subtotal"/>
-                                        </td>
-
+                                        <t t-if="line.name">
+                                            <td style="border: 1px solid #ddd; padding: 10px;">
+                                                <t t-esc="line.name or ''"/>
+                                            </td>
+                                            <!-- Qty -->
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="line.quantity"/>
+                                            </td>
+                                            <!-- EnStock -->
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="line.product_id.qty_available or 0"/>
+                                            </td>
+                                            <!-- To prod -->
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="line.quantity - (line.product_id.qty_available or 0)"/>
+                                            </td>
+                                             <!-- Unit cost -->
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="line.price_unit"/>
+                                            </td>
+                                            <!-- Disc -->
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="line.discount"/>
+                                            </td>
+                                            <!-- Subtotal -->
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="line.price_subtotal"/>
+                                            </td>
+                                        </t>
                                     </tr>
 
                                 </t>
@@ -236,7 +237,7 @@
                                 <td style="text-align: left; font-size: 14px; padding: 5px;">
                                     <strong>Carrier :</strong>
 
-                                    <t t-esc="doc.carrier_id"/>
+                                    <t t-esc="doc.carrier_id.name"/>
                                 </td>
                                 <td style="text-align: right; font-size: 14px; padding: 5px;">
                                     <strong>Transport :</strong>
@@ -261,7 +262,7 @@
                                 <td style="text-align: right; font-size: 14px; padding: 5px;">
                                     <strong>TPS/G.S.T :</strong>
                                     <t t-esc="doc.tps"/><br/>
-                                    (HTS) si applicable 
+                                   <span style=" font-size: 9px; padding: 5px;"> (HTS) si applicable </span>
                                 </td>
                             </tr>
                             <tr>
@@ -276,7 +277,7 @@
                             </tr>
 
                             <tr >
-                                <td style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
+                                <td colspan="2" style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
                                     <strong>Stock :</strong>
                                     <t t-esc="sum(line.quantity for line in doc.invoice_line_ids)"/>
 
