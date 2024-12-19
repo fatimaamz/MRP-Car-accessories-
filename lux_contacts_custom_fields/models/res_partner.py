@@ -1,7 +1,25 @@
 
 from odoo import api, fields, models
 import re
-
+class MrpProduction(models.Model):
+    _inherit = "mrp.production"
+    
+    sale_order_partner_id = fields.Many2one(
+        'res.partner',
+        string='Partner from Sale Order',
+        compute='_compute_sale_order_partner_id',
+        store=True,
+        readonly=True
+    )
+    
+    @api.depends('origin')
+    def _compute_sale_order_partner_id(self):
+        for record in self:
+            if record.invoice_origin:
+                # Search for the related sale order using invoice_origin
+                sale_order = self.env['sale.order'].search([('name', '=', record.origin)], limit=1)
+                record.sale_order_partner_id = sale_order.partner_id if sale_order else False
+    
 class AccountMove(models.Model):
     _inherit = "account.move"
 
