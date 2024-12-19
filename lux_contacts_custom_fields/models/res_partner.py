@@ -3,27 +3,24 @@ from odoo import api, fields, models
 import re
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
-    """
+    
     def _get_report_values(self, docids, data=None):
         work_orders = self.browse(self.env.context.get('active_ids', []))
         filtered_lines = []
         for work_order in work_orders:
-            # Fetch only the selected work orders (if you have a selection criteria)
             for line in work_order.workorder_ids: 
                 filtered_lines.append({
-                    'name': line.name,
-                    'quantity': line.qty_produced,
-                    'qty_available': line.product_id.qty_available,
-                    'to_produce': line.qty_production - (line.product_id.qty_available or 0),
-                    'price_unit': line.product_id.standard_price,  # Assuming unit cost is here
-                    'discount': 0.0,  # Placeholder if discounts apply
-                    'price_subtotal': line.qty_production * line.product_id.standard_price,
+                    'product': line.product_id.name,
+                    'quantity': line.product_qty,
+                    'date':line.picking_scheduled_date,
+                    'couper': "Oui" if line.is_coped else "Non",
+                    
                 })
         return {
             'docs': work_orders,
             'lines': filtered_lines,
         }
-        """
+        
     
     sale_order_partner_id = fields.Many2one(
         'res.partner',
