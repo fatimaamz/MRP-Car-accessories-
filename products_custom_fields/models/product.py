@@ -40,6 +40,13 @@ class ProductMarque(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
+   
+    reflecteur_type = fields.Selection(
+        [('oui', 'Oui'), ('non', 'Non')],
+        string="Réflecteur Type",
+        default='non',  
+        help="Indicate whether the product has a Réflecteur Type."
+    )
     price_line_ids = fields.One2many('product.price.line', 'product_id', string='Liste des prix')
     year_ids = fields.Many2many('year.model', string='Année')
     product_type = fields.Selection([
