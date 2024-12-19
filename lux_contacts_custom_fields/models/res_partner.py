@@ -36,8 +36,7 @@ class MrpProduction(models.Model):
     @api.depends('origin')
     def _compute_sale_order_partner_id(self):
         for record in self:
-            if record.invoice_origin:
-                # Search for the related sale order using invoice_origin
+            if record.origin:
                 sale_order = self.env['sale.order'].search([('name', '=', record.origin)], limit=1)
                 record.sale_order_partner_id = sale_order.partner_id if sale_order else False
     
