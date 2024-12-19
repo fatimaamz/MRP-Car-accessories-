@@ -282,7 +282,7 @@
                         </table>
 
 
-                        <t t-if="doc.note">
+                        <t t-if="doc.narration">
                             <div style="margin-top: 20px; padding: 10px; font-size: 14px;">
                                 <strong>Special note :</strong>
                                 <br/>
