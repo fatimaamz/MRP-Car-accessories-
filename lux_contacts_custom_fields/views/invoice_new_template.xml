@@ -222,7 +222,7 @@
 
                             </tbody>
                         </table>
-                        <table style="width: 100%; margin-top: 20px;background-color: #edeff2; ">
+                        <table style="width: 100%; margin-top: 20px;border-spacing: 5; border: 1px solid #edeff2;background-color: #edeff2; ">
                             <tr>
                                 <td style="text-align: left; font-size: 14px; padding: 5px;">
                                     <strong>PCS :</strong>
