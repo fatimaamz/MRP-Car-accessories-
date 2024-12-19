@@ -139,7 +139,7 @@
                                         <br/>
                                         <br/>
                                         Date:
-                                        <t t-esc="doc.date_order and doc.date_order.strftime('%B %d, %Y') or ''"/>
+                                        <t t-esc="doc.invoice_date  or ''"/>
                                         <br/>
                                         <br/>
                                         Order N°:
