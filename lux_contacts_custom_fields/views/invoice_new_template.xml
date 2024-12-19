@@ -259,8 +259,9 @@
                                     <t t-esc="doc.weight"/>
                                 </td>
                                 <td style="text-align: right; font-size: 14px; padding: 5px;">
-                                    <strong>TPS/Q.S.T :</strong>
-                                    <t t-esc="doc.tps"/>
+                                    <strong>TPS/G.S.T :</strong>
+                                    <t t-esc="doc.tps"/><br/>
+                                    (HTS) si applicable 
                                 </td>
                             </tr>
                             <tr>
