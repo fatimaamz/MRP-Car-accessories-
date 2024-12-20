@@ -135,7 +135,7 @@
                                     Reflector type: <t t-esc="wo['reflector_type'] or ''"/>
                                 </td>
                             </tr>
-                        </t>
+                     
                     </tbody>
                         </t>
                 </t>
