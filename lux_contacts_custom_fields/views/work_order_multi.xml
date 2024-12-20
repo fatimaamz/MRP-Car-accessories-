@@ -62,7 +62,7 @@
                                 </t>
                                 <t t-if="docs[0].sale_order_partner_id.country_id">
                                     <t t-esc="docs[0].sale_order_partner_id.country_id.name"/>
-                                </t>
+                                </t><br/>
                                 <t t-if="docs[0].note_interne">
                                     <strong>Note Interne:</strong>
                                     <br/>
