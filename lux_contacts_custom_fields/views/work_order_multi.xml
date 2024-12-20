@@ -112,7 +112,7 @@
 
                 <!-- Product Details Table (Table 2) -->
                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                    <t t-set="work_orders" t-value="doc.get_report_values()"/>
+                    <t t-set="work_orders" t-value="docs.get_report_values()"/>
                         <t t-if="work_orders">
                               <t t-foreach="work_orders" t-as="wo">
                     <tbody>
