@@ -4,35 +4,7 @@ import re
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-    #new_design = fields.Text(string="Nouveau Design ")
-    #interior_color = fields.Char(string="Interior Color", compute="_compute_interior_color", store=True)
-    #insert_color = fields.Char(string="Insert Color", compute="_compute_insert_color", store=True)
-    
-    """
-    @api.depends('selected_characteristic')
-    def _compute_interior_color(self):
-       
-        pattern = r"Interior Color:\s*(.+?)\s*\((\w+)\)"
-        for record in self:
-            match = re.search(pattern, record.selected_characteristic or '')
-            if match:
-                # Format: Color Name (Code)
-                record.interior_color = f"{match.group(1).strip()} ({match.group(2).strip()})"
-            else:
-                record.interior_color = ""
-
-    @api.depends('selected_characteristic')
-    def _compute_insert_color(self):
-        
-        pattern = r"Insert Color:\s*(.+?)\s*\((\w+)\)"
-        for record in self:
-            match = re.search(pattern, record.selected_characteristic or '')
-            if match:
-                # Format: Color Name (Code)
-                record.insert_color = f"{match.group(1).strip()} ({match.group(2).strip()})"
-            else:
-                record.insert_color = ""
-                
+ 
     
     def _get_report_values(self, docids, data=None):
         work_orders = self.browse(self.env.context.get('active_ids', []))
@@ -55,7 +27,7 @@ class MrpProduction(models.Model):
             'docs': work_orders,
             'lines': filtered_lines,
         }
-        """
+       
         
     
     sale_order_partner_id = fields.Many2one(
