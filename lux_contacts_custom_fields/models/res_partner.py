@@ -6,8 +6,12 @@ import re
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
+
     def get_report_values(self, docids, data=None):
-        work_orders = self.browse(self.env.context.get('active_ids', []))
+        # Get the selected work orders
+        work_orders = self.browse(docids)
+        
+        # Prepare lines for the report
         filtered_lines = []
         for line in work_orders:
             filtered_lines.append({
@@ -21,13 +25,16 @@ class MrpProduction(models.Model):
                 'insert': line.insert_color,
                 'interior': line.interior_color,
             })
+        
+        # Calculate the total quantity
         total_quantity = sum(line['quantity'] for line in filtered_lines)
+        
+        # Return the values to be used in the template
         return {
-            'docs': work_orders,
-            'lines': filtered_lines,
-            'total_quantity': total_quantity,
+            'docs': work_orders,  # This will be passed to the template
+            'lines': filtered_lines,  # This is the detailed lines data
+            'total_quantity': total_quantity,  # The total quantity to display
         }
-
 
  
         
