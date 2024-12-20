@@ -118,7 +118,7 @@
                     <tbody>
                          
                             <tr>
-                                <td>
+                                <td style="border: 1px solid #ddd; padding: 10px; text-align: left;">
                                     <div style="background-color: #d3d3d3; text-align: center; padding: 10px;">
                                                   <img t-att-src="image_data_uri(wo['image'])"
                                                        style="width: 100px; height: 100px; object-fit: contain; display: block; border: none;"/>
@@ -133,7 +133,7 @@
                                     Coupé: <t t-esc="wo['couper']"/><br/>
                                     Quantité: <t t-esc="wo['quantity']"/>
                                 </td>
-                                <td>
+                                <td style="border: 1px solid #ddd; padding: 10px; text-align: left;">
                                     Interior Color: <t t-esc="wo['interior'] or ''"/><br/>
                                     Insert: <t t-esc="wo['insert'] or ''"/><br/>
                                     Logo: <t t-esc="wo['logo'] or ''"/><br/>
@@ -143,8 +143,18 @@
                             </tr>
                      
                     </tbody>
+                        <tr style="background-color: #edeff2; border: 1px solid white;">
+                              <td colspan="5"
+                                  style="text-align: right; font-weight: bold; padding: 10px; border: none !important;">
+                                  Total de la commande :
+                              </td>
+                              <td style="text-align: center; font-weight: bold; padding: 10px; border: none !important;">
+                                  <t t-esc="sum(wo['quantity'])"/>
+                              </td>
+                          </tr>
                         </t>
                 </t>
+                    
                 </table>
 
                 <!-- Total Quantity -->
