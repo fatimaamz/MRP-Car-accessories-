@@ -125,9 +125,9 @@
                                               </div>
                                 </td>
                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: left;vertical-align: top;">
-                                    <strong >
+                                    <strong>
                                      N°: <t t-esc="wo['name']"/>
-                                    </stong>
+                                    </strong>
                                     <br/>
                                     Date: <t t-esc="wo['date'] or ''"/><br/>
                                     Coupé: <t t-esc="wo['couper']"/><br/>
