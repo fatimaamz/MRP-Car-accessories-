@@ -14,6 +14,7 @@ class MrpProduction(models.Model):
         for line in work_orders:
             filtered_lines.append({
                 'image':line.selected_image,
+                'name':line.name,
                 'product': line.product_id.name,
                 'quantity': line.product_qty,
                 'date': line.picking_scheduled_date,
