@@ -6,7 +6,7 @@ class MrpProduction(models.Model):
 
  
     
-    def get_report_values():
+    def get_report_values(self):
         work_orders = self.browse(self.env.context.get('active_ids', []))
         filtered_lines = []
         for work_order in work_orders:
