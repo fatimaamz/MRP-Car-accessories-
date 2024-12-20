@@ -159,7 +159,7 @@
                                   <t t-esc="sum(wo['quantity'] for wo in work_orders)"/>
                               </td>
                           </tr>
-                        </t>
+                        
                 </table>
 
             </div>
