@@ -112,8 +112,11 @@
 
                 <!-- Product Details Table (Table 2) -->
                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <t t-set="work_orders" t-value="doc.get_report_values()"/>
+                        <t t-if="work_orders">
+                              <t t-foreach="work_orders" t-as="wo">
                     <tbody>
-                        <t t-foreach="lines" t-as="wo">
+                         
                             <tr>
                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: left;">
                                     <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
@@ -134,16 +137,18 @@
                             </tr>
                         </t>
                     </tbody>
+                        </t>
+                </t>
                 </table>
 
                 <!-- Total Quantity -->
-                <table style="width: 100%; margin-top: 20px; border-spacing: 5; border: 1px solid #edeff2; background-color: #edeff2;">
+                <!--<table style="width: 100%; margin-top: 20px; border-spacing: 5; border: 1px solid #edeff2; background-color: #edeff2;">
                     <tr>
                         <td style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
                             <strong>Total Quantity:</strong> <t t-esc="total_quantity"/>
                         </td>
                     </tr>
-                </table>
+                </table>-->
 
             </div>
         </t>
