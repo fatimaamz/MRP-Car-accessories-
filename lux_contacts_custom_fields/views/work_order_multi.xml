@@ -118,10 +118,16 @@
                     <tbody>
                          
                             <tr>
+                                <td>
+                                    <div style="background-color: #d3d3d3; text-align: center; padding: 10px;">
+                                                  <img t-att-src="image_data_uri(wo['image'])"
+                                                       style="width: 100px; height: 100px; object-fit: contain; display: block; border: none;"/>
+                                              </div>
+                                </td>
                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: left;">
-                                    <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
-                                        N°: <t t-esc="wo['product']"/>
-                                    </h2>
+                                    <strong style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
+                                        N°: <t t-esc="wo['name']"/>
+                                    </strong>
                                     <br/>
                                     Date: <t t-esc="wo['date'] or ''"/><br/>
                                     Coupé: <t t-esc="wo['couper']"/><br/>
