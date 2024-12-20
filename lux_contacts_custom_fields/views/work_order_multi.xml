@@ -126,7 +126,7 @@
                                 </td>
                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: left;">
                                     <strong style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
-                                        N°: <t t-esc="wo['name']"/>
+                                     N°: <t t-esc="wo['name']"/>
                                     </strong>
                                     <br/>
                                     Date: <t t-esc="wo['date'] or ''"/><br/>
