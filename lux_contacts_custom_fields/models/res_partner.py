@@ -47,12 +47,18 @@ class MrpProduction(models.Model):
                     'quantity': line.product_qty,
                     'date':line.picking_scheduled_date,
                     'couper': "Oui" if line.is_coped else "Non",
+                    'reflector_type': line.product_id.reflecteur_type,
+                    'new_design':line.new_design,
+                    'logo':line.logo_inscription,
+                    'insert':line.insert_color,
+                    'interior':line.interior_color,
                     
                 })
         return {
             'docs': work_orders,
             'lines': filtered_lines,
         }
+        
         
     
     sale_order_partner_id = fields.Many2one(
