@@ -1,33 +1,35 @@
 
 from odoo import api, fields, models
 import re
+
+
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
- 
-    
     def get_report_values(self, docids, data=None):
         work_orders = self.browse(self.env.context.get('active_ids', []))
         filtered_lines = []
         for line in work_orders:
-            #for line in work_order.workorder_ids: 
-                filtered_lines.append({
-                    'product': line.product_id.name,
-                    'quantity': line.product_qty,
-                    'date':line.picking_scheduled_date,
-                    'couper': "Oui" if line.is_coped else "Non",
-                    'reflector_type': line.product_id.reflecteur_type,
-                    'new_design':line.new_design,
-                    'logo':line.logo_inscription,
-                    'insert':line.insert_color,
-                    'interior':line.interior_color,
-                    
-                })
+            filtered_lines.append({
+                'product': line.product_id.name,
+                'quantity': line.product_qty,
+                'date': line.picking_scheduled_date,
+                'couper': "Oui" if line.is_coped else "Non",
+                'reflector_type': line.product_id.reflecteur_type,
+                'new_design': line.new_design,
+                'logo': line.logo_inscription,
+                'insert': line.insert_color,
+                'interior': line.interior_color,
+            })
+        total_quantity = sum(line['quantity'] for line in filtered_lines)
         return {
             'docs': work_orders,
             'lines': filtered_lines,
+            'total_quantity': total_quantity,
         }
-       
+
+
+ 
         
     
     sale_order_partner_id = fields.Many2one(
