@@ -158,6 +158,7 @@
                         <!--field name="design_ids"/>-->
                         <field name="note_interne" />
                         <field name="logo_inscription" />
+                        <field name="new_design"/>
                 <field name="is_conforme" class="o_inline"/>
                 <button name="action_view_delivery_order" 
                                         type="object" 
