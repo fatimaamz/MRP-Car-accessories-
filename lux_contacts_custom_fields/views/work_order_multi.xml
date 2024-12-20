@@ -174,17 +174,17 @@
                                             <!-- Product -->
                                             <td style="border: 1px solid #ddd; padding: 10px;text-align: left;">
                                                 <strong>
-                                                    <t t-esc="line['product']"/>
+                                                    <t t-esc="wo['product']"/>
                                                 </strong>
                                                 <br/>
                                                 Date :
-                                                <t t-esc="line['date'] or ''"/>
+                                                <t t-esc="wo['date'] or ''"/>
                                                 <br/>
                                                 Coupé :
-                                                <t t-esc="line['couper']"/>
+                                                <t t-esc="wo['couper']"/>
                                                 <br/>
                                                 Quantité :
-                                                <t t-esc="line['quantity']"/>
+                                                <t t-esc="wo['quantity']"/>
                                                 <br/>
 
 
@@ -192,19 +192,19 @@
 
                                             <td>
                                                 Interior Color :
-                                                <t t-esc="line['interior'] or ''"/>
+                                                <t t-esc="wo['interior'] or ''"/>
                                                 <br/>
                                                 Insert :
-                                                <t t-esc="line['insert'] or ''"/>
+                                                <t t-esc="wo['insert'] or ''"/>
                                                 <br/>
                                                 Logo :
-                                                <t t-esc="line['logo'] or ''"/>
+                                                <t t-esc="wo['logo'] or ''"/>
                                                 <br/>
                                                 New design
-                                                <t t-esc="line['new_design'] or ''"/>
+                                                <t t-esc="wo['new_design'] or ''"/>
                                                 <br/>
                                                 Reflector type :
-                                                <t t-esc="line['reflector_type'] or ''"/>
+                                                <t t-esc="wo['reflector_type'] or ''"/>
                                                 <br/>
 
 
