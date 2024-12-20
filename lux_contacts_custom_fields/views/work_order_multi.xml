@@ -149,7 +149,7 @@
                                   Total de la commande :
                               </td>
                               <td style="text-align: center; font-weight: bold; padding: 10px; border: none !important;">
-                                  <t t-esc="sum(wo['quantity'])"/>
+                                  <t t-esc="sum(line.quantity for line in work_orders)"/>
                               </td>
                           </tr>
                         </t>
