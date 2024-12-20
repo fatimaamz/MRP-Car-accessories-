@@ -4,15 +4,14 @@ import re
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-    new_design = fields.Text(string="Nouveau Design ")
-    interior_color = fields.Char(string="Interior Color", compute="_compute_interior_color", store=True)
-    insert_color = fields.Char(string="Insert Color", compute="_compute_insert_color", store=True)
-
+    #new_design = fields.Text(string="Nouveau Design ")
+    #interior_color = fields.Char(string="Interior Color", compute="_compute_interior_color", store=True)
+    #insert_color = fields.Char(string="Insert Color", compute="_compute_insert_color", store=True)
+    
+    """
     @api.depends('selected_characteristic')
     def _compute_interior_color(self):
-        """
-        Extract the "Interior Color" value from the selected_characteristic field.
-        """
+       
         pattern = r"Interior Color:\s*(.+?)\s*\((\w+)\)"
         for record in self:
             match = re.search(pattern, record.selected_characteristic or '')
@@ -24,9 +23,7 @@ class MrpProduction(models.Model):
 
     @api.depends('selected_characteristic')
     def _compute_insert_color(self):
-        """
-        Extract the "Insert Color" value from the selected_characteristic field.
-        """
+        
         pattern = r"Insert Color:\s*(.+?)\s*\((\w+)\)"
         for record in self:
             match = re.search(pattern, record.selected_characteristic or '')
@@ -58,7 +55,7 @@ class MrpProduction(models.Model):
             'docs': work_orders,
             'lines': filtered_lines,
         }
-        
+        """
         
     
     sale_order_partner_id = fields.Many2one(
