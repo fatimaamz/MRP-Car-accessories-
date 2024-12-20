@@ -9,8 +9,8 @@ class MrpProduction(models.Model):
     def get_report_values(self):
         work_orders = self.browse(self.env.context.get('active_ids', []))
         filtered_lines = []
-        for work_order in work_orders:
-            for line in work_order.workorder_ids: 
+        for line in work_orders:
+            #for line in work_order.workorder_ids: 
                 filtered_lines.append({
                     'product': line.product_id.name,
                     'quantity': line.product_qty,
