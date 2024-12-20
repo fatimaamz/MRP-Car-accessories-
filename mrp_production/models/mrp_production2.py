@@ -85,6 +85,36 @@ class StockMove(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
+
+    new_design = fields.Text(string="Nouveau Design ")
+    interior_color = fields.Char(string="Interior Color", compute="_compute_interior_color", store=True)
+    insert_color = fields.Char(string="Insert Color", compute="_compute_insert_color", store=True)
+    
+    
+    @api.depends('selected_characteristics')
+    def _compute_interior_color(self):
+       
+        pattern = r"Interior Color:\s*(.+?)\s*\((\w+)\)"
+        for record in self:
+            match = re.search(pattern, record.selected_characteristics or '')
+            if match:
+                # Format: Color Name (Code)
+                record.interior_color = f"{match.group(1).strip()} ({match.group(2).strip()})"
+            else:
+                record.interior_color = ""
+
+    @api.depends('selected_characteristics')
+    def _compute_insert_color(self):
+        
+        pattern = r"Insert Color:\s*(.+?)\s*\((\w+)\)"
+        for record in self:
+            match = re.search(pattern, record.selected_characteristics or '')
+            if match:
+                # Format: Color Name (Code)
+                record.insert_color = f"{match.group(1).strip()} ({match.group(2).strip()})"
+            else:
+                record.insert_color = ""
+
     
 
     product_template_id = fields.Many2one(
