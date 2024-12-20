@@ -8,7 +8,7 @@ class MrpProduction(models.Model):
 
 
     def get_report_values(self):
-        work_orders =  self.browse(self.env.context.get('active_ids', [])
+        work_orders =  self.browse(self.env.context.get('active_ids', []))
         filtered_lines = []
         total_quantity = 0  # Initialize total quantity
         for line in work_orders:
