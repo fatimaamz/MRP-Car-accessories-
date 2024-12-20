@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <odoo>
-
+    <!-- Report Action -->
     <record id="action_report_invoice_new_template" model="ir.actions.report">
         <field name="name">Multi work order</field>
         <field name="model">mrp.production</field>
@@ -12,226 +11,141 @@
         <field name="binding_model_id" ref="mrp.model_mrp_production"/>
     </record>
 
-
+    <!-- Report Template -->
     <template id="report_work_order_multi">
-
-
         <t t-call="web.basic_layout">
-
             <div class="page">
-                <t t-foreach="docs" t-as="doc">
-                    <main>
-                        <!-- Header Section -->
-                        <div class="header"
-                             style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                            <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
-                                <tr style="border: 1px solid white;">
-                                    <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
-                                        <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                             style="height: 60px;" alt="Company Logo"/>
-                                        <br/>
+                <!-- Header Section (Single Header for all selected records) -->
+                <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                    <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
+                        <tr style="border: 1px solid white;">
+                            <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
+                                <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)" style="height: 60px;" alt="Company Logo"/>
+                                <br/>
+                            </td>
+                            <td style="text-align: right; vertical-align: middle; border: 1px solid white;">
+                                <div style="text-align: justify; width: 100%; border: 1px solid white;">
+                                    <strong style="font-size: 16px;">Work Order Multi</strong>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
-                                    </td>
-                                    <td style="text-align: right; vertical-align: middle; border: 1px solid white;">
-                                        <div style="text-align: justify; width: 100%; border: 1px solid white;">
-                                            <strong style="font-size: 16px;">
-                                                Work Order Multi
-                                            </strong>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div style="margin-top: 30px;">
-                           
-                            <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
-                                <tr>
-                                    <!-- Left Block: Customer Information -->
-                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;  border: 1px solid white;">
-                                        <strong style="font-size: 16px;">
-                                            <t t-esc="doc.sale_order_partner_id.name"/>
-                                        </strong>
-                                        <br/>
-                                        <t t-esc="doc.sale_order_partner_id.phone or ''"/>
-                                        <br/>
-                                        <t t-if="doc.sale_order_partner_id.street">
-                                            <t t-esc="doc.sale_order_partner_id.street"/>
-                                            <t t-if="doc.sale_order_partner_id.city or doc.sale_order_partner_id.state_id or doc.sale_order_partner_id.country_id">
-                                                ,
-                                            </t>
-                                        </t>
-                                        <t t-if="doc.sale_order_partner_id.city">
-                                            <t t-esc="doc.sale_order_partner_id.city"/>
-                                            <t t-if="doc.sale_order_partner_id.state_id or doc.sale_order_partner_id.country_id">
-                                                ,
-                                            </t>
-                                        </t>
-                                        <t t-if="doc.sale_order_partner_id.state_id">
-                                            <t t-esc="doc.sale_order_partner_id.state_id.name"/>
-                                            <t t-if="doc.sale_order_partner_id.country_id">,</t>
-                                        </t>
-                                        <br/>
-                                        <t t-if="doc.sale_order_partner_id.zip">
-                                            <t t-esc="doc.sale_order_partner_id.zip"/>
-                                        </t>
-                                        <t t-if="doc.sale_order_partner_id.country_id">
-                                            <t t-esc="doc.sale_order_partner_id.country_id.name"/>
-                                        </t>
-                                        <t t-if="doc.note_interne">
-                                            <strong>Note Interne:</strong>
-                                            <br/>
-                                            <t t-esc="doc.note_interne"/>
-                                        </t>
-                                    </td>
-
-                                    <!-- Center Block: Ship To -->
-                                    <td style="padding: 10px; background-color: #e0eaff;  border: 1px solid #ddd; vertical-align: top; width: 40%; font-size: 14px;">
-                                        <span>
-                                            <strong>
-                                                <span t-esc="'Ship to / Expédié à :'"/>
-                                            </strong>
-                                        </span>
-                                        <br/>
-                                        <br/>
-                                        <t t-if="doc.partner_shipping_id.name">
-                                            <t t-esc="doc.ship_to_id.name" style="font-weight: bold;"/>
-                                            <br/>
-                                            <br/>
-                                        </t>
-                                        <t t-if="doc.partner_shipping_id.street">
-                                            <t t-esc="doc.ship_to_id.street"/>
-                                            <t t-if="doc.ship_to_id.city or doc.partner_shipping_id.state_id or doc.ship_to_id.zip">
-                                                ,
-                                            </t>
-                                        </t>
-                                        <t t-if="doc.ship_to_id.city">
-                                            <t t-esc="doc.ship_to_id.city"/>
-                                            <t t-if="doc.ship_to_id.state_id or doc.ship_to_id.zip">
-                                                ,
-                                            </t>
-                                        </t>
-                                        <t t-if="doc.ship_to_id.state_id">
-                                            <t t-esc="doc.ship_to_id.state_id.name"/>
-                                            <t t-if="doc.ship_to_id.zip">,</t>
-                                        </t>
-                                        <t t-if="doc.ship_to_id.zip">
-                                            <t t-esc="doc.ship_to_id.zip"/>
-                                        </t>
-                                        <br/>
-                                        <br/>
-                                        <t t-if="doc.ship_to_id.phone">
-                                            <span>Téléphone :
-                                                <t t-esc="doc.ship_to_id.phone"/>
-                                            </span>
-                                        </t>
-                                        <br/>
-                                        <br/>
-                                        <span>Must Ship by :
-                                            <t t-esc="doc.picking_scheduled_date"/>
-                                        </span>
-                                    </td>
-
-                                    <!-- Right Block: Order Details -->
-                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;   border: 1px solid white;">
-                                        <strong style="font-size: 16px;">Order Details:</strong>
-                                        <br/>
-                                        <br/>
-
-                                        Order N°:
-                                        <t t-esc="doc.origin"/>
-                                        <br/>
-                                        <br/>
-                                        PO Client:
-                                        <t t-esc="doc.sale_order_partner_id.po or ''"/>
-                                        <br/>
-                                        <br/>
-                                        Date:
-                                        <t t-esc="doc.picking_scheduled_date  or ''"/>
-                                        <br/>
-                                        <br/>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-
-                        <!-- Product Details Table (Table 2) -->
-                        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-
-                            <tbody>
-
-                              <t t-foreach="lines" t-as="wo">
-
-
-                                        <tr>
-                                            <!-- Product -->
-                                            <td style="border: 1px solid #ddd; padding: 10px;text-align: left;">
-                                                 <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
-                                                        N°:
-                                                        <t t-esc="doc.name"/>
-                                                </h2>
-                                                <strong>
-                                                    <t t-esc="wo['product']"/>
-                                                </strong>
-                                                <br/>
-                                                Date :
-                                                <t t-esc="wo['date'] or ''"/>
-                                                <br/>
-                                                Coupé :
-                                                <t t-esc="wo['couper']"/>
-                                                <br/>
-                                                Quantité :
-                                                <t t-esc="wo['quantity']"/>
-                                                <br/>
-
-
-                                            </td>
-
-                                            <td>
-                                                Interior Color :
-                                                <t t-esc="wo['interior'] or ''"/>
-                                                <br/>
-                                                Insert :
-                                                <t t-esc="wo['insert'] or ''"/>
-                                                <br/>
-                                                Logo :
-                                                <t t-esc="wo['logo'] or ''"/>
-                                                <br/>
-                                                New design
-                                                <t t-esc="wo['new_design'] or ''"/>
-                                                <br/>
-                                                Reflector type :
-                                                <t t-esc="wo['reflector_type'] or ''"/>
-                                                <br/>
-
-
-                                            </td>
-
-                                        </tr>
-                                   
+                <!-- Customer, Ship To, and Order Details -->
+                <div style="margin-top: 30px;">
+                    <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
+                        <tr>
+                            <!-- Customer Information -->
+                            <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;  border: 1px solid white;">
+                                <strong style="font-size: 16px;">
+                                    <t t-esc="docs[0].sale_order_partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <t t-esc="docs[0].sale_order_partner_id.phone or ''"/>
+                                <br/>
+                                <t t-if="docs[0].sale_order_partner_id.street">
+                                    <t t-esc="docs[0].sale_order_partner_id.street"/>
+                                    <t t-if="docs[0].sale_order_partner_id.city or docs[0].sale_order_partner_id.state_id or docs[0].sale_order_partner_id.country_id">,</t>
                                 </t>
+                                <t t-if="docs[0].sale_order_partner_id.city">
+                                    <t t-esc="docs[0].sale_order_partner_id.city"/>
+                                    <t t-if="docs[0].sale_order_partner_id.state_id or docs[0].sale_order_partner_id.country_id">,</t>
+                                </t>
+                                <t t-if="docs[0].sale_order_partner_id.state_id">
+                                    <t t-esc="docs[0].sale_order_partner_id.state_id.name"/>
+                                    <t t-if="docs[0].sale_order_partner_id.country_id">,</t>
+                                </t>
+                                <br/>
+                                <t t-if="docs[0].sale_order_partner_id.zip">
+                                    <t t-esc="docs[0].sale_order_partner_id.zip"/>
+                                </t>
+                                <t t-if="docs[0].sale_order_partner_id.country_id">
+                                    <t t-esc="docs[0].sale_order_partner_id.country_id.name"/>
+                                </t>
+                                <t t-if="docs[0].note_interne">
+                                    <strong>Note Interne:</strong>
+                                    <br/>
+                                    <t t-esc="docs[0].note_interne"/>
+                                </t>
+                            </td>
 
+                            <!-- Ship To Information -->
+                            <td style="padding: 10px; background-color: #e0eaff; border: 1px solid #ddd; vertical-align: top; width: 40%; font-size: 14px;">
+                                <span><strong>Ship to / Expédié à :</strong></span><br/><br/>
+                                <t t-if="docs[0].partner_shipping_id.name">
+                                    <t t-esc="docs[0].partner_shipping_id.name" style="font-weight: bold;"/><br/><br/>
+                                </t>
+                                <t t-if="docs[0].partner_shipping_id.street">
+                                    <t t-esc="docs[0].partner_shipping_id.street"/>
+                                    <t t-if="docs[0].partner_shipping_id.city or docs[0].partner_shipping_id.state_id or docs[0].partner_shipping_id.zip">,</t>
+                                </t>
+                                <t t-if="docs[0].partner_shipping_id.city">
+                                    <t t-esc="docs[0].partner_shipping_id.city"/>
+                                    <t t-if="docs[0].partner_shipping_id.state_id or docs[0].partner_shipping_id.zip">,</t>
+                                </t>
+                                <t t-if="docs[0].partner_shipping_id.state_id">
+                                    <t t-esc="docs[0].partner_shipping_id.state_id.name"/>
+                                    <t t-if="docs[0].partner_shipping_id.zip">,</t>
+                                </t>
+                                <t t-if="docs[0].partner_shipping_id.zip">
+                                    <t t-esc="docs[0].partner_shipping_id.zip"/>
+                                </t>
+                                <br/><br/>
+                                <t t-if="docs[0].partner_shipping_id.phone">
+                                    <span>Téléphone: <t t-esc="docs[0].partner_shipping_id.phone"/></span>
+                                </t>
+                                <br/><br/>
+                                <span>Must Ship by: <t t-esc="docs[0].picking_scheduled_date"/></span>
+                            </td>
 
-                            </tbody>
-                        </table>
-                        <table style="width: 100%; margin-top: 20px; border-spacing: 5; border: 1px solid #edeff2; background-color: #edeff2;">
+                            <!-- Order Details -->
+                            <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px; border: 1px solid white;">
+                                <strong style="font-size: 16px;">Order Details:</strong><br/><br/>
+                                Order N°: <t t-esc="docs[0].origin"/><br/><br/>
+                                PO Client: <t t-esc="docs[0].sale_order_partner_id.po or ''"/><br/><br/>
+                                Date: <t t-esc="docs[0].picking_scheduled_date or ''"/><br/><br/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Product Details Table (Table 2) -->
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <tbody>
+                        <t t-foreach="lines" t-as="wo">
                             <tr>
-                                <td style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
-                                    <strong>Total Quantity:</strong>
-                                    <t t-esc="total_quantity"/>
+                                <td style="border: 1px solid #ddd; padding: 10px; text-align: left;">
+                                    <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
+                                        N°: <t t-esc="wo['product']"/>
+                                    </h2>
+                                    <br/>
+                                    Date: <t t-esc="wo['date'] or ''"/><br/>
+                                    Coupé: <t t-esc="wo['couper']"/><br/>
+                                    Quantité: <t t-esc="wo['quantity']"/>
+                                </td>
+                                <td>
+                                    Interior Color: <t t-esc="wo['interior'] or ''"/><br/>
+                                    Insert: <t t-esc="wo['insert'] or ''"/><br/>
+                                    Logo: <t t-esc="wo['logo'] or ''"/><br/>
+                                    New design: <t t-esc="wo['new_design'] or ''"/><br/>
+                                    Reflector type: <t t-esc="wo['reflector_type'] or ''"/>
                                 </td>
                             </tr>
-                        </table>
+                        </t>
+                    </tbody>
+                </table>
 
+                <!-- Total Quantity -->
+                <table style="width: 100%; margin-top: 20px; border-spacing: 5; border: 1px solid #edeff2; background-color: #edeff2;">
+                    <tr>
+                        <td style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
+                            <strong>Total Quantity:</strong> <t t-esc="total_quantity"/>
+                        </td>
+                    </tr>
+                </table>
 
-                    </main>
-                </t>
             </div>
-
         </t>
     </template>
-
-
 </odoo>
