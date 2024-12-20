@@ -7,8 +7,8 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
 
-    def get_report_values(self, docids, data=None):
-        work_orders = self.browse(docids)
+    def get_report_values(self):
+        work_orders =  self.browse(self.env.context.get('active_ids', [])
         filtered_lines = []
         total_quantity = 0  # Initialize total quantity
         for line in work_orders:
@@ -23,13 +23,9 @@ class MrpProduction(models.Model):
                 'insert': line.insert_color,
                 'interior': line.interior_color,
             })
-            total_quantity += line.product_qty  # Sum quantities
+            #total_quantity += line.product_qty  # Sum quantities
         
-        return {
-            'docs': work_orders,
-            'lines': filtered_lines,
-            'total_quantity': total_quantity,  # Pass the total quantity
-        }
+        return filtered_lines
 
  
         
