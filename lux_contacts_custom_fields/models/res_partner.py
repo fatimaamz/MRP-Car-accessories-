@@ -8,11 +8,9 @@ class MrpProduction(models.Model):
 
 
     def get_report_values(self, docids, data=None):
-        # Get the selected work orders
         work_orders = self.browse(docids)
-        
-        # Prepare lines for the report
         filtered_lines = []
+        total_quantity = 0  # Initialize total quantity
         for line in work_orders:
             filtered_lines.append({
                 'product': line.product_id.name,
@@ -25,15 +23,12 @@ class MrpProduction(models.Model):
                 'insert': line.insert_color,
                 'interior': line.interior_color,
             })
+            total_quantity += line.product_qty  # Sum quantities
         
-        # Calculate the total quantity
-        total_quantity = sum(line['quantity'] for line in filtered_lines)
-        
-        # Return the values to be used in the template
         return {
-            'docs': work_orders,  # This will be passed to the template
-            'lines': filtered_lines,  # This is the detailed lines data
-            'total_quantity': total_quantity,  # The total quantity to display
+            'docs': work_orders,
+            'lines': filtered_lines,
+            'total_quantity': total_quantity,  # Pass the total quantity
         }
 
  
