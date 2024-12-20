@@ -30,8 +30,8 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='barcode']" position="after">
-               <field name="reflecteur_type"/>
+               <xpath expr="//page[@name='general_information']" position="inside">
+                  <field name="reflecteur_type"/>
             </xpath>
             <xpath expr="//page[@name='general_information']" position="inside">
                 <group>
