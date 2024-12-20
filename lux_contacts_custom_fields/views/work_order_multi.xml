@@ -13,7 +13,7 @@
     </record>
 
 
-    <template id="report_work_order_multi>
+    <template id="report_work_order_multi">
 
 
         <t t-call="web.basic_layout">
@@ -28,15 +28,16 @@
                                 <tr style="border: 1px solid white;">
                                     <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                         <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                             style="height: 60px;" alt="Company Logo"/><br/>
-                                        
+                                             style="height: 60px;" alt="Company Logo"/>
+                                        <br/>
+
                                     </td>
                                     <td style="text-align: right; vertical-align: middle; border: 1px solid white;">
                                         <div style="text-align: justify; width: 100%; border: 1px solid white;">
                                             <strong style="font-size: 16px;">
                                                 Work Order Multi
                                             </strong>
-                                            
+
                                         </div>
                                     </td>
                                 </tr>
@@ -44,9 +45,10 @@
                         </div>
 
                         <div style="margin-top: 30px;">
-						<h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
-                                         N°: <t t-esc="doc.name"/>
-                                        </h2>
+                            <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
+                                N°:
+                                <t t-esc="doc.name"/>
+                            </h2>
                             <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
                                 <tr>
                                     <!-- Left Block: Customer Information -->
@@ -80,10 +82,11 @@
                                         <t t-if="doc.sale_order_partner_id.country_id">
                                             <t t-esc="doc.sale_order_partner_id.country_id.name"/>
                                         </t>
-										<t t-if="doc.note_interne">
-										<strong>Note Interne:</strong><br/>
-											 <t t-esc="doc.note_interne"/>
-										</t>
+                                        <t t-if="doc.note_interne">
+                                            <strong>Note Interne:</strong>
+                                            <br/>
+                                            <t t-esc="doc.note_interne"/>
+                                        </t>
                                     </td>
 
                                     <!-- Center Block: Ship To -->
@@ -138,7 +141,7 @@
                                         <strong style="font-size: 16px;">Order Details:</strong>
                                         <br/>
                                         <br/>
-                                       
+
                                         Order N°:
                                         <t t-esc="doc.origin"/>
                                         <br/>
@@ -147,7 +150,7 @@
                                         <t t-esc="doc.sale_order_partner_id.po or ''"/>
                                         <br/>
                                         <br/>
-										 Date:
+                                        Date:
                                         <t t-esc="doc.picking_scheduled_date  or ''"/>
                                         <br/>
                                         <br/>
@@ -159,47 +162,66 @@
 
                         <!-- Product Details Table (Table 2) -->
                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                           
+
                             <tbody>
-                               
-                               <t t-set="work_orders" t-value="doc.get_report_values()"/>
-                               <t t-if="work_orders">
-                                     <t t-foreach="work_orders" t-as="wo">
-                                    
 
-										<tr>
-											<!-- Product -->
-											<td style="border: 1px solid #ddd; padding: 10px;text-align: left;">
-												<strong><t t-esc="line['product']"/></strong><br/>
-												Date : <t t-esc="line['date'] or ''"/><br/>
-												Coupé : <t t-esc="line['couper']"/><br/>
-												Quantité : <t t-esc="line['quantity']"/><br/>
-											
-											
-												
-											</td>
-												
-											<td>
-												Interior Color : <t t-esc="line['interior'] or ''"/><br/>
-												Insert : <t t-esc="line['insert'] or ''"/><br/>
-												Logo : <t t-esc="line['logo'] or ''"/></br>
-												New design<t t-esc="line['new_design'] or ''"/><br/>
-												Reflector type : <t t-esc="line['reflector_type'] or ''"/><br/>
-											
-											
-											</td>								
-                                        
-										</tr>
+                                <t t-set="work_orders" t-value="doc.get_report_values()"/>
+                                <t t-if="work_orders">
+                                    <t t-foreach="work_orders" t-as="wo">
 
+
+                                        <tr>
+                                            <!-- Product -->
+                                            <td style="border: 1px solid #ddd; padding: 10px;text-align: left;">
+                                                <strong>
+                                                    <t t-esc="line['product']"/>
+                                                </strong>
+                                                <br/>
+                                                Date :
+                                                <t t-esc="line['date'] or ''"/>
+                                                <br/>
+                                                Coupé :
+                                                <t t-esc="line['couper']"/>
+                                                <br/>
+                                                Quantité :
+                                                <t t-esc="line['quantity']"/>
+                                                <br/>
+
+
+                                            </td>
+
+                                            <td>
+                                                Interior Color :
+                                                <t t-esc="line['interior'] or ''"/>
+                                                <br/>
+                                                Insert :
+                                                <t t-esc="line['insert'] or ''"/>
+                                                <br/>
+                                                Logo :
+                                                <t t-esc="line['logo'] or ''"/>
+                                                <br/>
+                                                New design
+                                                <t t-esc="line['new_design'] or ''"/>
+                                                <br/>
+                                                Reflector type :
+                                                <t t-esc="line['reflector_type'] or ''"/>
+                                                <br/>
+
+
+                                            </td>
+
+                                        </tr>
+                                    </t>
                                 </t>
 
 
                             </tbody>
                         </table>
                         <table style="width: 100%; margin-top: 20px;border-spacing: 5; border: 1px solid #edeff2;background-color: #edeff2; ">
-                            
+
                             <tr>
-                                <td  colspan="2" style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
+                                <td colspan="2"
+                                    style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
                                     <strong>Stock :</strong>
                                     <t t-esc="sum(line.quantity for line in work_orders)"/>
 
@@ -209,12 +231,10 @@
                         </table>
 
 
-                       
-
                     </main>
                 </t>
             </div>
-            
+
         </t>
     </template>
 
