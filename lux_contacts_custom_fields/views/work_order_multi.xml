@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- Report Action -->
-    <record id="action_report_invoice_new_template" model="ir.actions.report">
+    <record id="action_report_multi_wo_new_template" model="ir.actions.report">
         <field name="name">Multi work order</field>
         <field name="model">mrp.production</field>
         <field name="report_type">qweb-pdf</field>
