@@ -53,13 +53,13 @@
                         </tr>
                         <tr>
                             <td>
-                                <span t-esc="doc.product_id.product_variant_ids[0].product_template_variant_value_ids.name"/>
+                                <span t-esc="doc.product_id.product_variant_ids[0].product_template_variant_value_ids[0].name"/>
                             </td>
                             <td>
                                 <span t-esc="doc.years"/>
                             </td>
                             <td>
-                                <span t-esc="doc.product_id.product_variant_ids[1].product_template_variant_value_ids.name"/>
+                                <span t-esc="doc.product_id.product_variant_ids[1].product_template_variant_value_ids[0].name"/>
                             </td>
                             <td>
                                 <span t-esc="doc.product_id.detailed_type"/>
