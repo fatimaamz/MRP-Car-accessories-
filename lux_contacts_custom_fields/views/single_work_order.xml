@@ -44,13 +44,13 @@
                         </tr>
                         <tr>
                             <td>
-                                <span t-esc="doc.product_id.product_variant_ids[0]"/>
+                                <span t-esc="doc.product_id.product_variant_ids[0].product_template_variant_value_ids"/>
                             </td>
                             <td>
                                 <span t-esc="doc.years"/>
                             </td>
                             <td>
-                                <span t-esc="doc.product_id.product_variant_ids[1]"/>
+                                <span t-esc="doc.product_id.product_variant_ids[1].product_template_variant_value_ids"/>
                             </td>
                             <td>
                                 <span t-esc="doc.product_id.detailed_type"/>
@@ -104,8 +104,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="background-color: bleu; color: white;font-size: 20px;">
-                                <span t-esc="doc.name"/>
+                            <td colspan="2" style="background-color: blue; color: white; font-size: 20px;">
+                                <strong><t t-esc="doc.name"/></strong>
                             </td>
                             <td>
                                 <strong>Date de production:</strong>
@@ -126,7 +126,7 @@
                         <tr>
                             <td colspan="2" style="background-color: red; color: white;font-size: 20px;">Must ship by:
                                 <br/>
-                                <span t-esc="doc.name"/>
+                                <span t-esc="doc.picking_scheduled_date"/>
                             </td>
                            
                             <td>
@@ -167,7 +167,7 @@
                         </tr>
                         <tr>
 
-                            <td colspan="4" style="background-color: ffffbf; ">
+                            <td colspan="4" style="background-color: #ffffbf;">
                                 <h6>Notes / Specifications:</h6>
                                 <p>
                                     <span t-esc="doc.note_interne"/>
