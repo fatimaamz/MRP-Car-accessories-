@@ -102,6 +102,25 @@ class SaleOrderLine(models.Model):
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    type_groupe_1 = fields.Selection(
+        [
+            ('dealer', 'Dealer'),
+            ('oem', 'OEM'),
+            ('mtl', 'MTL'),
+        ],
+        string="Type Groupe ",
+        help="Select the group type for the first category: Dealer, OEM, or MTL."
+    )
+
+    type_groupe_2 = fields.Selection(
+        [
+            ('dealer', 'Dealer'),
+            ('mtl', 'MTL'),
+        ],
+        string="Type Groupe ",
+        help="Select the group type for the second category: Dealer or MTL."
+    )
     
     dealer_Code=fields.Char(string='Code du concessionnaire')
     type_client = fields.Selection([
