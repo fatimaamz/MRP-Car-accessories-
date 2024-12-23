@@ -157,7 +157,7 @@
                                 <t t-esc="doc.origin"/>
                                 <br/>
                                 Quantity :
-                                <t t-esc="doc.quantity"/>
+                                <t t-esc="doc.product_qty"/>
                                 <br/>
                                 PO client :
                                 <t t-esc="doc.sale_order_partner_id.po "/>
