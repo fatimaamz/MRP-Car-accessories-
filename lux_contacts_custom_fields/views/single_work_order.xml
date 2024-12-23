@@ -53,7 +53,7 @@
                                 <span t-esc="doc.product_id.product_variant_ids[1]"/>
                             </td>
                             <td>
-                                <span t-esc="doc.datailed_type"/>
+                                <span t-esc="doc.product_id.datailed_type"/>
                             </td>
                         </tr>
                         <tr>
