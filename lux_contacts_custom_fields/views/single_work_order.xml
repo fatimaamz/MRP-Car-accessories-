@@ -38,7 +38,7 @@
                         <h4 style="background-color: black; color: white; padding: 10px;position: absolute;top: 1px;right: 33px;">
                             <span t-esc="doc.product_id.name"/>
                         </h4>
-                         <img t-att-src="image_data_uri(doc.selected_image)"  style="max-width: 70%;"/>
+                         <img t-att-src="image_data_uri(doc.selected_image)"  style="max-width: 60%;"/>
                     </div>
 
 
@@ -117,16 +117,16 @@
                                 <strong><t t-esc="doc.name"/></strong>
                             </td>
                             <td>
-                                <strong>Date de production:</strong>
+                                Date de production:
                                 <t t-esc="doc.date_start"/>
                                 <br/>
-                                <strong>Coupé:</strong>
+                                Coupé:
                                  <t t-esc="'Oui' if doc.is_coped else 'Non'"/>
                                 <br/>
 
                             </td>
                             <td>
-                                <strong>New design:</strong>
+                                New design:
                                 <br/>
                                 <t t-esc="doc.new_design"/>
 
