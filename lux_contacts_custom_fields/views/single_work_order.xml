@@ -35,7 +35,7 @@
 
                     <!-- Product Information -->
                     <div class="mb-4 text-center">
-                        <h4 style="background-color: black; color: white; padding: 10px;position: absolute;top: 3px;right: 20px;">
+                        <h4 style="background-color: black; color: white; padding: 10px;position: absolute;top: 2px;right: 27px;">
                             <span t-esc="doc.product_id.name"/>
                         </h4>
                          <img t-att-src="image_data_uri(doc.selected_image)"  style="max-width: 100%;"/>
