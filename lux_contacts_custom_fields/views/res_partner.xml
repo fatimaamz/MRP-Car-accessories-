@@ -16,6 +16,8 @@
                         <field name="type_paiement"/>
                         <field name="oem"/>
                         <field name="dealer_Code"/>
+			<field name="type_groupe_1"/>
+			<field name="type_groupe_2"/>
                         <field name="installation"/>
                         <field name="prov"/>
                 </group>
