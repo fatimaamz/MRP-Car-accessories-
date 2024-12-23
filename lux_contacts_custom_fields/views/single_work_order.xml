@@ -1,0 +1,146 @@
+<odoo>
+     <record id="action_report_single_wo_template" model="ir.actions.report">
+        <field name="name">Single work order</field>
+        <field name="model">mrp.production</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lux_contacts_custom_fields.report_single_work_order_multi</field>
+        <field name="report_file">lux_contacts_custom_fields.report_single_work_order_multi</field>
+        <field name="print_report_name">"Work order - %s" % (object.name)</field>
+        <field name="binding_model_id" ref="mrp.model_mrp_production"/>
+    </record>
+
+
+    <template id="report_single_work_order_multi>
+
+
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-foreach="docs" t-as="doc">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <img t-att-src="doc.company_id.logo" style="max-height: 50px;" />
+                    </div>
+                    <h3>WORK ORDER</h3>
+                </div>
+
+                <!-- Product Information -->
+                <div class="mb-4 text-center">
+                    <h4 style="background-color: black; color: white; padding: 10px;">
+                        <span t-esc="doc.product_id.name" />
+                    </h4>
+                    <img t-att-src="doc.selected_image" style="max-width: 100%;" />
+                </div>
+
+              
+
+                <!-- Work Order Details -->
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Marque:</td>
+
+                        <td>Année:</td>
+						<td>Model:</td>
+                        <td>Product type:</td>
+                    </tr>
+                    <tr>                        
+					    <td><span t-esc="doc.product_id.product_variant_ids[0]" /></td>
+                        <td><span t-esc="doc.years"/></td>
+                        <td><span t-esc="doc.product_id.product_variant_ids[1]" /></td>
+                        <td><span t-esc="doc.datailed_type" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><strong style="font-size: 16px;">
+                                    <t t-esc="doc.sale_order_partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <t t-esc="doc.sale_order_partner_id.phone or ''"/>
+                                <br/>
+                                <t t-if="doc.sale_order_partner_id.street">
+                                    <t t-esc="doc.sale_order_partner_id.street"/>
+                                    <t t-if="doc.sale_order_partner_id.city or doc.sale_order_partner_id.state_id or doc.sale_order_partner_id.country_id">,</t>
+                                </t>
+                                <t t-if="doc.sale_order_partner_id.city">
+                                    <t t-esc="doc.sale_order_partner_id.city"/>
+                                    <t t-if="doc.sale_order_partner_id.state_id or doc.sale_order_partner_id.country_id">,</t>
+                                </t>
+                                <t t-if="doc.sale_order_partner_id.state_id">
+                                    <t t-esc="doc.sale_order_partner_id.state_id.name"/>
+                                    <t t-if="doc.sale_order_partner_id.country_id">,</t>
+                                </t>
+                                <br/>
+                                <t t-if="doc.sale_order_partner_id.zip">
+                                    <t t-esc="doc.sale_order_partner_id.zip"/>
+                                </t>
+                                <t t-if="doc.sale_order_partner_id.country_id">
+                                    <t t-esc="doc.sale_order_partner_id.country_id.name"/>
+                                </t>
+                        
+                        <td colspan="2">Ship to:<br/>
+										<t t-if="doc.partner_shipping_id.name">
+                                            <t t-esc="doc.ship_to_id.name" style="font-weight: bold;"/>
+                                            <br/>
+                                            <br/>
+                                        </t>
+                                        <t t-if="doc.partner_shipping_id.street">
+                                            <t t-esc="doc.ship_to_id.street"/>
+                                            <t t-if="doc.ship_to_id.city or doc.partner_shipping_id.state_id or doc.ship_to_id.zip">
+                                                ,
+                                            </t>
+                                        </t></td>
+                    </tr>
+					<tr>
+						<td  colspan="2" style="background-color: bleu; color: white;font-size: 20px;"><span t-esc="doc.name" /> </td>
+						<td>
+							<stong>Date de production:</strong> <t t-esc="doc.date_start"/><br/>
+							<stong>Coupé:</strong> <t t-esc="doc.couper"/><br/>
+							
+						</td>
+						<td>
+						  <stong>New design:</strong><br/>
+						  <t t-esc="doc.new_design"/>
+						  
+						</td>
+					</tr>
+					<tr>
+						<td  colspan="2" style="background-color: red; color: white;font-size: 20px;">  Must ship by:<br/><span t-esc="doc.name" /> </td>
+						<td>
+								<stong>Date de production:</strong> <t t-esc="doc.date_start"/><br/>
+								<stong>Coupé:</strong> <t t-esc="doc.couper"/><br/>
+								
+						</td>
+						<td>
+							Part number : <t t-esc="doc.product_id.default_code"/> <br/>
+							Color  : <t t-esc="doc.interior_color"/><br/>
+							Insert : <t t-esc="doc.insert_color"/><br/>
+							Logo : <t t-esc="doc.logo_inscription "/><br/>
+							Reflector type <t t-esc="doc.product_id.reflecteur_type "/><br/>
+						
+						</td>
+						
+						<td>
+							  <stong>Infos Order:</strong><br/>
+							  Date : <br/>
+							  Order : <t t-esc="doc.origin"/><br/>
+							  Quantity : <t t-esc="doc.quantity"/><br/>
+							  PO client : <t t-esc="doc.sale_order_partner_id.po "/><br/>
+							  
+						</td>
+					</tr>
+					<tr>
+					
+						<td colspan="4" style="background-color: ffffbf; " >
+							 <h6>Notes / Specifications:</h6>
+							<p><span t-esc="doc.note_interne" /></p>
+						</td>
+					</tr>
+                </table>
+
+               
+               
+				
+               
+				</t>
+            </div>
+        </t>
+    </template>
+</odoo>
