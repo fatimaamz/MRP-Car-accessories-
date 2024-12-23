@@ -128,15 +128,7 @@
                                 <br/>
                                 <span t-esc="doc.name"/>
                             </td>
-                            <td>
-                                <strong>Date de production:</strong>
-                                <t t-esc="doc.date_start"/>
-                                <br/>
-                                <strong>Coupé:</strong>
-                                <t t-esc="doc.couper"/>
-                                <br/>
-
-                            </td>
+                           
                             <td>
                                 Part number :
                                 <t t-esc="doc.product_id.default_code"/>
