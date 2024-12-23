@@ -38,7 +38,7 @@
                         <h4 style="background-color: black; color: white; padding: 10px;">
                             <span t-esc="doc.product_id.name"/>
                         </h4>
-                        <img t-att-src="'data:image/png;base64,' + doc.selected_image" style="max-width: 100%;"/>
+                         <img t-att-src="image_data_uri(doc.selected_image)"  style="max-width: 100%;"/>
                     </div>
 
 
