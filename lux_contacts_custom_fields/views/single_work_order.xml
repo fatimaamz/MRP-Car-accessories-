@@ -21,7 +21,7 @@
                         <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
                             <tr style="border: 1px solid white;">
                                 <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
-                                    <img t-att-src="image_data_uri(doc.selected_image)" style="height: 70px;"/>
+                                   <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)" style="height: 60px;" alt="Company Logo"/>
                                     <br/>
                                 </td>
                                 <td style="text-align: right; vertical-align: middle; border: 1px solid white;">
