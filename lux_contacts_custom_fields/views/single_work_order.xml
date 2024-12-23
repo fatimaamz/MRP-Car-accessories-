@@ -17,12 +17,21 @@
         <t t-call="web.basic_layout">
             <div class="page">
                 <t t-foreach="docs" t-as="doc">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <img t-att-src="doc.company_id.logo" style="max-height: 50px;"/>
-                        </div>
-                        <h3>WORK ORDER</h3>
-                    </div>
+                     <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                        <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
+                            <tr style="border: 1px solid white;">
+                                <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
+                                    <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)" style="height: 60px;" alt="Company Logo"/>
+                                    <br/>
+                                </td>
+                                <td style="text-align: right; vertical-align: middle; border: 1px solid white;">
+                                    <div style="text-align: justify; width: 100%; border: 1px solid white;">
+                                        <strong style="font-size: 16px;">WORK ORDER</strong>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                </div>
 
                     <!-- Product Information -->
                     <div class="mb-4 text-center">
@@ -57,7 +66,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
+                            <td colspan="2" style="background-color: #edeff2;">
                                 <strong style="font-size: 16px;">
                                     <t t-esc="doc.sale_order_partner_id.name"/>
                                 </strong>
@@ -148,7 +157,7 @@
 
                             </td>
 
-                            <td>
+                            <td style="background-color: #edeff2;">
                                 <strong>Infos Order:</strong>
                                 <br/>
                                 Date :
