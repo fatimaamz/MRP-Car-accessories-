@@ -86,7 +86,15 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
 
-    new_design = fields.Text(string="Nouveau Design ")
+    new_design = fields.Selection(
+        [
+            ('requis', 'Requis'),
+            ('recu', 'Reçu'),
+        ],
+        string="Nouveau Design",
+        default='requis',  # Optional: Set a default value
+        help="Indicate the design status as either Requis or Reçu."
+    )
     interior_color = fields.Char(string="Interior Color", compute="_compute_interior_color", store=True)
     insert_color = fields.Char(string="Insert Color", compute="_compute_insert_color", store=True)
     
