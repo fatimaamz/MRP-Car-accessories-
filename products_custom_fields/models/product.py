@@ -43,7 +43,7 @@ class ProductTemplate(models.Model):
    
     reflecteur_type = fields.Selection(
         [('oui', 'Oui'), ('non', 'Non')],
-        string="Réflecteur Type",
+        string="Type Réflecteur",
         default='non',  
         help="Indicate whether the product has a Réflecteur Type."
     )
@@ -65,7 +65,15 @@ class ProductTemplate(models.Model):
     sous_model_id = fields.Many2one('product.sousmodele', string='Sous modèle')
     style_id = fields.Many2one('product.style', string='Style')
     marque_id = fields.Many2one('product.marque', string='Marque')
+            
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
 
+    reflecteur_type = fields.Selection(
+        related='product_tmpl_id.reflecteur_type',
+        string="Type Réflecteur ",
+        store=True,
+    )
 class CustomerType(models.Model):
     _name = 'customer.type'
     _description = 'Customer Type'
