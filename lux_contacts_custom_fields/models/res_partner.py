@@ -86,7 +86,20 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     insert_color = fields.Char(string="Insert Color", compute="_compute_insert_color", store=True)
+    interior_color = fields.Char(string="Interior Color", compute="_compute_interior_color", store=True)
 
+    @api.depends('name')
+    def _compute_interior_color(self):
+        """
+        Extract the "Interior Color" value from the description.
+        """
+        pattern = r"Interior Color:\s*(.+)\s*\((\w+)\)"
+        for line in self:
+            match = re.search(pattern, line.name or '')
+            if match:
+                line.interior_color = f"{match.group(1).strip()} ({match.group(2).strip()})"
+            else:
+                line.interior_color = False
     @api.depends('name')
     def _compute_insert_color(self):
         """
