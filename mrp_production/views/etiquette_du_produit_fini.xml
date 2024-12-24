@@ -8,7 +8,7 @@
                             <h2>DESIGNERTRIM</h2>
                             <p><strong><t t-esc="o.product_id.name" /></strong></p>
                             <p>Rocker Kit: </p>
-                            <p>Color: <t t-esc="o.interior color" /></p>
+                            <p>Color: <t t-esc="o.interior_color" /></p>
                             <img t-if="o.product_id.barcode" t-att-src="'data:image/png;base64,%s' % o.product_id.barecode" style="width: 80px; height: 80px;" />
                             <img t-if="o.selected_image" t-att-src="'data:image/png;base64,%s' % o.selected_image" style="width: 100%; margin: 10px 0;" />
                             <p><strong><t t-esc="o.product_id.default_code" /></strong></p>
