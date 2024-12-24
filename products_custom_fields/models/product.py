@@ -40,7 +40,7 @@ class ProductMarque(models.Model):
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-   
+    qr_code_uploaded = fields.Image("QR Code (Uploaded)", max_width=512, max_height=512)
     reflecteur_type = fields.Selection(
         [('oui', 'Oui'), ('non', 'Non')],
         string="Type Réflecteur",
@@ -74,6 +74,7 @@ class ProductProduct(models.Model):
         string="Type Réflecteur ",
         store=True,
     )
+    qr_code_uploaded = fields.Image("QR Code (Uploaded)", max_width=512, max_height=512)
 class CustomerType(models.Model):
     _name = 'customer.type'
     _description = 'Customer Type'
