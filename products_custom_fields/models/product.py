@@ -4,11 +4,6 @@ from odoo import models,fields,api
 
 
 
-
-
-            
-
-
 class YearModel(models.Model):
     _name = 'year.model'
     _description = 'Year Model'
