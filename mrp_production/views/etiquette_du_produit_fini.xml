@@ -31,8 +31,8 @@
                             <div style="width: 90mm; height: 110mm; border: 5px solid black; margin: auto; position: relative; padding: 0; border-radius: 12px; overflow: hidden;">
 
                                  <div style="width: 100%; height: 40mm; text-align: center; overflow: hidden; border-bottom: 1px solid black; border-radius: 12px 12px 0 0;background-color: black">
-                                    <div   t-field="docs.doc.sale_order_partner_id.name" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px 12px 0 0;"/>
-                                     <img t-att-src="doc.product_id.qr_code_uploaded" style="max-width: 50%;position: absolute;bottom: 8px;left: 16px;" />
+                                    <div   t-field="docs.sale_order_partner_id.name" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px 12px 0 0;"/>
+                                     <img t-att-src="docs.product_id.qr_code_uploaded" style="max-width: 50%;position: absolute;bottom: 8px;left: 16px;" />
                                      
                                 </div>
 
