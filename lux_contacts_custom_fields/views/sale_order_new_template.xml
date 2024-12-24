@@ -165,7 +165,7 @@
                                         <br/>
                                         <br/>
                                         
-                                        <t t-if="doc.invoice_ids[0]">Facture N°:
+                                        <t t-if="doc.invoice_ids">Facture N°:
                                             <t t-esc="doc.invoice_ids[0].name"/>
                                         </t>
                                     </td>
