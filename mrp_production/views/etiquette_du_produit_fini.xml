@@ -1,4 +1,5 @@
 <odoo>
+    <!--test -->
     <data>
         <template id="label_production_view_pdf_custom" inherit_id="mrp.label_production_view_pdf">
             <xpath expr="//t[@t-call='web.basic_layout']" position="replace">
