@@ -5,17 +5,17 @@
             <xpath expr="//t[@t-call='web.basic_layout']" position="replace">
                 <t t-call="web.basic_layout">
                       <div style="border: 1px solid #000; padding: 10px; width: 300px; text-align: center;">
-                <h2>DESIGNERTRIM</h2>
-                <p><strong><t t-esc="o.product_id.name" /></strong></p>
-                <p>Rocker Kit: </p>
-                <p>Color: <t t-esc="o.interior color" /></p>
-                <img t-if="o.product_id.barcode" t-att-src="'data:image/png;base64,%s' % o.product_id.barecode" style="width: 80px; height: 80px;" />
-                <img t-if="o.selected_image" t-att-src="'data:image/png;base64,%s' % o.selected_image" style="width: 100%; margin: 10px 0;" />
-                <p><strong><t t-esc="o.product_id.default_code" /></strong></p>
-                <img t-if="o.barcode_image" t-att-src="'data:image/png;base64,%s' % o.barcode_image" style="width: 100%;" />
-                <p><t t-esc="o.product_id.barcode" /></p>
-            </div>
-
+                            <h2>DESIGNERTRIM</h2>
+                            <p><strong><t t-esc="o.product_id.name" /></strong></p>
+                            <p>Rocker Kit: </p>
+                            <p>Color: <t t-esc="o.interior color" /></p>
+                            <img t-if="o.product_id.barcode" t-att-src="'data:image/png;base64,%s' % o.product_id.barecode" style="width: 80px; height: 80px;" />
+                            <img t-if="o.selected_image" t-att-src="'data:image/png;base64,%s' % o.selected_image" style="width: 100%; margin: 10px 0;" />
+                            <p><strong><t t-esc="o.product_id.default_code" /></strong></p>
+                            <img t-if="o.barcode_image" t-att-src="'data:image/png;base64,%s' % o.barcode_image" style="width: 100%;" />
+                            <p><t t-esc="o.product_id.barcode" /></p>
+                        </div>
+                </t>
                     
                    <!-- <t t-set="nRows" t-value="12"/>
                     <t t-set="nCols" t-value="4"/>
