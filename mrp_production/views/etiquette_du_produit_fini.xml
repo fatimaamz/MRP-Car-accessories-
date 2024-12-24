@@ -1,130 +1,66 @@
 <odoo>
     <data>
-        <!-- Héritage du modèle existant -->
         <template id="label_production_view_pdf_custom" inherit_id="mrp.label_production_view_pdf">
             <xpath expr="//t[@t-call='web.basic_layout']" position="replace">
                 <t t-call="web.basic_layout">
-                  
-                  
-                <t t-set="nRows" t-value="12"/>
-                    <t t-set="nCols" t-value="4"/>
-                    <t t-set="uom_categ_unit" t-value="env.ref('uom.product_uom_categ_unit')"/>
-
-                    <t t-set="move_lines"
-                       t-value="docs.move_finished_ids.move_line_ids.filtered(lambda ml: ml.move_id.production_id.state == 'done' and ml.state == 'done' and ml.quantity)"/>
-                    <t t-set="move_line_qtys" t-value="[]"/>
-                    <t t-foreach="move_lines" t-as="move_line">
-                        <t t-if="move_line.product_uom_id.category_id == uom_categ_unit">
-                            <t t-set="move_line_qtys" t-value="move_line_qtys + [int(move_line.quantity)]"/>
-                        </t>
-                        <t t-else="">
-                            <t t-set="move_line_qtys" t-value="move_line_qtys + [1]"/>
-                        </t>
-                    </t>
-                    <t t-set="index_to_qtys"
-                       t-value="{i: qty for i, qty in zip(range(0, len(move_line_qtys)), move_line_qtys)}"/>
-                    <t t-set="num_pages" t-value="sum(move_line_qtys)// (nRows * nCols) + 1"/>
-
-                    <div t-foreach="range(num_pages)" t-as="page" class="o_label_sheet" t-att-style="'padding: 5mm;'">
-                        <div class="page" style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm;">
-
-                               <div style="width: 90mm; height: 80mm; border: 5px solid black; margin: auto; position: relative; padding: 0; border-radius: 12px; overflow: hidden;">
-                                    <!-- Header Section -->
-                                    <div style="width: 100%; height: 40mm; text-align: center; overflow: hidden; border-bottom: 1px solid black; border-radius: 12px 12px 0 0; background-color: black; position: relative;">
-                                        <!-- Partner Name -->
-                                        <div t-field="docs.sale_order_partner_id.name" style="color: white; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;"></div>
-                                        
-                                        <!-- QR Code with White Background -->
-                                        <img t-att-src="docs.product_id.qr_code_uploaded" 
-                                             style="max-width: 70%; background-color: white; padding: 5px;  position: absolute;bottom: 8px;right: 16px;" />
-                                    </div>
-                                </div>
-
+                    <!-- Outer Container -->
+                    <div style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm; border-radius: 12px; overflow: hidden;">
                         
-                                <div>
-                                   
-                                    <p>
-                                        <strong><span t-field="docs.product_id"/></strong><br/>
-                                        <strong>Couleurs: <span t-field="docs.color"/></strong><br/>
-                                        <strong>Années: <span t-field="docs.years"/></strong><br/>
-                                
-                                    </p>
-                                      <p>
-                                       
-                                    </p>
-                                    
-                                  
-                                   <div>
-                                            
-                                        <img  t-att-src="image_data_uri(docs.product_image)" style="width:100%;"/>
-                                       
-                                         <t t-if="docs.product_id.tracking != 'none' and (docs.lot_name or move_line.lot_id)">
-                                                            <div t-field="docs.lot_name or docs.lot_id.name" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:25%'}"/>
-                                                            <div class="o_label_4x12 text-center"><span t-out="docs.lot_name or docs.lot_id.name">Demo Barcode</span></div>
-                                                        </t>
-                                                        <t t-elif="docs.product_id.tracking == 'none' and docs.product_id.barcode">
-                                                            <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:25%'}"/>
-                                                            <div class="o_label_4x12 text-center"><span t-out="docs.product_id.barcode">12345678901</span></div>
-                                                        </t>
-                                    </div>
-                                </div>
+                        <!-- Header Section -->
+                        <div style="width: 100%; height: 40mm; background-color: black; color: white; text-align: center; position: relative; border-radius: 12px 12px 0 0;">
+                            <!-- DesignerTrim Logo -->
+                            <div style="font-size: 16px; font-weight: bold; line-height: 40mm;">DESIGNERTRIM</div>
+                            
+                            <!-- QR Code -->
+                            <img t-att-src="docs.product_id.qr_code_uploaded" 
+                                 style="width: 25mm; height: 25mm; position: absolute; top: 7mm; right: 7mm; background-color: white; padding: 3px; border-radius: 5px;" />
+                        </div>
 
-                            <div class="col-5">
-                                <span class="text-end">
-                                    <span t-field="docs.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:350px;height:60px'}">Package barcode</span>
-                                </span>
+                        <!-- Product Details Section -->
+                        <div style="padding: 5mm; text-align: left;">
+                            <!-- Product Name and Details -->
+                            <p style="margin: 0; font-size: 14px;">
+                                <strong t-field="docs.product_id.display_name"/> <!-- Product Name -->
+                            </p>
+                            <p style="margin: 0; font-size: 12px;">
+                                <span><strong>Rocker Kit</strong></span> | 
+                                <span><strong>Color:</strong> <t t-esc="docs.color or 'N/A'"/></span>
+                            </p>
+                        </div>
+
+                        <!-- Product Image Section -->
+                        <div style="width: 100%; height: 50mm; text-align: center; margin: 5mm 0;">
+                            <img t-att-src="image_data_uri(docs.product_image)" 
+                                 style="max-width: 100%; height: 100%; object-fit: contain; border: 1px solid black; border-radius: 5px;" />
+                        </div>
+
+                        <!-- Part and Barcode Section -->
+                        <div style="text-align: center; margin-top: 5mm;">
+                            <!-- Part Number -->
+                            <p style="margin: 0; font-size: 12px;">
+                                <strong>PART#:</strong> <span t-field="docs.product_id.default_code" />
+                            </p>
+                            
+                            <!-- Barcode -->
+                            <div style="margin-top: 3mm;">
+                                <t t-if="docs.product_id.tracking != 'none' and docs.lot_name">
+                                    <div t-field="docs.lot_name" t-options="{'widget': 'barcode', 'img_style': 'width:100%; height:30px'}" />
+                                </t>
+                                <t t-elif="docs.product_id.barcode">
+                                    <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:100%; height:30px'}" />
+                                </t>
+                                <t t-else="">
+                                    <span>No barcode available</span>
+                                </t>
                             </div>
+                        </div>
 
-
-                                
-
-                                <!--
-                                <table class="my-0 table table-sm table-borderless" style="width: 100%; height: auto;">
-                                    <t t-foreach="range(nRows)" t-as="row">
-                                        <tr>
-                                            <t t-foreach="range(nCols)" t-as="column">
-                                                <t t-if="index_to_qtys and not current_quantity">
-                                                    <t t-set="index_to_qty" t-value="index_to_qtys.popitem()"/>
-                                                    <t t-set="move_line" t-value="move_lines[index_to_qty[0]]"/>
-                                                    <t t-set="current_quantity" t-value="index_to_qty[1]"/>
-                                                </t>
-                                                <t t-if="current_quantity">
-                                                    <t t-set="make_invisible" t-value="False"/>
-                                                    <t t-set="current_quantity" t-value="current_quantity - 1"/>
-                                                </t>
-                                                <t t-else="">
-                                                    <t t-set="make_invisible" t-value="True"/>
-                                                </t>
-                                                <td t-att-style="make_invisible and 'visibility:hidden'">
-                                                    <div t-if="move_line" t-translation="off" t-att-style="'position:relative; width:43mm; height:19mm; border: 1px solid %s;' % (move_line.env.user.company_id.primary_color or 'black')">
-                                                        <div class="o_label_name o_label_4x12 fw-bold">
-                                                            <span t-out="move_line.product_id.display_name">Product</span>
-                                                            <div><span>Quantity: </span>
-                                                                <span t-if="move_line.product_uom_id.category_id == uom_categ_unit">1.0</span>
-                                                                <span t-else="" t-out="move_line.quantity">5</span>
-                                                                <span t-field="move_line.product_uom_id" groups="uom.group_uom">UOM id</span>
-                                                            </div>
-                                                        </div>
-                                                        <t t-if="move_line.product_id.tracking != 'none' and (move_line.lot_name or move_line.lot_id)">
-                                                            <div t-field="move_line.lot_name or move_line.lot_id.name" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:35%'}"/>
-                                                            <div class="o_label_4x12 text-center"><span t-out="move_line.lot_name or move_line.lot_id.name">Demo Barcode</span></div>
-                                                        </t>
-                                                        <t t-elif="move_line.product_id.tracking == 'none' and move_line.product_id.barcode">
-                                                            <div t-field="move_line.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:35%'}"/>
-                                                            <div class="o_label_4x12 text-center"><span t-out="move_line.product_id.barcode">12345678901</span></div>
-                                                        </t>
-                                                        <t t-else="">
-                                                            <span class="text-muted">No barcode available</span>
-                                                        </t>
-                                                    </div>
-                                                </td>
-                                            </t>
-                                        </tr>
-                                    </t>
-                                </table>-->
-                            </div>
+                        <!-- VIN Code -->
+                        <div style="text-align: center; margin-top: 5mm; font-size: 12px; font-weight: bold;">
+                            <t t-esc="docs.vin_code or 'VIN12345'" />
+                        </div>
                         
-                  </div>
+                    </div>
                 </t>
             </xpath>
         </template>
