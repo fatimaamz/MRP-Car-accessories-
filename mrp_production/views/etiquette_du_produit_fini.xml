@@ -5,7 +5,18 @@
             <xpath expr="//t[@t-call='web.basic_layout']" position="replace">
                 <t t-call="web.basic_layout">
                   
-                    
+                    <div style="background-color: black; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <!-- Text on the left -->
+                            <div style="font-size: 14px; font-weight: bold;">
+                                DESIGNERTRIM
+                            </div>
+                            
+                            <!-- QR Code on the right -->
+                            <div>
+                                <img t-att-src="'/web/image/res.partner/' + str(docs.product_id.qr_code_uploaded) + '/image_1920'" 
+                                     alt="QR Code" style="width: 50px; height: 50px;" />
+                            </div>
+                        </div>        
                 <t t-set="nRows" t-value="12"/>
                     <t t-set="nCols" t-value="4"/>
                     <t t-set="uom_categ_unit" t-value="env.ref('uom.product_uom_categ_unit')"/>
