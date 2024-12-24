@@ -164,10 +164,10 @@
                                         <t t-esc="doc.partner_id.po or ''"/>
                                         <br/>
                                         <br/>
-                                        <t t-if="doc.invoice_ids">
-                                            Facture N°:
-                                            <t t-esc="doc.invoice_ids[0].name or ''"/>
-                                        </t>
+                                        
+                                        Facture N°:
+                                        <t t-esc="doc.invoice_ids[0].name or ''"/>
+                                        
                                     </td>
                                 </tr>
                             </table>
@@ -266,6 +266,9 @@
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="line.product_id.qty_available or 0"/>
                                         </td>
+                                      <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="line.product_uom_qty - (line.product_id.qty_available or 0)"/>
+                                            </td>
                                         <!-- Qty -->
                                         
                                     </tr>
