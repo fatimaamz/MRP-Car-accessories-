@@ -23,11 +23,11 @@
                                 <strong t-field="docs.product_id.display_name"/> <!-- Product Name -->
                             </p>
                             <p style="margin: 0; font-size: 12px;">
-                                <span><strong>Type de produit</strong><t t-esc="docs.product_id.detailed_type"/></span> <br/>
-                               <span><strong>Marque</strong><t t-esc="docs.product_variant_ids[0].name"/></span> <br/>
-                                <span><strong>Année</strong><t t-esc="docs.years or ''"/></span><b/>
-                                <span><strong>Model</strong><t t-esc="docs.product_variant_ids[1].name"/></span><br/>
-                                <span><strong>Couleur:</strong> <t t-esc="docs.interior_color or ''"/></span>
+                                <span><strong>Type de produit : </strong><t t-esc="docs.product_id.detailed_type"/></span> <br/>
+                               <span><strong>Marque : </strong><t t-esc="docs.product_variant_ids[0].name"/></span> <br/>
+                                <span><strong>Année :</strong><t t-esc="docs.years or ''"/></span><b/>
+                                <span><strong>Model : </strong><t t-esc="docs.product_variant_ids[1].name"/></span><br/>
+                                <span><strong>Couleur :</strong> <t t-esc="docs.interior_color or ''"/></span>
                             </p>
                         </div>
 
