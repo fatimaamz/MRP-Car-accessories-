@@ -55,9 +55,9 @@
                             </div>
                         </div>
 
-                        <!-- VIN Code -->
+                      
                         <div style="text-align: center; margin-top: 5mm; font-size: 12px; font-weight: bold;">
-                            <t t-esc="docs.vin_code or 'VIN12345'" />
+                            <t t-esc="docs.product_id.barcode or ''" />
                         </div>
                         
                     </div>
