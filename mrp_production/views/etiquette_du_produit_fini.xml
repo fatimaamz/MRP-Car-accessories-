@@ -7,12 +7,12 @@
                     <div style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm; border-radius: 12px; overflow: hidden;">
                         
                         <!-- Header Section -->
-                        <div style="width: 100%; height: 40mm; background-color: black; color: white; text-align: center; position: relative; border-radius: 12px 12px 0 0;">
+                        <div style="width: 100%; height: 100mm; background-color: black; color: white; text-align: left; position: relative; border-radius: 12px 12px 0 0;">
                             <!-- DesignerTrim Logo -->
-                            <div style="font-size: 16px; font-weight: bold; line-height: 40mm;">DESIGNERTRIM</div>
+                            <div style="font-size: 16px; font-weight: bold; line-height: 40mm;"><span t-field="docs.sale_order_partner_id.name" /></div>
                             
                             <!-- QR Code -->
-                            <img t-att-src="docs.product_id.qr_code_uploaded" 
+                             <img t-att-src="docs.product_id.qr_code_selected" 
                                  style="width: 25mm; height: 25mm; position: absolute; top: 7mm; right: 7mm; background-color: white; padding: 3px; border-radius: 5px;" />
                         </div>
 
@@ -23,22 +23,26 @@
                                 <strong t-field="docs.product_id.display_name"/> <!-- Product Name -->
                             </p>
                             <p style="margin: 0; font-size: 12px;">
-                                <span><strong>Rocker Kit</strong></span> | 
-                                <span><strong>Color:</strong> <t t-esc="docs.color or 'N/A'"/></span>
+                               <span><strong>Marque</strong><t t-esc="doc.product_variant_ids[0].name"/></span> 
+                                <span><strong>Année</strong><t t-esc="docs.years or ''"/></span>
+                                <span><strong>Model</strong><t t-esc="doc.product_variant_ids[1].name"/></span>
+                                
+                            
+                                <span><strong>Color:</strong> <t t-esc="docs.interior_color or ''"/></span>
                             </p>
                         </div>
 
                         <!-- Product Image Section -->
-                        <div style="width: 100%; height: 50mm; text-align: center; margin: 5mm 0;">
-                            <img t-att-src="image_data_uri(docs.product_image)" 
+                        <div style="width: 100%; height: 50mm; text-align: center; margin: 5mm 0;border: 2px solid gray;">
+                            <img t-att-src="image_data_uri(docs.selected_image)" 
                                  style="max-width: 100%; height: 100%; object-fit: contain; border: 1px solid black; border-radius: 5px;" />
                         </div>
 
                         <!-- Part and Barcode Section -->
                         <div style="text-align: center; margin-top: 5mm;">
                             <!-- Part Number -->
-                            <p style="margin: 0; font-size: 12px;">
-                                <strong>PART#:</strong> <span t-field="docs.product_id.default_code" />
+                            <p style="margin: 0; font-size: 12px;border: 2px solid gray;">
+                                <strong>PART#:</strong> <span t-field="docs.product_id.name" /><span t-field="docs.interior_color" /><span t-field="docs.insert_color" />
                             </p>
                             
                             <!-- Barcode -->
