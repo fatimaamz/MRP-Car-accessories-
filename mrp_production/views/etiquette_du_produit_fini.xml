@@ -5,18 +5,7 @@
             <xpath expr="//t[@t-call='web.basic_layout']" position="replace">
                 <t t-call="web.basic_layout">
                   
-                    <div style="background-color: black; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
-                            <!-- Text on the left -->
-                            <div style="font-size: 14px; font-weight: bold;">
-                                DESIGNERTRIM
-                            </div>
-                            
-                            <!-- QR Code on the right -->
-                            <div>
-                                <img t-att-src="'/web/image/res.partner/' + str(docs.product_id.qr_code_uploaded) + '/image_1920'" 
-                                     alt="QR Code" style="width: 50px; height: 50px;" />
-                            </div>
-                        </div>        
+                  
                 <t t-set="nRows" t-value="12"/>
                     <t t-set="nCols" t-value="4"/>
                     <t t-set="uom_categ_unit" t-value="env.ref('uom.product_uom_categ_unit')"/>
@@ -37,9 +26,9 @@
                     <t t-set="num_pages" t-value="sum(move_line_qtys)// (nRows * nCols) + 1"/>
 
                     <div t-foreach="range(num_pages)" t-as="page" class="o_label_sheet" t-att-style="'padding: 5mm;'">
-                        <div class="page" style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm;">
+                        <!--<div class="page" style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm;">-->
 
-                            <div style="width: 90mm; height: 140mm; border: 1px solid black; margin: auto; position: relative; padding: 0; border-radius: 12px; overflow: hidden;">
+                            <div style="width: 90mm; height: 300mm; border: 1px solid black; margin: auto; position: relative; padding: 0; border-radius: 12px; overflow: hidden;">
 
                                  <div style="width: 100%; height: 10mm; text-align: center; overflow: hidden; border-bottom: 1px solid black; border-radius: 12px 12px 0 0;">
                                     <img t-att-src="'/web/image/res.company/%s/logo' % (docs.company_id.id)" alt="Logo de la Société" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px 12px 0 0;"/>
@@ -128,7 +117,7 @@
                                 </table>-->
                             </div>
                         </div>
-                    </div>
+                  <!--  </div>-->
                 </t>
             </xpath>
         </template>
