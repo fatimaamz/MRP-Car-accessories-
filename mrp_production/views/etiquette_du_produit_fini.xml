@@ -9,10 +9,10 @@
                             <p><strong><t t-esc="docs.product_id.name" /></strong></p>
                             <p>Rocker Kit: </p>
                             <p>Color: <t t-esc="docs.interior_color" /></p>
-                            <img t-if="docs.product_id.barcode" t-att-src="'data:image/png;base64,%s' % o.product_id.barecode" style="width: 80px; height: 80px;" />
+                            <img t-if="docs.product_id.qr_code_uploaded" t-att-src="'data:image/png;base64,%s' % o.product_id.qr_code_uploaded" style="width: 80px; height: 80px;" />
                             <img t-if="docs.selected_image" t-att-src="'data:image/png;base64,%s' % docs.selected_image" style="width: 100%; margin: 10px 0;" />
                             <p><strong><t t-esc="docs.product_id.default_code" /></strong></p>
-                            <img t-if="docs.barcode_image" t-att-src="'data:image/png;base64,%s' % docs.barcode_image" style="width: 100%;" />
+                          <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:25%'}"/>
                             <p><t t-esc="docs.product_id.barcode" /></p>
                         </div>
                 </t>
