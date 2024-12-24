@@ -12,7 +12,7 @@
                             <div style="font-size: 16px; font-weight: bold; line-height: 40mm;"><span t-field="docs.sale_order_partner_id.name" /></div>
                             
                             <!-- QR Code -->
-                             <img t-att-src="docs.product_id.qr_code_selected" 
+                             <img t-att-src="docs.product_id.qr_code_uploaded" 
                                  style="width: 25mm; height: 25mm; position: absolute; top: 7mm; right: 7mm; background-color: white; padding: 3px; border-radius: 5px;" />
                         </div>
 
