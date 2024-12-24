@@ -38,7 +38,27 @@
                                             <t t-esc="user.company_id.name"/>
                                         </strong>
                                         <br/>
-                                        <span t-field="user.company_id" t-options="{'widget': 'contact', 'fields': ['address', 'name'], 'no_marker': True}"/>
+                                        <span>
+                                               <t t-if="user.company_id.street">
+                                            <t t-esc="user.company_id.street"/>
+                                            <t t-if="user.company_id.city oruser.company_id.state_id or user.company_id.country_id">, </t>
+                                        </t>
+                                        <t t-if="user.company_id.city">
+                                            <t t-esc="user.company_id.city"/>
+                                            <t t-if="user.company_id.state_id or user.company_id.country_id">, </t>
+                                        </t>
+                                        <t t-if="user.company_id.state_id">
+                                            <t t-esc="user.company_id.state_id.name"/>
+                                            <t t-if="user.company_id.country_id">, </t>
+                                        </t>
+                                        <br/>
+                                        <t t-if="user.company_id.zip">
+                                            <t t-esc="user.company_id.zip"/>
+                                        </t>
+                                        <t t-if="user.company_id.country_id">
+                                            <t t-esc="user.company_id.country_id.name"/>
+                                        </t>
+                                        </span><br/>
                                         <span style="font-size: 14px;">
                                             
                                             <t t-esc="user.company_id.email or ''"/>
@@ -114,6 +134,9 @@
                                         </t>
                                         <br/>
                                         <br/>
+                                      <t t-if="doc.partner_shipping_id.email">
+                                            <span> <t t-esc="doc.partner_shipping_id.email"/></span>
+                                        </t>
                                         <t t-if="doc.partner_shipping_id.phone">
                                             <span>Téléphone : <t t-esc="doc.partner_shipping_id.phone"/></span>
                                         </t>
@@ -190,22 +213,25 @@
                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
                             <thead>
                                 <tr style="background-color: #edeff2;">
-                                    <th style="border: 1px solid #ddd; padding: 10px;">N°</th>
+                                   <!-- <th style="border: 1px solid #ddd; padding: 10px;">N°</th>-->
                                     <th style="border: 1px solid #ddd; padding: 10px;">Image</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">Description</th>
-                                    <th style="border: 1px solid #ddd; padding: 10px;">Couleur</th>
-                                    <th style="border: 1px solid #ddd; padding: 10px;">EnStock</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Insert</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Color</th> 
                                     <th style="border: 1px solid #ddd; padding: 10px;">Qty</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Stock</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">To Prod.</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
-                                <t t-set="counter" t-value="0"/>
+                                <!--<t t-set="counter" t-value="0"/>-->
                                 <t t-foreach="doc.order_line" t-as="line">
-                                    <t t-set="counter" t-value="counter + 1"/>
+                                   <!-- <t t-set="counter" t-value="counter + 1"/>-->
                                     <tr>
-                                        <td style="border: 1px solid #ddd; padding: 10px;">
+                                      <!--  <td style="border: 1px solid #ddd; padding: 10px;">
                                             <t t-esc="counter"/>
-                                        </td>
+                                        </td>-->
                                         <!-- Image Column -->
                                         <!--<td class="text-right">
                                             <img t-if="line.image_128" t-att-src="image_data_uri(line.image_128)"
@@ -229,14 +255,19 @@
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="line.insert_color  or ' '"/>
                                         </td>
+                                      <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                            <t t-esc="line.interior_color  or ' '"/>
+                                        </td>
+                                      
+                                      <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                            <t t-esc="line.product_uom_qty"/>
+                                        </td>
                                         <!-- EnStock -->
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="line.product_id.qty_available or 0"/>
                                         </td>
                                         <!-- Qty -->
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                            <t t-esc="line.product_uom_qty"/>
-                                        </td>
+                                        
                                     </tr>
 
                                 </t>
