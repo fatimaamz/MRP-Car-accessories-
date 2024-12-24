@@ -39,6 +39,7 @@
                                         </strong>
                                         <br/>
                                         <span style="font-size: 14px;">
+                                           <t  t-field="user.company_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;vat&quot;], &quot;no_marker&quot;: True, }"><br/>
                                             <t t-esc="user.company_id.email or ''"/>
                                             /
                                             <t t-esc="user.company_id.phone or ''"/>
