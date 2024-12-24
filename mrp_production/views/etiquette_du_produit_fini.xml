@@ -12,7 +12,7 @@
                             <div style="font-size: 16px; font-weight: bold; line-height: 40mm;"><span t-field="docs.sale_order_partner_id.name" /></div>
                             
                             <!-- QR Code -->
-                             <img t-att-src="docs.product_id.qr_code_uploaded" 
+                             <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" 
                                  style="width: 25mm; height: 25mm; position: absolute; top: 7mm; right: 7mm; background-color: white; padding: 3px; border-radius: 5px;" />
                         </div>
 
@@ -23,11 +23,9 @@
                                 <strong t-field="docs.product_id.display_name"/> <!-- Product Name -->
                             </p>
                             <p style="margin: 0; font-size: 12px;">
-                               <span><strong>Marque</strong><t t-esc="docs.product_variant_ids[0].name"/></span> 
-                                <span><strong>Année</strong><t t-esc="docs.years or ''"/></span>
-                                <span><strong>Model</strong><t t-esc="docs.product_variant_ids[1].name"/></span>
-                                
-                            
+                               <span><strong>Marque</strong><t t-esc="docs.product_variant_ids[0].name"/></span> <br/>
+                                <span><strong>Année</strong><t t-esc="docs.years or ''"/></span><b/>
+                                <span><strong>Model</strong><t t-esc="docs.product_variant_ids[1].name"/></span><br/>
                                 <span><strong>Color:</strong> <t t-esc="docs.interior_color or ''"/></span>
                             </p>
                         </div>
