@@ -4,7 +4,8 @@
         <template id="label_production_view_pdf_custom" inherit_id="mrp.label_production_view_pdf">
             <xpath expr="//t[@t-call='web.basic_layout']" position="replace">
                 <t t-call="web.basic_layout">
-                   <div style="border: 1px solid #000; width: 250px; padding: 10px; font-family: Arial, sans-serif; font-size: 12px; text-align: center;">
+                  
+                    <div style="border: 1px solid #000; width: 250px; padding: 10px; font-family: Arial, sans-serif; font-size: 12px; text-align: center;">
             <!-- Header Section -->
             <div style="border-bottom: 2px solid #000; margin-bottom: 10px;">
                 <h3 style="margin: 0; font-size: 16px; font-weight: bold;">DESIGNERTRIM</h3>
@@ -26,8 +27,7 @@
 
             <!-- Product Image -->
             <div style="margin-bottom: 10px;">
-                <img t-if="docs.product_image" t-att-src="'data:image/png;base64,%s' % docs.selected_image" style="width: 100%; height: auto; border: 1px solid #ccc;" />
-                
+                <img t-if="docs.selected_image" t-att-src="'data:image/png;base64,%s' % docs.selected_image" style="width: 100%; height: auto; border: 1px solid #ccc;" />
             </div>
 
             <!-- Product Code -->
@@ -37,11 +37,12 @@
 
             <!-- Barcode Section -->
             <div>
-                <p t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:auto'}"/>
-
+                <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:35%'}"/>
                 <p style="margin: 0; font-size: 10px;">HMAKONA2024RED</p>
             </div>
         </div>
+         
+        
                 </t>
                     
                    <!-- <t t-set="nRows" t-value="12"/>
