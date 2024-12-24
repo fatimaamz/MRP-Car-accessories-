@@ -23,9 +23,9 @@
                                 <strong t-field="docs.product_id.display_name"/> <!-- Product Name -->
                             </p>
                             <p style="margin: 0; font-size: 12px;">
-                               <span><strong>Marque</strong><t t-esc="doc.product_variant_ids[0].name"/></span> 
+                               <span><strong>Marque</strong><t t-esc="docs.product_variant_ids[0].name"/></span> 
                                 <span><strong>Année</strong><t t-esc="docs.years or ''"/></span>
-                                <span><strong>Model</strong><t t-esc="doc.product_variant_ids[1].name"/></span>
+                                <span><strong>Model</strong><t t-esc="docs.product_variant_ids[1].name"/></span>
                                 
                             
                                 <span><strong>Color:</strong> <t t-esc="docs.interior_color or ''"/></span>
