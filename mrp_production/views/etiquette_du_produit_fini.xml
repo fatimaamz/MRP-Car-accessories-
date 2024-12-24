@@ -4,7 +4,7 @@
             <xpath expr="//t[@t-call='web.basic_layout']" position="replace">
                 <t t-call="web.basic_layout">
                     <!-- Outer Container -->
-                    <div style="width: 100mm; height: 200mm; border: 1px solid black; padding: 5mm; border-radius: 12px; overflow: hidden;">
+                    <div style="width: 100mm; height: 170mm; border: 1px solid black; padding: 5mm; border-radius: 12px; overflow: hidden;">
                         
                         <!-- Header Section -->
                         <div style="width: 100%; height: 40mm; background-color: black; color: white; text-align: left; position: relative; border-radius: 12px 12px 0 0;">
@@ -23,10 +23,11 @@
                                 <strong t-field="docs.product_id.display_name"/> <!-- Product Name -->
                             </p>
                             <p style="margin: 0; font-size: 12px;">
+                                <span><strong>Type de produit</strong><t t-esc="docs.product_id.detailed_type"/></span> <br/>
                                <span><strong>Marque</strong><t t-esc="docs.product_variant_ids[0].name"/></span> <br/>
                                 <span><strong>Année</strong><t t-esc="docs.years or ''"/></span><b/>
                                 <span><strong>Model</strong><t t-esc="docs.product_variant_ids[1].name"/></span><br/>
-                                <span><strong>Color:</strong> <t t-esc="docs.interior_color or ''"/></span>
+                                <span><strong>Couleur:</strong> <t t-esc="docs.interior_color or ''"/></span>
                             </p>
                         </div>
 
