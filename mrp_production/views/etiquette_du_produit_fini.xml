@@ -26,7 +26,7 @@
                     <t t-set="num_pages" t-value="sum(move_line_qtys)// (nRows * nCols) + 1"/>
 
                     <div t-foreach="range(num_pages)" t-as="page" class="o_label_sheet" t-att-style="'padding: 5mm;'">
-                        div class="page" style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm;">
+                        <div class="page" style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm;">
 
                                <div style="width: 90mm; height: 80mm; border: 5px solid black; margin: auto; position: relative; padding: 0; border-radius: 12px; overflow: hidden;">
                                     <!-- Header Section -->
