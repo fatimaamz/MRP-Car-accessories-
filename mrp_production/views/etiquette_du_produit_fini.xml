@@ -5,47 +5,8 @@
             <xpath expr="//t[@t-call='web.basic_layout']" position="replace">
                 <t t-call="web.basic_layout">
                   
-                    <div style="border: 1px solid #000; width: 250px; padding: 10px; font-family: Arial, sans-serif; font-size: 12px; text-align: center;">
-            <!-- Header Section -->
-            <div style="border-bottom: 2px solid #000; margin-bottom: 10px;">
-                <h3 style="margin: 0; font-size: 16px; font-weight: bold;">DESIGNERTRIM</h3>
-            </div>
-            
-            <!-- Product Information -->
-            <div style="margin-bottom: 10px; text-align: left;">
-                <p style="margin: 0; font-size: 14px; font-weight: bold;">Kona 2024</p>
-                <div style="display: flex; justify-content: space-between; font-size: 12px;">
-                    <span>Rocker Kit</span>
-                    <span>Color: Racing Red</span>
-                </div>
-            </div>
-
-            <!-- QR Code Section -->
-            <div style="margin-bottom: 10px;">
-                <img t-if="docs.product_id.qr_code_uploaded" t-att-src="'data:image/png;base64,%s' % docs.product_id.qr_code_uploaded" style="width: 50px; height: 50px;" />
-            </div>
-
-            <!-- Product Image -->
-            <div style="margin-bottom: 10px;">
-                <img t-if="docs.selected_image" t-att-src="'data:image/png;base64,%s' % docs.selected_image" style="width: 100%; height: auto; border: 1px solid #ccc;" />
-            </div>
-
-            <!-- Product Code -->
-            <div style="margin-bottom: 10px;">
-                <p style="margin: 0; font-weight: bold;">HYKONA2024</p>
-            </div>
-
-            <!-- Barcode Section -->
-            <div>
-                <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:100%;height:35%'}"/>
-                <p style="margin: 0; font-size: 10px;">HMAKONA2024RED</p>
-            </div>
-        </div>
-         
-        
-                </t>
                     
-                   <!-- <t t-set="nRows" t-value="12"/>
+                <t t-set="nRows" t-value="12"/>
                     <t t-set="nCols" t-value="4"/>
                     <t t-set="uom_categ_unit" t-value="env.ref('uom.product_uom_categ_unit')"/>
 
@@ -105,7 +66,7 @@
                                 <span class="text-end">
                                     <span t-field="docs.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:350px;height:60px'}">Package barcode</span>
                                 </span>
-                            </div>-->
+                            </div>
 
 
                                 
@@ -154,10 +115,10 @@
                                         </tr>
                                     </t>
                                 </table>-->
-                           <!-- </div>
+                            </div>
                         </div>
                     </div>
-                </t>-->
+                </t>
             </xpath>
         </template>
     </data>
