@@ -26,9 +26,9 @@
                     <t t-set="num_pages" t-value="sum(move_line_qtys)// (nRows * nCols) + 1"/>
 
                     <div t-foreach="range(num_pages)" t-as="page" class="o_label_sheet" t-att-style="'padding: 5mm;'">
-                        <!--<div class="page" style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm;">-->
+                        div class="page" style="width: 100mm; height: 150mm; border: 1px solid black; padding: 5mm;">
 
-                               <div style="width: 90mm; height: 110mm; border: 5px solid black; margin: auto; position: relative; padding: 0; border-radius: 12px; overflow: hidden;">
+                               <div style="width: 90mm; height: 80mm; border: 5px solid black; margin: auto; position: relative; padding: 0; border-radius: 12px; overflow: hidden;">
                                     <!-- Header Section -->
                                     <div style="width: 100%; height: 40mm; text-align: center; overflow: hidden; border-bottom: 1px solid black; border-radius: 12px 12px 0 0; background-color: black; position: relative;">
                                         <!-- Partner Name -->
@@ -36,7 +36,7 @@
                                         
                                         <!-- QR Code with White Background -->
                                         <img t-att-src="docs.product_id.qr_code_uploaded" 
-                                             style="max-width: 50%; background-color: white; padding: 5px; border-radius: 8px; position: absolute; bottom: 8px; left: 16px;" />
+                                             style="max-width: 70%; background-color: white; padding: 5px;  position: absolute;bottom: 8px;right: 16px;" />
                                     </div>
                                 </div>
 
@@ -124,7 +124,7 @@
                                 </table>-->
                             </div>
                         
-                  <!--  </div>-->
+                  </div>
                 </t>
             </xpath>
         </template>
