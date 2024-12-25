@@ -50,6 +50,31 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    picking_name = fields.Char(
+        string="Tracking Name",
+        compute="_compute_picking_details",
+        store=True
+    )
+    numero_suivi = fields.Char(
+        string="Tracking Number",
+        compute="_compute_picking_details",
+        store=True
+    )
+    carrier_id = fields.Char(
+        string="Carrier id",
+        compute="_compute_picking_details",
+        store=True
+    )
+
+    def _compute_picking_details(self):
+        for record in self:
+            picking = self.env['stock.picking'].search([
+                ('origin', '=', record.invoice_origin)
+            ], limit=1)
+            record.picking_name = picking.name if picking else False
+            record.numero_suivi = picking.numero_suivi if picking else False
+            record.carrier_id = picking.carrier_id if picking else False
+
     payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
 
     @api.depends('payment_ids')
