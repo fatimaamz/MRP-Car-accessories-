@@ -72,9 +72,10 @@ class AccountMove(models.Model):
             picking = self.env['stock.picking'].search([
                 ('origin', '=', record.invoice_origin)
             ], limit=1)
-            record.picking_name = picking.name if picking else False
-            record.numero_suivi = picking.numero_suivi if picking else False
-            record.carrier_id = picking.carrier_id if picking else False
+            if picking:
+                record.picking_name = picking.name if picking else False
+                record.numero_suivi = picking.numero_suivi if picking else False
+                record.carrier_id = picking.carrier_id if picking else False
 
     payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
 
