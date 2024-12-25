@@ -157,7 +157,7 @@
                                         </span>
                                            
                                             <span>Tracking number : <t t-esc="doc.numero_suivi"/></span>
-                                           <!-- <span>Via : <t t-esc="doc.carrier_id"/></span>-->
+                                           <span>Via : <t t-esc="doc.carrier_id"/></span>
                                     </td>
 
                                     <!-- Right Block: Order Details -->
