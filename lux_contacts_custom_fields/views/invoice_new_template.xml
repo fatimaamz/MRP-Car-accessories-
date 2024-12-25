@@ -155,9 +155,11 @@
                                             <t t-esc="doc.invoice_date"/>
                                         
                                         </span>
+                                        <br/>
                                            
                                             <span>Tracking number : <t t-esc="doc.numero_suivi"/></span>
-                                           <span>Via : <t t-esc="doc.carrier_id"/></span>
+                                        <br/>
+                                           <span>Via : <t t-esc="doc.carrier_id.name"/></span>
                                     </td>
 
                                     <!-- Right Block: Order Details -->
