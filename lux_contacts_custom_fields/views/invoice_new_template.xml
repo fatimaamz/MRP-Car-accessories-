@@ -156,8 +156,8 @@
                                         
                                         </span>
                                            
-                                            <span>Tracking number : <t t-esc="doc.picking_id[0].numero_suivi"/></span>
-                                            <span>Via : <t t-esc="doc.picking_id[0].carrier_id"/></span>
+                                            <span>Tracking number : <t t-esc="doc.numero_suivi"/></span>
+                                            <span>Via : <t t-esc="doc.carrier_id"/></span>
                                     </td>
 
                                     <!-- Right Block: Order Details -->
@@ -312,7 +312,7 @@
                             <tr>
                                 <td  colspan="2" style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
                                     <strong>Stock :</strong>
-                                   <t t-esc="doc.picking_id[0].name"/>
+                                   <t t-esc="doc.picking_name"/>
 
                                 </td>
 
