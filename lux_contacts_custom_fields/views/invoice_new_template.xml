@@ -155,7 +155,7 @@
                                             <t t-esc="doc.invoice_date"/>
                                         
                                         </span>
-                                            </span>
+                                           
                                             <span>Tracking number : <t t-esc="doc.picking_id[0].numero_suivi"/></span>
                                             <span>Via : <t t-esc="doc.picking_id[0].carrier_id"/></span>
                                     </td>
