@@ -180,10 +180,16 @@
 
                                         Facture N°:
                                         <t t-esc="doc.name or ''"/>
+                                         <br/>
+                                        <br/>
 
-                                        <t t-if="doc.payment_date">
-                                            <t t-esc="doc.payment_date or ''"/>
-                                        </t>
+                                         Payé le: 
+                                          <t t-esc="doc.payment_date or ''"/>
+                                         <br/>
+                                        <br/>
+                                        Dealer : <t t-esc="doc.sale_order_partner_id.dealer_code or ''"/>
+                                        
+                                        
                                     </td>
                                 </tr>
                             </table>
@@ -197,8 +203,8 @@
 
                                     <th style="border: 1px solid #ddd; padding: 10px;">Description</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">Qty</th>
-                                    <th style="border: 1px solid #ddd; padding: 10px;">Stock</th>
-                                    <th style="border: 1px solid #ddd; padding: 10px;">To prod</th>
+                                   <!-- <th style="border: 1px solid #ddd; padding: 10px;">Stock</th>-->
+                                   <!-- <th style="border: 1px solid #ddd; padding: 10px;">To prod</th>-->
                                     <th style="border: 1px solid #ddd; padding: 10px;">Unit Cost</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">Disc.</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">STotal</th>
@@ -222,13 +228,13 @@
                                                 <t t-esc="line.quantity"/>
                                             </td>
                                             <!-- EnStock -->
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                            <!--<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="line.product_id.qty_available or 0"/>
-                                            </td>
+                                            </td>-->
                                             <!-- To prod -->
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                           <!-- <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="line.quantity - (line.product_id.qty_available or 0)"/>
-                                            </td>
+                                            </td>-->
                                              <!-- Unit cost -->
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="line.price_unit"/>
@@ -306,7 +312,7 @@
                             <tr>
                                 <td  colspan="2" style="text-align: right; font-size: 14px; font-weight: bold; padding: 5px;">
                                     <strong>Stock :</strong>
-                                    <t t-esc="sum(line.quantity for line in doc.invoice_line_ids)"/>
+                                   <t t-esc="doc.picking_id[0].name"/>
 
                                 </td>
 
