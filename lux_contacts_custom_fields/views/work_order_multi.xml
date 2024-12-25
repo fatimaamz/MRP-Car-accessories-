@@ -93,7 +93,7 @@
                                 </t>
                                 <br/><br/>
                                  <t t-if="docs[0].partner_shipping_id.email">
-                                    <span>Téléphone: <t t-esc="docs[0].partner_shipping_id.email"/></span>
+                                    < <t t-esc="docs[0].partner_shipping_id.email"/>
                                 </t><br/>
                                 <t t-if="docs[0].partner_shipping_id.phone">
                                     <span>Téléphone: <t t-esc="docs[0].partner_shipping_id.phone"/></span>
