@@ -118,11 +118,18 @@
                     <tbody>
                          
                             <tr>
+                                <td>
+                                    <strong><t t-esc="wo['product'] or ''"/></strong>
+                                </td>
+                                
                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: left;vertical-align: top;">
                                     <div style="background-color: #d3d3d3; text-align: center; padding: 10px;">
                                                   <img t-att-src="image_data_uri(wo['image'])"
                                                        style="width: 100px; height: 100px; object-fit: contain; display: block; border: none;"/>
                                               </div>
+                                </td>
+                                <td>
+                                    <strong><t t-esc="wo['quantity'] or ''"/></strong>
                                 </td>
                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: left;vertical-align: top;">
                                     <strong>
@@ -131,7 +138,8 @@
                                     <br/>
                                     Date: <t t-esc="wo['date'] or ''"/><br/>
                                     Coupé: <t t-esc="wo['couper']"/><br/>
-                                    Quantité: <t t-esc="wo['quantity']"/>
+                                    Placé: <t t-esc="wo['placer']"/><br/>
+                                   
                                 </td>
                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: left;vertical-align: top;">
                                     Interior Color: <t t-esc="wo['interior'] or ''"/><br/>
