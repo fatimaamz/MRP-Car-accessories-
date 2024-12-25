@@ -50,21 +50,21 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    picking_name = fields.Char(
-        string="Tracking Name",
-        compute="_compute_picking_details",
-        store=True
-    )
-    numero_suivi = fields.Char(
-        string="Tracking Number",
-        compute="_compute_picking_details",
-        store=True
-    )
-    carrier_id = fields.Char(
-        string="Carrier id",
-        compute="_compute_picking_details",
-        store=True
-    )
+    #picking_name = fields.Char(
+    #    string="Tracking Name",
+    #    compute="_compute_picking_details",
+    #    store=True
+    #)
+    #numero_suivi = fields.Char(
+    #    string="Tracking Number",
+    #    compute="_compute_picking_details",
+    #    store=True
+    #)
+    #carrier_id = fields.Char(
+    #    string="Carrier id",
+    #    compute="_compute_picking_details",
+    #    store=True
+    #)
 
     def _compute_picking_details(self):
         for record in self:
