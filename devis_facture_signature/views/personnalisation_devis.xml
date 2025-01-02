@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<odoo>
+
+
+    <template id="report_saleorder_document_customized" inherit_id="sale.report_saleorder_document">
+
+        <xpath expr="//div[@name='so_total_summary']" position="after">
+
+
+            <div style="position: absolute; bottom: 20px; left: 20px; width: 60%;">
+                <p>
+                    <strong style="color:#3c90e3;">CONDITIONS</strong>
+                </p>
+                <p>
+                    <strong style="color: #1A5276;">Délai de réalisation</strong>
+                    <br/>
+                    Intervention sur site : 24 heures après validation de la commande.
+                </p>
+                <p>
+                    <strong style="color: #1A5276; ">Modalité du paiement</strong>
+                    <br/>
+                    50% à la réception du Bon de Commande, 50% à la livraison des attestations.
+                </p>
+            </div>
+
+            <!-- Ajouter la signature en bas à droite -->
+            <div style="position: absolute; bottom: 20px; right: 20px; width: 30%; text-align: right;">
+                <img src="/devis_facture_signature/static/signature.png" alt="Signature"
+                     style="max-width: 100%; height: auto;"/>
+            </div>
+
+
+        </xpath>
+
+
+    </template>
+
+
+</odoo>
+
+
+
+    
