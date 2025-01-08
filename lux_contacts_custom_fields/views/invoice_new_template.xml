@@ -18,13 +18,13 @@
 
         <t t-call="web.basic_layout">
 
-             <div
+             <div class="page"
       style="
        
         position: relative;
         
-        overflow: hidden;
-        text-align: left;
+       
+        
         font-size: 8px;
         color: #19213c;
         font-family: Inter;
