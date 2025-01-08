@@ -18,14 +18,7 @@
 
         <t t-call="web.basic_layout">
 
-             <div class="page"
-      style="
-       
-        font-size: 20px;
-        color: #19213c;
-        font-family: Inter;
-      "
-    >
+             <div class="page" style="color: #19213c;font-family: Inter;">
       <img
         style="
           position: absolute;
