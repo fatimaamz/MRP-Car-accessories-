@@ -128,7 +128,7 @@
                                         <br/>
                                         <br/>
                                         <t t-if="doc.partner_shipping_id.name">
-                                            <t t-esc="doc.partner_shipping_id.name" style="font-weight: bold;"/>
+                                          <strong>  <t t-esc="doc.partner_shipping_id.name" /></strong>
                                             <br/>
                                             <br/>
                                         </t>
@@ -169,7 +169,7 @@
                                            
                                             <span>Tracking number : <t t-esc="doc.numero_suivi"/></span>
                                         <br/>
-                                           <span>Via : <t t-esc="doc.carrier_id.name"/></span>
+                                           <span>Via :<strong> <t t-esc="doc.carrier_id.name"/></strong></span>
                                     </td>
 
                                     <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 16px; border: 1px solid white; margin-left: 20px; text-align: justify;">
