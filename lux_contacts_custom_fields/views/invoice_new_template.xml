@@ -172,12 +172,9 @@
                                            <span>Via : <t t-esc="doc.carrier_id.name"/></span>
                                     </td>
 
-                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;   border: 1px solid white;position: absolute;
+                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;   border: 1px solid white;
               
-                                       
-                                        display: flex;
-                                        flex-direction: column;
-                                       
+                                    
                                         justify-content: flex-start;">
                                         <strong style="font-size: 14px;">Order Details:</strong>
                                         <br/>
