@@ -211,12 +211,11 @@
 
                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                             <thead>
-                                <tr style=" background-color: #f7f7f7; position: absolute;">
+                                <tr style=" background-color: #f7f7f7;">
 
                                     <th style="border: 1px solid #ddd; padding: 10px;">Description</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">Qty</th>
-                                    <th style="border: 1px solid #ddd; padding: 10px;"><p style="margin: 0">Unit</p>
-                                    <p style="margin: 0">Cost</p></th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Unit Cost</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">Disc.</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">STotal</th>
 
