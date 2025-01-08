@@ -291,8 +291,9 @@
                                 <strong>Weight :</strong>
                                 <t t-esc="doc.weight"/>
                                 <br/> 
-                                <strong>Stock :</strong>
-                                <t t-esc="doc.picking_name"/>
+                              
+                                <strong>Serial Number :</strong>
+                                <t t-esc="doc.numero_serie"/>
                             </td>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
                                 <strong>TPS/G.S.T :</strong>
@@ -302,9 +303,9 @@
                         </tr>
                         <tr>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
-                                <strong>Serial Number :</strong>
-                                <t t-esc="doc.numero_serie"/>
                                 
+                                  <strong>Stock :</strong>
+                                <t t-esc="doc.picking_name"/>
                             </td>
                         
                             
