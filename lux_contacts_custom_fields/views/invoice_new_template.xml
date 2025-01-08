@@ -18,17 +18,7 @@
 
         <t t-call="web.basic_layout">
 
-            <div class="page" style="
-        width: 100%;
-        position: relative;
-        background-color: #fff;
-        height: 842px;
-        overflow: hidden;
-        text-align: left;
-        font-size: 8px;
-        color: #19213c;
-        font-family: Inter;
-      ">
+            <div class="page">
                 <t t-foreach="docs" t-as="doc">
                     <main>
                         <!-- Header Section -->
