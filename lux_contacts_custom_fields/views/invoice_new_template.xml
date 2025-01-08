@@ -108,9 +108,9 @@
                                         </t>
                                     </td>
 
-                                    <td style="padding: 10px; border-radius: 13px;
+                                    <td style="padding: 10px; border-radius: 15px;
                                               background-color: #f6f8fc;
-                                              border: 1px solid #fffff;
+                                              border: 1px solid white;
                                               height: 160px;
                                               display: flex;
                                               flex-direction: column;
