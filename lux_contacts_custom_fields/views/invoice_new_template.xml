@@ -121,7 +121,7 @@
                                       
                                         <span>
                                             <strong>
-                                                <br/><br/><span t-esc="'Ship to / Expédié à :'"/>
+                                                <br/><span t-esc="'Ship to / Expédié à :'"/>
                                             </strong>
                                         </span>
                                         <br/>
@@ -281,8 +281,8 @@
                                 <t t-esc="doc.custom_clearance"/>
                             </td>
                             <td style=" font-size: 14px;padding: 6px;float: right;">
-                                <strong>TVP/P.S.T :</strong>
-                                <t t-esc="doc.tvp"/>
+                                <strong>Taxes :</strong>
+                                <t t-esc="doc.amount_tax_signed"/>
                             </td>
                         </tr>
                         <tr>
@@ -294,11 +294,11 @@
                                 Serial Number :
                                 <t t-esc="doc.numero_serie"/>
                             </td>
-                            <td style=" font-size: 14px;padding: 6px;float: right;">
+                           <!-- <td style=" font-size: 14px;padding: 6px;float: right;">
                                 <strong>TPS/G.S.T :</strong>
                                 <t t-esc="doc.tps"/><br/>
                                 <span style="font-size: 9px; padding: 5px;"> (HTS) si applicable </span>
-                            </td>
+                            </td>-->
                         </tr>
                         <tr>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
