@@ -286,7 +286,7 @@
                                 <t t-esc="doc.custom_clearance"/>
                             </td>
                             <td style=" font-size: 14px;padding: 6px;float: right;">
-                                <strong>Taxes :</strong>
+                                <strong> <t t-esc="line[0].tax_ids[0].name"/>:</strong>
                                 <t t-esc="doc.amount_tax_signed"/>
                             </td>
                         </tr>
