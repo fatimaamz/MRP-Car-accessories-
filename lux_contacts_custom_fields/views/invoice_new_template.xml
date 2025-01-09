@@ -20,7 +20,7 @@
 
              
 
-           <div class="page" >
+           <div class="page" style="color: #2f374f;font-family: Inter;">
                 <t t-foreach="docs" t-as="doc">
                     <main>
                         <div class="header"
@@ -29,7 +29,7 @@
                                 <tr style="border: 1px solid white;">
                                     <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                         <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                                 style="  width: 100px;height: 30px;" alt="Company Logo"/><br/><br/>
+                                                 style="  width: 150px;height: 50px;" alt="Company Logo"/><br/><br/>
                                         <h2 style="display: inline-block; margin-left: 8px; vertical-align: middle; margin-bottom: 0;">
                                             <strong>Invoice</strong>
                                         </h2>
@@ -260,7 +260,7 @@
                                 PCS :
                                 <t t-esc="doc.pcs"/>
                             </td>
-                            <td style="text-align: justify; font-size: 14px; padding: 6px;">
+                            <td style="text-align: justify; font-size: 14px;">
                                 <strong>Sous Total :</strong>
                                 <t t-esc="'$ {:.2f}'.format(doc.amount_untaxed)"/>
                             </td>
@@ -270,7 +270,7 @@
                                 Carrier :
                                 <t t-esc="doc.carrier_id.name"/>
                             </td>
-                            <td style="text-align: justify; font-size: 14px; padding: 6px;">
+                            <td style="text-align: justify; font-size: 14px;">
                                 <strong>Transport :</strong>
                                 <t t-esc="doc.transport"/>
                             </td>
@@ -280,7 +280,7 @@
                                 Custom Clearance :
                                 <t t-esc="doc.custom_clearance"/>
                             </td>
-                            <td style="text-align: justify; font-size: 14px; padding: 6px;">
+                            <td style="text-align: justify; font-size: 14px;">
                                 <strong>TVP/P.S.T :</strong>
                                 <t t-esc="doc.tvp"/>
                             </td>
@@ -294,7 +294,7 @@
                                 Serial Number :
                                 <t t-esc="doc.numero_serie"/>
                             </td>
-                            <td style="text-align: justify; font-size: 14px; padding: 6px;">
+                            <td style="text-align: justify; font-size: 14px;">
                                 <strong>TPS/G.S.T :</strong>
                                 <t t-esc="doc.tps"/><br/>
                                 <span style="font-size: 9px; padding: 5px;"> (HTS) si applicable </span>
@@ -308,7 +308,7 @@
                             </td>
                         
                             
-                            <td style="text-align: justify; font-size: 14px; padding: 6px;">
+                            <td style="text-align: justify; font-size: 14px;">
                                 <strong>GRAND TOTAL :</strong>
                                 <t t-esc="'$ {:.2f}'.format(doc.amount_total)"/>
                             </td>
