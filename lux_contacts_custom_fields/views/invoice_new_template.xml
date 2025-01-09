@@ -111,7 +111,7 @@
                                     <td style="padding: 10px; border-radius: 15px;
                                               background-color: #f6f8fc;
                                               border: 1px solid white;
-                                              height: 160px;
+                                              height: 200px;
                                               display: flex;
                                               flex-direction: column;
                                             
@@ -121,7 +121,7 @@
                                       
                                         <span>
                                             <strong>
-                                                <br/><span t-esc="'Ship to / Expédié à :'"/>
+                                               <span t-esc="'Ship to / Expédié à :'"/>
                                             </strong>
                                         </span>
                                         <br/>
