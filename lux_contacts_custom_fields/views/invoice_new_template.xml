@@ -291,9 +291,9 @@
                                 <t t-esc="doc.weight"/>
                                 
                               
-                               
-                            </td>
-                             <td  style="text-align: justify; font-size: 14px; padding: 6px;"> Serial Number :
+                               <br/><br/>
+                            
+                              Serial Number :
                                 <t t-esc="doc.numero_serie"/>
                             </td>
                            <!-- <td style=" font-size: 14px;padding: 6px;float: right;">
