@@ -229,8 +229,12 @@
 
                                         <t t-if="line.name">
                                             <td style="border: 1px solid #ddd; padding: 10px;">
-                                              <strong>  <t t-esc="line.product_id.name or ''"/></strong>
-                                                 <t t-esc="line.name or ''"/>
+                                               <strong>
+                                                    <t t-esc="line.name.split(' ', 1)[0]"/> <!-- Extracts the first word or token -->
+                                                </strong>
+                                                <span>
+                                                    <t t-esc="' '.join(line.name.split(' ')[1:])"/> <!-- Extracts the rest of the text -->
+                                                </span>
                                             </td>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="line.quantity"/>
