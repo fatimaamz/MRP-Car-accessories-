@@ -20,7 +20,7 @@
 
              
 
-           <div class="page" style="color: #2f374f;font-family: Inter;line-height: 1.5;">
+           <div class="page" style="color: #2f374f;font-family: Inter;line-height: 1.2;">
                 <t t-foreach="docs" t-as="doc">
                     <main>
                         <div class="header"
