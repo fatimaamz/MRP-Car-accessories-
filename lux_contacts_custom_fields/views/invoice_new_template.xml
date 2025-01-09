@@ -29,12 +29,12 @@
                                 <tr style="border: 1px solid white;">
                                     <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                         <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                                 style="  width: 150px;height: 50px;" alt="Company Logo"/><br/><br/>
+                                                 style="  width: 250px;height: 80px;" alt="Company Logo"/><br/><br/>
                                         <h2 style="display: inline-block; margin-left: 8px; vertical-align: middle; margin-bottom: 0;">
                                             <strong>Invoice</strong>
                                         </h2>
                                     </td>
-                                    <td style="text-align: right; vertical-align: middle; border: 1px solid white;">
+                                    <td style="text-align: right; vertical-align: middle; border: 1px solid white;padding-right: 220px;">
                                         <div style="text-align: justify; width: 100%; border: 1px solid white;">
                                             <strong style="font-size: 16px;">
                                                 <t t-esc="user.company_id.name"/>
@@ -260,7 +260,7 @@
                                 PCS :
                                 <t t-esc="doc.pcs"/>
                             </td>
-                            <td style="text-align: justify; font-size: 14px;">
+                            <td style="text-align: justify; font-size: 14px;padding-right: 20px;">
                                 <strong>Sous Total :</strong>
                                 <t t-esc="'$ {:.2f}'.format(doc.amount_untaxed)"/>
                             </td>
