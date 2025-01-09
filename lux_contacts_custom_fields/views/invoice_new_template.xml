@@ -114,7 +114,6 @@
                                               height: 160px;
                                               display: flex;
                                               flex-direction: column;
-                                              margin-top:14px;
                                             
                                               box-sizing: border-box;
                                              
@@ -122,7 +121,7 @@
                                       
                                         <span>
                                             <strong>
-                                                <span t-esc="'Ship to / Expédié à :'"/>
+                                                <br/><br/><span t-esc="'Ship to / Expédié à :'"/>
                                             </strong>
                                         </span>
                                         <br/>
