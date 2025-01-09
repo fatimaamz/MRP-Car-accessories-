@@ -289,21 +289,22 @@
                             <td rowspan="2" style="text-align: justify; font-size: 14px; padding: 6px;">
                                 Weight :
                                 <t t-esc="doc.weight"/>
-                                <br/> 
+                                
                               
                                
                             </td>
+                            
                            <!-- <td style=" font-size: 14px;padding: 6px;float: right;">
                                 <strong>TPS/G.S.T :</strong>
                                 <t t-esc="doc.tps"/><br/>
                                 <span style="font-size: 9px; padding: 5px;"> (HTS) si applicable </span>
                             </td>-->
                         </tr>
-                           <tr>
-                               <td rowspan="2" style="text-align: justify; font-size: 14px; padding: 6px;"> Serial Number :
+                        <tr>
+                              <td  style="text-align: justify; font-size: 14px; padding: 6px;"> Serial Number :
                                 <t t-esc="doc.numero_serie"/>
                                </td>
-                           </tr> 
+                        </tr>
                         <tr>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
                                 
