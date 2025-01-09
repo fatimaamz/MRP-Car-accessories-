@@ -29,7 +29,7 @@
                                 <tr style="border: 1px solid white;">
                                     <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                         <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                                 style="  width: 250px;height: 60px;" alt="Company Logo"/><br/><br/>
+                                                 style="  width: 250px;height: 40px;" alt="Company Logo"/><br/><br/>
                                         <h2 style="display: inline-block; margin-left: 8px; vertical-align: middle; margin-bottom: 0;">
                                             <strong>Invoice</strong>
                                         </h2>
@@ -229,7 +229,8 @@
 
                                         <t t-if="line.name">
                                             <td style="border: 1px solid #ddd; padding: 10px;">
-                                              <strong>  <t t-esc="line.name or ''"/></strong>
+                                              <strong>  <t t-esc="line.product_id.name or ''"/></strong>
+                                                 <t t-esc="line.name or ''"/>
                                             </td>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="line.quantity"/>
