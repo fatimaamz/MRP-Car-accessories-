@@ -229,7 +229,7 @@
 
                                         <t t-if="line.name">
                                             <td style="border: 1px solid #ddd; padding: 10px;">
-                                                <t t-esc="line.name or ''"/>
+                                              <strong>  <t t-esc="line.name or ''"/></strong>
                                             </td>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="line.quantity"/>
