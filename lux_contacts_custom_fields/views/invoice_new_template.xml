@@ -29,9 +29,9 @@
                                 <tr style="border: 1px solid white;">
                                     <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                         <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                             style="height: 60px;" alt="Company Logo"/><br/>
-                                        <h2 style="display: inline-block; margin-left: 10px; vertical-align: middle; margin-bottom: 0;">
-                                            Invoice
+                                             style="  width: 65px;height: 12px;" alt="Company Logo"/><br/><br/>
+                                        <h2 style="display: inline-block; margin-left: 8px; vertical-align: middle; margin-bottom: 0;">
+                                            <strong>Invoice</strong>
                                         </h2>
                                     </td>
                                     <td style="text-align: right; vertical-align: middle; border: 1px solid white;">
@@ -254,10 +254,10 @@
 
                             </tbody>
                         </table>
-                        <table style="width: 100%; margin: 20px auto; border-spacing: 5px; border: 1px solid #f7f7f7; background-color: #f7f7f7; padding: 6px;">
+                        <table style="width: 100%; margin: 28px auto; border-spacing: 5px; border: 1px solid #f7f7f7; background-color: #f7f7f7; padding: 6px;">
                         <tr>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
-                                <strong>PCS :</strong>
+                                PCS :
                                 <t t-esc="doc.pcs"/>
                             </td>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
@@ -267,7 +267,7 @@
                         </tr>
                         <tr>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
-                                <strong>Carrier :</strong>
+                                Carrier :
                                 <t t-esc="doc.carrier_id.name"/>
                             </td>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
@@ -277,7 +277,7 @@
                         </tr>
                         <tr>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
-                                <strong>Custom Clearance :</strong>
+                                Custom Clearance :
                                 <t t-esc="doc.custom_clearance"/>
                             </td>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
@@ -287,11 +287,11 @@
                         </tr>
                         <tr>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
-                                <strong>Weight :</strong>
+                                Weight :
                                 <t t-esc="doc.weight"/>
                                 <br/> 
                               
-                                <strong>Serial Number :</strong>
+                                Serial Number :
                                 <t t-esc="doc.numero_serie"/>
                             </td>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
@@ -303,7 +303,7 @@
                         <tr>
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
                                 
-                                  <strong>Stock :</strong>
+                                Stock :
                                 <t t-esc="doc.picking_name"/>
                             </td>
                         
