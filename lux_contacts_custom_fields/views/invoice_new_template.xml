@@ -286,7 +286,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="2" style="text-align: justify; font-size: 14px; padding: 6px;">
+                            <td  style="text-align: justify; font-size: 14px; padding: 6px;">
                                 Weight :
                                 <t t-esc="doc.weight"/>
                                 
