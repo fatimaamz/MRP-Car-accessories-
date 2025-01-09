@@ -119,6 +119,7 @@
                                               box-sizing: border-box;
                                              
                                               font-size: 16px;">
+                                        <br/><br/>
                                         <span>
                                             <strong>
                                                 <span t-esc="'Ship to / Expédié à :'"/>
