@@ -108,13 +108,13 @@
                                         </t>
                                     </td>
 
-                                    <td style="padding-top: 10px; border-radius: 15px;
+                                    <td style="padding: 10px; border-radius: 15px;
                                               background-color: #f6f8fc;
                                               border: 1px solid white;
                                               height: 160px;
                                               display: flex;
                                               flex-direction: column;
-                                              
+                                              margin-top:14px;
                                             
                                               box-sizing: border-box;
                                              
