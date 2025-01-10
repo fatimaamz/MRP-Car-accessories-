@@ -202,7 +202,7 @@
                                             <tr>
                                                 <td  t-if="doc.invoice_ids" style="text-align: left; padding-left: 5px; border: 1px solid white;">Facture N°</td>
                                                 <td  t-if="doc.invoice_ids" style="text-align: left; padding-left: 5px; border: 1px solid white;">:</td>
-                                                <td style="text-align: left; padding-left: 5px; border: 1px solid white;"><t t-esc="doc.invoice_ids[0].name"/></td>
+                                                <td t-if="doc.invoice_ids" style="text-align: left; padding-left: 5px; border: 1px solid white;"><t t-esc="doc.invoice_ids[0].name"/></td>
                                             </tr>
                                            
                                         </table>
