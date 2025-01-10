@@ -324,8 +324,8 @@
                                 <t t-esc="doc.custom_clearance"/>
                             </td>
                             <td t-if="line[0].tax_ids[0]" style=" font-size: 14px;padding: 6px;float: right;">
-                                <strong> <t t-esc="line[0].tax_ids[0].name"/>:</strong>
-                                $ <t t-esc="doc.amount_tax_signed"/>
+                                <strong> <t t-if="line[0].tax_ids[0]"  t-esc="line[0].tax_ids[0].name"/>:</strong>
+                                $ <t t-if="line[0].tax_ids[0]"  t-esc="doc.amount_tax_signed"/>
                             </td>
                         </tr>
                         <tr>
