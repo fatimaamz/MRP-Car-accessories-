@@ -331,11 +331,11 @@
                                 </td>
                             </tr>-->
                           <tr style=" border: 1px solid white;">
-                              <td colspan="6"
+                              <td colspan="3"
                                   style="text-align: right; font-weight: bold; padding: 10px; border: none !important;background-color: #f7f7f7;">
                                   Total de la commande :
                               </td>
-                              <td style="text-align: center; font-weight: bold; padding: 10px; border: none !important;background-color: #f7f7f7;">
+                              <td colspan="3" style="text-align: center; font-weight: bold; padding: 10px; border: none !important;background-color: #f7f7f7;">
                                   <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/>
                               </td>
                           </tr>
