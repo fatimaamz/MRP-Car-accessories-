@@ -217,7 +217,7 @@
 
 
                                 <thead>
-                                    <tr style="background-color: #edeff2;">
+                                    <tr style="background-color: #f7f7f7;">
                                         <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
                                         <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
                                             Number
@@ -251,7 +251,7 @@
                         <!-- Product Details Table (Table 2) -->
                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
                             <thead>
-                                <tr style="background-color: #edeff2;">
+                                <tr style=" background-color: #f7f7f7;">
                                    <!-- <th style="border: 1px solid #ddd; padding: 10px;">N°</th>-->
                                     <th style="border: 1px solid #ddd; padding: 10px;">Image</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">Description</th>
