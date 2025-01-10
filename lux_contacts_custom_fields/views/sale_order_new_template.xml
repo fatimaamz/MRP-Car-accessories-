@@ -331,8 +331,8 @@
                                 </td>
                             </tr>-->
                           <tr style="border: 1px solid white;">
-                              <td colspan="7" style="text-align: right; font-weight: bold; padding: 10px; border: none !important;width: 200px;">
-                                  <div style="background-color: #f7f7f7;">Total de la commande :   <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/></div>
+                              <td colspan="6" style="text-align: right; font-weight: bold; padding: 10px; border: none !important;">
+                                  <div style="background-color: #f7f7f7;width: 200px;">Total de la commande :   <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/></div>
                               </td>
                              
                           </tr>
