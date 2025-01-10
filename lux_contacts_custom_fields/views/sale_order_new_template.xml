@@ -276,11 +276,11 @@
                                             <img t-if="line.image_128" t-att-src="image_data_uri(line.image_128)"
                                                  style="width: 200px; height: 200px;"/>
                                         </td>-->
-                                     <td style="width: 120px;">
+                                     <td style="width: 320px;border: 1px solid #ddd;">
                                           <t t-if="line.image_128">
                                               <div style=" text-align: center; padding: 10px;">
                                                   <img t-att-src="image_data_uri(line.image_128)"
-                                                       style="width: 100px; height: 60px; border: 1px solid #ddd"/>
+                                                       style="width: 200px;"/>
                                               </div>
                                           </t>
                                       </td>
@@ -330,12 +330,12 @@
                                     <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/>
                                 </td>
                             </tr>-->
-                          <tr style="background-color: #edeff2; border: 1px solid white;">
+                          <tr style=" border: 1px solid white;">
                               <td colspan="6"
-                                  style="text-align: right; font-weight: bold; padding: 10px; border: none !important;">
+                                  style="text-align: right; font-weight: bold; padding: 10px; border: none !important;background-color: #f7f7f7;">
                                   Total de la commande :
                               </td>
-                              <td style="text-align: center; font-weight: bold; padding: 10px; border: none !important;">
+                              <td style="text-align: center; font-weight: bold; padding: 10px; border: none !important;background-color: #f7f7f7;">
                                   <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/>
                               </td>
                           </tr>
