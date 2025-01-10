@@ -27,7 +27,7 @@
                             <tr style="border: 1px solid white;">
                                 <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                     <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                         style="  width: 240px;height: 35px;" alt="Company Logo"/>
+                                         style="  width: 240px;height: 35px;" alt="Company Logo"/><br/><br/>
                                     <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
                                         Sales Order
                                     </h2>
@@ -233,13 +233,13 @@
 
                                     <t t-foreach="delivery_details" t-as="delivery">
                                         <tr>
-                                            <td style="border: 1px solid #ddd; padding: 8px;"
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery['N° semaine']"/>
-                                            <td style="border: 1px solid #ddd; padding: 8px;"
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery['Tracking number']"/>
-                                            <td style="border: 1px solid #ddd; padding: 8px;"
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery['Must ship by']"/>
-                                            <td style="border: 1px solid #ddd; padding: 8px;"
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery['Ship via']"/>
                                         </tr>
                                     </t>
@@ -249,7 +249,7 @@
 
 
                         <!-- Product Details Table (Table 2) -->
-                        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                             <thead>
                                 <tr style=" background-color: #f7f7f7;">
                                    <!-- <th style="border: 1px solid #ddd; padding: 10px;">N°</th>-->
@@ -296,21 +296,21 @@
                                                 </span>
                                         </td>
                                         <!-- Couleur -->
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                        <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="line.insert_color  or ' '"/>
                                         </td>
-                                      <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                      <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="line.interior_color  or ' '"/>
                                         </td>
                                       
-                                      <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                      <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="line.product_uom_qty"/>
                                         </td>
                                         <!-- EnStock -->
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                        <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="line.product_id.qty_available or 0"/>
                                         </td>
-                                      <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                      <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="line.product_uom_qty - (line.product_id.qty_available or 0)"/>
                                             </td>
                                         <!-- Qty -->
