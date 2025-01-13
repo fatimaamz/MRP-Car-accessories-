@@ -127,7 +127,7 @@
                                 
                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: left;vertical-align: top;">
                                     <div style="background-color: #d3d3d3; text-align: center; padding: 10px;">
-                                           <t t-if="image_data_uri(wo['image'])">
+                                           <t t-if="wo['image']">
                                         
                                                   <img t-att-src="image_data_uri(wo['image'])"
                                                        style="width: 100px; height: 100px; object-fit: contain; display: block; border: none;"/></t>
