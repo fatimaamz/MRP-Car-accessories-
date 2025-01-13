@@ -37,6 +37,11 @@ class AccountMove(models.Model):
     numero_serie = fields.Char(string='Numéro Série')
     tvp = fields.Char(string='TVP/P.S.T')
     tps = fields.Char(string='TPS/Q.S.T ')
+    luxncibill_number = fields.Char(
+        string="Numéro de Pièce Unique",
+        default="LUXNCIBILL",
+        help="Numéro de pièce unique",
+    )
 
      
 
