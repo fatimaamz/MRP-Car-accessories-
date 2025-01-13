@@ -51,6 +51,11 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    luxncibill_number = fields.Char(
+        string="Numéro de Pièce Unique",
+        default="LUXNCIBILL",
+        help="Numéro de pièce unique",
+    )
     picking_name = fields.Char(
         string="Tracking Name",
         compute="_compute_picking_details",
