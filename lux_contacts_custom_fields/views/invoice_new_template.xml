@@ -219,7 +219,7 @@
                                             <tr>
                                                 <td style="text-align: left; padding-left: 5px; border: 1px solid white;">PO Client</td>
                                                 <td style="text-align: left; padding-left: 5px; border: 1px solid white;">:</td>
-                                                <td style="text-align: left; padding-left: 5px; border: 1px solid white;"><t t-esc="doc.sale_order_partner_id.po or ''"/></td>
+                                                <td style="text-align: left; padding-left: 5px; border: 1px solid white;"><t t-esc="doc.ref or ''"/></td>
                                             </tr>
                                             <tr>
                                                 <td style="text-align: left; padding-left: 5px; border: 1px solid white;">Facture N°</td>
