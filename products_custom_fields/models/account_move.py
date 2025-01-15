@@ -4,7 +4,7 @@ import base64
 from datetime import datetime
 from odoo.exceptions import ValidationError
 
-"""
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     
@@ -24,7 +24,7 @@ class ResPartner(models.Model):
                 ], limit=1)
                 if existing:
                     raise ValidationError("The Dealer Code must be unique.")
- """   
+  
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
