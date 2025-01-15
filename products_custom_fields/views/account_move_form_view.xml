@@ -21,7 +21,7 @@
                 <xpath expr="//page[@id='other_tab']//group[@id='other_tab_group']" position="inside">
                    
                        
-                            <group string="Livraison" name="shipping_info_group">
+                            <group string="Détails" name="shipping_info_group">
                                  <field name="luxncibill_number"/>
                                 <field name="pcs"/>
                                 <field name="weight"/>
