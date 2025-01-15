@@ -3,6 +3,15 @@ from odoo import api, fields, models
 import re
 
 
+class StockPicking(models.Model):
+    _inherit = "stock.picking"
+
+    po = fields.Char(
+        string="Po Client",
+        related="sale_id.client_order_ref",
+       
+    )
+
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
