@@ -32,7 +32,13 @@ class MrpProduction(models.Model):
 
  
         
-    
+    sale_order_id = fields.Many2one(
+        comodel_name='sale.order',
+        string='Sale Order',
+        compute='_compute_sale_order',
+        store=True,
+       
+    )
     sale_order_partner_id = fields.Many2one(
         'res.partner',
         string='Partner from Sale Order',
@@ -40,6 +46,15 @@ class MrpProduction(models.Model):
         store=True,
         readonly=True
     )
+    
+    @api.depends('origin')
+    def _compute_sale_order(self):
+        for record in self:
+            if record.origin:  
+                sale_order = self.env['sale.order'].search([('name', '=', record.origin)], limit=1)
+                record.sale_order_id = sale_order.id if sale_order else False
+            else:
+                record.sale_order_id = False
     
     @api.depends('origin')
     def _compute_sale_order_partner_id(self):
