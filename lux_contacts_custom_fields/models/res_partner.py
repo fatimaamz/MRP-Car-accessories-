@@ -6,7 +6,8 @@ import re
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-
+    picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
+    picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
     def get_report_values(self):
         work_orders =  self.browse(self.env.context.get('active_ids', []))
         filtered_lines = []
