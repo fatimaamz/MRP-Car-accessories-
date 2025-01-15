@@ -7,7 +7,7 @@
     "website": "https://www.weelite.co",
     "category": "Manufacturing",
     "license": "OPL-1",
-    "depends": ["mrp","sale","market_connector",'stock','base','lux_contacts_custom_fields'],
+    "depends": ['mrp','sale','market_connector','stock','base'],
     "data": [
         
         "views/mrp_production.xml",
