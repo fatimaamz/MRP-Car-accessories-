@@ -99,7 +99,7 @@
                                     <span>Téléphone: <t t-esc="docs[0].partner_shipping_id.phone"/></span>
                                 </t>
                                 <br/><br/>
-                                <span>Must Ship by: <t t-esc="docs[0].picking_scheduled_date"/></span>
+                                <!--<span>Must Ship by: <t t-esc="docs[0].picking_scheduled_date"/></span>-->
                             </td>
 
                             <!-- Order Details -->
@@ -107,7 +107,7 @@
                                 <strong style="font-size: 16px;">Order Details:</strong><br/><br/>
                                 Order N°: <t t-esc="docs[0].origin"/><br/><br/>
                                 PO Client: <t t-esc="docs[0].sale_order_id.ref or ''"/><br/><br/>
-                                Date: <t t-esc="docs[0].picking_scheduled_date or ''"/><br/><br/>
+                               <!-- Date: <t t-esc="docs[0].picking_scheduled_date or ''"/><br/><br/>-->
                             </td>
                         </tr>
                     </table>
