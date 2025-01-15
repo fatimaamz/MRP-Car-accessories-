@@ -17,7 +17,7 @@ class MrpProduction(models.Model):
                 'name':line.name,
                 'product': line.product_id.name,
                 'quantity': line.product_qty,
-                'date': line.picking_scheduled_date,
+                #'date': line.picking_scheduled_date,
                 'placer': "Oui" if line.place_status=='place' else "Non",
                 'couper': "Oui" if line.is_coped else "Non",
                 'reflector_type': line.product_id.reflecteur_type,
