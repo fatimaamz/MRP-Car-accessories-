@@ -8,6 +8,19 @@ class MrpProduction(models.Model):
 
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
+
+    
+    @api.depends('origin')  
+    def _compute_picking_id(self):
+        for production in self:
+            picking = self.env['stock.picking'].search([
+                ('origin', '=', production.origin),  
+                ('state', 'not in', ['cancel'])
+            ], limit=1)
+
+            production.picking_id = picking.id if picking else False
+
+    
     def get_report_values(self):
         work_orders =  self.browse(self.env.context.get('active_ids', []))
         filtered_lines = []
