@@ -39,7 +39,7 @@ class MrpProduction(models.Model):
         store=True,
        
     )
-    po_client = fields.Char(string="PO client",related='sale_order_id.ref')
+    #po_client = fields.Char(string="PO client",related='sale_order_id.ref')
     sale_order_partner_id = fields.Many2one(
         'res.partner',
         string='Partner from Sale Order',
