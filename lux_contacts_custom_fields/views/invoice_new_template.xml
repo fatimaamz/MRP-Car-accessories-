@@ -184,7 +184,7 @@
                                         <br/>
                                         <br/>
                                         PO Client:
-                                        <t t-esc="doc.sale_order_partner_id.po or ''"/>
+                                        <t t-esc="doc.ref or ''"/>
                                         <br/>
                                         <br/>
 
@@ -197,7 +197,7 @@
                                           <t t-esc="doc.payment_date or ''"/>
                                          <br/>
                                         <br/>
-                                        Dealer : <t t-esc="doc.sale_order_partner_id.dealer_code or ''"/>
+                                        Dealer : <!--<t t-esc="doc.sale_order_partner_id.dealer_code or ''"/>-->
                                         
                                         
                                     </td>-->
