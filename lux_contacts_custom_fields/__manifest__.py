@@ -7,8 +7,8 @@
     "author": "WEELITE",
     "website": "",
     "category": "Contacts",
-    "license": "AGPL-3",
-    "depends": ['base','sale','purchase','mrp','stock','mrp_production'],
+    
+    "depends": ['base','mrp_production','sale','purchase','mrp','stock'],
     "data": ["views/res_partner.xml",
              "views/sale_order_new_template.xml",
              "views/invoice_new_template.xml",
