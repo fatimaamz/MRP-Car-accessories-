@@ -175,7 +175,7 @@
                                 <t t-esc="doc.product_qty"/>
                                 <br/>
                                 PO client :
-                                <t t-esc="doc.sale_order_partner_id.po "/>
+                                <t t-esc="doc.sale_order_id.ref "/>
                                 <br/>
 
                             </td>
