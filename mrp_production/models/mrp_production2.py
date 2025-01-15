@@ -174,12 +174,28 @@ class MrpProduction(models.Model):
     years = fields.Char(string="Années", compute='_compute_year', store=True)
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
+    sale_order_id = fields.Many2one(
+        comodel_name='sale.order',
+        string='Sale Order',
+        compute='_compute_sale_order',
+        store=True,)
+  
     po_client = fields.Char(string="PO client",related='sale_order_id.ref')
   
     ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
     is_coped= fields.Boolean(string="Coupé", compute="_compute_is_coped")
+
+    @api.depends('origin')
+    def _compute_sale_order(self):
+        for record in self:
+            if record.origin:  
+                sale_order = self.env['sale.order'].search([('name', '=', record.origin)], limit=1)
+                record.sale_order_id = sale_order.id if sale_order else False
+            else:
+                record.sale_order_id = False
+
 
     def action_view_delivery_order(self):
         delivery_order = self.env['stock.picking'].search([('origin', '=', self.origin)], limit=1)
