@@ -90,7 +90,12 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-   
+    sales_team_id = fields.Many2one(
+        comodel_name='crm.team',
+        string="Sales Team",
+        related='invoice_user_id.sale_team_id',
+        store=True
+    )
     picking_name = fields.Char(
         string="Tracking Name",
         compute="_compute_picking_details",
