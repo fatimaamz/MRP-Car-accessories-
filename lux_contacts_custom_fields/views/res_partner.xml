@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//tree" position="inside">
-                 <field name="po_client" />
+                 <field name="po" />
                     
             </xpath>
         </field>
