@@ -106,7 +106,7 @@
                             <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px; border: 1px solid white;">
                                 <strong style="font-size: 16px;">Order Details:</strong><br/><br/>
                                 Order N°: <t t-esc="docs[0].origin"/><br/><br/>
-                                PO Client: <t t-esc="docs[0].sale_order_partner_id.po or ''"/><br/><br/>
+                                PO Client: <t t-esc="docs[0].sale_order_id.ref or ''"/><br/><br/>
                                 Date: <t t-esc="docs[0].picking_scheduled_date or ''"/><br/><br/>
                             </td>
                         </tr>
