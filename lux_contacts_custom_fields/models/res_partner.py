@@ -7,7 +7,7 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     po = fields.Char(
-        string="Po Client",
+        string="Po client",
         related="sale_id.client_order_ref",
        
     )
