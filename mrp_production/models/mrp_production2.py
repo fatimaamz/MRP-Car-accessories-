@@ -174,7 +174,7 @@ class MrpProduction(models.Model):
     years = fields.Char(string="Années", compute='_compute_year', store=True)
 
     shopify_instance_id = fields.Many2one('shopify.credentials', string="Source", compute='_compute_shopify_instance')
-    po_client = fields.Char(string="PO client",related='picking_id.numero_commande')
+    po_client = fields.Char(string="PO client",related='sale_order_id.ref')
   
     ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
