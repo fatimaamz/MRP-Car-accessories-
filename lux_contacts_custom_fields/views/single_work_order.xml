@@ -141,7 +141,7 @@
                         <tr>
                             <td colspan="2" style="background-color: red; color: white;font-size: 20px;">Must ship by:
                                 <br/>
-                                <span t-esc="doc.picking_scheduled_date"/>
+                               <!-- <span t-esc="doc.picking_scheduled_date"/>-->
                             </td>
                            
                             <td>
