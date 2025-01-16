@@ -36,6 +36,12 @@
                  <xpath expr="//group[@name='accounting_info_group']" position="attributes">
                      <attribute name="invisible">1</attribute>
                  </xpath>
+                <xpath expr="//group[@name='sale_info_group']//field[@name='ref']" position="attributes">
+                    <attribute name="string">PO Client</attribute>
+                </xpath>
+                <xpath expr="//group[@name='sale_info_group']//field[@name='invoice_user_id']" position="attributes">
+                    <attribute name="string">Commercial</attribute>
+                </xpath>
                 <xpath expr="//page[@id='other_tab']//group[@id='other_tab_group']" position="inside">
                    
                        
