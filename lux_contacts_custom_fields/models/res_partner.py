@@ -1,7 +1,7 @@
 
 from odoo import api, fields, models
 import re
-
+import datetime
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
@@ -102,7 +102,11 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-   
+    picking_scheduled_date = fields.Datetime(
+        string="Ship date",
+        compute="_compute_picking_details"
+       
+    )
     sales_team_id = fields.Many2one(
         comodel_name='crm.team',
         string="Sales Team",
@@ -135,6 +139,7 @@ class AccountMove(models.Model):
             record.picking_name = picking.name if picking else False
             record.numero_suivi = picking.numero_suivi if picking else False
             record.carrier_id = picking.carrier_id if picking else False
+            record.picking_scheduled_date = picking[0].scheduled_date if picking else False
 
     payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
 
