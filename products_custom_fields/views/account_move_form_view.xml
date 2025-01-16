@@ -43,7 +43,7 @@
                                  <field name="luxncibill_number"/>
                                 <field name="pcs"/>
                                 <field name="weight"/>
-                                <field name="tracking"/>
+                                <!--<field name="tracking"/>-->
                                 <field name="custom_clearance"/>
                                 <field name="transport"/>
                                  <field name = "carrier_id"/>
