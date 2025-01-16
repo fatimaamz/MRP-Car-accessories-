@@ -27,7 +27,8 @@ class ResPartner(models.Model):
   
 class AccountMove(models.Model):
     _inherit = 'account.move'
-
+    
+    num_stock = fields.Char(string='N° Stock')
     num_lx = fields.Char(string="Numéro LX")
     pcs = fields.Integer(string='PCS')
     weight = fields.Float(string='Poids')
