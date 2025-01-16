@@ -29,7 +29,7 @@
     <field name="model">product.product</field>
     <field name="inherit_id" ref="product.product_normal_form_view"/>
     <field name="arch" type="xml">
-       <field name="list_price" position="after">
+       <field name="taxes_id" position="before">
                    <field name="dnet" class="oe_inline" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"/>
          </field>
          <xpath expr="//page[@name='general_information']//group[1]//group[1]" position="inside">
@@ -43,7 +43,7 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
-            <field name="list_price" position="after">
+            <field name="taxes_id" position="before">
                    <field name="dnet" class="oe_inline" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"/>
             </field>
              <xpath expr="//page[@name='general_information']//group[1]//group[1]" position="inside">
