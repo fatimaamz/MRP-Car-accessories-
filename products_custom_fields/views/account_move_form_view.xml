@@ -54,7 +54,8 @@
                    
                        
                             <group string="Détails" name="shipping_info_group">
-                                 <field name="luxncibill_number"/>
+                                <field name="num_stock"/>
+                                <field name="luxncibill_number"/>
                                 <field name="pcs"/>
                                 <field name="weight"/>
                                 <field name="tracking"/>
