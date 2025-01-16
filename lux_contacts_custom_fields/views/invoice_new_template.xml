@@ -352,7 +352,7 @@
                             <td style="text-align: justify; font-size: 14px; padding: 6px;">
                                 
                                 Stock :
-                                <t t-esc="doc.picking_name"/>
+                                <t t-esc="doc.num_stock"/>
                             </td>
                         
                             
