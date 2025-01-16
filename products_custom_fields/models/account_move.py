@@ -28,6 +28,7 @@ class ResPartner(models.Model):
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    num_lx = fields.Char(string="Numéro LX")
     pcs = fields.Integer(string='PCS')
     weight = fields.Float(string='Poids')
     tracking = fields.Char(string='Suivi')
