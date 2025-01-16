@@ -34,7 +34,8 @@ class ProductMarque(models.Model):
     name = fields.Char(string='Name', required=True)
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
-
+    
+    dnet = fields.Float(string="DNET", help="Tarif de base du produit")
     qr_code_uploaded = fields.Image("QR Code" ,max_width=512, max_height=512)
     reflecteur_type = fields.Selection(
         [('oui', 'Oui'), ('non', 'Non')],
@@ -64,6 +65,7 @@ class ProductTemplate(models.Model):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
+    dnet = fields.Float(string="DNET", help="Tarif de base du produit")
     reflecteur_type = fields.Selection(
         related='product_tmpl_id.reflecteur_type',
         string="Type Réflecteur ",
