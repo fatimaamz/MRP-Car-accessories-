@@ -27,7 +27,13 @@
                 <xpath expr="//page[@id='aml_tab']" position="attributes">
                      <attribute name="invisible">1</attribute>
                  </xpath>
-                <xpath expr="//field[@name='partner_bank_id']" position="attributes">
+                <xpath expr="//group[@name='sale_info_group']//field[@name='partner_bank_id']" position="attributes">
+                     <attribute name="invisible">1</attribute>
+                 </xpath>
+                 <xpath expr="//group[@name='sale_info_group']//field[@name='qr_code_method']" position="attributes">
+                     <attribute name="invisible">1</attribute>
+                 </xpath>
+                 <xpath expr="//group[@name='accounting_info_group']" position="attributes">
                      <attribute name="invisible">1</attribute>
                  </xpath>
                 <xpath expr="//page[@id='other_tab']//group[@id='other_tab_group']" position="inside">
