@@ -90,6 +90,10 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    num_lx = fields.Char(
+        string="Numéro LX",
+        
+    )
     sales_team_id = fields.Many2one(
         comodel_name='crm.team',
         string="Sales Team",
