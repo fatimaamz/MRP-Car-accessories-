@@ -42,6 +42,9 @@
                 <xpath expr="//group[@name='sale_info_group']//field[@name='invoice_user_id']" position="attributes">
                     <attribute name="string">Commercial</attribute>
                 </xpath>
+                  <xpath expr="//div[@name='journal_div']" position="after">
+                      <field name="num_lux"/>
+                  </xpath>
                 <xpath expr="//page[@id='other_tab']//group[@id='other_tab_group']" position="inside">
                    
                        
