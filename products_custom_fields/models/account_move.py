@@ -102,7 +102,7 @@ class AccountMove(models.Model):
                         'shpd': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "        ",  # Ship Date (YYYYMMDD)
                         'inv': invoice.name[:12].ljust(12),  # Invoice Number (left justified, 12 chars)
                         'qty': str(line.quantity).zfill(7),  # Shipped Quantity (right justified, zero filled, 7 chars)
-                        'prce': str(line.price_unit).zfill(7),  # Unit Price (right justified, zero filled, 7 chars)
+                        'prce': str(line.product_id.dnet).zfill(7),  # Unit Price (right justified, zero filled, 7 chars)
                         'amnt': str(line.price_subtotal).zfill(11),  # Amount (subtotal, right justified, zero filled, 11 chars)
                         'pstqst': str(invoice.amount_tax).zfill(7),  # PST/QST (7 chars, zero filled)
                         'gst': str(invoice.amount_tax).zfill(7),  # GST (7 chars, zero filled)
