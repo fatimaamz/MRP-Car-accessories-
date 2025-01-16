@@ -31,7 +31,7 @@ class AccountMove(models.Model):
     num_lx = fields.Char(string="Numéro LX")
     pcs = fields.Integer(string='PCS')
     weight = fields.Float(string='Poids')
-    tracking = fields.Char(string='Suivi')
+    tracking = fields.Char(string='Numéro de tracking')
     custom_clearance = fields.Char(string='Dédouanement')
     transport = fields.Char(string='Transport')
     freight_cost = fields.Float(string="Freight Cost")
