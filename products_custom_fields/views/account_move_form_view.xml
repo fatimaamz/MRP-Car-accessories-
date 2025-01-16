@@ -18,6 +18,9 @@
             <field name="model">account.move</field>
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//div[@name='journal_div']" position="after">
+                      <field name="num_lx"/>
+                  </xpath>
                  <xpath expr="//label[@for='journal_id']" position="attributes">
                      <attribute name="invisible">1</attribute>
                  </xpath>
@@ -42,9 +45,7 @@
                 <xpath expr="//group[@name='sale_info_group']//field[@name='invoice_user_id']" position="attributes">
                     <attribute name="string">Commercial</attribute>
                 </xpath>
-                  <xpath expr="//div[@name='journal_div']" position="after">
-                      <field name="num_lx"/>
-                  </xpath>
+                  
                 <xpath expr="//page[@id='other_tab']//group[@id='other_tab_group']" position="inside">
                    
                        
