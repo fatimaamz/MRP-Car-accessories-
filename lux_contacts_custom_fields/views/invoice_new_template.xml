@@ -161,7 +161,7 @@
                                         <br/>
                                         <br/>
                                         <span>Ship Date :
-                                            <t t-esc="doc.invoice_date"/>
+                                            <t t-esc="doc.picking_scheduled_date"/>
                                         
                                         </span>
                                         <br/>
