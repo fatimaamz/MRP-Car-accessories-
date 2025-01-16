@@ -13,7 +13,8 @@
              "views/sale_order_new_template.xml",
              "views/invoice_new_template.xml",
              "views/work_order_multi.xml",
-             "views/single_work_order.xml"
+             "views/single_work_order.xml",
+             "views/sequence.xml",
             ],
     "installable": True,
 }
