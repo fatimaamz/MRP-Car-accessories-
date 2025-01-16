@@ -166,9 +166,9 @@
                                         </span>
                                         <br/>
                                            
-                                            <span>Tracking number : <t t-esc="doc.numero_suivi"/></span>
+                                            <span>Tracking number : <t t-esc="doc.tracking"/></span>
                                         <br/>
-                                           <span>Via :<strong> <t t-esc="doc.carrier_id.name"/></strong></span>
+                                           <span>Via :<strong> <t t-esc="doc.transport"/></strong></span>
                                     </td>
 
                                    <!-- <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 16px; border: 1px solid white; margin-left: 20px; text-align: justify;">
