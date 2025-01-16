@@ -55,9 +55,9 @@
                                 <!--<field name="tracking"/>-->
                                 <field name="custom_clearance"/>
                                 <field name="transport"/>
-                                 <field name = "carrier_id"/>
-                                 <field name = "freight_cost"/>
-                                <field name = "numero_serie"/>
+                                 <field name="carrier_id"/>
+                                 <field name="freight_cost"/>
+                                <field name="numero_serie"/>
                                 <!--<field name = "tvp"/>-->
                                 <!--<field name = "tps"/>-->
                                <!-- <field name="carrier"/>-->
