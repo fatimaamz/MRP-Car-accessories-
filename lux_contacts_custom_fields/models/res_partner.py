@@ -29,6 +29,18 @@ class MrpProduction(models.Model):
 
             #production.picking_id = picking.id if picking else False
 
+    work_order_multi = fields.Char(
+        string="Work Order Multi",
+        readonly=True,
+        copy=False
+    )
+
+    @api.model
+    def create(self, vals):
+        if 'work_order_multi' not in vals:
+            vals['work_order_multi'] = self.env['ir.sequence'].next_by_code('mrp.production.work_order_multi') or 'WM00000'
+        return super(MrpProduction, self).create(vals)
+
     
     def get_report_values(self):
         work_orders =  self.browse(self.env.context.get('active_ids', []))
