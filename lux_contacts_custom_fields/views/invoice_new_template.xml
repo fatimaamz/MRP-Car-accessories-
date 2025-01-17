@@ -315,7 +315,7 @@
                             </td>
                             <td style=" font-size: 14px;padding: 6px;float: right;">
                                 <strong>Transport :</strong>
-                                <t t-esc="doc.delivery_price"/>
+                               <t t-if="doc.delivery_price"/>$ <t t-esc="doc.delivery_price"/></t>
                             </td>
                         </tr>
                         <tr>
