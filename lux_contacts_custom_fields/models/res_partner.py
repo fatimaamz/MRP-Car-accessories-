@@ -126,7 +126,7 @@ class AccountMove(models.Model):
     carrier_id = fields.Many2one(
         comodel_name='delivery.carrier',
         compute="_compute_picking_details",
-        string="Delivery Carrier",
+        string="Transport",
         help="The delivery carrier associated with this invoice."
     )
 
