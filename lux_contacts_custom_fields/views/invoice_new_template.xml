@@ -268,10 +268,12 @@
                                         <t t-if="line.name">
                                             <td style="border: 1px solid #ddd; padding: 10px;">
                                                <strong>
-                                                    <t t-esc="line.product_variant_description.split(' ', 1)[0]"/> <!-- Extracts the first word or token -->
+                                                    <!--<t t-esc="line.product_variant_description.split(' ', 1)[0]"/>-->
+                                                   <t t-esc="line.product_id.name"/>
                                                 </strong>
                                                 <span>
-                                                    <t t-esc="' '.join(line.product_variant_description.split(' ')[1:])"/> <!-- Extracts the rest of the text -->
+                                                    <!--<t t-esc="' '.join(line.product_variant_description.split(' ')[1:])"/> -->
+                                                    <t t-esc="line.product_variant_description/>
                                                 </span>
                                             </td>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
