@@ -34,11 +34,12 @@ class AccountMoveLine(models.Model):
             # Remove fields that have 'None', 'No insert', or empty values
             for field, non_values in fields_to_check:
                 for non_value in non_values:
-                    cleaned_description = cleaned_description.replace(f"{field}: {non_value}", "").strip()
+                    # Remove the field and its value if it matches the non-value
+                    pattern = r'{}: {}\s*'.format(re.escape(field), re.escape(non_value))
+                    cleaned_description = re.sub(pattern, '', cleaned_description)
 
-            # Remove redundant commas or spaces
-            # We handle extra commas that might result from the removals
-            cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove unwanted spaces around commas
+            # Remove any redundant commas, like ", ," or leading/trailing commas
+            cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove spaces around commas
             cleaned_description = cleaned_description.strip(', ')  # Remove leading/trailing commas
 
             # Remove extra spaces between words
