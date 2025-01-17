@@ -6,9 +6,6 @@ import datetime
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    class AccountMoveLine(models.Model):
-    _inherit = 'account.move.line'
-
     cleaned_name = fields.Char(
         string='Cleaned Description',
         compute='_compute_cleaned_name',
