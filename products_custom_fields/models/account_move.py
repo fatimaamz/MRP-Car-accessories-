@@ -32,11 +32,11 @@ class AccountMove(models.Model):
     num_lx = fields.Char(string="Numéro LX")
     pcs = fields.Integer(string='PCS')
     weight = fields.Float(string='Poids')
-    tracking = fields.Char(string='Numéro de tracking')
+    tracking = fields.Char(string='Numéro de tracking',compute="_compute_picking_details", store=True)
     custom_clearance = fields.Char(string='Dédouanement')
     transport = fields.Char(string='Transport')
     freight_cost = fields.Float(string="Freight Cost")
-    carrier_id = fields.Many2one('delivery.carrier', string="Carrier")
+    #carrier_id = fields.Many2one('delivery.carrier', string="Carrier")
     numero_serie = fields.Char(string='Numéro Série')
     tvp = fields.Char(string='TVP/P.S.T')
     tps = fields.Char(string='TPS/Q.S.T ')
@@ -45,6 +45,15 @@ class AccountMove(models.Model):
         help="Numéro de pièce unique",
     )
 
+    def get_details(self):
+        for record in self:
+            picking = self.env['stock.picking'].search([
+                ('origin', '=', record.invoice_origin)
+            ], limit=1)
+            
+           
+            record.tracking = picking.numero_suivi if picking else False
+            
      
 
     #------------------- Hyundai Edi Invoice------------------------------------
