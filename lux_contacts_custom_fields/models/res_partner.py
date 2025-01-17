@@ -123,12 +123,50 @@ class AccountMove(models.Model):
         compute="_compute_picking_details",
         store=True
     )
+    #carrier_id = fields.Many2one(
+        #comodel_name='delivery.carrier',
+       # compute="_compute_picking_details",
+       # string="Transport",
+        #help="The delivery carrier associated with this invoice."
+   # )
+
+    delivery_date = fields.Datetime(
+        string='Delivery Date',
+        related='picking_id.scheduled_date',
+        store=True,
+        help="The scheduled delivery date for the related delivery order."
+    )
+    tracking = fields.Char(
+        string='Numéro de tracking',
+        related='picking_id.numero_suivi',
+        store=True,
+    )
     carrier_id = fields.Many2one(
         comodel_name='delivery.carrier',
-        compute="_compute_picking_details",
         string="Transport",
+        related='picking_id.carrier_id',
+        store=True,
         help="The delivery carrier associated with this invoice."
     )
+    picking_id = fields.Many2one(
+        comodel_name='stock.picking',
+        string="Delivery Order",
+        compute='_compute_picking_id',
+        store=True,
+        help="The delivery order linked to this invoice."
+    )
+
+    @api.depends('invoice_origin')
+    def _compute_picking_id(self):
+        for record in self:
+            if record.invoice_origin:
+                record.picking_id = self.env['stock.picking'].search([
+                    ('origin', '=', record.invoice_origin),
+                    ('state', '!=', 'cancel')  # Optional: Ensure it's not a canceled picking
+                ], limit=1)
+            else:
+                record.picking_id = False
+                
 
     def _compute_picking_details(self):
         for record in self:
@@ -137,8 +175,8 @@ class AccountMove(models.Model):
             ], limit=1)
             
             record.picking_name = picking.name if picking else False
-            record.numero_suivi = picking.numero_suivi if picking else False
-            record.carrier_id = picking.carrier_id if picking else False
+            #record.numero_suivi = picking.numero_suivi if picking else False
+            #record.carrier_id = picking.carrier_id if picking else False
             record.picking_scheduled_date = picking[0].scheduled_date if picking else False
 
     payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
