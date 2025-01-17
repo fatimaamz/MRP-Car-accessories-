@@ -5,6 +5,34 @@ from datetime import datetime
 from odoo.exceptions import ValidationError
 
 
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+
+    cleaned_name = fields.Char(
+        string='Cleaned Description',
+        compute='_compute_cleaned_name',
+        store=True,
+        help="The cleaned version of the description without unwanted phrases."
+    )
+
+    @api.depends('name')
+    def _compute_cleaned_name(self):
+        unwanted_phrases = ["None", "No Color", "No insert", "No Insert"]
+        for line in self:
+            if line.name:
+                # Start with the original name
+                cleaned_description = line.name
+                # Remove unwanted phrases
+                for phrase in unwanted_phrases:
+                    cleaned_description = cleaned_description.replace(f"({phrase})", "")
+                    cleaned_description = cleaned_description.replace(phrase, "")
+                # Remove extra whitespace
+                line.cleaned_name = ' '.join(cleaned_description.split())
+            else:
+                line.cleaned_name = False
+
+                
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     
