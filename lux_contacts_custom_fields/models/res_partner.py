@@ -23,9 +23,14 @@ class AccountMoveLine(models.Model):
             # Initial cleaned description is the original
             cleaned_description = line.name
 
-            # Remove fields if they have 'None', 'No insert', or empty values
+            # Remove fields with specific unwanted values such as "None", "No insert", "INSERT"
             cleaned_description = re.sub(r'(CARBON CODE: None|PAINT CODE: None|PAINT CODE: INSERT|INSERT COLOR: No insert|INSERT COLOR:)', '', cleaned_description)
-            cleaned_description = re.sub(r'\s{2,}', ' ', cleaned_description)  # Remove multiple spaces
+            
+            # Also, handle fields with no value or empty space
+            cleaned_description = re.sub(r'(CARBON CODE:|PAINT CODE:|INSERT COLOR:)\s*[,]*\s*', '', cleaned_description)
+
+            # Remove any multiple spaces that might result from removed fields
+            cleaned_description = re.sub(r'\s{2,}', ' ', cleaned_description)  # Multiple spaces replaced by one space
             cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove spaces around commas
 
             # Remove trailing commas if any
