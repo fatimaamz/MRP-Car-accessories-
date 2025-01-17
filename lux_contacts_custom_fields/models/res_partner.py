@@ -36,17 +36,21 @@ class AccountMoveLine(models.Model):
                 cleaned_description = cleaned_description.replace(f"({phrase})", "")
                 cleaned_description = cleaned_description.replace(phrase, "")
 
-            # Remove the field label if its value is None
+            # List of fields to check and remove if their values are 'None' or empty
             fields_to_check = [
                 ("CARBON CODE", "None"),
                 ("PAINT CODE", "None"),
                 ("INSERT COLOR", "No insert")
             ]
+            
             for field, non_value in fields_to_check:
-                if non_value in cleaned_description:
+                if f"{field}: {non_value}" in cleaned_description:
                     cleaned_description = cleaned_description.replace(f"{field}: {non_value}", "").strip()
 
-            # Remove extra whitespace
+            # Remove any redundant commas (e.g., ", ,")
+            cleaned_description = ', '.join([segment.strip() for segment in cleaned_description.split(',') if segment.strip()])
+
+            # Remove any leading or trailing spaces
             line.cleaned_name = ' '.join(cleaned_description.split())
 
     def _get_valid_variant_values(self, product):
