@@ -273,7 +273,7 @@
                                                 </strong>
                                                 <span>
                                                     <!--<t t-esc="' '.join(line.product_variant_description.split(' ')[1:])"/> -->
-                                                    <t t-esc="line.product_variant_description/>
+                                                    <t t-esc="line.product_variant_description"/>
                                                 </span>
                                             </td>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
