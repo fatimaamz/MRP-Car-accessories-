@@ -6,29 +6,54 @@ import datetime
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
+    class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+
     cleaned_name = fields.Char(
         string='Cleaned Description',
         compute='_compute_cleaned_name',
         store=True,
-        help="The cleaned version of the description without unwanted phrases."
+        help="The cleaned version of the description without unwanted variant values."
     )
 
-    @api.depends('name')
+    @api.depends('name', 'product_id')
     def _compute_cleaned_name(self):
-        unwanted_phrases = ["None", "No Color", "No insert", "No Insert"]
         for line in self:
-            if line.name:
-                # Start with the original name
-                cleaned_description = line.name
-                # Remove unwanted phrases
-                for phrase in unwanted_phrases:
-                    cleaned_description = cleaned_description.replace(f"({phrase})", "")
-                    cleaned_description = cleaned_description.replace(phrase, "")
-                # Remove extra whitespace
-                line.cleaned_name = ' '.join(cleaned_description.split())
-            else:
+            if not line.name:
                 line.cleaned_name = False
-                
+                continue
+            
+            # Get valid variant values for the product
+            valid_variant_values = self._get_valid_variant_values(line.product_id)
+            
+            # Start with the original description
+            cleaned_description = line.name
+            
+            # Unwanted phrases that are not valid variant values
+            unwanted_phrases = [
+                "None", "No insert", "No Insert", "No Color", "No color", "(None, None, No Color)"
+            ]
+            
+            # Filter out unwanted phrases if they are not part of valid variant values
+            unwanted_phrases = [phrase for phrase in unwanted_phrases if phrase not in valid_variant_values]
+
+            # Remove unwanted phrases from the description
+            for phrase in unwanted_phrases:
+                cleaned_description = cleaned_description.replace(f"({phrase})", "")
+                cleaned_description = cleaned_description.replace(phrase, "")
+
+            # Remove extra whitespace
+            line.cleaned_name = ' '.join(cleaned_description.split())
+
+    def _get_valid_variant_values(self, product):
+        """Retrieve all valid attribute values for a product's variants."""
+        if not product:
+            return []
+        
+        # Get all attribute values linked to the product
+        attribute_values = product.product_template_attribute_value_ids.mapped('name')
+        return set(attribute_values)
+        
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
