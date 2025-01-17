@@ -6,49 +6,34 @@ import datetime
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    cleaned_name = fields.Char(
-        string='Cleaned Description',
-        compute='_compute_cleaned_name',
-        store=True,
-        help="The cleaned version of the description without unwanted variant values."
-    )
+    cleaned_name = fields.Char(string="Cleaned Name", compute="_compute_cleaned_name", store=True)
 
-    @api.depends('name', 'product_id')
+    @api.depends('name')
     def _compute_cleaned_name(self):
+        """
+        Clean the name by removing attributes like 'CARBON CODE', 'PAINT CODE', etc., 
+        when their value is 'None', 'No insert', or 'No Color'. 
+        Ensure residual commas, semicolons, and extra spaces are removed.
+        """
         for line in self:
-            if not line.name:
-                line.cleaned_name = False
-                continue
-
-            # Initial cleaned description is the original
-            cleaned_description = line.name
-
-            # List of attribute names we want to check (e.g., CARBON CODE, PAINT CODE, INSERT COLOR)
-            attribute_names = ['CARBON CODE', 'PAINT CODE', 'INSERT COLOR']
-
-            # Iterate through each attribute name to check if its value is None or No insert
-            for attribute_name in attribute_names:
-                # Search for the attribute and its value (None, No insert) with the following colon
-                pattern = r'(' + re.escape(attribute_name) + r':\s*(None|No insert)\s*)'
-                # Remove both the attribute and its None/No insert value
-                cleaned_description = re.sub(pattern, '', cleaned_description)
-
-                # Remove any redundant colons and spaces (e.g., after removing values, colons might remain)
-                cleaned_description = re.sub(r'\s*[:,]*\s*', '', cleaned_description)
-
-            # Remove any unnecessary spaces, commas, and blank fields
-            cleaned_description = re.sub(r'\s{2,}', ' ', cleaned_description)  # Replace multiple spaces by one
-            cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove spaces around commas
-
-            # Remove any trailing commas and spaces
-            cleaned_description = re.sub(r',\s*$', '', cleaned_description)
-
-            # Clean up any leading or trailing spaces
-            cleaned_description = cleaned_description.strip()
-
-            # Store the cleaned description
-            line.cleaned_name = cleaned_description
-        
+            # Start with the original name or an empty string
+            cleaned_description = line.name or ''
+    
+            # Regular expression to match attributes with invalid values
+            cleaned_description = re.sub(
+                r"(CARBON CODE|INSERT COLOR|PAINT CODE|INTERIOR COLOR|STYLE|Année):\s*(None|No insert|No Color)[,;]?\s*",
+                '',
+                cleaned_description
+            )
+    
+            # Remove trailing commas, semicolons, or extra spaces left behind
+            cleaned_description = re.sub(r"[,\s;]+$", "", cleaned_description)  # Trailing punctuation and spaces
+            cleaned_description = re.sub(r"\s{2,}", " ", cleaned_description)   # Multiple spaces to a single space
+            cleaned_description = re.sub(r"\(\s*,\s*\)", "()", cleaned_description)  # Empty parentheses
+    
+            # Update the cleaned_name field with the processed description
+            line.cleaned_name = cleaned_description.strip()
+            
         
 class StockPicking(models.Model):
     _inherit = "stock.picking"
