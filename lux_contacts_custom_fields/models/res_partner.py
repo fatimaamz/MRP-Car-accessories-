@@ -23,7 +23,7 @@ class AccountMoveLine(models.Model):
             # Start with the original description
             cleaned_description = line.name
 
-            # List of fields to check and remove if their values are 'None' or empty
+            # List of fields to check and remove if their values are 'None', 'No insert', or empty
             fields_to_check = [
                 ("CARBON CODE", ["None", ""]),
                 ("PAINT CODE", ["None", ""]),
@@ -31,26 +31,21 @@ class AccountMoveLine(models.Model):
                 ("Année", ["None", ""]),
             ]
             
-            # Remove fields that have 'None' or empty values
+            # Remove fields that have 'None', 'No insert', or empty values
             for field, non_values in fields_to_check:
                 for non_value in non_values:
-                    if f"{field}: {non_value}" in cleaned_description:
-                        cleaned_description = cleaned_description.replace(f"{field}: {non_value}", "").strip()
+                    cleaned_description = cleaned_description.replace(f"{field}: {non_value}", "").strip()
 
-            # Remove any field with empty or 'None' values and clean up any commas
-            cleaned_description = ', '.join([segment.strip() for segment in cleaned_description.split(',') if segment.strip()])
+            # Remove redundant commas or spaces
+            # We handle extra commas that might result from the removals
+            cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove unwanted spaces around commas
+            cleaned_description = cleaned_description.strip(', ')  # Remove leading/trailing commas
 
-            # Remove extra spaces
-            line.cleaned_name = ' '.join(cleaned_description.split())
+            # Remove extra spaces between words
+            cleaned_description = ' '.join(cleaned_description.split())
 
-    def _get_valid_variant_values(self, product):
-        """Retrieve all valid attribute values for a product's variants."""
-        if not product:
-            return []
-        
-        # Get all attribute values linked to the product
-        attribute_values = product.product_template_attribute_value_ids.mapped('name')
-        return set(attribute_values)
+            # Store the cleaned description
+            line.cleaned_name = cleaned_description
         
         
 class StockPicking(models.Model):
