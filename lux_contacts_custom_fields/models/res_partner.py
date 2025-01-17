@@ -23,12 +23,16 @@ class AccountMoveLine(models.Model):
             # Initial cleaned description is the original
             cleaned_description = line.name
 
-            # Now we check the product's variants to hide values if None
+            # Now we check the product's variants to hide values if None or No insert
             if line.product_id and line.product_id.product_template_attribute_value_ids:
                 for attribute_value in line.product_id.product_template_attribute_value_ids:
-                    if attribute_value and attribute_value.name in ['None', 'No insert']:
-                        # If the attribute value is None or No insert, we hide it in the description
-                        cleaned_description = re.sub(r'(\b' + re.escape(attribute_value.name) + r':\s*None|No insert|,?\s*)', '', cleaned_description)
+                    attribute_name = attribute_value.attribute_id.name
+                    value = attribute_value.name
+
+                    # If the value is None or No insert, remove the attribute and its value
+                    if value in ['None', 'No insert']:
+                        # Regex to remove both attribute name and its value if it's None or No insert
+                        cleaned_description = re.sub(r'(\b' + re.escape(attribute_name) + r':\s*(None|No insert|)\s*,?\s*)', '', cleaned_description)
 
             # Handle the removal of unnecessary spaces, commas, and blank fields
             cleaned_description = re.sub(r'\s{2,}', ' ', cleaned_description)  # Replace multiple spaces by one
