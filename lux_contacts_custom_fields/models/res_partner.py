@@ -6,25 +6,39 @@ import datetime
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    cleaned_name = fields.Char(string="Cleaned Name", compute="_compute_cleaned_name", store=True)
+    clean_description = fields.Text(string="Clean Description", compute='_compute_clean_description', store=True)
 
-    product_variant_description = fields.Char(
-        string="Product Variant Description",
-        compute='_compute_product_variant_description'
-    )
-
-    def _compute_product_variant_description(self):
+    @api.depends('product_id', 'product_id.product_template_attribute_value_ids')
+    def _compute_clean_description(self):
+        """
+        Compute the cleaned product description by filtering out unwanted attributes.
+        """
         for line in self:
-            attributes = []
-            product = line.product_id
-            for attr_value in product.product_template_attribute_value_ids:
-                attr_name = attr_value.attribute_id.name
-                attr_val = attr_value.name
+            if line.product_id:
+                attributes = []
 
-                # Filter out 'None', empty, and 'No insert' values
-                if attr_val and attr_val.strip().lower() not in ['none', '', 'no insert']:
-                    attributes.append(f"{attr_name}: {attr_val}")
-            line.product_variant_description = ', '.join(attributes)
+                # Loop through product attributes
+                for attr_value in line.product_id.product_template_attribute_value_ids:
+                    attr_name = attr_value.attribute_id.name.strip() if attr_value.attribute_id.name else ''
+                    attr_val = attr_value.name.strip() if attr_value.name else ''
+
+                    # Exclude 'None', '', 'No insert', and invisible spaces
+                    if attr_val.lower() not in ['none', 'no insert', ''] and attr_val != '\u00A0':
+                        attributes.append(f"{attr_name}: {attr_val}")
+
+                # Build the cleaned description
+                product_info = f"{line.product_id.default_code} ({line.product_id.name})" if line.product_id.default_code else line.product_id.name
+                line.clean_description = f"{product_info}\n" + "\n".join(attributes) if attributes else product_info
+            else:
+                line.clean_description = ""
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        """
+        Update the line description when the product changes.
+        """
+        for line in self:
+            line.name = line.clean_description if line.clean_description else line.product_id.name
             
         
 class StockPicking(models.Model):
