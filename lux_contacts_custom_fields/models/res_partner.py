@@ -28,9 +28,13 @@ class AccountMoveLine(models.Model):
 
             # Iterate through each attribute name to check if its value is None or No insert
             for attribute_name in attribute_names:
-                # Search for the attribute and its value (None, No insert)
-                pattern = r'(' + re.escape(attribute_name) + r':\s*(None|No insert|)\s*,?\s*)'
+                # Search for the attribute and its value (None, No insert) with the following colon
+                pattern = r'(' + re.escape(attribute_name) + r':\s*(None|No insert)\s*)'
+                # Remove both the attribute and its None/No insert value
                 cleaned_description = re.sub(pattern, '', cleaned_description)
+
+                # Remove any redundant colons and spaces (e.g., after removing values, colons might remain)
+                cleaned_description = re.sub(r'\s*[:,]*\s*', '', cleaned_description)
 
             # Remove any unnecessary spaces, commas, and blank fields
             cleaned_description = re.sub(r'\s{2,}', ' ', cleaned_description)  # Replace multiple spaces by one
