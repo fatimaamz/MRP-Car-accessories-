@@ -268,11 +268,11 @@
                                         <t t-if="line.name">
                                             <td style="border: 1px solid #ddd; padding: 10px;">
                                                <strong>
-                                                    <t t-esc="line.clean_description.split(' ', 1)[0]"/>
+                                                    <t t-esc="line.cleaned_name.split(' ', 1)[0]"/>
                                                   
                                                 </strong>
                                                 <span>
-                                                    <t t-esc="' '.join(line.clean_description.split(' ')[1:])"/>
+                                                    <t t-esc="' '.join(line.cleaned_name.split(' ')[1:])"/>
                                                    
                                                 </span>
                                             </td>
