@@ -60,7 +60,7 @@
                                 <field name="weight"/>
                                 <field name="tracking"/>
                                 <field name="custom_clearance"/>
-                                <field name="transport"/>
+                               <!-- <field name="transport"/>-->
                                  <field name="carrier_id"/>
                                  <field name="freight_cost"/>
                                 <field name="numero_serie"/>
