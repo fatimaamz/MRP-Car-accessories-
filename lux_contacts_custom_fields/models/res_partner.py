@@ -23,30 +23,30 @@ class AccountMoveLine(models.Model):
             # Start with the original description
             cleaned_description = line.name
 
-            # List of fields to check and remove if their values are 'None', 'No insert', or empty
+            # List of fields and the unwanted values to be removed
             fields_to_check = [
                 ("CARBON CODE", ["None", ""]),
-                ("PAINT CODE", ["None", ""]),
+                ("PAINT CODE", ["None", "INSERT", ""]),
                 ("INSERT COLOR", ["No insert", ""]),
                 ("Année", ["None", ""]),
             ]
             
-            # Remove fields that have 'None', 'No insert', or empty values
+            # Remove fields that have 'None', 'No insert', 'INSERT' or empty values
             for field, non_values in fields_to_check:
                 for non_value in non_values:
-                    # Match the field and its value and remove if value matches a non-value
+                    # Match the field and value and remove them entirely
                     pattern = r'\s*' + re.escape(f"{field}: {non_value}") + r'\s*[,]*\s*'
                     cleaned_description = re.sub(pattern, '', cleaned_description)
 
-            # Handle empty values like "PAINT CODE: " and remove them entirely
+            # Clean up the case when there is a field with an empty value like "PAINT CODE: "
             cleaned_description = re.sub(r'\s*([A-Za-z ]+):\s*[\s]*[,]*\s*', '', cleaned_description)
 
-            # Clean up remaining commas and extra spaces
+            # Remove any redundant commas and excessive spaces
             cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove spaces around commas
             cleaned_description = re.sub(r',\s*$', '', cleaned_description)  # Remove trailing comma
             cleaned_description = cleaned_description.strip()  # Remove leading and trailing spaces
 
-            # Remove any excessive internal spaces
+            # Remove any excessive internal spaces (multiple spaces become a single one)
             cleaned_description = ' '.join(cleaned_description.split())
 
             # Store the cleaned description
