@@ -26,18 +26,25 @@ class AccountMoveLine(models.Model):
             # Start with the original description
             cleaned_description = line.name
             
-            # Unwanted phrases that are not valid variant values
+            # Remove unwanted phrases or attributes (like 'None', 'No Color', etc.)
             unwanted_phrases = [
                 "None", "No insert", "No Insert", "No Color", "No color", "(None, None, No Color)"
             ]
             
-            # Filter out unwanted phrases if they are not part of valid variant values
-            unwanted_phrases = [phrase for phrase in unwanted_phrases if phrase not in valid_variant_values]
-
             # Remove unwanted phrases from the description
             for phrase in unwanted_phrases:
                 cleaned_description = cleaned_description.replace(f"({phrase})", "")
                 cleaned_description = cleaned_description.replace(phrase, "")
+
+            # Remove the field label if its value is None
+            fields_to_check = [
+                ("CARBON CODE", "None"),
+                ("PAINT CODE", "None"),
+                ("INSERT COLOR", "No insert")
+            ]
+            for field, non_value in fields_to_check:
+                if non_value in cleaned_description:
+                    cleaned_description = cleaned_description.replace(f"{field}: {non_value}", "").strip()
 
             # Remove extra whitespace
             line.cleaned_name = ' '.join(cleaned_description.split())
