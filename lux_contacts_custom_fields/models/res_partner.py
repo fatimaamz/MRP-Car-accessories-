@@ -20,37 +20,27 @@ class AccountMoveLine(models.Model):
                 line.cleaned_name = False
                 continue
             
-            # Get valid variant values for the product
-            valid_variant_values = self._get_valid_variant_values(line.product_id)
-            
             # Start with the original description
             cleaned_description = line.name
-            
-            # Remove unwanted phrases or attributes (like 'None', 'No Color', etc.)
-            unwanted_phrases = [
-                "None", "No insert", "No Insert", "No Color", "No color", "(None, None, No Color)"
-            ]
-            
-            # Remove unwanted phrases from the description
-            for phrase in unwanted_phrases:
-                cleaned_description = cleaned_description.replace(f"({phrase})", "")
-                cleaned_description = cleaned_description.replace(phrase, "")
 
             # List of fields to check and remove if their values are 'None' or empty
             fields_to_check = [
-                ("CARBON CODE", "None"),
-                ("PAINT CODE", "None"),
-                ("INSERT COLOR", "No insert")
+                ("CARBON CODE", ["None", ""]),
+                ("PAINT CODE", ["None", ""]),
+                ("INSERT COLOR", ["No insert", ""]),
+                ("Année", ["None", ""]),
             ]
             
-            for field, non_value in fields_to_check:
-                if f"{field}: {non_value}" in cleaned_description:
-                    cleaned_description = cleaned_description.replace(f"{field}: {non_value}", "").strip()
+            # Remove fields that have 'None' or empty values
+            for field, non_values in fields_to_check:
+                for non_value in non_values:
+                    if f"{field}: {non_value}" in cleaned_description:
+                        cleaned_description = cleaned_description.replace(f"{field}: {non_value}", "").strip()
 
-            # Remove any redundant commas (e.g., ", ,")
+            # Remove any field with empty or 'None' values and clean up any commas
             cleaned_description = ', '.join([segment.strip() for segment in cleaned_description.split(',') if segment.strip()])
 
-            # Remove any leading or trailing spaces
+            # Remove extra spaces
             line.cleaned_name = ' '.join(cleaned_description.split())
 
     def _get_valid_variant_values(self, product):
@@ -61,6 +51,7 @@ class AccountMoveLine(models.Model):
         # Get all attribute values linked to the product
         attribute_values = product.product_template_attribute_value_ids.mapped('name')
         return set(attribute_values)
+        
         
 class StockPicking(models.Model):
     _inherit = "stock.picking"
