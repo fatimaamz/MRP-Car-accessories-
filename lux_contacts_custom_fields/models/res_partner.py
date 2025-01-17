@@ -19,22 +19,20 @@ class AccountMoveLine(models.Model):
             if not line.name:
                 line.cleaned_name = False
                 continue
-            
+
             # Initial cleaned description is the original
             cleaned_description = line.name
 
-            # Now we check the product's variants to hide values if None or No insert
-            if line.product_id and line.product_id.product_template_attribute_value_ids:
-                for attribute_value in line.product_id.product_template_attribute_value_ids:
-                    attribute_name = attribute_value.attribute_id.name
-                    value = attribute_value.name
+            # List of attribute names we want to check (e.g., CARBON CODE, PAINT CODE, INSERT COLOR)
+            attribute_names = ['CARBON CODE', 'PAINT CODE', 'INSERT COLOR']
 
-                    # If the value is None or No insert, remove the attribute and its value
-                    if value in ['None', 'No insert']:
-                        # Regex to remove both attribute name and its value if it's None or No insert
-                        cleaned_description = re.sub(r'(\b' + re.escape(attribute_name) + r':\s*(None|No insert|)\s*,?\s*)', '', cleaned_description)
+            # Iterate through each attribute name to check if its value is None or No insert
+            for attribute_name in attribute_names:
+                # Search for the attribute and its value (None, No insert)
+                pattern = r'(' + re.escape(attribute_name) + r':\s*(None|No insert|)\s*,?\s*)'
+                cleaned_description = re.sub(pattern, '', cleaned_description)
 
-            # Handle the removal of unnecessary spaces, commas, and blank fields
+            # Remove any unnecessary spaces, commas, and blank fields
             cleaned_description = re.sub(r'\s{2,}', ' ', cleaned_description)  # Replace multiple spaces by one
             cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove spaces around commas
 
