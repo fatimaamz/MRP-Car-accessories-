@@ -8,31 +8,23 @@ class AccountMoveLine(models.Model):
 
     cleaned_name = fields.Char(string="Cleaned Name", compute="_compute_cleaned_name", store=True)
 
-    @api.depends('name')
-    def _compute_cleaned_name(self):
-        """
-        Clean the name by removing attributes like 'CARBON CODE', 'PAINT CODE', etc., 
-        when their value is 'None', 'No insert', or 'No Color'. 
-        Ensure residual commas, semicolons, and extra spaces are removed.
-        """
+    product_variant_description = fields.Char(
+        string="Product Variant Description",
+        compute='_compute_product_variant_description'
+    )
+
+    def _compute_product_variant_description(self):
         for line in self:
-            # Start with the original name or an empty string
-            cleaned_description = line.name or ''
-    
-            # Regular expression to match attributes with invalid values
-            cleaned_description = re.sub(
-                r"(CARBON CODE|INSERT COLOR|PAINT CODE|INTERIOR COLOR|STYLE|Année):\s*(None|No insert|No Color)[,;]?\s*",
-                '',
-                cleaned_description
-            )
-    
-            # Remove trailing commas, semicolons, or extra spaces left behind
-            cleaned_description = re.sub(r"[,\s;]+$", "", cleaned_description)  # Trailing punctuation and spaces
-            cleaned_description = re.sub(r"\s{2,}", " ", cleaned_description)   # Multiple spaces to a single space
-            cleaned_description = re.sub(r"\(\s*,\s*\)", "()", cleaned_description)  # Empty parentheses
-    
-            # Update the cleaned_name field with the processed description
-            line.cleaned_name = cleaned_description.strip()
+            attributes = []
+            product = line.product_id
+            for attr_value in product.product_template_attribute_value_ids:
+                attr_name = attr_value.attribute_id.name
+                attr_val = attr_value.name
+
+                # Filter out 'None', empty, and 'No insert' values
+                if attr_val and attr_val.strip().lower() not in ['none', '', 'no insert']:
+                    attributes.append(f"{attr_name}: {attr_val}")
+            line.product_variant_description = ', '.join(attributes)
             
         
 class StockPicking(models.Model):
