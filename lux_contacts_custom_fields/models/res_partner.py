@@ -23,14 +23,18 @@ class AccountMoveLine(models.Model):
             # Initial cleaned description is the original
             cleaned_description = line.name
 
-            # Remove fields with None or insert values (like 'PAINT CODE: None', 'INSERT COLOR: No insert')
-            cleaned_description = re.sub(r'(\b(CARBON CODE|PAINT CODE|INSERT COLOR):\s*(None|No insert|)\s*,?\s*)', '', cleaned_description)
+            # Now we check the product's variants to hide values if None
+            if line.product_id and line.product_id.product_template_attribute_value_ids:
+                for attribute_value in line.product_id.product_template_attribute_value_ids:
+                    if attribute_value and attribute_value.name in ['None', 'No insert']:
+                        # If the attribute value is None or No insert, we hide it in the description
+                        cleaned_description = re.sub(r'(\b' + re.escape(attribute_value.name) + r':\s*None|No insert|,?\s*)', '', cleaned_description)
 
-            # Clean up any multiple spaces and extra commas
+            # Handle the removal of unnecessary spaces, commas, and blank fields
             cleaned_description = re.sub(r'\s{2,}', ' ', cleaned_description)  # Replace multiple spaces by one
             cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove spaces around commas
 
-            # Remove any trailing commas, if present
+            # Remove any trailing commas and spaces
             cleaned_description = re.sub(r',\s*$', '', cleaned_description)
 
             # Clean up any leading or trailing spaces
@@ -38,7 +42,6 @@ class AccountMoveLine(models.Model):
 
             # Store the cleaned description
             line.cleaned_name = cleaned_description
-            
         
         
 class StockPicking(models.Model):
