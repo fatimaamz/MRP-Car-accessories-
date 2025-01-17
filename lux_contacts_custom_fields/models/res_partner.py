@@ -20,34 +20,19 @@ class AccountMoveLine(models.Model):
                 line.cleaned_name = False
                 continue
             
-            # Start with the original description
+            # Initial cleaned description is the original
             cleaned_description = line.name
 
-            # List of fields and the unwanted values to be removed
-            fields_to_check = [
-                ("CARBON CODE", ["None", ""]),
-                ("PAINT CODE", ["None", "INSERT", ""]),
-                ("INSERT COLOR", ["No insert", ""]),
-                ("Année", ["None", ""]),
-            ]
-            
-            # Remove fields that have 'None', 'No insert', 'INSERT' or empty values
-            for field, non_values in fields_to_check:
-                for non_value in non_values:
-                    # Match the field and value and remove them entirely
-                    pattern = r'\s*' + re.escape(f"{field}: {non_value}") + r'\s*[,]*\s*'
-                    cleaned_description = re.sub(pattern, '', cleaned_description)
-
-            # Clean up the case when there is a field with an empty value like "PAINT CODE: "
-            cleaned_description = re.sub(r'\s*([A-Za-z ]+):\s*[\s]*[,]*\s*', '', cleaned_description)
-
-            # Remove any redundant commas and excessive spaces
+            # Remove fields if they have 'None', 'No insert', or empty values
+            cleaned_description = re.sub(r'(CARBON CODE: None|PAINT CODE: None|PAINT CODE: INSERT|INSERT COLOR: No insert|INSERT COLOR:)', '', cleaned_description)
+            cleaned_description = re.sub(r'\s{2,}', ' ', cleaned_description)  # Remove multiple spaces
             cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove spaces around commas
-            cleaned_description = re.sub(r',\s*$', '', cleaned_description)  # Remove trailing comma
-            cleaned_description = cleaned_description.strip()  # Remove leading and trailing spaces
 
-            # Remove any excessive internal spaces (multiple spaces become a single one)
-            cleaned_description = ' '.join(cleaned_description.split())
+            # Remove trailing commas if any
+            cleaned_description = re.sub(r',\s*$', '', cleaned_description)
+
+            # Clean up any leading or trailing spaces
+            cleaned_description = cleaned_description.strip()
 
             # Store the cleaned description
             line.cleaned_name = cleaned_description
