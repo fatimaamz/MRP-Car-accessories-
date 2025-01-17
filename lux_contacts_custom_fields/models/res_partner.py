@@ -35,14 +35,16 @@ class AccountMoveLine(models.Model):
             for field, non_values in fields_to_check:
                 for non_value in non_values:
                     # Remove the field and its value if it matches the non-value
-                    pattern = r'{}: {}\s*'.format(re.escape(field), re.escape(non_value))
+                    pattern = r'\s*' + re.escape(f"{field}: {non_value}") + r'\s*[,]*\s*'
                     cleaned_description = re.sub(pattern, '', cleaned_description)
 
-            # Remove any redundant commas, like ", ," or leading/trailing commas
+            # Clean up remaining commas and extra spaces
+            # Remove extra commas that might result from the field removal
             cleaned_description = re.sub(r'\s*,\s*', ', ', cleaned_description)  # Remove spaces around commas
-            cleaned_description = cleaned_description.strip(', ')  # Remove leading/trailing commas
-
-            # Remove extra spaces between words
+            cleaned_description = re.sub(r',\s*$', '', cleaned_description)  # Remove trailing comma
+            cleaned_description = cleaned_description.strip()  # Remove leading and trailing spaces
+            
+            # Remove any excessive internal spaces
             cleaned_description = ' '.join(cleaned_description.split())
 
             # Store the cleaned description
