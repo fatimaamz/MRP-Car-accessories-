@@ -5,40 +5,28 @@ import datetime
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
+    
+    cleaned_name = fields.Char(string="Cleaned Name", compute="_compute_cleaned_name", store=True)
 
-    clean_description = fields.Text(string="Clean Description", compute='_compute_clean_description', store=True)
-
-    @api.depends('product_id', 'product_id.product_template_attribute_value_ids')
-    def _compute_clean_description(self):
+    @api.depends('name')
+    def _compute_cleaned_name(self):
         """
-        Compute the cleaned product description by filtering out unwanted attributes.
-        """
-        for line in self:
-            if line.product_id:
-                attributes = []
-
-                # Loop through product attributes
-                for attr_value in line.product_id.product_template_attribute_value_ids:
-                    attr_name = attr_value.attribute_id.name.strip() if attr_value.attribute_id.name else ''
-                    attr_val = attr_value.name.strip() if attr_value.name else ''
-
-                    # Exclude 'None', '', 'No insert', and invisible spaces
-                    if attr_val.lower() not in ['none', 'no insert', ''] and attr_val != '\u00A0':
-                        attributes.append(f"{attr_name}: {attr_val}")
-
-                # Build the cleaned description
-                product_info = f"{line.product_id.default_code} ({line.product_id.name})" if line.product_id.default_code else line.product_id.name
-                line.clean_description = f"{product_info}\n" + "\n".join(attributes) if attributes else product_info
-            else:
-                line.clean_description = ""
-
-    @api.onchange('product_id')
-    def _onchange_product_id(self):
-        """
-        Update the line description when the product changes.
+        Clean the name by removing attributes like 'CARBON CODE', 'PAINT CODE', etc., when their value is 'None' or other invalid values.
         """
         for line in self:
-            line.name = line.clean_description if line.clean_description else line.product_id.name
+            cleaned_description = line.name or ''
+
+            # Remove attribute-value pairs where the value is 'None' or 'No insert' (like 'CARBON CODE: None')
+            cleaned_description = re.sub(r"(CARBON CODE|INSERT COLOR|PAINT CODE|INTERIOR COLOR|Style|Année):\s*(None|No insert|No Color)[,;]?\s*", '', cleaned_description)
+
+            # Optionally, clean up any unnecessary commas or spaces left behind
+            cleaned_description = re.sub(r"[,;]\s*$", "", cleaned_description)
+
+            # Update the cleaned_name field with the cleaned description
+            line.cleaned_name = cleaned_description.strip()
+
+    
+
             
         
 class StockPicking(models.Model):
