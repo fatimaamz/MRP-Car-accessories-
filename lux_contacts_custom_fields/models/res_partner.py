@@ -102,6 +102,28 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    delivery_price = fields.Float(
+        string='Delivery Price',
+        compute='_compute_delivery_price',
+        store=True,
+        help="The price of the delivery line in the invoice."
+    )
+
+    @api.depends('invoice_line_ids')
+    def _compute_delivery_price(self):
+        for record in self:
+            delivery_category = self.env['product.category'].search([('id', '=', 5)], limit=1)
+            
+            if delivery_category:
+                # Filter invoice lines by products in the 'Delivery Services' category
+                delivery_lines = record.invoice_line_ids.filtered(
+                    lambda line: line.product_id.categ_id == delivery_category
+                )
+                record.delivery_price = sum(delivery_lines.mapped('price_subtotal'))
+            else:
+                record.delivery_price = 0.0
+                
+
     picking_scheduled_date = fields.Datetime(
         string="Ship date",
         compute="_compute_picking_details"
