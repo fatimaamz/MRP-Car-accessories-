@@ -38,7 +38,7 @@ class AccountMoveLine(models.Model):
                     pattern = r'\s*' + re.escape(f"{field}: {non_value}") + r'\s*[,]*\s*'
                     cleaned_description = re.sub(pattern, '', cleaned_description)
 
-            # Handle case where there's an empty value after a field (e.g., "PAINT CODE: ")
+            # Handle empty values like "PAINT CODE: " and remove them entirely
             cleaned_description = re.sub(r'\s*([A-Za-z ]+):\s*[\s]*[,]*\s*', '', cleaned_description)
 
             # Clean up remaining commas and extra spaces
