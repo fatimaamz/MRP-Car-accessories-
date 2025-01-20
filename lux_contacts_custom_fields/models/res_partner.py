@@ -143,8 +143,17 @@ class AccountMove(models.Model):
 
     def _compute_payment_mode(self):
         for record in self:
-            payments = record.payment_ids.filtered(lambda p: p.state == 'posted')
-            record.payment_mode = ", ".join(payments.mapped('journal_id.name')) if payments else ""
+            # Get all posted payments linked to the invoice's move_id
+            payments = self.env['account.payment'].search([
+                ('move_id', '=', record.id),  # Match payments linked to this invoice (move_id)
+                ('state', '=', 'posted')  # Only consider posted payments
+            ])
+    
+            if payments:
+                # Join the names of the journals from the filtered payments
+                record.payment_mode = ", ".join(set(payments.mapped('journal_id.name')))
+            else:
+                record.payment_mode = ""
 
     
 
@@ -245,15 +254,12 @@ class AccountMove(models.Model):
     @api.depends('payment_ids')
     def _compute_payment_date(self):
         for move in self:
-            # Access all payments associated with the invoice
-            payments = self.env['account.payment'].search([
-                ('move_id', 'in', move.payment_ids.ids),  # Match payments linked to the invoice
-                ('state', '=', 'posted')  # Only include posted payments
-            ])
+            # Access payments directly related to the invoice
+            payments = move.payment_ids.filtered(lambda p: p.state == 'posted')  # Filter posted payments
             
             if payments:
-                # Get the earliest payment date
-                move.payment_date = min(payments.mapped('date'))
+                # Get the earliest payment date from the related payments
+                move.payment_date = min(payments.mapped('payment_date'))  # Use payment_date field directly
             else:
                 move.payment_date = False
                 
