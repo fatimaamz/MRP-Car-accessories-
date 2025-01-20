@@ -143,11 +143,8 @@ class AccountMove(models.Model):
 
     def _compute_payment_mode(self):
         for record in self:
-            payments = record.line_ids.mapped('payment_id')
-            if payments:
-                record.payment_mode = ", ".join(payments.mapped('journal_id.name'))
-            else:
-                record.payment_mode = ""
+            payments = record.payment_ids.filtered(lambda p: p.state == 'posted')
+            record.payment_mode = ", ".join(payments.mapped('journal_id.name')) if payments else ""
 
     
 
@@ -251,7 +248,7 @@ class AccountMove(models.Model):
             # Find the first posted payment related to the invoice
             payment = move.payment_ids.filtered(lambda p: p.state == 'posted')
             if payment:
-                move.payment_date = payment[0].payment_date  # Get the date of the first payment
+                move.payment_date = payment[0].date  # Get the date of the first payment
             else:
                 move.payment_date = False
                 
