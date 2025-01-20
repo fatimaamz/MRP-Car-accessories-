@@ -66,5 +66,6 @@
 		<xpath expr="//group[@name='group_extra_info']" position="inside">
 	             <field name="installation"/>
 	      </xpath>
+</record>
 
 </odoo>
