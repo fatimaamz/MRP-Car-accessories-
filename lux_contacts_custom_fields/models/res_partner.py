@@ -245,10 +245,15 @@ class AccountMove(models.Model):
     @api.depends('payment_ids')
     def _compute_payment_date(self):
         for move in self:
-            # Find the first posted payment related to the invoice
-            payment = move.payment_ids.filtered(lambda p: p.state == 'posted')
-            if payment:
-                move.payment_date = payment[0].date  # Get the date of the first payment
+            # Access all payments associated with the invoice
+            payments = self.env['account.payment'].search([
+                ('move_id', 'in', move.payment_ids.ids),  # Match payments linked to the invoice
+                ('state', '=', 'posted')  # Only include posted payments
+            ])
+            
+            if payments:
+                # Get the earliest payment date
+                move.payment_date = min(payments.mapped('date'))
             else:
                 move.payment_date = False
                 
