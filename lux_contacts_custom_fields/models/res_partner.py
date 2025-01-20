@@ -249,34 +249,23 @@ class AccountMove(models.Model):
             #record.carrier_id = picking.carrier_id if picking else False
             record.picking_scheduled_date = picking[0].scheduled_date if picking else False
             
-    payment_date = fields.Char(string="Payment Dates", compute="_compute_payment_date", store=True)
+   
 
-    @api.depends('line_ids.payment_id.state', 'line_ids.payment_id.payment_date')
-    def _compute_payment_date(self):
-        for inv in self:
-            payment_dates = inv.line_ids.mapped('payment_id').filtered(lambda p: p.state == 'posted').mapped('payment_date')
-            
-            if payment_dates:
-                # Combine all payment dates as a comma-separated string
-                inv.payment_date = ', '.join(map(str, sorted(payment_dates)))
-            else:
-                inv.payment_date = False
-
-    #payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
+    payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
     
 
-    #@api.depends('line_ids.payment_id', 'line_ids.payment_id.state')
-    #def _compute_payment_date(self):
-        #for inv in self:
-            #dates = []
-            #if inv.invoice_payments_widget:
+    @api.depends('invoice_payments_widget')
+    def _compute_payment_date(self):
+        for inv in self:
+            dates = []
+            if inv.invoice_payments_widget:
                 # Load JSON data from the invoice_payments_widget field
-                #payment_data = json.loads(inv.invoice_payments_widget).get('content', [])
-                #for payment_info in payment_data:
-                    #payment_date = payment_info.get('date')
-                    #if payment_date:
-                        #dates.append(payment_date)
-            #inv.payment_date = ', '.join(dates) if dates else False
+                payment_data = json.loads(inv.invoice_payments_widget).get('content', [])
+                for payment_info in payment_data:
+                    payment_date = payment_info.get('date')
+                    if payment_date:
+                        dates.append(payment_date)
+            inv.payment_date = ', '.join(dates) if dates else False
                 
     
     sale_order_partner_id = fields.Many2one(
