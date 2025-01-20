@@ -252,20 +252,16 @@ class AccountMove(models.Model):
    
 
     payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
-    
 
-    @api.depends('invoice_payments_widget')
     def _compute_payment_date(self):
-        for inv in self:
-            dates = []
-            if inv.invoice_payments_widget:
-                # Load JSON data from the invoice_payments_widget field
-                payment_data = json.loads(inv.invoice_payments_widget).get('content', [])
-                for payment_info in payment_data:
-                    payment_date = payment_info.get('date')
-                    if payment_date:
-                        dates.append(payment_date)
-            inv.payment_date = min(dates) if dates else False 
+        for record in self:
+            payment_date = False
+            if record.invoice_payments_widget:
+                widget_content = json.loads(record.invoice_payments_widget)
+                payments = widget_content.get('content', [])
+                if payments:
+                    payment_date = payments[0].get('date')
+            record.payment_date = payment_date
                 
     
     sale_order_partner_id = fields.Many2one(
