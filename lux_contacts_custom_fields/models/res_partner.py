@@ -259,21 +259,21 @@ class AccountMove(models.Model):
         for inv in self:
             payment_dates = set()
             payment_journals = set()
-            
+
             if inv.invoice_payments_widget:
-                # Load JSON data from the invoice_payments_widget field
-                payment_data = json.loads(inv.invoice_payments_widget).get('content', [])
-                
+                # The invoice_payments_widget is already a dictionary, so no need to use json.loads
+                payment_data = inv.invoice_payments_widget.get('content', [])
+
                 for payment_info in payment_data:
                     payment_date = payment_info.get('date')
                     journal_name = payment_info.get('journal_name')
-                    
+
                     # Add the date and journal to the respective sets to avoid duplicates
                     if payment_date:
                         payment_dates.add(payment_date)
                     if journal_name:
                         payment_journals.add(journal_name)
-            
+
             # Assign the extracted payment dates and journal names
             inv.payment_date = ', '.join(sorted([str(date) for date in payment_dates])) if payment_dates else False
             inv.payment_journal = ', '.join(sorted(payment_journals)) if payment_journals else False
