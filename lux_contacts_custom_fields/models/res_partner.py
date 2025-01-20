@@ -251,22 +251,32 @@ class AccountMove(models.Model):
             
    
 
-    payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
+    payment_date = fields.Char(string='Payment Date', compute='_compute_payment_date', store=True)
+    payment_journal = fields.Char(string='Payment Journal', compute='_compute_payment_date', store=True)
 
+    @api.depends('invoice_payments_widget')
     def _compute_payment_date(self):
-        for record in self:
-            payment_date = False
-            if record.invoice_payments_widget:
-                # Check if the data is a string, if so, parse it, otherwise, it's already a dictionary
-                if isinstance(record.invoice_payments_widget, str):
-                    widget_content = json.loads(record.invoice_payments_widget)
-                else:
-                    widget_content = record.invoice_payments_widget
-
-                payments = widget_content.get('content', [])
-                if payments:
-                    payment_date = payments[0].get('date')  # Extract the first payment date
-            record.payment_date = payment_date
+        for inv in self:
+            payment_dates = set()
+            payment_journals = set()
+            
+            if inv.invoice_payments_widget:
+                # Load JSON data from the invoice_payments_widget field
+                payment_data = json.loads(inv.invoice_payments_widget).get('content', [])
+                
+                for payment_info in payment_data:
+                    payment_date = payment_info.get('date')
+                    journal_name = payment_info.get('journal_name')
+                    
+                    # Add the date and journal to the respective sets to avoid duplicates
+                    if payment_date:
+                        payment_dates.add(payment_date)
+                    if journal_name:
+                        payment_journals.add(journal_name)
+            
+            # Assign the extracted payment dates and journal names
+            inv.payment_date = ', '.join(sorted([str(date) for date in payment_dates])) if payment_dates else False
+            inv.payment_journal = ', '.join(sorted(payment_journals)) if payment_journals else False
                 
     
     sale_order_partner_id = fields.Many2one(
