@@ -240,7 +240,7 @@
                                             <tr>
                                                 <td style="text-align: left; padding-left: 5px; border: 1px solid white;">Réf.</td>
                                                 <td style="text-align: left; padding-left: 5px; border: 1px solid white;">:</td>
-                                                <td style="text-align: left; padding-left: 5px; border: 1px solid white;"><t t-esc="doc.num_lx e or ''"/></td>
+                                                <td style="text-align: left; padding-left: 5px; border: 1px solid white;"><t t-esc="doc.num_lx  or ''"/></td>
                                             </tr>
                                             <tr>
                                                 <td style="text-align: left; padding-left: 5px; border: 1px solid white;">Dealer</td>
