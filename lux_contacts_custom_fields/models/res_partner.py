@@ -2,7 +2,7 @@
 from odoo import api, fields, models
 import re
 import datetime
-
+import json
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
     
@@ -265,7 +265,7 @@ class AccountMove(models.Model):
                     payment_date = payment_info.get('date')
                     if payment_date:
                         dates.append(payment_date)
-            inv.payment_date = ', '.join(dates) if dates else False
+            inv.payment_date = min(dates) if dates else False 
                 
     
     sale_order_partner_id = fields.Many2one(
