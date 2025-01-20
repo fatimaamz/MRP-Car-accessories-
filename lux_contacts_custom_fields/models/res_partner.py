@@ -41,6 +41,12 @@ class StockPicking(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
+    installation = fields.Selection(
+        [('yes', 'Oui'), ('no', 'Non')],
+        string="Installation",
+        help="Indique si une installation est prévue pour cet ordre de fabrication."
+    )
+
     #picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     #picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
 
@@ -140,6 +146,30 @@ class AccountMove(models.Model):
         compute="_compute_payment_mode",
         store=True,
     )
+
+    installation = fields.Selection(
+        [('yes', 'Oui'), ('no', 'Non')],
+        string="Installation",
+        compute="_compute_installation",
+        store=True,
+        help="Indique si une installation est prévue pour cet ordre de fabrication."
+    )
+
+  
+
+    @api.depends('invoice_origin')
+    def _compute_installation(self):
+        for move in self:
+            if move.invoice_origin:
+                # Récupérer l'ordre de fabrication lié
+                mrp_production = self.env['mrp.production'].search([
+                    ('origin', '=', move.invoice_origin)
+                ], limit=1)
+                move.installation = mrp_production.installation if mrp_production else False
+            else:
+                move.installation = False
+
+    
 
     def _compute_payment_mode(self):
         for record in self:
