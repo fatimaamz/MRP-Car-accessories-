@@ -251,17 +251,18 @@ class AccountMove(models.Model):
 
     payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
 
-    @api.depends('payment_ids')
+    @api.depends('line_ids.payment_id', 'line_ids.payment_id.state')
     def _compute_payment_date(self):
-        for move in self:
-            # Access payments directly related to the invoice
-            payments = move.payment_ids.filtered(lambda p: p.state == 'posted')  # Filter posted payments
-            
-            if payments:
-                # Get the earliest payment date from the related payments
-                move.payment_date = min(payments.mapped('payment_date'))  # Use payment_date field directly
-            else:
-                move.payment_date = False
+        for inv in self:
+            dates = []
+            if inv.invoice_payments_widget:
+                # Load JSON data from the invoice_payments_widget field
+                payment_data = json.loads(inv.invoice_payments_widget).get('content', [])
+                for payment_info in payment_data:
+                    payment_date = payment_info.get('date')
+                    if payment_date:
+                        dates.append(payment_date)
+            inv.payment_date = ', '.join(dates) if dates else False
                 
     
     sale_order_partner_id = fields.Many2one(
