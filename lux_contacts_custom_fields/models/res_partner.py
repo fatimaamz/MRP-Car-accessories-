@@ -135,6 +135,22 @@ class AccountMove(models.Model):
         help="The price of the delivery line in the invoice."
     )
 
+    payment_mode = fields.Char(
+        string="Mode de paiement",
+        compute="_compute_payment_mode",
+        store=True,
+    )
+
+    def _compute_payment_mode(self):
+        for record in self:
+            payments = record.line_ids.mapped('payment_id')
+            if payments:
+                record.payment_mode = ", ".join(payments.mapped('journal_id.name'))
+            else:
+                record.payment_mode = "Non défini"
+
+    
+
     @api.depends('invoice_line_ids')
     def _compute_delivery_price(self):
         for record in self:
