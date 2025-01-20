@@ -147,7 +147,7 @@ class AccountMove(models.Model):
             if payments:
                 record.payment_mode = ", ".join(payments.mapped('journal_id.name'))
             else:
-                record.payment_mode = "Non défini"
+                record.payment_mode = ""
 
     
 
