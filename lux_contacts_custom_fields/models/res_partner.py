@@ -257,10 +257,15 @@ class AccountMove(models.Model):
         for record in self:
             payment_date = False
             if record.invoice_payments_widget:
-                widget_content = json.loads(record.invoice_payments_widget)
+                # Check if the data is a string, if so, parse it, otherwise, it's already a dictionary
+                if isinstance(record.invoice_payments_widget, str):
+                    widget_content = json.loads(record.invoice_payments_widget)
+                else:
+                    widget_content = record.invoice_payments_widget
+
                 payments = widget_content.get('content', [])
                 if payments:
-                    payment_date = payments[0].get('date')
+                    payment_date = payments[0].get('date')  # Extract the first payment date
             record.payment_date = payment_date
                 
     
