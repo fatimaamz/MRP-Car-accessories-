@@ -153,7 +153,7 @@ class AccountMove(models.Model):
     )
     payment_memo = fields.Char(
         string="Mémo",
-        compute="_compute_payment_mode",
+        compute='_compute_payment_date',
         store=True,
     )
 
@@ -185,11 +185,10 @@ class AccountMove(models.Model):
             if payments:
                 # Join the names of the journals from the filtered payments
                 record.payment_mode = ", ".join(set(payments.mapped('journal_id.name')))
-                record.payment_memo = ", ".join(set(ref.replace('\xa0', ' ') for ref in payments.mapped('ref') if ref))
+                
             else:
                 record.payment_mode = ""
-                record.payment_memo = ""
-
+                
     
 
     @api.depends('invoice_line_ids')
@@ -294,6 +293,7 @@ class AccountMove(models.Model):
         for inv in self:
             payment_dates = set()
             payment_journals = set()
+            payment_memo = ser()
 
             if inv.invoice_payments_widget:
                 # The invoice_payments_widget is already a dictionary, so no need to use json.loads
@@ -302,16 +302,20 @@ class AccountMove(models.Model):
                 for payment_info in payment_data:
                     payment_date = payment_info.get('date')
                     journal_name = payment_info.get('journal_name')
-
+                    journal_memo = payment_info.get('ref')
                     # Add the date and journal to the respective sets to avoid duplicates
                     if payment_date:
                         payment_dates.add(payment_date)
                     if journal_name:
                         payment_journals.add(journal_name)
+                    if journal_memo:
+                        payment_memo.add(journal_memo)
 
             # Assign the extracted payment dates and journal names
             inv.payment_date = ', '.join(sorted([str(date) for date in payment_dates])) if payment_dates else False
             inv.payment_journal = ', '.join(sorted(payment_journals)) if payment_journals else False
+            inv.payment_memo = ', '.join(sorted(payment_memo)) if payment_memo else False
+            
                 
     
     sale_order_partner_id = fields.Many2one(
