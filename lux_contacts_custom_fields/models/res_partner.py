@@ -439,7 +439,7 @@ class ResPartner(models.Model):
         ('NC', 'NC'),
     ], string='Prov')
 
-
+"""
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
@@ -464,3 +464,4 @@ class SaleOrder(models.Model):
                         for production in production_order:
                             production.move_raw_ids.write({'installation': line.installation})
 
+"""
