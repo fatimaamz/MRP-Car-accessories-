@@ -9,6 +9,10 @@ class AccountMoveLine(models.Model):
    
     
     cleaned_name = fields.Char(string="Cleaned Name", compute="_compute_cleaned_name", store=True)
+    installation = fields.Selection([
+        ('yes', 'Oui'),
+        ('no', 'Non')
+    ], string='Installation Required', default='no')
 
     @api.depends('name')
     def _compute_cleaned_name(self):
@@ -43,12 +47,10 @@ class StockPicking(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-    installation = fields.Selection(
-        [('yes', 'Oui'), ('no', 'Non')],
-        string="Installation",
-        readonly=True,
-        help="Indique si une installation est prévue pour cet ordre de fabrication."
-    )
+    installation = fields.Selection([
+        ('yes', 'Oui'),
+        ('no', 'Non')
+    ], string='Installation Required', default='no')
 
     #picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     #picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
@@ -150,13 +152,7 @@ class AccountMove(models.Model):
         store=True,
     )
 
-    installation = fields.Selection(
-        [('yes', 'Oui'), ('no', 'Non')],
-        string="Installation",
-        readonly=True,
-        help="Indique si une installation est prévue pour cette facture."
-    )
-
+    
   
 
     @api.depends('invoice_origin')
@@ -335,6 +331,11 @@ class SaleOrderLine(models.Model):
 
     insert_color = fields.Char(string="Insert Color", compute="_compute_insert_color", store=True)
     interior_color = fields.Char(string="Interior Color", compute="_compute_interior_color", store=True)
+   
+    installation = fields.Selection([
+        ('yes', 'Oui'),
+        ('no', 'Non')
+    ], string='Installation Required', default='no')
 
     @api.depends('name')
     def _compute_interior_color(self):
@@ -438,27 +439,28 @@ class ResPartner(models.Model):
         ('NC', 'NC'),
     ], string='Prov')
 
+
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    installation = fields.Selection(
-        [('yes', 'Oui'), ('no', 'Non')],
-        string="Installation",
-        default='no',
-        help="Indique si une installation est prévue pour ce devis."
-    )
-
-    def _create_invoices(self, grouped=False, final=False):
-        invoices = super(SaleOrder, self)._create_invoices(grouped=grouped, final=final)
-        for invoice in invoices:
-            invoice.installation = self.installation
-        return invoices
-
     def action_confirm(self):
-        res = super(SaleOrder, self).action_confirm()
+        super(SaleOrder, self).action_confirm()
         for order in self:
-            for production in order.order_line.mapped('move_ids').mapped('production_id'):
-                production.installation = order.installation
-        return res
+            # Propager le champ installation vers les lignes de facture
+            for line in order.order_line:
+                if line.installation:
+                    invoice_lines = self.env['account.move.line'].search([
+                        ('sale_line_ids', 'in', line.ids)
+                    ])
+                    for invoice_line in invoice_lines:
+                        invoice_line.write({'installation': line.installation})
 
+                    # Propager le champ installation vers l'ordre de fabrication
+                    if line.product_id.manufacture_ok:
+                        production_order = self.env['mrp.production'].search([
+                            ('origin', '=', order.name),
+                            ('product_id', '=', line.product_id.id)
+                        ])
+                        for production in production_order:
+                            production.move_raw_ids.write({'installation': line.installation})
 
