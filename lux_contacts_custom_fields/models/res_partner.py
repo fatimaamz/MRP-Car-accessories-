@@ -6,10 +6,7 @@ import json
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    mrp_production_id = fields.Many2one(
-        'mrp.production',
-        string="Manufacturing Order",
-    )
+   
     
     cleaned_name = fields.Char(string="Cleaned Name", compute="_compute_cleaned_name", store=True)
 
