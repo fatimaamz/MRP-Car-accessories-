@@ -151,11 +151,7 @@ class AccountMove(models.Model):
         compute="_compute_payment_mode",
         store=True,
     )
-    payment_memo = fields.Char(
-        string="Mémo",
-        compute='_compute_payment_date',
-        store=True,
-    )
+    
 
     
   
@@ -287,6 +283,7 @@ class AccountMove(models.Model):
 
     payment_date = fields.Char(string='Payment Date', compute='_compute_payment_date', store=True)
     payment_journal = fields.Char(string='Payment Journal', compute='_compute_payment_date', store=True)
+    payment_memo = fields.Char(string="Mémo",compute='_compute_payment_date',store=True)
 
     @api.depends('invoice_payments_widget')
     def _compute_payment_date(self):
@@ -314,7 +311,7 @@ class AccountMove(models.Model):
             # Assign the extracted payment dates and journal names
             inv.payment_date = ', '.join(sorted([str(date) for date in payment_dates])) if payment_dates else False
             inv.payment_journal = ', '.join(sorted(payment_journals)) if payment_journals else False
-            inv.payment_memo = ', '.join(sorted(payment_memos)) if payment_memos else "refgg"
+            inv.payment_memo = ', '.join(sorted(payment_memos)) if payment_memos else False
             
                 
     
