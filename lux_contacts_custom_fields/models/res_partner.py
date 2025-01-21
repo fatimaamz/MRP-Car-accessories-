@@ -151,6 +151,11 @@ class AccountMove(models.Model):
         compute="_compute_payment_mode",
         store=True,
     )
+    payment_memo = fields.Char(
+        string="Mémo",
+        compute="_compute_payment_mode",
+        store=True,
+    )
 
     
   
@@ -180,8 +185,10 @@ class AccountMove(models.Model):
             if payments:
                 # Join the names of the journals from the filtered payments
                 record.payment_mode = ", ".join(set(payments.mapped('journal_id.name')))
+                record.payment_memo = ", ".join(set(payments.mapped('ref')))
             else:
                 record.payment_mode = ""
+                record.payment_memo = ""
 
     
 
