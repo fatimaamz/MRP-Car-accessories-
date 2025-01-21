@@ -10,7 +10,7 @@
                 </xpath>
             </field>
      </record>
-  <record id="view_move_line_form_inherit" model="ir.ui.view">
+  <!--<record id="view_move_line_form_inherit" model="ir.ui.view">
             <field name="name">account.move.line.form.inherit</field>
             <field name="model">account.move.line</field>
             <field name="inherit_id" ref="account.view_move_line_form"/>
@@ -19,7 +19,7 @@
                     <field name="installation"/>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 	
 	
 
