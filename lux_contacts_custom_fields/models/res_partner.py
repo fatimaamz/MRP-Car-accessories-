@@ -185,7 +185,7 @@ class AccountMove(models.Model):
             if payments:
                 # Join the names of the journals from the filtered payments
                 record.payment_mode = ", ".join(set(payments.mapped('journal_id.name')))
-                record.payment_memo = ", ".join(set(payments.mapped('ref')))
+                record.payment_memo = ", ".join(set(ref.replace('\xa0', ' ') for ref in payments.mapped('ref') if ref))
             else:
                 record.payment_mode = ""
                 record.payment_memo = ""
