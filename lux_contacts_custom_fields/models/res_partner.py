@@ -293,7 +293,7 @@ class AccountMove(models.Model):
         for inv in self:
             payment_dates = set()
             payment_journals = set()
-            payment_memo = ser()
+            payment_memo = set()
 
             if inv.invoice_payments_widget:
                 # The invoice_payments_widget is already a dictionary, so no need to use json.loads
