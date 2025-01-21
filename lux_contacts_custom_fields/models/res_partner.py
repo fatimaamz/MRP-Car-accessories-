@@ -299,7 +299,7 @@ class AccountMove(models.Model):
                 for payment_info in payment_data:
                     payment_date = payment_info.get('date')
                     journal_name = payment_info.get('journal_name')
-                    journal_memo = payment_info.get('ref')
+                    journal_memo = payment_info.get('title')
                     # Add the date and journal to the respective sets to avoid duplicates
                     if payment_date:
                         payment_dates.add(payment_date)
