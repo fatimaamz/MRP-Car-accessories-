@@ -46,6 +46,7 @@ class MrpProduction(models.Model):
     installation = fields.Selection(
         [('yes', 'Oui'), ('no', 'Non')],
         string="Installation",
+        readonly=True,
         help="Indique si une installation est prévue pour cet ordre de fabrication."
     )
 
@@ -152,9 +153,8 @@ class AccountMove(models.Model):
     installation = fields.Selection(
         [('yes', 'Oui'), ('no', 'Non')],
         string="Installation",
-        compute="_compute_installation",
-        store=True,
-        help="Indique si une installation est prévue pour cet ordre de fabrication."
+        readonly=True,
+        help="Indique si une installation est prévue pour cette facture."
     )
 
   
@@ -438,5 +438,27 @@ class ResPartner(models.Model):
         ('NC', 'NC'),
     ], string='Prov')
 
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    installation = fields.Selection(
+        [('yes', 'Oui'), ('no', 'Non')],
+        string="Installation",
+        default='no',
+        help="Indique si une installation est prévue pour ce devis."
+    )
+
+    def _create_invoices(self, grouped=False, final=False):
+        invoices = super(SaleOrder, self)._create_invoices(grouped=grouped, final=final)
+        for invoice in invoices:
+            invoice.installation = self.installation
+        return invoices
+
+    def action_confirm(self):
+        res = super(SaleOrder, self).action_confirm()
+        for order in self:
+            for production in order.order_line.mapped('move_ids').mapped('production_id'):
+                production.installation = order.installation
+        return res
 
 
