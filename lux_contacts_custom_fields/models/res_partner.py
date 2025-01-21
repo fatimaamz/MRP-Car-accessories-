@@ -293,7 +293,7 @@ class AccountMove(models.Model):
         for inv in self:
             payment_dates = set()
             payment_journals = set()
-            payment_memo = set()
+            payment_memos = set()
 
             if inv.invoice_payments_widget:
                 # The invoice_payments_widget is already a dictionary, so no need to use json.loads
@@ -314,7 +314,7 @@ class AccountMove(models.Model):
             # Assign the extracted payment dates and journal names
             inv.payment_date = ', '.join(sorted([str(date) for date in payment_dates])) if payment_dates else False
             inv.payment_journal = ', '.join(sorted(payment_journals)) if payment_journals else False
-            inv.payment_memo = ', '.join(sorted(payment_memo)) if payment_memo else False
+            inv.payment_memo = ', '.join(sorted(payment_memos)) if payment_memos else "refgg"
             
                 
     
