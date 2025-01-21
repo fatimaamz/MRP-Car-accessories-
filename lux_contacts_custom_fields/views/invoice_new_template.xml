@@ -237,7 +237,7 @@
                                              <tr>
                                                 <td style="text-align: left; padding-left: 5px; border: 1px solid white;">Moyen de paiement</td>
                                                 <td style="text-align: left; padding-left: 5px; border: 1px solid white;">:</td>
-                                                <td style="text-align: left; padding-left: 5px; border: 1px solid white;"><t t-esc="doc.payment_journal"/></td>
+                                                <td style="text-align: left; padding-left: 5px; border: 1px solid white;"><t t-esc="doc.payment_memo"/></td>
                                             </tr>
                                             
                                             <tr>
