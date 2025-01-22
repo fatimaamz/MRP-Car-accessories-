@@ -46,6 +46,13 @@ class SalesRepAttendance(models.Model):
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    installation = fields.Boolean(
+        string="Installation",
+        default=False,
+        help="Indique si une installation est incluse pour cette commande."
+    )
+
+
     team_weekly_target = fields.Float(
         string="Objectif Hebdomadaire ($)",
         compute='_compute_team_weekly_target',
