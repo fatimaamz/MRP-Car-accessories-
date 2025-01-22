@@ -6,7 +6,7 @@
 
             <xpath expr="//field[@name='payment_term_id']" position="after">
                 <field name="installation">
-                    <attribute name="invisible">partner_id.type_client != 'Concessionnaires Programme nationaux'</attribute>
+                     <field name="modifiers">{'invisible': [['partner_id.type_client', '!=', 'Concessionnaires Programme nationaux']]}</field>
                 </field>
                     
                 <field name="commission_pool"/>
