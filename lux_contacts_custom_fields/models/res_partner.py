@@ -283,7 +283,25 @@ class AccountMove(models.Model):
 
     payment_date = fields.Char(string='Payment Date', compute='_compute_payment_date', store=True)
     payment_journal = fields.Char(string='Payment Journal', compute='_compute_payment_date', store=True)
-    payment_memo = fields.Char(string="Mémo",compute='_compute_payment_date',store=True)
+    ref = fields.Char(string="Reference", compute='_compute_payment_ref', store=True)
+
+    @api.depends('invoice_payments_widget')
+    def _compute_payment_ref(self):
+        for inv in self:
+            payment_refs = set()
+    
+            if inv.invoice_payments_widget:
+                # Extract payment data from the widget content
+                payment_data = inv.invoice_payments_widget.get('content', [])
+    
+                for payment_info in payment_data:
+                    # Safely retrieve the ref value
+                    payment_ref = payment_info.get('ref')
+                    if payment_ref:
+                        payment_refs.add(payment_ref)  # Add to set to avoid duplicates
+    
+            # Assign extracted and sorted values or False if the set is empty
+            inv.ref = ', '.join(sorted(payment_refs)) if payment_refs else False
 
     @api.depends('invoice_payments_widget')
     def _compute_payment_date(self):
@@ -299,19 +317,18 @@ class AccountMove(models.Model):
                 for payment_info in payment_data:
                     payment_date = payment_info.get('date')
                     journal_name = payment_info.get('journal_name')
-                    journal_memo = payment_info.get('journal_name')
+                    
                     # Add the date and journal to the respective sets to avoid duplicates
                     if payment_date:
                         payment_dates.add(payment_date)
                     if journal_name:
                         payment_journals.add(journal_name)
-                    if journal_memo:
-                        payment_memos.add(journal_memo)
+                   
 
             # Assign the extracted payment dates and journal names
             inv.payment_date = ', '.join(sorted([str(date) for date in payment_dates])) if payment_dates else False
             inv.payment_journal = ', '.join(sorted(payment_journals)) if payment_journals else False
-            inv.payment_memo = payment_memos if payment_memos else False
+           
             
                 
     
