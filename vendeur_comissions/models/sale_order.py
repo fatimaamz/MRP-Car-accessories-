@@ -48,7 +48,8 @@ class SaleOrder(models.Model):
 
     installation = fields.Boolean(
         string="Installation",
-        default=False,
+        default=lambda self: self._default_installation(),
+        
         help="Indique si une installation est incluse pour cette commande."
     )
     type_client = fields.Selection(
@@ -73,6 +74,15 @@ class SaleOrder(models.Model):
         store=True
     )
 
+    @api.model
+    def _default_installation(self):
+        partner_id = self.env.context.get('default_partner_id')
+        if partner_id:
+            partner = self.env['res.partner'].browse(partner_id)
+            if partner.type_client == 'Concessionnaires Régulier':
+                return True
+        return False
+        
     @api.depends('user_id')
     def _compute_team_weekly_target(self):
         """Récupérer l'objectif hebdomadaire de l'équipe du vendeur associé."""
