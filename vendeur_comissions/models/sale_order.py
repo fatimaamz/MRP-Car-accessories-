@@ -127,23 +127,4 @@ class SaleOrder(models.Model):
                 order.additional_commission = 0
 
             order.individual_commissions = base_commissions + order.additional_commission
- """
-    @api.depends('user_id', 'commission_pool', 'team_id')
-    def _compute_individual_commissions(self):
-       Calcul des commissions individuelles basées sur les jours travaillés.
-        for order in self:
-            attendances = self.env['sales.rep.attendance'].search([
-                ('team_id', '=', order.team_id.id),
-                ('week_start_date', '<=', fields.Date.today()),
-                ('week_start_date', '>=', fields.Date.today() - timedelta(days=7))
-            ])
-            total_days_worked = sum(attendances.mapped('days_worked'))
-            if total_days_worked > 0:
-                per_day_rate = order.commission_pool / total_days_worked
-                order.individual_commissions = sum([
-                    att.days_worked * per_day_rate
-                    for att in attendances if att.sales_rep_id == order.user_id
-                ])
-            else:
-                order.individual_commissions = 0
-"""
+
