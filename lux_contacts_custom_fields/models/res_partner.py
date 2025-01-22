@@ -300,7 +300,7 @@ class AccountMove(models.Model):
                             refs.add(payment.ref)
     
             # Assign the concatenated references
-            inv.payment_ref = ', '.join(sorted(refs)) if refs else False
+            inv.ref = ', '.join(sorted(refs)) if refs else False
 
     @api.depends('invoice_payments_widget')
     def _compute_payment_date(self):
