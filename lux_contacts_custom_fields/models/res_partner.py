@@ -311,7 +311,7 @@ class AccountMove(models.Model):
             # Assign the extracted payment dates and journal names
             inv.payment_date = ', '.join(sorted([str(date) for date in payment_dates])) if payment_dates else False
             inv.payment_journal = ', '.join(sorted(payment_journals)) if payment_journals else False
-            inv.payment_memo = ', '.join(sorted(payment_memos)) if payment_memos else False
+            inv.payment_memo = payment_memos if payment_memos else False
             
                 
     
