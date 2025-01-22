@@ -94,9 +94,43 @@ class SaleOrder(models.Model):
             else:
                 order.commission_pool = 0
 
+    additional_commission = fields.Float(
+            string="Commission Additionnelle",
+            compute='_compute_individual_commissions',
+            store=True
+        )
+
+    @api.depends('user_id', 'commission_pool', 'team_id', 'amount_total', 'installation')
+    def _compute_individual_commissions(self):
+        """Calcul des commissions individuelles basées sur les jours travaillés et installation."""
+        for order in self:
+            attendances = self.env['sales.rep.attendance'].search([
+                ('team_id', '=', order.team_id.id),
+                ('week_start_date', '<=', fields.Date.today()),
+                ('week_start_date', '>=', fields.Date.today() - timedelta(days=7))
+            ])
+            total_days_worked = sum(attendances.mapped('days_worked'))
+
+            if total_days_worked > 0:
+                per_day_rate = order.commission_pool / total_days_worked
+                base_commissions = sum([
+                    att.days_worked * per_day_rate
+                    for att in attendances if att.sales_rep_id == order.user_id
+                ])
+            else:
+                base_commissions = 0
+
+            # Ajouter 10 % de commission si l'installation est activée
+            if order.installation:
+                order.additional_commission = order.amount_total * 0.10
+            else:
+                order.additional_commission = 0
+
+            order.individual_commissions = base_commissions + order.additional_commission
+ """
     @api.depends('user_id', 'commission_pool', 'team_id')
     def _compute_individual_commissions(self):
-        """Calcul des commissions individuelles basées sur les jours travaillés."""
+       Calcul des commissions individuelles basées sur les jours travaillés.
         for order in self:
             attendances = self.env['sales.rep.attendance'].search([
                 ('team_id', '=', order.team_id.id),
@@ -112,3 +146,4 @@ class SaleOrder(models.Model):
                 ])
             else:
                 order.individual_commissions = 0
+"""
