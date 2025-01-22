@@ -49,7 +49,7 @@ class SaleOrder(models.Model):
     installation = fields.Boolean(
         string="Installation",
         help="Indique si une installation est incluse pour cette commande.",
-        default=lambda self: self._get_default_installation()
+        
     )
 
     def _get_default_installation(self):
@@ -80,7 +80,21 @@ class SaleOrder(models.Model):
         store=True
     )
 
-    
+    @api.model
+    def create(self, vals):
+        partner = vals.get('partner_id')
+        if partner:
+            partner_record = self.env['res.partner'].browse(partner)
+            if partner_record.type_client == 'Concessionnaires régulier':
+                vals['installation'] = True
+        return super(SaleOrder, self).create(vals)
+
+    def write(self, vals):
+        if 'partner_id' in vals:
+            partner_record = self.env['res.partner'].browse(vals['partner_id'])
+            if partner_record.type_client == 'Concessionnaires régulier':
+                vals['installation'] = True
+        return super(SaleOrder, self).write(vals)
             
     @api.depends('user_id')
     def _compute_team_weekly_target(self):
