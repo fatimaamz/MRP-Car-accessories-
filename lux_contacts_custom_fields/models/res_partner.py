@@ -403,7 +403,7 @@ class ResPartner(models.Model):
     #dealer_Code=fields.Char(string='Code du concessionnaire')
     type_client = fields.Selection([
         ('Concessionnaires Régulier', 'Concessionnaires Régulier'),
-        ('Concessionnaires Programme nationaux', 'Concessionnaires Programme nationaux'),
+        ('concessionnaires_programme _nationaux', 'Concessionnaires Programme nationaux'),
         ('Distributeur', 'Distributeur'),
         ('Particulier', 'Particulier'),
         ('Fabriquant majeur', 'Fabriquant majeur'),
