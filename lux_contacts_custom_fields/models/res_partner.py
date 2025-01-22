@@ -283,7 +283,7 @@ class AccountMove(models.Model):
 
     payment_date = fields.Char(string='Payment Date', compute='_compute_payment_date', store=True)
     payment_journal = fields.Char(string='Payment Journal', compute='_compute_payment_date', store=True)
-    ref = fields.Char(string="Reference", compute='_compute_payment_ref', store=True)
+    ref_pay = fields.Char(string="Reference", compute='_compute_payment_ref', store=True)
 
     @api.depends('invoice_payments_widget')
     def _compute_payment_ref(self):
@@ -300,7 +300,7 @@ class AccountMove(models.Model):
                             refs.add(payment.ref)
     
             # Assign the concatenated references
-            inv.ref = ', '.join(sorted(refs)) if refs else False
+            inv.ref_pay = ', '.join(sorted(refs)) if refs else False
 
     @api.depends('invoice_payments_widget')
     def _compute_payment_date(self):
