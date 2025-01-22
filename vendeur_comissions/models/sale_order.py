@@ -48,8 +48,16 @@ class SaleOrder(models.Model):
 
     installation = fields.Boolean(
         string="Installation",
-        help="Indique si une installation est incluse pour cette commande."
+        help="Indique si une installation est incluse pour cette commande.",
+        default=lambda self: self._get_default_installation()
     )
+
+    def _get_default_installation(self):
+        # Check if the customer type is 'Concessionnaires régulier'
+        if self.partner_id and self.type_client == 'Concessionnaires Régulier':
+            return True
+        return False
+        
     type_client = fields.Selection(
         related='partner_id.type_client',
         string="Type de client",
