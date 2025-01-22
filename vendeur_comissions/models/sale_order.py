@@ -76,11 +76,9 @@ class SaleOrder(models.Model):
 
     @api.model
     def _default_installation(self):
-        partner_id = self.env.context.get('default_partner_id')
-        if partner_id:
-            partner = self.env['res.partner'].browse(partner_id)
-            if partner.type_client == 'Concessionnaires Régulier':
-                return True
+        partner_id = self.env.context.get('type_client')
+        if partner_id == 'Concessionnaires Régulier':
+            return True
         return False
         
     @api.depends('user_id')
