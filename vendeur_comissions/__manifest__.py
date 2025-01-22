@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['sale','base','account','crm'],
+    'depends': ['sale','base','account','crm','lux_contacts_custom_fields'],
 
     # always loaded
     'data': [
