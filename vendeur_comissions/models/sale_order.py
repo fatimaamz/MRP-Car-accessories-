@@ -51,7 +51,11 @@ class SaleOrder(models.Model):
         default=False,
         help="Indique si une installation est incluse pour cette commande."
     )
-
+    type_client = fields.Selection(
+        related='partner_id.type_client',
+        string="Type de client",
+        store=True
+    )
 
     team_weekly_target = fields.Float(
         string="Objectif Hebdomadaire ($)",
