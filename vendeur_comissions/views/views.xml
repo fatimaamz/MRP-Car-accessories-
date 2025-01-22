@@ -5,6 +5,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="installation" invisible="partner_id.type_client != 'Concessionnaires Programme nationau'"/>
                 <field name="commission_pool"/>
                <field name="individual_commissions"/>
             </xpath>
