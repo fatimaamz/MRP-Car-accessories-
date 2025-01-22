@@ -288,23 +288,19 @@ class AccountMove(models.Model):
     @api.depends('invoice_payments_widget')
     def _compute_payment_ref(self):
         for inv in self:
-            communications = set()  # To store unique communication values
-            
+            refs = set()
             if inv.invoice_payments_widget:
-                # Extract payment data from the widget content
                 payment_data = inv.invoice_payments_widget.get('content', [])
-                
                 for payment_info in payment_data:
-                    # Get the related account.payment ID
                     account_payment_id = payment_info.get('account_payment_id')
                     if account_payment_id:
-                        # Search for the payment register to retrieve the communication field
-                        payment = self.env['account.payment'].search([('id', '=', account_payment_id)], limit=1)
-                        if payment and payment.communication:
-                            communications.add(payment.communication)
-            
-            # Assign the extracted communication values or False if empty
-            inv.ref = ', '.join(sorted(communications)) if communications else False
+                        # Fetch the payment record
+                        payment = self.env['account.payment'].browse(account_payment_id)
+                        if payment and hasattr(payment, 'ref') and payment.ref:
+                            refs.add(payment.ref)
+    
+            # Assign the concatenated references
+            inv.payment_ref = ', '.join(sorted(refs)) if refs else False
 
     @api.depends('invoice_payments_widget')
     def _compute_payment_date(self):
