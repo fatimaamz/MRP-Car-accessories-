@@ -148,19 +148,7 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
     
-    filter_date_from = fields.Date(string="Date de début (Filtre)")
-    filter_date_to = fields.Date(string="Date de fin (Filtre)")
     
-    def apply_filter_dates(self):
-        """
-        Récupère les dates définies dans le filtre et les stocke dans les champs.
-        """
-        date_from = self.env.context.get('date_from', date.today())
-        date_to = self.env.context.get('date_to', date.today())
-
-        for record in self:
-            record.filter_date_from = date_from
-            record.filter_date_to = date_to
             
     @property
     def date_today(self):
@@ -172,20 +160,11 @@ class AccountMove(models.Model):
         selected_invoices = self.filtered(lambda inv: inv.move_type == 'out_invoice')
         if not selected_invoices:
             return
-        date_from = self.env.context.get('date_from', fields.Date.today())
-        date_to = self.env.context.get('date_to', fields.Date.today())
-        
-        data = {
-            'date_from': date_from,
-            'date_to': date_to,
-        }
-
+       
+       
         return self.env.ref('lux_contacts_custom_fields.action_report_selected_invoices').report_action(
-            selected_invoices, data=data
+            selected_invoices
         )
-        #return self.env.ref('lux_contacts_custom_fields.action_report_selected_invoices').report_action(
-            #selected_invoices
-        #)
 
    
 
