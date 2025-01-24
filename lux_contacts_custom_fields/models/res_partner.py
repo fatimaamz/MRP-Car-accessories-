@@ -10,6 +10,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
 
+
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
@@ -148,18 +149,21 @@ class AccountMove(models.Model):
 
     def action_download_filtered_invoices(self):
        
+        # Get filtered invoices
         invoices = self.search(self._context.get('domain', []))
+        if not invoices:
+            raise ValueError("No invoices found for the current filter.")
 
-        # Préparer le contenu PDF
+        # Initialize PDF
         buffer = io.BytesIO()
         pdf = canvas.Canvas(buffer, pagesize=A4)
         width, height = A4
 
-        # Titre du document
+        # Add title
         pdf.setFont("Helvetica-Bold", 16)
         pdf.drawString(200, height - 50, "Liste des Factures Filtrées")
 
-        # Ajouter les colonnes
+        # Add table headers
         pdf.setFont("Helvetica-Bold", 10)
         y = height - 100
         pdf.drawString(50, y, "Client")
@@ -169,11 +173,12 @@ class AccountMove(models.Model):
         pdf.drawString(550, y, "Montant TTC")
         y -= 20
 
-        # Remplir les données
+        # Add invoice data
         pdf.setFont("Helvetica", 10)
         for invoice in invoices:
-            if y < 50:  # Créer une nouvelle page si l'espace est insuffisant
+            if y < 50:  # New page if not enough space
                 pdf.showPage()
+                pdf.setFont("Helvetica", 10)
                 y = height - 50
 
             pdf.drawString(50, y, invoice.partner_id.name or "")
@@ -183,19 +188,19 @@ class AccountMove(models.Model):
             pdf.drawString(550, y, f"{invoice.amount_total:.2f}")
             y -= 20
 
-        # Finaliser et sauvegarder
+        # Finalize and save the PDF
         pdf.save()
         buffer.seek(0)
         pdf_data = buffer.read()
         buffer.close()
 
-        # Télécharger le fichier PDF
+        # Return the PDF for download
         return {
             'type': 'ir.actions.act_url',
             'url': f"data:application/pdf;base64,{base64.b64encode(pdf_data).decode()}",
             'target': 'new',
         }
-
+        
     
 
     delivery_price = fields.Float(
