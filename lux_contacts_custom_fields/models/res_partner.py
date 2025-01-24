@@ -147,57 +147,24 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    def action_download_filtered_invoices(self):
-       
-        # Get filtered invoices
-        invoices = self.search(self._context.get('domain', []))
+    @api.model
+    def action_print_filtered_invoices(self):
+        # Récupérer les factures actuellement filtrées
+        domain = self.env.context.get('active_domain')
+        if not domain:
+            raise UserError("Veuillez appliquer un filtre avant d'utiliser cette action.")
+        
+        invoices = self.search(domain)
         if not invoices:
-            raise ValueError("No invoices found for the current filter.")
-
-        # Initialize PDF
-        buffer = io.BytesIO()
-        pdf = canvas.Canvas(buffer, pagesize=A4)
-        width, height = A4
-
-        # Add title
-        pdf.setFont("Helvetica-Bold", 16)
-        pdf.drawString(200, height - 50, "Liste des Factures Filtrées")
-
-        # Add table headers
-        pdf.setFont("Helvetica-Bold", 10)
-        y = height - 100
-        pdf.drawString(50, y, "Client")
-        pdf.drawString(200, y, "Numéro de Facture")
-        pdf.drawString(350, y, "Date Facture")
-        pdf.drawString(450, y, "Montant HT")
-        pdf.drawString(550, y, "Montant TTC")
-        y -= 20
-
-        # Add invoice data
-        pdf.setFont("Helvetica", 10)
-        for invoice in invoices:
-            if y < 50:  # New page if not enough space
-                pdf.showPage()
-                pdf.setFont("Helvetica", 10)
-                y = height - 50
-
-            pdf.drawString(50, y, invoice.partner_id.name or "")
-            pdf.drawString(200, y, invoice.name or "")
-            pdf.drawString(350, y, invoice.invoice_date.strftime('%Y-%m-%d') if invoice.invoice_date else "")
-            pdf.drawString(450, y, f"{invoice.amount_untaxed:.2f}")
-            pdf.drawString(550, y, f"{invoice.amount_total:.2f}")
-            y -= 20
-
-        # Finalize and save the PDF
-        pdf.save()
-        buffer.seek(0)
-        pdf_data = buffer.read()
-        buffer.close()
-
-        # Return the PDF for download
+            raise UserError("Aucune facture trouvée pour ce filtre.")
+        
+        # Générer un PDF à partir d'un rapport personnalisé
+        pdf_report = self.env.ref('your_module_name.filtered_invoices_report')._render_qweb_pdf(invoices.ids)[0]
+        
+        # Retourner le PDF pour le téléchargement
         return {
             'type': 'ir.actions.act_url',
-            'url': f"data:application/pdf;base64,{base64.b64encode(pdf_data).decode()}",
+            'url': f'/web/content/?model=account.move&field=datas&download=true&id={invoices.ids[0]}&filename=filtered_invoices.pdf',
             'target': 'new',
         }
         
