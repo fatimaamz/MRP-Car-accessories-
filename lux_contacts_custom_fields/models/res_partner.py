@@ -6,8 +6,7 @@ import json
 import base64
 from datetime import date
 import io
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
+from odoo.exceptions import UserError
 
 
 
@@ -147,24 +146,23 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    @api.model
-    def action_print_filtered_invoices(self):
-        # Récupérer les factures actuellement filtrées
-        domain = self.env.context.get('active_domain')
-        if not domain:
-            raise UserError("Veuillez appliquer un filtre avant d'utiliser cette action.")
+    def action_print_selected_invoices(self):
+        # Récupérer les factures sélectionnées
+        selected_invoice_ids = self.env.context.get('active_ids', [])
+        if not selected_invoice_ids:
+            raise UserError("Veuillez sélectionner au moins une facture avant d'utiliser cette action.")
         
-        invoices = self.search(domain)
+        invoices = self.browse(selected_invoice_ids)
         if not invoices:
-            raise UserError("Aucune facture trouvée pour ce filtre.")
+            raise UserError("Aucune facture valide sélectionnée.")
         
-        # Générer un PDF à partir d'un rapport personnalisé
-        pdf_report = self.env.ref('your_module_name.filtered_invoices_report')._render_qweb_pdf(invoices.ids)[0]
+        # Générer un PDF pour les factures sélectionnées
+        pdf_report = self.env.ref('lux_contacts_custom_fields.filtered_invoices_report')._render_qweb_pdf(invoices.ids)[0]
         
-        # Retourner le PDF pour le téléchargement
+        # Retourner le PDF pour téléchargement
         return {
             'type': 'ir.actions.act_url',
-            'url': f'/web/content/?model=account.move&field=datas&download=true&id={invoices.ids[0]}&filename=filtered_invoices.pdf',
+            'url': '/web/content/?model=account.move&field=datas&download=true&filename=selected_invoices.pdf',
             'target': 'new',
         }
         
