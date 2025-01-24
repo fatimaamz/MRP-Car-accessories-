@@ -30,7 +30,7 @@
                                         <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
                                                  style="  width: 240px;height: 35px;" alt="Company Logo"/><br/><br/>
                                         <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
-                                            <strong>Invoice</strong>
+                                            <strong>Etat des comptes</strong>
                                         </h2>
                                     </td>
                                     <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;">
@@ -131,7 +131,7 @@
 
 
 <record id="action_report_selected_invoices" model="ir.actions.report">
-    <field name="name">Filtered Invoices</field>
+    <field name="name">Etat des comptes</field>
     <field name="model">account.move</field>
     <field name="report_type">qweb-pdf</field>
     <field name="report_name">lux_contacts_custom_fields.filtered_invoices_report_template</field>
