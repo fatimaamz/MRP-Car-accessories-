@@ -15,14 +15,14 @@
     </record>
     
 <template id="filtered_invoices_report_template">
-        <t t-call="web.basic_layout">
+        <t t-call="web.external_layout">
             <t t-set="doc" t-value="docs[0]"/>
             <div class="page">
-                <h2>Factures Filtrées</h2>
-                <!--<p>Date du jour : <t t-esc="fields.Date.today()"/></p>
+              
+                <p>Date du jour : <t t-esc="data.get('date_today')"/></p>
                 <t t-if="doc.context.get('date_from') and doc.context.get('date_to')">
                     <p>Période : du <t t-esc="doc.context['date_from']"/> au <t t-esc="doc.context['date_to']"/></p>
-                </t>-->
+                </t>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
