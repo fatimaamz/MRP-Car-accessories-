@@ -3,6 +3,8 @@ from odoo import api, fields, models
 import re
 import datetime
 import json
+import io
+import base64
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
