@@ -15,9 +15,7 @@
     </record>
     
 <template id="filtered_invoices_report_template">
-        <t t-call="web.external_layout">
-         
-              
+         <t t-call="web.basic_layout">
 
              
 
@@ -73,49 +71,59 @@
                                 </tr>
                             </table>
                         </div>
-                            
-              
-                <p>Date du jour : <t t-esc="doc.date_today"/></p>
-               <!-- <p>Période : du <t t-esc="doc.filter_date_from"/> au <t t-esc="doc.filter_date_to"/></p>-->
+
+                <p>Date du jour :
+                    <t t-esc="doc.date_today"/>
+                </p>
+                <!-- <p>Période : du <t t-esc="doc.filter_date_from"/> au <t t-esc="doc.filter_date_to"/></p>-->
 
 
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                    <thead>
+                        <tr style=" background-color: #f7f7f7;">
 
-                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
-                            <thead>
-                                <tr style=" background-color: #f7f7f7;">
+                            <th style="border: 1px solid #ddd; padding: 10px;">Client</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">Numéro de facture</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">Date de facture</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">Date d'échéance</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">Montant HT</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">Montant TTC</th>
 
-                                    <th style="border: 1px solid #ddd; padding: 10px;">Client</th>
-                                    <th style="border: 1px solid #ddd; padding: 10px;">Numéro de facture</th>
-                                    <th style="border: 1px solid #ddd; padding: 10px;">Date de facture</th>
-                                    <th style="border: 1px solid #ddd; padding: 10px;">Date d'échéance</th>
-                                    <th style="border: 1px solid #ddd; padding: 10px;">Montant HT</th>
-                                        <th style="border: 1px solid #ddd; padding: 10px;">Montant TTC</th>
-                                        
-                                </tr>
-                            </thead>
-                            <tbody>
-                              
-                                
-                                    <tr>
-                                                <td><t t-esc="invoice.partner_id.name"/></td>
-                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.name"/></td>
-                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.invoice_date"/></td>
-                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.invoice_date_due"/></td>
-                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.amount_untaxed"/></td>
-                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.amount_total"/></td>
-       
-                                    </tr>
-
-                                
+                        </tr>
+                    </thead>
+                    <tbody>
 
 
-                            </tbody>
-                        </table>
-                            
+                        <tr>
+                            <td>
+                                <t t-esc="invoice.partner_id.name"/>
+                            </td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="invoice.name"/>
+                            </td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="invoice.invoice_date"/>
+                            </td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="invoice.invoice_date_due"/>
+                            </td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="invoice.amount_untaxed"/>
+                            </td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="invoice.amount_total"/>
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+                </table>
                     
-                
+                    </main>
+                </t>
             </div>
-              
+
         </t>
     </template>
 
