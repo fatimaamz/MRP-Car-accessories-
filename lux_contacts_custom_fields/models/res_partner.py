@@ -139,6 +139,51 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    def action_download_filtered_invoices(self):
+        # Récupérer les factures filtrées
+        invoices = self.search(self._context.get('domain', []))
+
+        # Préparer les données
+        data = [
+            ['Date du jour', 'Période', 'Client', 'Numéro de la facture', 'Date de la facture',
+             'Date d\'échéance', 'Montant hors taxe', 'Montant TTC']
+        ]
+
+        for invoice in invoices:
+            data.append([
+                date.today().strftime('%Y-%m-%d'),
+                f"du {self.env.context.get('start_date', '')} au {self.env.context.get('end_date', '')}",
+                invoice.partner_id.name,
+                invoice.name,
+                invoice.invoice_date.strftime('%Y-%m-%d') if invoice.invoice_date else '',
+                invoice.invoice_date_due.strftime('%Y-%m-%d') if invoice.invoice_date_due else '',
+                invoice.amount_untaxed,
+                invoice.amount_total
+            ])
+
+        # Générer un fichier Excel
+        output = io.BytesIO()
+        import xlsxwriter
+        workbook = xlsxwriter.Workbook(output)
+        sheet = workbook.add_worksheet('Factures')
+        
+        for row_idx, row_data in enumerate(data):
+            for col_idx, value in enumerate(row_data):
+                sheet.write(row_idx, col_idx, value)
+        
+        workbook.close()
+        output.seek(0)
+        file_data = output.read()
+        output.close()
+
+        # Envoyer le fichier en téléchargement
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f"data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(file_data).decode()}",
+            'target': 'new',
+        }
+        
+
     delivery_price = fields.Float(
         string='Delivery Price',
         compute='_compute_delivery_price',
