@@ -3,9 +3,11 @@ from odoo import api, fields, models,_
 import re
 import datetime
 import json
-import base64
 from datetime import date
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 import io
+import base64
 from odoo.exceptions import UserError
 
 
@@ -146,11 +148,93 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    def action_print_selected_invoices(self):
-        selected_ids = self.env.context.get('active_ids', [])
-        selected_invoices = self.env['account.move'].browse(selected_ids)
-        
-        return self.env.ref('action_report_selected_invoices').report_action(selected_invoices)
+    def action_generate_invoice_pdf(self):
+        # Filtrer uniquement les factures
+        selected_invoices = self.filtered(lambda inv: inv.move_type == 'out_invoice')
+
+        if not selected_invoices:
+            return
+
+        # Générer le PDF
+        file_content = self._generate_pdf_report(selected_invoices)
+
+        # Créer une pièce jointe pour permettre le téléchargement
+        attachment = self.env['ir.attachment'].create({
+            'name': f"Factures_{date.today()}.pdf",
+            'datas': base64.b64encode(file_content),
+            'type': 'binary',
+            'res_model': 'account.move',
+            'res_id': self.id,
+        })
+
+        # Retourner une action pour télécharger le fichier
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'new',
+        }
+
+    def _generate_pdf_report(self, invoices):
+        buffer = io.BytesIO()
+        pdf = canvas.Canvas(buffer, pagesize=A4)
+        width, height = A4
+
+        # Marges et configuration
+        margin_x = 50
+        margin_y = height - 50
+        line_height = 20
+
+        # Titre
+        pdf.setFont("Helvetica-Bold", 14)
+        pdf.drawString(margin_x, margin_y, "Rapport des factures")
+        margin_y -= 30
+
+        # Date du jour
+        today = date.today()
+        pdf.setFont("Helvetica", 12)
+        pdf.drawString(margin_x, margin_y, f"Date du jour : {today}")
+        margin_y -= 20
+
+        # Période (personnalisez si nécessaire)
+        pdf.drawString(margin_x, margin_y, "Période : du ... au ...")
+        margin_y -= 30
+
+        # En-têtes des colonnes
+        headers = [
+            "Client", "Numéro de la facture", "Date de la facture",
+            "Date d'échéance", "Montant HT", "Montant TTC"
+        ]
+        col_widths = [100, 100, 100, 100, 80, 80]
+        pdf.setFont("Helvetica-Bold", 10)
+        for i, header in enumerate(headers):
+            x = margin_x + sum(col_widths[:i])
+            pdf.drawString(x, margin_y, header)
+        margin_y -= line_height
+
+        # Données des factures
+        pdf.setFont("Helvetica", 10)
+        for invoice in invoices:
+            if margin_y < 50:  # Si espace insuffisant, passer à la page suivante
+                pdf.showPage()
+                margin_y = height - 50
+
+            data = [
+                invoice.partner_id.name or "",
+                invoice.name or "",
+                str(invoice.invoice_date or ""),
+                str(invoice.invoice_date_due or ""),
+                f"{invoice.amount_untaxed:.2f}",
+                f"{invoice.amount_total:.2f}"
+            ]
+            for i, value in enumerate(data):
+                x = margin_x + sum(col_widths[:i])
+                pdf.drawString(x, margin_y, value)
+            margin_y -= line_height
+
+        # Terminer et sauvegarder le fichier PDF
+        pdf.save()
+        buffer.seek(0)
+        return buffer.read()
     
             
     
