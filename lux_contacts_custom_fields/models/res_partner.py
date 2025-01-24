@@ -152,20 +152,26 @@ class AccountMove(models.Model):
     def date_today(self):
         return datetime.today().strftime('%d/%m/%Y')
     
+    
     def action_generate_invoice_pdf(self):
-        """
-        Action appelée par le bouton pour générer un PDF des factures sélectionnées.
-        """
-        # Vérifiez que seules les factures (type `out_invoice`) sont sélectionnées
+       
         selected_invoices = self.filtered(lambda inv: inv.move_type == 'out_invoice')
         if not selected_invoices:
             return
-
-       
+        date_from = self.env.context.get('date_from', fields.Date.today())
+        date_to = self.env.context.get('date_to', fields.Date.today())
+        
+        data = {
+            'date_from': date_from,
+            'date_to': date_to,
+        }
 
         return self.env.ref('lux_contacts_custom_fields.action_report_selected_invoices').report_action(
-            selected_invoices
+            selected_invoices, data=data
         )
+        #return self.env.ref('lux_contacts_custom_fields.action_report_selected_invoices').report_action(
+            #selected_invoices
+        #)
 
    
 
