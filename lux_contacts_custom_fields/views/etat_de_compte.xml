@@ -20,7 +20,7 @@
         <div class="page">
             <h2>Factures Filtrées</h2>
             <p>Date du jour : <t t-esc="fields.Date.today()"/></p>
-            <p>Période : du <t t-esc="doc.context['date_from']"/> au <t t-esc="doc.context['date_to']"/></p>
+           <!-- <p>Période : du <t t-esc="doc.context['date_from']"/> au <t t-esc="doc.context['date_to']"/></p>-->
             <table class="table table-bordered">
                 <thead>
                     <tr>
