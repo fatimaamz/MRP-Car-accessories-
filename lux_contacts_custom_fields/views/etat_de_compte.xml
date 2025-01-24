@@ -1,0 +1,44 @@
+<odoo>
+<template id="filtered_invoices_report_template">
+    <t t-call="web.basic_layout">
+        <t t-set="doc" t-value="docs[0]"/>
+        <div class="page">
+            <h2>Factures Filtrées</h2>
+            <p>Date du jour : <t t-esc="fields.Date.today()"/></p>
+            <p>Période : du <t t-esc="doc.context['date_from']"/> au <t t-esc="doc.context['date_to']"/></p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Numéro de facture</th>
+                        <th>Date de facture</th>
+                        <th>Date d'échéance</th>
+                        <th>Montant HT</th>
+                        <th>Montant TTC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="docs" t-as="invoice">
+                        <tr>
+                            <td><t t-esc="invoice.partner_id.name"/></td>
+                            <td><t t-esc="invoice.name"/></td>
+                            <td><t t-esc="invoice.invoice_date"/></td>
+                            <td><t t-esc="invoice.invoice_date_due"/></td>
+                            <td><t t-esc="invoice.amount_untaxed"/></td>
+                            <td><t t-esc="invoice.amount_total"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</template>
+
+<record id="filtered_invoices_report" model="ir.actions.report">
+    <field name="name">Filtered Invoices</field>
+    <field name="model">account.move</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">lux_contacts_custom_fields.filtered_invoices_report_template</field>
+    <field name="report_file">lux_contacts_custom_fields.filtered_invoices_report_template</field>
+</record>
+</odoo>
