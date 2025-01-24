@@ -20,8 +20,8 @@
             <div class="page">
               
                 <p>Date du jour : <t t-esc="doc.date_today"/></p>
-                <t t-if="doc.context.get('date_from') and doc.context.get('date_to')">
-                    <p>Période : du <t t-esc="doc.context['date_from']"/> au <t t-esc="doc.context['date_to']"/></p>
+                <t >
+                    <p>Période : du /></p>
                 </t>
                     
                 <table class="table table-bordered">
