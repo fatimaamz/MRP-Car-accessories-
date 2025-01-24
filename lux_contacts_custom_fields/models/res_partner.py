@@ -149,7 +149,7 @@ class AccountMove(models.Model):
     def action_print_selected_invoices(self):
         # Retrieve the selected invoice records
         selected_ids = self.env.context.get('active_ids', [])
-        selected_invoices = self.env['account.invoice'].browse(selected_ids)
+        selected_invoices = self.env['account.move'].browse(selected_ids)
         
         # Return the report action for the selected invoices
         return self.env.ref('action_report_selected_invoices').report_action(selected_invoices)
