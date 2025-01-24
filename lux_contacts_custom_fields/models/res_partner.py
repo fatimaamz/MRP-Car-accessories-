@@ -146,22 +146,14 @@ class MrpProduction(models.Model):
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    def action_print_filtered_invoices(self):
-        # Vérifier si des enregistrements sont sélectionnés
-        selected_records = self.browse(self.env.context.get('active_ids', []))
-        if not selected_records:
-            raise UserError("Veuillez sélectionner au moins une facture.")
+    def action_print_selected_invoices(self):
+        # Retrieve the selected invoice records
+        selected_ids = self.env.context.get('active_ids', [])
+        selected_invoices = self.env['account.invoice'].browse(selected_ids)
+        
+        # Return the report action for the selected invoices
+        return self.env.ref('action_report_selected_invoices').report_action(selected_invoices)
 
-        # Logique pour le traitement (par exemple, export ou impression)
-        # Exemple : générer un rapport PDF pour les factures sélectionnées
-        pdf_content, _ = self.env.ref('lux_contacts_custom_fields.filtered_invoices_report')._render_qweb_pdf(selected_records.ids)
-
-        # Retourner le PDF pour téléchargement
-        return {
-            'type': 'ir.actions.act_url',
-            'url': f'/web/content/{pdf_content}',
-            'target': 'new',
-        }
         
     
 
