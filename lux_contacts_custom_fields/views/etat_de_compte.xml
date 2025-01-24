@@ -96,22 +96,22 @@
 
                         <tr>
                             <td>
-                                <t t-esc="invoice.partner_id.name"/>
+                                <t t-esc="doc.partner_id.name"/>
                             </td>
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                <t t-esc="invoice.name"/>
+                                <t t-esc="doc.name"/>
                             </td>
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                <t t-esc="invoice.invoice_date"/>
+                                <t t-esc="doc.invoice_date"/>
                             </td>
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                <t t-esc="invoice.invoice_date_due"/>
+                                <t t-esc="doc.invoice_date_due"/>
                             </td>
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                <t t-esc="invoice.amount_untaxed"/>
+                                <t t-esc="doc.amount_untaxed"/>
                             </td>
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                <t t-esc="invoice.amount_total"/>
+                                <t t-esc="doc.amount_total"/>
                             </td>
 
                         </tr>
