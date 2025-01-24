@@ -147,32 +147,20 @@ class MrpProduction(models.Model):
     
 class AccountMove(models.Model):
     _inherit = "account.move"
-
+    
     def action_generate_invoice_pdf(self):
-        # Filtrer uniquement les factures
+        """
+        Action appelée par le bouton pour générer un PDF des factures sélectionnées.
+        """
+        # Vérifiez que seules les factures (type `out_invoice`) sont sélectionnées
         selected_invoices = self.filtered(lambda inv: inv.move_type == 'out_invoice')
-
         if not selected_invoices:
             return
 
-        # Générer le PDF
-        file_content = self._generate_pdf_report(selected_invoices)
+        # Appelle le rapport QWeb
+        return self.env.ref('lux_contacts_custom_fields.action_report_selected_invoices').report_action(selected_invoices)
 
-        # Créer une pièce jointe pour permettre le téléchargement
-        attachment = self.env['ir.attachment'].create({
-            'name': f"Factures_{date.today()}.pdf",
-            'datas': base64.b64encode(file_content),
-            'type': 'binary',
-            'res_model': 'account.move',
-            'res_id': self.id,
-        })
-
-        # Retourner une action pour télécharger le fichier
-        return {
-            'type': 'ir.actions.act_url',
-            'url': f'/web/content/{attachment.id}?download=true',
-            'target': 'new',
-        }
+   
 
     def _generate_pdf_report(self, invoices):
         buffer = io.BytesIO()
