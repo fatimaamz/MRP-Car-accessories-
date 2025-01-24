@@ -76,20 +76,7 @@
 
 
 
-<record id="view_invoice_tree_inherit_export_etat_compte" model="ir.ui.view">
-        <field name="name">account.invoice.tree.inherit.export</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_invoice_tree"/>
-        <field name="arch" type="xml">
-            <xpath expr="//header//button[1]" position="before">
-               <button name="action_print_selected_invoices"
-                    type="object"
-                    string="Etat ded comptes"
-                    class="btn-primary"
-                    icon="fa-download"/>
-            </xpath>
-        </field>
-    </record>
+
 	
 
  <!--	<record id="luxw_view_order_line_form_inherit" model="ir.ui.view">
