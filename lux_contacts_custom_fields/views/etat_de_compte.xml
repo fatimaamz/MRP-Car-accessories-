@@ -34,7 +34,7 @@
     </t>
 </template>
 
-<record id="filtered_invoices_report" model="ir.actions.report">
+<record id="action_report_selected_invoices" model="ir.actions.report">
     <field name="name">Filtered Invoices</field>
     <field name="model">account.move</field>
     <field name="report_type">qweb-pdf</field>
