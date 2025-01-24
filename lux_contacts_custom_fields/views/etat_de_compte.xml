@@ -20,7 +20,7 @@
                 <main>
             <div class="page">
               
-                <p>Date du jour : <t t-esc="doc.date_today"/></p>
+                <!--<p>Date du jour : <t t-esc="doc.date_today"/></p>-->
                 <p>Période : du <t t-esc="data.get('date_from', 'N/A')"/> au <t t-esc="data.get('date_to', 'N/A')"/></p>
                     
                 <table class="table table-bordered">
