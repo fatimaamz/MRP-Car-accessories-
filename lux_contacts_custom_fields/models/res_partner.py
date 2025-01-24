@@ -147,6 +147,10 @@ class MrpProduction(models.Model):
     
 class AccountMove(models.Model):
     _inherit = "account.move"
+
+    @property
+    def date_today(self):
+        return datetime.today().strftime('%d/%m/%Y')
     
     def action_generate_invoice_pdf(self):
         """
@@ -157,12 +161,10 @@ class AccountMove(models.Model):
         if not selected_invoices:
             return
 
-        context = {
-            'date_today': datetime.today().strftime('%Y-%m-%d'),
-        }
+       
 
         return self.env.ref('lux_contacts_custom_fields.action_report_selected_invoices').report_action(
-            selected_invoices, data=context
+            selected_invoices
         )
 
    
