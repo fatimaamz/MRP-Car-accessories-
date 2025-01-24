@@ -21,7 +21,7 @@
             <div class="page">
               
                 <p>Date du jour : <t t-esc="doc.date_today"/></p>
-                <p>Période : du <t t-esc="doc.date_from/> au <t t-esc="doc.date_to"/></p>
+                <p>Période : du <t t-esc="doc.filter_date_from"/> au <t t-esc="doc.filter_date_to"/></p>
                     
                 <table class="table table-bordered">
                     <thead>
