@@ -82,7 +82,7 @@
         <field name="inherit_id" ref="account.view_invoice_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//header//button[1]" position="before">
-               <button name="action_print_filtered_invoices"
+               <button name="action_print_selected_invoices"
                     type="object"
                     string="Etat ded comptes"
                     class="btn-primary"
