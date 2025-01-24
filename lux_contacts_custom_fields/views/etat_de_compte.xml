@@ -19,7 +19,7 @@
             <t t-set="doc" t-value="docs[0]"/>
             <div class="page">
               
-                <p>Date du jour : <t t-esc="o.date_today"/></p>
+                <p>Date du jour : <t t-esc="doc.date_today"/></p>
                 <t t-if="doc.context.get('date_from') and doc.context.get('date_to')">
                     <p>Période : du <t t-esc="doc.context['date_from']"/> au <t t-esc="doc.context['date_to']"/></p>
                 </t>
