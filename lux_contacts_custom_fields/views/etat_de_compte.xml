@@ -49,6 +49,7 @@
     </t>
 </template>
 
+
 <record id="action_report_selected_invoices" model="ir.actions.report">
     <field name="name">Filtered Invoices</field>
     <field name="model">account.move</field>
