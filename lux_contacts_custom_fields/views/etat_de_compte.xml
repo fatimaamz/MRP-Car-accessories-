@@ -16,39 +16,106 @@
     
 <template id="filtered_invoices_report_template">
         <t t-call="web.external_layout">
-            <t t-set="doc" t-value="docs[0]"/>
-                <main>
-            <div class="page">
+         
+              
+
+             
+
+           <div class="page" style="color: #2f374f;font-family: Inter;line-height: 1.3;">
+                <t t-foreach="docs" t-as="doc">
+                    <main>
+                        <div class="header"
+                             style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                            <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
+                                <tr style="border: 1px solid white;">
+                                    <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
+                                        <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
+                                                 style="  width: 240px;height: 35px;" alt="Company Logo"/><br/><br/>
+                                        <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
+                                            <strong>Invoice</strong>
+                                        </h2>
+                                    </td>
+                                    <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;">
+                                        <div style="text-align: justify; width: 100%; border: 1px solid white;">
+                                            <strong style="font-size: 16px;">
+                                                <t t-esc="user.company_id.name"/>
+                                            </strong>
+                                            <br/>
+                                        <span>
+                                               <t t-if="user.company_id.street">
+                                            <t t-esc="user.company_id.street"/>
+                                            <t t-if="user.company_id.city or user.company_id.state_id or user.company_id.country_id">, </t>
+                                        </t>
+                                        <t t-if="user.company_id.city">
+                                            <t t-esc="user.company_id.city"/>
+                                            <t t-if="user.company_id.state_id or user.company_id.country_id">, </t>
+                                        </t>
+                                        <t t-if="user.company_id.state_id">
+                                            <t t-esc="user.company_id.state_id.name"/>
+                                            <t t-if="user.company_id.country_id">, </t>
+                                        </t>
+                                        <br/>
+                                        <t t-if="user.company_id.zip">
+                                            <t t-esc="user.company_id.zip"/>
+                                        </t>
+                                        <t t-if="user.company_id.country_id">
+                                            <t t-esc="user.company_id.country_id.name"/>
+                                        </t>
+                                        </span><br/>
+                                            
+                                            <span style="font-size: 14px;">
+                                                <t t-esc="user.company_id.email or ''"/>
+                                                /
+                                                <t t-esc="user.company_id.phone or ''"/>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                            
               
                 <p>Date du jour : <t t-esc="doc.date_today"/></p>
                <!-- <p>Période : du <t t-esc="doc.filter_date_from"/> au <t t-esc="doc.filter_date_to"/></p>-->
+
+
+
+                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                            <thead>
+                                <tr style=" background-color: #f7f7f7;">
+
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Client</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Numéro de facture</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Date de facture</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Date d'échéance</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Montant HT</th>
+                                        <th style="border: 1px solid #ddd; padding: 10px;">Montant TTC</th>
+                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                              
+                                
+                                    <tr>
+                                                <td><t t-esc="invoice.partner_id.name"/></td>
+                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.name"/></td>
+                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.invoice_date"/></td>
+                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.invoice_date_due"/></td>
+                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.amount_untaxed"/></td>
+                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"><t t-esc="invoice.amount_total"/></td>
+       
+                                    </tr>
+
+                                
+
+
+                            </tbody>
+                        </table>
+                            
                     
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Client</th>
-                            <th>Numéro de facture</th>
-                            <th>Date de facture</th>
-                            <th>Date d'échéance</th>
-                            <th>Montant HT</th>
-                            <th>Montant TTC</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <t t-foreach="docs" t-as="invoice">
-                            <tr>
-                                <td><t t-esc="invoice.partner_id.name"/></td>
-                                <td><t t-esc="invoice.name"/></td>
-                                <td><t t-esc="invoice.invoice_date"/></td>
-                                <td><t t-esc="invoice.invoice_date_due"/></td>
-                                <td><t t-esc="invoice.amount_untaxed"/></td>
-                                <td><t t-esc="invoice.amount_total"/></td>
-                            </tr>
-                        </t>
-                    </tbody>
-                </table>
+                
             </div>
-                </main>
+              
         </t>
     </template>
 
