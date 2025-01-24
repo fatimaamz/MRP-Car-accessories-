@@ -86,6 +86,7 @@
                     type="object"
                     string="Etat ded comptes"
                     class="btn-primary"
+		    context="{'active_ids': active_ids}"
                     icon="fa-download"/>
             </xpath>
         </field>
