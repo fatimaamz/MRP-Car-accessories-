@@ -73,6 +73,20 @@
 	    </field>
 </record>
 
+<record id="view_account_move_tree_inherit" model="ir.ui.view">
+    <field name="name">account.move.tree.inherit</field>
+    <field name="model">account.move</field>
+    <field name="inherit_id" ref="account.view_move_tree"/>
+    <field name="arch" type="xml">
+        <xpath expr="//tree" position="after">
+            <button name="action_download_filtered_invoices"
+                    type="object"
+                    string="Etat des comptes"
+                    class="btn-primary"/>
+        </xpath>
+    </field>
+</record>
+
  <!--	<record id="luxw_view_order_line_form_inherit" model="ir.ui.view">
             <field name="name">sale.order.line.form.inherit</field>
             <field name="model">sale.order.line</field>
