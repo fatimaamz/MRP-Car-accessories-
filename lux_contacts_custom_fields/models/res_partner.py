@@ -5,6 +5,7 @@ import datetime
 import json
 import io
 import base64
+from datetime import date
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
