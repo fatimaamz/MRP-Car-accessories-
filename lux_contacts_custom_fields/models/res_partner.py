@@ -147,18 +147,15 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     def action_print_selected_invoices(self):
-        # Récupérer les factures sélectionnées
-        selected_invoice_ids = self.env.context.get('active_ids', [])
-        if not selected_invoice_ids:
+        # Récupérer les enregistrements sélectionnés
+        selected_records = self.browse(self.env.context.get('active_ids', []))
+
+        if not selected_records:
             raise UserError("Veuillez sélectionner au moins une facture avant d'utiliser cette action.")
-        
-        invoices = self.browse(selected_invoice_ids)
-        if not invoices:
-            raise UserError("Aucune facture valide sélectionnée.")
-        
+
         # Générer un PDF pour les factures sélectionnées
-        pdf_report = self.env.ref('lux_contacts_custom_fields.filtered_invoices_report')._render_qweb_pdf(invoices.ids)[0]
-        
+        pdf_report = self.env.ref('lux_contacts_custom_fields.filtered_invoices_report')._render_qweb_pdf(selected_records.ids)[0]
+
         # Retourner le PDF pour téléchargement
         return {
             'type': 'ir.actions.act_url',
