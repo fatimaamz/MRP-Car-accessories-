@@ -17,6 +17,7 @@
 <template id="filtered_invoices_report_template">
         <t t-call="web.external_layout">
             <t t-set="doc" t-value="docs[0]"/>
+                <main>
             <div class="page">
               
                 <p>Date du jour : <t t-esc="doc.date_today"/></p>
@@ -49,6 +50,7 @@
                     </tbody>
                 </table>
             </div>
+                </main>
         </t>
     </template>
 
