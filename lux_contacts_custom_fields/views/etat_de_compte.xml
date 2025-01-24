@@ -73,7 +73,7 @@
                         </div>
 
                 <p>Date du jour :
-                   <t t-foreach="docs" t-as="doc"> <t t-esc="doc.date_today"/></t>
+                   <t t-foreach="docs" t-as="doc"> <t t-esc="doc[0].date_today"/></t>
                 </p>
                 <!-- <p>Période : du <t t-esc="doc.filter_date_from"/> au <t t-esc="doc.filter_date_to"/></p>-->
 
@@ -96,7 +96,7 @@
 
                         
                         <tr>
-                            <td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                 <t t-esc="doc.partner_id.name"/>
                             </td>
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
