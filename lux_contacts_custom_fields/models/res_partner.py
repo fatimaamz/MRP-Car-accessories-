@@ -1,7 +1,7 @@
 
 from odoo import api, fields, models,_
 import re
-import datetime
+from datetime import datetime
 import json
 from datetime import date
 from reportlab.lib.pagesizes import A4
@@ -157,8 +157,13 @@ class AccountMove(models.Model):
         if not selected_invoices:
             return
 
-        # Appelle le rapport QWeb
-        return self.env.ref('lux_contacts_custom_fields.action_report_selected_invoices').report_action(selected_invoices)
+        context = {
+            'date_today': datetime.today().strftime('%Y-%m-%d'),
+        }
+
+        return self.env.ref('lux_contacts_custom_fields.action_report_selected_invoices').report_action(
+            selected_invoices, data=context
+        )
 
    
 
