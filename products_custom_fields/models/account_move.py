@@ -211,7 +211,7 @@ class AccountMove(models.Model):
                     #'dealer_code': str(invoice.partner_id.dealer_code).zfill(5),
                     'dealer_code': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,  # Dealer Code (5 chars, left justified)
                     'invoice_number': invoice.name[:20].ljust(20),
-                    'invoice_date': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,
+                    #'invoice_date': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,
                     'item_ref_number': "LUXNCIBILL".ljust(20),  # Numéro de pièce (fixé à LUXNCIBILL)
                     'wholesale_amount': str(invoice.amount_total_signed).zfill(9),
                     #'item_ref_number': (line.product_id.default_code[:20].ljust(20) if line.product_id and line.product_id.default_code else " " * 20),
