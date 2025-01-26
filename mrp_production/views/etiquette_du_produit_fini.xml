@@ -7,7 +7,7 @@
                     <!-- Outer Container -->
                     <div style="width: 100mm; height: 150mm; border: 1px solid black; border-radius: 12px; overflow: hidden; font-family: Arial, sans-serif;">
                         <!-- Header Section -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 2mm; background-color: black; color: white; border-radius: 12px 12px 0 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: black; color: white; border-radius: 12px 12px 0 0;">
                             <!-- DesignerTrim Logo -->
                             <div style="font-size: 14px; font-weight: bold; text-align: left;">
                                 <span t-field="docs.sale_order_partner_id.name" />
@@ -16,7 +16,7 @@
                             <div>
                                 <t t-if="docs.product_id.qr_code_uploaded">
                                     <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" 
-                                         style="width: 25mm; height: 25mm; position: absolute; top: 7mm; right: 7mm; background-color: white;  border-radius: 5px;" />
+                                         style="width: 25mm; height: 25mm; position: absolute; top: 7mm; right: 30px; background-color: white;  border-radius: 5px;" />
                                 </t>
 
                                 <t t-else="">
