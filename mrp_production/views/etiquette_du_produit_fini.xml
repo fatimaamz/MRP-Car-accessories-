@@ -30,7 +30,7 @@
                             <span style="margin: 0; font-size: 12px;">
                                 <strong>Model:</strong> 
                                 <t t-if="len(docs.product_variant_ids) > 1">
-                                    <t t-esc="docs.product_variant_ids[0].name"/>
+                                    <t t-esc="docs.product_variant_ids[1].name"/>
                                 </t>
                                 <t t-else="">
                                     <span></span>
