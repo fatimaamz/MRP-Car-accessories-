@@ -32,10 +32,15 @@
                             </p>
                             <p style="margin: 0; font-size: 12px;">
                                 <strong>Type:</strong> <t t-esc="docs.product_id.detailed_type" />
-                            </p>
+                            </p><br/>
+                            <span><strong>Marque : </strong><span t-if="docs.product_variant_ids and docs.product_variant_ids[0].name">
+                                    <t t-esc="docs.product_variant_ids[0].name"/>
+                                </span></span> <br/>
+                            
                             <p style="margin: 0; font-size: 12px;">
                                 <strong>Year:</strong> <t t-esc="docs.years or ''" />
-                            </p>
+                            </p><br/>
+                            <span><strong>Model : </strong><t t-esc="docs.product_variant_ids[1].name"/></span><br/>
                             <p style="margin: 0; font-size: 12px;">
                                 <strong>Color:</strong> <t t-esc="docs.interior_color or ''" />
                             </p>
@@ -62,7 +67,7 @@
                                     <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:80%; height:30px'}" />
                                 </t>
                                 <t t-else="">
-                                    <span>No barcode available</span>
+                                    <span></span>
                                 </t>
                             </div>
                         </div>
