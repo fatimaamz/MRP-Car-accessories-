@@ -200,23 +200,28 @@ class AccountMove(models.Model):
             os.makedirs(desktop_path)
 
         file_path = os.path.join(desktop_path, file_name)
+        luxncibill_line = next((line for line in invoice.invoice_line_ids if line.product_id.default_code == "LUXNCIBILL"), None)
 
+        if not luxncibill_line:
+            raise ValueError("No product line with reference 'LUXNCIBILL' found in the invoice.")
         with open(file_path, 'w') as file:
-            for line in invoice.invoice_line_ids:
+            #for line in invoice.invoice_line_ids:
                 # Build the new record data based on the specified format
                 record_data = {
                     #'dealer_code': str(invoice.partner_id.dealer_code).zfill(5),
                     'dealer_code': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,  # Dealer Code (5 chars, left justified)
                     'invoice_number': invoice.name[:20].ljust(20),
                     'invoice_date': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,
-                    'item_ref_number': (line.product_id.default_code[:20].ljust(20) if line.product_id and line.product_id.default_code else " " * 20),
-                    'num_items': str(line.quantity).zfill(7),
-                    'wholesale_amount': str(int(line.price_subtotal * 100)).zfill(9),  # Assuming 2 decimal places
-                    'dealer_net_amount': "0" * 9,  # Placeholder; customize if needed
-                    'freight_amount': str(int(invoice.freight_cost * 100)).zfill(9) if invoice.freight_cost else "0" * 9,
-                    'gst_amount': str(int(invoice.amount_tax * 100)).zfill(7),
-                    'pst_amount': str(int(invoice.amount_tax * 100)).zfill(7),  # Same as GST for simplicity; adjust as needed
-                    'record_type': 'D' if invoice.move_type == 'out_invoice' else 'C'  # 'D' for debit, 'C' for credit
+                    'item_ref_number': "LUXNCIBILL".ljust(20),  # Numéro de pièce (fixé à LUXNCIBILL)
+                    'wholesale_amount': str(invoice.amount_total_signed).zfill(9),
+                    #'item_ref_number': (line.product_id.default_code[:20].ljust(20) if line.product_id and line.product_id.default_code else " " * 20),
+                    #'num_items': str(line.quantity).zfill(7),
+                    #'wholesale_amount': str(int(line.price_subtotal * 100)).zfill(9),  # Assuming 2 decimal places
+                    #'dealer_net_amount': "0" * 9,  # Placeholder; customize if needed
+                    #'freight_amount': str(int(invoice.freight_cost * 100)).zfill(9) if invoice.freight_cost else "0" * 9,
+                    #'gst_amount': str(int(invoice.amount_tax * 100)).zfill(7),
+                    #'pst_amount': str(int(invoice.amount_tax * 100)).zfill(7),  # Same as GST for simplicity; adjust as needed
+                    #'record_type': 'D' if invoice.move_type == 'out_invoice' else 'C'  # 'D' for debit, 'C' for credit
                 }
                 
                 # Write formatted record data to the file
