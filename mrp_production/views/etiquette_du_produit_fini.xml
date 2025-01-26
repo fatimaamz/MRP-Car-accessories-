@@ -13,10 +13,13 @@
                             <div style="font-size: 16px; font-weight: bold; line-height: 40mm;"><span t-field="docs.sale_order_partner_id.name" /></div>
                             
                             <!-- QR Code -->
-                            <div t-if="image_data_uri(docs.product_id.qr_code_uploaded">
-                             <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" 
-                                 style="width: 25mm; height: 25mm; position: absolute; top: 7mm; right: 7mm; background-color: white; padding: 3px; border-radius: 5px;" />
-                            </div>
+                            <t t-if="docs.product_id.qr_code_uploaded">
+                                    <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" 
+                                         style="width: 25mm; height: 25mm; position: absolute; top: 7mm; right: 7mm; background-color: white; padding: 3px; border-radius: 5px;" />
+                                </t>
+                                <t t-else="">
+                                    <span>No QR Code available</span>
+                                </t>
                         </div>
 
                         <!-- Product Details Section -->
