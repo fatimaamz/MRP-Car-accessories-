@@ -27,31 +27,31 @@
 
                         <!-- Product Details Section -->
                         <div style="padding: 5mm;">
-                            <p style="margin: 0; font-size: 12px;">
+                            <span style="margin: 0; font-size: 12px;">
                                 <strong>Model:</strong> <t t-esc="docs.product_id.display_name" />
-                            </p>
-                            <p style="margin: 0; font-size: 12px;">
+                            </span>
+                            <span style="margin: 0; font-size: 12px;">
                                 <strong>Type:</strong> <t t-esc="docs.product_id.detailed_type" />
-                            </p><br/>
-                            <p style="margin: 0; font-size: 12px;"><strong>Marque : </strong><span t-if="docs.product_variant_ids and docs.product_variant_ids[0].name">
+                            </span><br/>
+                            <span style="margin: 0; font-size: 12px;"><strong>Marque : </strong><span t-if="docs.product_variant_ids and docs.product_variant_ids[0].name">
                                     <t t-esc="docs.product_variant_ids[0].name"/>
-                                </span></p> <br/>
+                                </span></span> <br/>
                             
-                            <p style="margin: 0; font-size: 12px;">
+                            <span style="margin: 0; font-size: 12px;">
                                 <strong>Year:</strong> <t t-esc="docs.years or ''" />
-                            </p><br/>
-                             <p style="margin: 0; font-size: 12px;"><strong>Model: </strong>
+                            </span><br/>
+                             <span style="margin: 0; font-size: 12px;"><strong>Model: </strong>
                                 <t t-if="len(docs.product_variant_ids) > 1">
                                     <t t-esc="docs.product_variant_ids[1].name"/>
                                 </t>
                                 <t t-else="">
                                     <span></span>
                                 </t>
-                             </p>
+                             </span>
                             
-                            <p style="margin: 0; font-size: 12px;">
+                            <span style="margin: 0; font-size: 12px;">
                                 <strong>Color:</strong> <t t-esc="docs.interior_color or ''" />
-                            </p>
+                            </span>
                         </div>
 
                         <!-- Product Image Section -->
@@ -83,12 +83,14 @@
                                     <span></span>
                                 </t>
                             </div>
+                             <div style="text-align: center; margin-top: 5mm; font-size: 12px; font-weight: bold;">
+                            <t t-esc="docs.product_id.barcode or ''" />
+                        </div>
+                            
                         </div>
 
                         <!-- Footer Section -->
-                        <div style="text-align: center; margin-top: 5mm; font-size: 12px; font-weight: bold;">
-                            <t t-esc="docs.product_id.barcode or ''" />
-                        </div>
+                       
                     </div>
                 </t>
             </xpath>
