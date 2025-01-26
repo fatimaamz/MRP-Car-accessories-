@@ -16,7 +16,7 @@
                             <div>
                                 <t t-if="docs.product_id.qr_code_uploaded">
                                     <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" 
-                                         style="width: 25mm; height: 25mm; position: absolute; right: 90mm; background-color: white;  border-radius: 5px;" />
+                                         style="width: 25mm; height: 25mm; position: absolute; right: 110mm; background-color: white;  border-radius: 5px;" />
                                 </t>
 
                                 <t t-else="">
