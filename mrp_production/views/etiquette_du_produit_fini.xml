@@ -34,7 +34,7 @@
                                     <t t-esc="docs.product_variant_ids[0].name"/>
                                 </span></span> <br/>-->
                                 <span><strong>Année :</strong><t t-esc="docs.years or ''"/></span><b/>
-                                <span><strong>Model : </strong><t t-esc="docs.product_variant_ids[1].name"/></span><br/>
+                               <!-- <span><strong>Model : </strong><t t-esc="docs.product_variant_ids[1].name"/></span><br/>-->
                                 <span><strong>Couleur :</strong> <t t-esc="docs.interior_color or ''"/></span>
                             </p>
                         </div>
