@@ -40,7 +40,14 @@
                             <p style="margin: 0; font-size: 12px;">
                                 <strong>Year:</strong> <t t-esc="docs.years or ''" />
                             </p><br/>
-                            <span><strong>Model : </strong><t t-esc="docs.product_variant_ids[1].name"/></span><br/>
+                             <strong>Model: </strong>
+                                <t t-if="len(docs.product_variant_ids) > 1">
+                                    <t t-esc="docs.product_variant_ids[1].name"/>
+                                </t>
+                                <t t-else="">
+                                    <span></span>
+                                </t>
+                            
                             <p style="margin: 0; font-size: 12px;">
                                 <strong>Color:</strong> <t t-esc="docs.interior_color or ''" />
                             </p>
