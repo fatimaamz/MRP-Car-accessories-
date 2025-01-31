@@ -10,13 +10,12 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 28px; background-color: black; color: white; border-radius: 12px 12px 0 0;">
                             <!-- DesignerTrim Logo -->
                             <div style="font-size: 14px; font-weight: bold; text-align: left;">
-                                <span t-field="docs.sale_order_partner_id.name" />
+                                <span t-field="docs.sale_order_partner_id.name"/>
                             </div>
                             <!-- QR Code -->
                             <div>
                                 <t t-if="docs.product_id.qr_code_uploaded">
-                                    <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" 
-                                         style="width: 25mm; height: 25mm; position: absolute; right: 110mm; background-color: white;  border-radius: 5px;" />
+                                    <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" style="width: 25mm; height: 25mm; position: absolute; right: 110mm; background-color: white;  border-radius: 5px;"/>
                                 </t>
 
                                 <t t-else="">
@@ -25,73 +24,75 @@
                             </div>
                         </div>
 
-                        <!-- Product Details Section -->
+                        <!-- Product Details Section <t t-esc="docs.product_id.detailed_type"/>  -->
                         <div style="padding: 5mm;">
-                            
-                            <span style="margin: 0; font-size: 12px;">
-                                <strong>Type:</strong> <t t-esc="docs.product_id.detailed_type" />
-                            </span><br/>
-                            <span style="margin: 0; font-size: 12px;"><strong>Marque : </strong><span t-if="docs.product_variant_ids and docs.product_variant_ids[0].name">
+                            <!-- Top Left: Year -->
+                            <div style="text-align: left; font-size: 12px; margin-bottom: 5mm;">
+                                <strong>
+                                    <span t-if="docs.product_variant_ids and docs.product_variant_ids[0].name">
                                     <t t-esc="docs.product_variant_ids[1].name"/>
-                                </span></span> <br/>
-                            
-                            <span style="margin: 0; font-size: 12px;">
-                                <strong>Year:</strong> <t t-esc="docs.years or ''" />
-                            </span><br/>
-                             <span style="margin: 0; font-size: 12px;"><strong>Model: </strong>
-                                <t t-if="len(docs.product_variant_ids) > 1">
-                                    <t t-esc="docs.product_variant_ids[0].name"/>
-                                </t>
-                                <t t-else="">
-                                    <span></span>
-                                </t>
-                             </span><br/>
-                            
-                            <span style="margin: 0; font-size: 12px;">
-                                <strong>Color:</strong> <t t-esc="docs.interior_color or ''" />
-                            </span>
-                        </div>
-
-                        <!-- Product Image Section -->
-                        <div style="width: 100%; height: 50mm; text-align: center; border: 1px solid gray; margin-bottom: 5mm;">
-                            <t t-if="docs.selected_image">
-                                <img t-att-src="image_data_uri(docs.selected_image)" 
-                                     style="max-width: 100%; height: 100%; object-fit: contain;" />
-                            </t>
-                            <t t-else="">
-                                <span style="font-size: 10px; color: gray;"></span>
-                            </t>
-                        </div>
-
-                        <!-- Part and Barcode Section -->
-                        <div style="text-align: center;">
-                            <p style="margin: 0; font-size: 12px;">
-                                <strong>PART#:</strong> <span t-field="docs.product_id.name" />
-                                <span t-field="docs.interior_color" />
-                                <span t-field="docs.insert_color" />
-                            </p>
-                            <div style="margin-top: 5mm;">
-                                <t t-if="docs.product_id.tracking != 'none' and docs.lot_name">
-                                    <div t-field="docs.lot_name" t-options="{'widget': 'barcode', 'img_style': 'width:80%; height:30px'}" />
-                                </t>
-                                <t t-elif="docs.product_id.barcode">
-                                    <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:80%; height:30px'}" />
-                                </t>
-                                <t t-else="">
-                                    <span></span>
-                                </t>
+                                </span> <t t-esc="docs.years or ''"/>
+                                </strong>
                             </div>
-                             <div style="text-align: center; margin-top: 5mm; font-size: 12px; font-weight: bold;">
-                            <t t-esc="docs.product_id.barcode or ''" />
-                        </div>
-                            
+                        
+                            <!-- Content Area -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 12px;">
+                                <!-- Bottom Left: Marque -->
+                                <div style="text-align: left;">
+                                    <strong>
+                                    <t t-if="docs.product_variant_ids and len(docs.product_variant_ids) &gt; 0">
+                                        <t t-esc="docs.product_variant_ids[0].name"/>
+                                    </t>
+                                    </strong>
+                                </div>
+                                
+                                <!-- Bottom Right: Color -->
+                                <div style="text-align: right;">
+                                    <strong>Color:</strong>
+                                    <t t-esc="docs.interior_color or ''"/>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Footer Section -->
-                       
+                <!-- Product Image Section -->
+                <div style="height: 70mm; border: 1px solid gray; margin: 2mm; display: table;">
+                    <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                        <t t-if="docs.selected_image">
+                            <img t-att-src="image_data_uri(docs.selected_image)" style="max-width: 90%; max-height: 90%; object-fit: contain;"/>
+                        </t>
+                        <t t-else="">
+                            <span style="font-size: 10px; color: gray;">No Image</span>
+                        </t>
                     </div>
-                </t>
-            </xpath>
+                </div>
+
+
+                <!-- Part and Barcode Section -->
+                <div style="text-align: center; height: 15mm;">
+                    <p style="font-size: 12px; border: 1px solid black; margin: 2mm; text-align: center;">
+                        <strong>PART : <span t-esc="docs.product_id.name + '-' + (docs.insert_color.split('(')[-1].strip(')') if docs.insert_color and '(' in docs.insert_color else docs.insert_color) or ''"/></strong>
+                    </p>
+
+                    <div style="margin-top: 2mm;">
+                        <t t-if="docs.product_id.tracking != 'none' and docs.lot_name">
+                            <div t-field="docs.lot_name" t-options="{'widget': 'barcode', 'img_style': 'width:80%; height:30px'}"/>
+                        </t>
+                        <t t-elif="docs.product_id.barcode">
+                            <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:80%; height:30px'}"/>
+                        </t>
+                        <t t-else="">
+                            <span/>
+                        </t>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2mm; font-size: 12px; font-weight: bold;">
+                        <t t-esc="docs.product_id.barcode or ''"/>
+                    </div>
+                </div>
+
+            </div>
+        </t>
+    </xpath>
         </template>
     </data>
 </odoo>
