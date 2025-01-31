@@ -55,6 +55,13 @@ class AccountMove(models.Model):
         help="Numéro de pièce unique",
     )
 
+    @api.model
+    def create(self, vals):
+        if not vals.get("name") or vals["name"] == "/":
+            seq = self.env["ir.sequence"].next_by_code("account.move") or "/"
+            vals["name"] = "KX" + seq  # Ensure it follows "KX+number" format
+        return super().create(vals)
+
     def get_details(self):
         for record in self:
             picking = self.env['stock.picking'].search([
