@@ -68,104 +68,7 @@ class AccountMove(models.Model):
             
      
 
-    #------------------- Hyundai Edi Invoice------------------------------------
-    def action_export_edi_invoice(self):
-        selected_invoice_ids = self.env.context.get('active_ids', [])
-        if not selected_invoice_ids:
-            raise UserError("No invoices selected for export.")
-
-        for invoice in self.env['account.move'].browse(selected_invoice_ids):
-            # Generate the EDI file
-            file_path = self.generate_edi_invoice_file(invoice)
-            
-            # Ensure the file is accessible for download
-            attachment_id = self.create_attachment(file_path, invoice)
-            
-            # Provide the download URL for the file
-            return {
-                'type': 'ir.actions.act_url',
-                'url': '/web/content/%s?download=true' % attachment_id.id,  # URL for downloading the file
-                'target': 'new',  # Open in the same window
-            }
-
-    def generate_edi_invoice_file(self, invoice):
-        """ Generate the EDI invoice file based on the given invoice """
-        vendor_name = invoice.partner_id.name.replace(" ", "") 
-        current_time = datetime.now().strftime('%Y%m%d_%H%M')
-        file_name = f"{vendor_name}_{current_time}.txt"
-        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-        if not os.path.exists(desktop_path):
-            os.makedirs(desktop_path)
-
-        file_path = os.path.join(desktop_path, file_name)
-        order_number = invoice.invoice_origin or ""
-        
-        with open(file_path, 'w') as file:
-            for line in invoice.invoice_line_ids:
-                if line.product_id:
-                    part_number = line.product_id.default_code if line.product_id.default_code else " " * 16
-                    
-                    # Updated record data to match exact format from example
-                    record_data = {
-                        'bill': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,  # HYCSBILL(S)
-                        'part': part_number[:16].ljust(16),  # HYC16PART(16)
-                        'ordd': invoice.date.strftime('%Y%m%d') if invoice.date else " " * 8,
-                        'shpd': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # HYCBSHPD(8)
-                        'inv': invoice.name[:12].ljust(12),  # HYC12V(12)
-                        'qty': str(int(line.quantity)).zfill(7),  # HYC7QTY(7)
-                        'prce': str(int(line.price_unit)).zfill(7),  # HYC7PRCE(7)
-                        'amnt': str(int(line.price_subtotal)).zfill(11),  # HYC11AMNT(11)
-                        'pstqst': str(int(invoice.amount_tax)).zfill(7),  # HYC7PSTQST(7)
-                        'gst': "0000000",  # HYC7GST(7)
-                        'totl': str(int(invoice.amount_total)).zfill(11),  # HYC11TOTL(11)
-                        'invd': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # HYCBINVD(8)
-                        'po': (invoice.partner_id.po or "").ljust(30),  # HYC30PO(30)
-                        'dbcr': 'D',  # HYC1DBCR(1)
-                        'war': ' ',  # HYC1WAR(1)
-                        'desc': line.name[:30].ljust(30),  # HYC30DESC(30)
-                        'wght': "00000",  # HYCSWGHT(5)
-                        'frgt': "000000000",  # HYCSFRGT(9)
-                        'carr': (invoice.carrier_id.name or "").ljust(30),  # HYC30CARR(30)
-                        'ordr': order_number[:9].ljust(9),  # HYCBORDD(9)
-                        'crdt': invoice.create_date.strftime('%Y%m%d') if invoice.create_date else " " * 8,  # HYCBCRDT(8)
-                        'err': " " * 30  # HYC30ERR(30)
-                    }
-                    
-                    line_data = ''.join(record_data.values()) + '\n'
-                    file.write(line_data)
-
-        return file_path
-
-    def create_attachment(self, file_path, invoice):
-        """ Creates an attachment for the generated file and stores it in Odoo """
-        # Read the file and create a binary attachment
-        file_name = os.path.basename(file_path)
-        with open(file_path, 'rb') as file:
-            file_data = file.read()  # Read the file content
-
-        # Base64 encode the binary file data before saving it to Odoo
-        encoded_file_data = base64.b64encode(file_data).decode('utf-8')
-
-        # Create the attachment record
-        attachment = self.env['ir.attachment'].create({
-            'name': file_name,
-            'type': 'binary',
-            'datas': encoded_file_data,  # Store the Base64 encoded content here
-            'mimetype': 'text/plain',
-            'res_model': 'account.move',
-            'res_id': invoice.id,  # Attach it to the current invoice
-        })
-
-        return attachment  # Return the attachment record
-
-
-
-
-    #------------------- Nissan Edi Invoice------------------------------------
-
-     
-
-    # Method for the second EDI export button
+    #------------------- Nissan EDI Invoice ------------------------------------
     def action_export_custom_edi_nissan_invoice(self):
         selected_invoice_ids = self.env.context.get('active_ids', [])
         if not selected_invoice_ids:
@@ -173,7 +76,7 @@ class AccountMove(models.Model):
 
         for invoice in self.env['account.move'].browse(selected_invoice_ids):
             file_path = self.generate_custom_edi_nissan_invoice_file(invoice)
-            attachment_id = self.create_attachment2(file_path, invoice)
+            attachment_id = self.create_attachment(file_path, invoice)
             return {
                 'type': 'ir.actions.act_url',
                 'url': '/web/content/%s?download=true' % attachment_id.id,
@@ -181,46 +84,29 @@ class AccountMove(models.Model):
             }
 
     def generate_custom_edi_nissan_invoice_file(self, invoice):
-        """ Generate the custom EDI invoice file based on the second format """
         vendor_name = invoice.partner_id.name.replace(" ", "")
         current_time = datetime.now().strftime('%Y%m%d_%H%M')
-        file_name = f"{vendor_name}_custom_{current_time}.txt"
+        file_name = f"{vendor_name}_{current_time}.txt"
         desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
         if not os.path.exists(desktop_path):
             os.makedirs(desktop_path)
 
         file_path = os.path.join(desktop_path, file_name)
-        luxncibill_line = next((line for line in invoice.invoice_line_ids if line.product_id.default_code == "LUXNCIBILL"), None)
-
-        if not luxncibill_line:
-            raise ValueError("No product line with reference 'LUXNCIBILL' found in the invoice.")
+        
         with open(file_path, 'w') as file:
-            #for line in invoice.invoice_line_ids:
-                # Build the new record data based on the specified format
-                record_data = {
-                    #'dealer_code': str(invoice.partner_id.dealer_code).zfill(5),
-                    'dealer_code': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,  # Dealer Code (5 chars, left justified)
-                    'invoice_number': invoice.name[:20].ljust(20),
-                    #'invoice_date': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,
-                    'item_ref_number': "LUXNCIBILL".ljust(20),  # Numéro de pièce (fixé à LUXNCIBILL)
-                    'wholesale_amount': str(invoice.amount_total_signed).zfill(9),
-                    #'item_ref_number': (line.product_id.default_code[:20].ljust(20) if line.product_id and line.product_id.default_code else " " * 20),
-                    #'num_items': str(line.quantity).zfill(7),
-                    #'wholesale_amount': str(int(line.price_subtotal * 100)).zfill(9),  # Assuming 2 decimal places
-                    #'dealer_net_amount': "0" * 9,  # Placeholder; customize if needed
-                    #'freight_amount': str(int(invoice.freight_cost * 100)).zfill(9) if invoice.freight_cost else "0" * 9,
-                    #'gst_amount': str(int(invoice.amount_tax * 100)).zfill(7),
-                    #'pst_amount': str(int(invoice.amount_tax * 100)).zfill(7),  # Same as GST for simplicity; adjust as needed
-                    #'record_type': 'D' if invoice.move_type == 'out_invoice' else 'C'  # 'D' for debit, 'C' for credit
-                }
-                
-                # Write formatted record data to the file
-                line_data = ''.join(record_data.values()) + '\n'
-                file.write(line_data)
+            record_data = {
+                'dealer_code': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,
+                'invoice_number': invoice.name[:20].ljust(20),
+                'item_ref_number': "LUXNCIBILL".ljust(20),
+                'wholesale_amount': str(int(invoice.amount_total_signed)).zfill(9),
+            }
+            
+            line_data = ''.join(record_data.values()) + '\n'
+            file.write(line_data)
 
         return file_path
 
-    def create_attachment2(self, file_path, invoice):
+    def create_attachment(self, file_path, invoice):
         file_name = os.path.basename(file_path)
         with open(file_path, 'rb') as file:
             file_data = file.read()
@@ -234,4 +120,93 @@ class AccountMove(models.Model):
             'res_model': 'account.move',
             'res_id': invoice.id,
         })
+        return attachment
+
+    #------------------- Hyundai EDI Invoice ------------------------------------
+    def action_export_edi_hyundai_invoice(self):
+        selected_invoice_ids = self.env.context.get('active_ids', [])
+        if not selected_invoice_ids:
+            raise UserError("No invoices selected for export.")
+
+        for invoice in self.env['account.move'].browse(selected_invoice_ids):
+            file_path = self.generate_edi_hyundai_invoice_file(invoice)
+            attachment_id = self.create_attachment(file_path, invoice)
+            return {
+                'type': 'ir.actions.act_url',
+                'url': '/web/content/%s?download=true' % attachment_id.id,
+                'target': 'new',
+            }
+
+    def generate_edi_hyundai_invoice_file(self, invoice):
+        """ Generate the EDI invoice file based on Hyundai specifications """
+        vendor_name = invoice.partner_id.name.replace(" ", "") 
+        current_time = datetime.now().strftime('%Y%m%d_%H%M')
+        file_name = f"{vendor_name}_{current_time}.txt"
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        if not os.path.exists(desktop_path):
+            os.makedirs(desktop_path)
+
+        file_path = os.path.join(desktop_path, file_name)
+        
+        with open(file_path, 'w') as file:
+            for line in invoice.invoice_line_ids:
+                if line.product_id:
+                    # Convert decimal amounts to integers (multiply by 100 and round)
+                    unit_price = int(round(line.price_unit * 100))
+                    subtotal = int(round(line.price_subtotal * 100))
+                    total_tax = int(round(invoice.amount_tax * 100))
+                    total = int(round(invoice.amount_total * 100))
+                    freight = int(round(invoice.freight_cost * 100)) if invoice.freight_cost else 0
+                    weight = int(round(invoice.weight)) if invoice.weight else 0
+                    
+                    # Split tax amount between PST/QST and GST (adjust as needed)
+                    pst_amount = total_tax // 2
+                    gst_amount = total_tax - pst_amount
+                    
+                    record_data = {
+                        'BILL': str(invoice.partner_id.dealer_code or "").zfill(5),  # Required, N(5)
+                        'PART': line.product_id.default_code[:16].ljust(16),  # Required, A(16)
+                        'ORDD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # Optional, A(8)
+                        'SHPD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # Required, A(8)
+                        'INV': invoice.name[:12].ljust(12),  # Required, A(12)
+                        'QTY': str(int(line.quantity)).zfill(7),  # Required, N(7)
+                        'PRCE': str(unit_price).zfill(7),  # Required, N(7)
+                        'AMNT': str(subtotal).zfill(11),  # Required, N(11)
+                        'PSTQST': str(pst_amount).zfill(7),  # Required, N(7)
+                        'GST': str(gst_amount).zfill(7),  # Required, N(7)
+                        'TOTL': str(total).zfill(11),  # Required, N(11)
+                        'WGHT': str(weight).zfill(9),  # Optional, N(9)
+                        'FRGT$': str(freight).zfill(9),  # Optional, N(9)
+                        'CARR': (invoice.carrier_id.name or "").ljust(30),  # Optional, A(30)
+                        'ORDR': (invoice.invoice_origin or "").ljust(9),  # Optional, A(9)
+                        'INVD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # Required, A(8)
+                        'DESC': line.name[:30].ljust(30),  # Optional, A(30)
+                        'DPO': (invoice.partner_id.po or "").ljust(30),  # Required, A(30)
+                        'DBCR': 'D' if invoice.move_type == 'out_invoice' else 'C',  # Required, A(1)
+                        'WAR': ' ',  # Required, A(1)
+                        'CRDT': invoice.create_date.strftime('%Y%m%d') if invoice.create_date else " " * 8,  # Optional, A(8)
+                        'ERR': " " * 30  # Optional, A(30)
+                    }
+                    
+                    line_data = ''.join(record_data.values()) + '\n'
+                    file.write(line_data)
+
+        return file_path
+
+    def create_attachment(self, file_path, invoice):
+        """ Creates an attachment for the generated file and stores it in Odoo """
+        file_name = os.path.basename(file_path)
+        with open(file_path, 'rb') as file:
+            file_data = file.read()
+        encoded_file_data = base64.b64encode(file_data).decode('utf-8')
+
+        attachment = self.env['ir.attachment'].create({
+            'name': file_name,
+            'type': 'binary',
+            'datas': encoded_file_data,
+            'mimetype': 'text/plain',
+            'res_model': 'account.move',
+            'res_id': invoice.id,
+        })
+
         return attachment
