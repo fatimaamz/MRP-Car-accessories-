@@ -12,9 +12,7 @@
 
 
     <template id="report_single_work_order_multi">
-
-
-        <t t-call="web.basic_layout">
+    <t t-call="web.basic_layout">
             <div class="page">
                 <t t-foreach="docs" t-as="doc">
                      <div class="header" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
@@ -111,8 +109,7 @@
                         </tr>
                     </table>
                 </div>
-
-                <!-- Production Information -->
+                
                 <div style="background-color: #f9fafb; padding: 20px; margin-bottom: 20px;font-size: 14px;">
                     <table style="width: 100%; border-collapse: collapse; border: 1px solid #f9fafb;">
                         <tr>
@@ -132,184 +129,49 @@
                             </td>
                             <td style="width: 33%; padding: 10px; vertical-align: top; border: 1px solid #f9fafb;">
                                 <strong>New design :</strong><br/>
-                                <input type="checkbox" t-att-checked="doc.new_design == 'requis'" disabled="true"/> Requis<br/>
-                                <input type="checkbox" t-att-checked="doc.new_design == 'recu'" disabled="true"/> Reçu
+                                <div style="margin-top: 5px;">
+                                    <label style="display: flex; align-items: center; margin-bottom: 4px;">
+                                        <input type="checkbox" 
+                                               t-att-checked="doc.new_design == 'requis'" 
+                                               disabled="true" 
+                                               style="width: 16px; height: 16px; margin-right: 8px; border: 1px solid #000;"/> 
+                                        <span style="font-size: 14px;">Requis</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center;">
+                                        <input type="checkbox" 
+                                               t-att-checked="doc.new_design == 'recu'" 
+                                               disabled="true" 
+                                               style="width: 16px; height: 16px; margin-right: 8px; border: 1px solid #000;"/> 
+                                        <span style="font-size: 14px;">Reçu</span>
+                                    </label>
+                                </div>
                             </td>
                         </tr>
                     </table>
                 </div>
 
-
-                <!-- Product Information -->
-                <div style="background-color: #f9fafb; padding: 20px; margin-bottom: 20px;">
-                    <div style="border: 1px solid black;  vertical-align: middle; text-align: center;">
-                        <div style="border: 1px solid black;position: relative;display: flex; justify-content: center; align-items: center;padding: 8px 15px; margin: 0;">
-                        <h4 style="position: absolute; top: 10px; right: 20px; background-color: black; color: white;">
-                            <span t-esc="doc.product_id.name"/>
-                        </h4>
-                        <t t-if="doc.selected_image">
-                            <img t-att-src="image_data_uri(doc.selected_image)" style=" max-width: 85%; height: auto;"/>
-                        </t>
+                    <!-- Product Information -->
+                    <div style="background-color: #f9fafb; padding: 20px; margin-bottom: 20px;">
+                        <div style="border: 1px solid black;  vertical-align: middle; text-align: center;">
+                            <div style="border: 1px solid black;position: relative;display: flex; justify-content: center; align-items: center;padding: 8px 15px; margin: 0;">
+                            <h4 style="position: absolute; top: 10px; right: 20px; background-color: black; color: white;">
+                                <span t-esc="doc.product_id.name"/>
+                            </h4>
+                            <t t-if="doc.selected_image">
+                                <img t-att-src="image_data_uri(doc.selected_image)" style=" max-width: 85%; height: auto;"/>
+                            </t>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div style="background-color: #f9fafb; padding: 20px; margin-bottom: 20px;">
+                    
+                    <div style="background-color: #f9fafb; padding: 20px; margin-bottom: 20px;">
                     <h6>Notes / Specifications:</h6>
                     <p>
                         <span t-esc="doc.note_interne"/>
                     </p>
                 </div>
 
-
-                <!-- Work Order Details -->
-                <table class="table table-bordered">
-                    <tr>
-                        <td>Marque:</td>
-
-                        <td>Année:</td>
-                        <td>Model:</td>
-                       <td>Part number:</td>
-                    </tr>
-                    <tr>
-                       <td>
-                            <span t-if="doc.product_variant_ids" t-esc="doc.product_variant_ids[0].name"/>
-                            <span t-else="" t-esc="doc.name"/>
-                        </td>
-                        <td>
-                            <span t-esc="doc.years"/>
-                        </td>
-                        <td>
-                            <span t-esc="len(doc.product_variant_ids) &gt; 1 and doc.product_variant_ids[1].name or doc.name"/>
-                        </td>
-                        <td>
-                            <span t-esc="doc.product_id.name"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="background-color: #edeff2;">
-                            <strong style="font-size: 16px;">
-                                <t t-esc="doc.sale_order_partner_id.name"/>
-                            </strong>
-                            <br/>
-                            <t t-esc="doc.sale_order_partner_id.phone or ''"/>
-                            <br/>
-                            <t t-if="doc.sale_order_partner_id.street">
-                                <t t-esc="doc.sale_order_partner_id.street"/>
-                                <t t-if="doc.sale_order_partner_id.city or doc.sale_order_partner_id.state_id or doc.sale_order_partner_id.country_id">
-                                    ,
-                                </t>
-                            </t>
-                            <t t-if="doc.sale_order_partner_id.city">
-                                <t t-esc="doc.sale_order_partner_id.city"/>
-                                <t t-if="doc.sale_order_partner_id.state_id or doc.sale_order_partner_id.country_id">
-                                    ,
-                                </t>
-                            </t>
-                            <t t-if="doc.sale_order_partner_id.state_id">
-                                <t t-esc="doc.sale_order_partner_id.state_id.name"/>
-                                <t t-if="doc.sale_order_partner_id.country_id">,</t>
-                            </t>
-                            <br/>
-                            <t t-if="doc.sale_order_partner_id.zip">
-                                <t t-esc="doc.sale_order_partner_id.zip"/>
-                            </t>
-                            <t t-if="doc.sale_order_partner_id.country_id">
-                                <t t-esc="doc.sale_order_partner_id.country_id.name"/>
-                            </t>
-                        </td>
-                        <td colspan="2">Ship to / Expédié à ::
-                            <br/>
-                            <t t-if="doc.partner_shipping_id.name">
-                                <t t-esc="doc.ship_to_id.name" style="font-weight: bold;"/>
-                                <br/>
-                                <br/>
-                            </t>
-                            <t t-if="doc.partner_shipping_id.street">
-                                <t t-esc="doc.ship_to_id.street"/>
-                                <t t-if="doc.ship_to_id.city or doc.partner_shipping_id.state_id or doc.ship_to_id.zip">
-                                    ,
-                                </t>
-                            </t>
-                            <br/>
-                              <t t-esc="doc.partner_shipping_id.email"/><br/>
-                              <t t-esc="doc.ship_to_id.phone"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="background-color: blue; color: white; font-size: 20px;">
-                            <strong><t t-esc="doc.name"/></strong>
-                        </td>
-                        <td>
-                            Date de production:
-                            <t t-esc="doc.date_start"/>
-                            <br/>
-                            Coupé:
-                             <t t-esc="'Oui' if doc.is_coped else 'Non'"/>
-                            <br/>
-                             Placé:
-                             <t t-esc="'Oui' if doc.place_status=='place' else 'Non'"/>
-                            <br/>
-
-                        </td>
-                        <td>
-                            New design:
-                            <br/>
-                            <t t-esc="doc.new_design"/>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="background-color: red; color: white;font-size: 20px;">Must ship by:
-                            <br/>
-                           <!-- <span t-esc="doc.picking_scheduled_date"/>-->
-                        </td>
-                       
-                        <td>
-                            Part number :
-                            <t t-esc="doc.product_id.default_code"/>
-                            <br/>
-                            Color :
-                            <t t-esc="doc.interior_color"/>
-                            <br/>
-                            Insert :
-                            <t t-esc="doc.insert_color"/>
-                            <br/>
-                            Logo :
-                            <t t-esc="doc.logo_inscription "/>
-                            <br/>
-                            Reflector type
-                            <t t-esc="doc.product_id.reflecteur_type "/>
-                            <br/>
-
-                        </td>
-
-                        <td style="background-color: #edeff2;" colspan="2">
-                            <strong>Infos Order:</strong>
-                            <br/>
-                            Date :
-                            <br/>
-                            Order :
-                            <t t-esc="doc.origin"/>
-                            <br/>
-                            Quantity :
-                            <t t-esc="doc.product_qty"/>
-                            <br/>
-                            PO client :
-                            <t t-esc="doc.sale_order_id.client_order_ref"/>
-                            <br/>
-
-                        </td>
-                    </tr>
-                    <tr>
-
-                        <td colspan="4" style="background-color: #ffffbf;">
-                            
-                        </td>
-                    </tr>
-                </table>
-
-
+                </t>
             </div>
         </t>
     </template>
