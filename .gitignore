@@ -1,0 +1,36 @@
+# Python bytecode
+*.py[cod]
+__pycache__/
+
+# Log files
+*.log
+
+# Environment files
+.env
+
+# IDE files
+.vscode/
+.idea/
+
+# Odoo specific
+*.pot
+*.pyc
+*.pyo
+.settings/
+.project
+.pydevproject
+
+# Database
+*.sql
+*.sqlite3
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Odoo data directories
+/filestore/
+/sessions/
+
+# Local development files
+local_settings.py
