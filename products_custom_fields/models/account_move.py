@@ -123,7 +123,7 @@ class AccountMove(models.Model):
         return attachment
 
     #------------------- Hyundai EDI Invoice ------------------------------------
-    def action_export_edi_hyundai_invoice(self):
+    def action_export_edi_invoice(self):
         selected_invoice_ids = self.env.context.get('active_ids', [])
         if not selected_invoice_ids:
             raise UserError("No invoices selected for export.")
