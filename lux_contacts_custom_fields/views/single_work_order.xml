@@ -137,6 +137,7 @@
                                                style="width: 16px; height: 16px; margin-right: 8px; border: 1px solid #000;"/> 
                                         <span style="font-size: 14px;">Requis</span>
                                     </label>
+                                    <br/>
                                     <label style="display: flex; align-items: center;">
                                         <input type="checkbox" 
                                                t-att-checked="doc.new_design == 'recu'" 
