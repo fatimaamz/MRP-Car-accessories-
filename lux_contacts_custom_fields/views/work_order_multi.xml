@@ -71,35 +71,33 @@
                             </td>
 
                             <!-- Ship To Information -->
-                            <td style="padding: 10px; background-color: #e0eaff; border: 1px solid #ddd; vertical-align: top; width: 40%; font-size: 14px;">
-                                <span><strong>Ship to / Expédié à :</strong></span><br/><br/>
+                            <td style="padding: 20px; background-color: rgba(242, 246, 255, 0.4); border: 1px solid white; vertical-align: top; width: 34%; font-size: 12px; border-radius: 10px; font-weight: 400;">
+                                <span style="font-size: 14px; font-weight: 500;"><strong>Ship to / Expédié à :</strong></span><br/><br/>
                                 <t t-if="docs[0].partner_shipping_id.name">
-                                    <t t-esc="docs[0].partner_shipping_id.name" style="font-weight: bold;"/><br/><br/>
+                                    <span style="font-size: 14px; font-weight: 500;"><t t-esc="docs[0].partner_shipping_id.name"/></span><br/><br/>
                                 </t>
                                 <t t-if="docs[0].partner_shipping_id.street">
                                     <t t-esc="docs[0].partner_shipping_id.street"/>
-                                    <t t-if="docs[0].partner_shipping_id.city or docs[0].partner_shipping_id.state_id or docs[0].partner_shipping_id.zip">,</t>
                                 </t>
-                                <t t-if="docs[0].partner_shipping_id.city">
-                                    <t t-esc="docs[0].partner_shipping_id.city"/>
-                                    <t t-if="docs[0].partner_shipping_id.state_id or docs[0].partner_shipping_id.zip">,</t>
-                                </t>
-                                <t t-if="docs[0].partner_shipping_id.state_id">
-                                    <t t-esc="docs[0].partner_shipping_id.state_id.name"/>
-                                    <t t-if="docs[0].partner_shipping_id.zip">,</t>
-                                </t>
+                                <t t-if="docs[0].partner_shipping_id.city">, <t t-esc="docs[0].partner_shipping_id.city"/></t>
+                                <t t-if="docs[0].partner_shipping_id.state_id">, <t t-esc="docs[0].partner_shipping_id.state_id.name"/></t>
+                                <br/>
                                 <t t-if="docs[0].partner_shipping_id.zip">
-                                    <t t-esc="docs[0].partner_shipping_id.zip"/>
+                                    <t t-esc="docs[0].partner_shipping_id.zip"/>, 
+                                </t>
+                                <t t-if="docs[0].partner_shipping_id.country_id">
+                                    <t t-esc="docs[0].partner_shipping_id.country_id.name"/>
                                 </t>
                                 <br/><br/>
-                                 <t t-if="docs[0].partner_shipping_id.email">
-                                     <t t-esc="docs[0].partner_shipping_id.email"/>
-                                </t><br/>
+                                <t t-if="docs[0].partner_shipping_id.email">
+                                    <t t-esc="docs[0].partner_shipping_id.email"/>
+                                </t>
+                                <br/>
                                 <t t-if="docs[0].partner_shipping_id.phone">
-                                    <span>Téléphone: <t t-esc="docs[0].partner_shipping_id.phone"/></span>
+                                    <span>Téléphone : <t t-esc="docs[0].partner_shipping_id.phone"/></span>
                                 </t>
                                 <br/><br/>
-                                <!--<span>Must Ship by: <t t-esc="docs[0].picking_scheduled_date"/></span>-->
+                                <span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date"/></span>
                             </td>
 
                             <!-- Order Details -->
@@ -114,66 +112,60 @@
                 </div>
 
                 <!-- Product Details Table (Table 2) -->
-                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <table style="width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; border: 1px solid #f9fafb; border-radius: 8px; overflow: hidden;">
+                    <thead>
+                        <tr style="background-color: #f9fafb;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #f9fafb;">Part Number</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #f9fafb;">Image</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #f9fafb;">Qty</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #f9fafb;">Produit</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #f9fafb;">Production</th>
+                        </tr>
+                    </thead>
                     <t t-set="work_orders" t-value="docs.get_report_values()"/>
-                        <t t-if="work_orders">
-                              <t t-foreach="work_orders" t-as="wo">
-                    <tbody>
-                         
-                            <tr>
-                                <td>
-                                    <strong><t t-esc="wo['product'] or ''"/></strong>
-                                </td>
-                                
-                                <td style="border: 1px solid #ddd; padding: 10px; text-align: left;vertical-align: top;">
-                                    <div style="background-color: #d3d3d3; text-align: center; padding: 10px;">
-                                           <t t-if="wo['image']">
-                                        
-                                                  <img t-att-src="image_data_uri(wo['image'])"
-                                                       style="width: 100px; height: 100px; object-fit: contain; display: block; border: none;"/></t>
-                                              </div>
-                                </td>
-                                <td>
-                                    <strong><t t-esc="wo['quantity'] or ''"/></strong>
-                                </td>
-                                <td style="border: 1px solid #ddd; padding: 10px; text-align: left;vertical-align: top;">
-                                    <strong>
-                                     N°: <t t-esc="wo['name']"/>
-                                    </strong>
-                                    <br/>
-                                   <!-- Date: <t t-esc="wo['date'] or ''"/><br/>-->
-                                    Coupé: <t t-esc="wo['couper']"/><br/>
-                                    Placé: <t t-esc="wo['placer']"/><br/>
-                                   
-                                </td>
-                                <td style="border: 1px solid #ddd; padding: 10px; text-align: left;vertical-align: top;">
-                                    Interior Color: <t t-esc="wo['interior'] or ''"/><br/>
-                                    Insert: <t t-esc="wo['insert'] or ''"/><br/>
-                                    Logo: <t t-esc="wo['logo'] or ''"/><br/>
-                                    New design: <t t-esc="wo['new_design'] or ''"/><br/>
-                                    Reflector type: <t t-esc="wo['reflector_type'] or ''"/>
-                                </td>
-                            </tr>
-                     
-                    </tbody>
-                        
-                </t>
+                    <t t-if="work_orders">
+                        <t t-foreach="work_orders" t-as="wo">
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #f9fafb;">
+                                        <strong><t t-esc="wo['product'] or ''"/></strong>
+                                    </td>
+                                    <td style="padding: 12px; border: 1px solid #f9fafb;">
+                                        <t t-if="wo['image']">
+                                            <img t-att-src="image_data_uri(wo['image'])" style="width: 100px; height: auto; object-fit: contain;"/>
+                                        </t>
+                                    </td>
+                                    <td style="padding: 12px; border: 1px solid #f9fafb;">
+                                        <strong><t t-esc="wo['quantity'] or ''"/></strong>
+                                    </td>
+                                    <td style="padding: 12px; border: 1px solid #f9fafb;">
+                                        Interior Color : <t t-esc="wo['interior'] or ''"/><br/>
+                                        Insert : <t t-esc="wo['insert'] or ''"/><br/>
+                                        Logo : <t t-esc="wo['logo'] or ''"/><br/>
+                                        New design : <t t-esc="wo['new_design'] or ''"/><br/>
+                                        Reflector type : <t t-esc="wo['reflector_type'] or ''"/>
+                                    </td>
+                                    <td style="padding: 12px; border: 1px solid #f9fafb;">
+                                        <strong>N° : <t t-esc="wo['name']"/></strong><br/>
+                                        Date : <t t-esc="wo['date'] or ''"/><br/>
+                                        Coupé : <t t-esc="wo['couper']"/><br/>
+                                        Placé : <t t-esc="wo['placer']"/>
+                                    </td>
+                                </tr>
+                            </tbody>
                         </t>
+                    </t>
                 </table>
 
                 <!-- Total Quantity -->
-                <table style="width: 100%; margin-top: 20px; border-spacing: 5; border: 1px solid #edeff2; background-color: #edeff2;">
-                   <tr style="background-color: #edeff2; border: 1px solid #edeff2;">
-                              <td colspan="5"
-                                  style="text-align: right; font-weight: bold; padding: 10px; border: none !important;">
-                                  Total de la commande :
-                              </td>
-                              <td style="text-align: center; font-weight: bold; padding: 10px; border: none !important;">
-                                  <t t-esc="sum(wo['quantity'] for wo in work_orders)"/>
-                              </td>
-                          </tr>
-                        
-                </table>
+                <div style="width: 100%; margin-top: 0px; text-align: right;">
+                    <div style="display: inline-block; padding: 10px 20px; background-color: #f9fafb; border-radius: 4px;">
+                        <span style="font-weight: bold;">Total de la commande : </span>
+                        <span style="margin-left: 10px; font-weight: bold;">
+                            <t t-esc="sum(wo['quantity'] for wo in work_orders)"/>
+                        </span>
+                    </div>
+                </div>
 
             </div>
         </t>
