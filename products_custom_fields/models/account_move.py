@@ -55,6 +55,7 @@ class AccountMove(models.Model):
         help="Numéro de pièce unique",
     )
 
+
     def get_details(self):
         for record in self:
             picking = self.env['stock.picking'].search([
