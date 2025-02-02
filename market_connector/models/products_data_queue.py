@@ -202,19 +202,18 @@ class ShopifyProductDataQueueEpt(models.Model):
 
     
     def matching_product_product(self, shopify_product):
-        _logger.info(f"Strat Matching Product{shopify_product}")
+        _logger.info(f"Start Matching Product{shopify_product}")
         by_modele = True
         by_style = False
         by_brand = True
-        referance = shopify_product.shopify_reference
-        referance = referance.strip()
-        # if referance.startswith("#"):
-        #     referance = referance[1:]
-        domain = [("name", "=", referance)]
+        reference = shopify_product.shopify_reference.strip()
+        
+        # Search by default_code first
+        domain = [("default_code", "=", reference)]
         if by_modele:
             domain.append(("product_template_variant_value_ids.name", "=", shopify_product.model))
         if by_style:
-            domain.append(("product_template_variant_value_ids.name", "=", shopify_product.style)) # shopify_product.style
+            domain.append(("product_template_variant_value_ids.name", "=", shopify_product.style))
         if by_brand:
             domain.append(("product_template_variant_value_ids.name", "=", shopify_product.brand))
             
@@ -225,19 +224,29 @@ class ShopifyProductDataQueueEpt(models.Model):
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
         elif product_count == 0:
-            # TODO :  Problème matching 
             _logger.info("No Product Matching")
             _logger.info(f"""
-                          Product Referance: {referance} \n
+                          Product Reference: {reference} \n
                           Model : {shopify_product.model} \n 
                           Brand : {shopify_product.brand} \n 
                           Search domain : {domain}
                           """)
+            # Create product name in format: reference (model,brand,style)
+            attributes = []
+            if shopify_product.model:
+                attributes.append(shopify_product.model)
+            if shopify_product.brand:
+                attributes.append(shopify_product.brand)
+            if shopify_product.style:
+                attributes.append(shopify_product.style)
+            
+            product_name = f"{reference} ({','.join(attributes) if attributes else ''})"
+
             product = self.env['product.product'].create({
-                    'name': referance,
+                    'name': product_name,
+                    'default_code': reference,
                     'type': 'product',
                 })
-
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
         else:
