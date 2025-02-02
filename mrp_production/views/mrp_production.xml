@@ -150,15 +150,9 @@
          </group>
         <group>
             <group>
-                 <field name="product_template_id" invisible="1"/>
-                                    
-
-                                   <field name="selected_image_id" />
-                                   <field name="selected_image" widget="image"/>          
-                        <!--field name="design_ids"/>-->
-                        <field name="note_interne" />
-                        <field name="logo_inscription" />
-                        <field name="new_design"/>
+                <field name="product_template_id" invisible="1"/>    
+                <field name="logo_inscription" />
+                <field name="new_design"/>
                 <field name="is_conforme" class="o_inline"/>
                 <button name="action_view_delivery_order" 
                                         type="object" 
@@ -173,14 +167,13 @@
             
         </group>
            
-         <group name="product_image_group" string="Détails du Produit" invisible="not product_id" >
-            
-            <!--<field name="product_image" widget="image"/>-->
-            <field name="selected_characteristics" />
-           <!-- <field name="product_variant_ids"  widget="many2many_tags"/>
-            <field name="product_tag_ids"  widget="many2many_tags"/>-->
-         </group>
          
+        <xpath expr="//div[hasclass('o_row', 'g-0', 'd-flex')]" position="after">
+            <group>
+                <field name="selected_characteristics"/>
+                <field name="selected_image_id"/>
+                <field name="selected_image" widget="image"/>
+            </group>
         </xpath>
        
     </field>
