@@ -34,3 +34,5 @@ Thumbs.db
 
 # Local development files
 local_settings.py
+
+*.Zone.Identifier
