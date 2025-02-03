@@ -220,6 +220,7 @@ class ShopifyProductDataQueueEpt(models.Model):
         product = self.env['product.product'].search(domain)
         product_count = len(product)
         _logger.info(f"List of products found : {product} | count {product_count}")
+        
         if product_count == 1:
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
@@ -231,7 +232,6 @@ class ShopifyProductDataQueueEpt(models.Model):
                           Brand : {shopify_product.brand} \n 
                           Search domain : {domain}
                           """)
-            # Create product name in format: reference (model,brand,style)
             attributes = []
             if shopify_product.model:
                 attributes.append(shopify_product.model)
@@ -242,23 +242,51 @@ class ShopifyProductDataQueueEpt(models.Model):
             
             product_name = f"{reference} ({','.join(attributes) if attributes else ''})"
 
+            # Créer le produit
             product = self.env['product.product'].create({
                     'name': product_name,
                     'default_code': reference,
                     'type': 'product',
                 })
+            
+            # Affecter tous les attributs existants
+            self._set_all_product_attributes(product)
+            
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
         else:
             _logger.info("Conflict")
-            product  = product[0]
+            product = product[0]
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
+        
         _logger.info(f"product : {product}")
         self.import_shopify_product_image(product, shopify_product.default_image_url)
         data_dict = json.loads(shopify_product.data)
         self.add_images_from_dict(product, data_dict.get('images',[]))
         return product
+    
+    def _set_all_product_attributes(self, product):
+        ProductTemplateAttributeLine = self.env['product.template.attribute.line']
+        
+        # Récupérer tous les attributs
+        attributes = self.env['product.attribute'].search([
+            ('name', 'in', ['MAIN COLOR', 'CARBON CODE', 'Année'])
+        ])
+        
+        for attribute in attributes:
+            # Récupérer toutes les valeurs pour cet attribut
+            values = self.env['product.attribute.value'].search([
+                ('attribute_id', '=', attribute.id)
+            ])
+            
+            if values:
+                # Créer la ligne d'attribut sur le template du produit avec toutes les valeurs
+                ProductTemplateAttributeLine.create({
+                    'product_tmpl_id': product.product_tmpl_id.id,
+                    'attribute_id': attribute.id,
+                    'value_ids': [(6, 0, values.ids)]
+                })
     
     def matching_product_template(self, shopify_product):
         product_template = self.env['product.template'].search([("name","=",shopify_product.shopify_reference)])
