@@ -94,14 +94,48 @@ class AccountMove(models.Model):
         file_path = os.path.join(desktop_path, file_name)
         
         with open(file_path, 'w') as file:
+            # Format invoice date as YYYYMMDD
+            invoice_date = invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else ""
+            
+            # Convert amounts to integers and pad with zeros
+            nci_cost = str(int(invoice.amount_untaxed * 100)).zfill(9)  # NCI Cost Total
+            dnet_total = str(int(invoice.amount_total * 100)).zfill(9)  # DNET Total
+            transport = str(int(invoice.freight_cost * 100)).zfill(9) if invoice.freight_cost else "000000000"
+            gst_tax = str(int(invoice.amount_tax * 100)).zfill(6)  # GST/FED TX
+            pst_tax = "000000"  # PST/PRV TX (set to 0 in example)
+            
+            # Format quantity with leading zeros
+            qty = str(int(invoice.pcs if invoice.pcs else 0)).zfill(3)
+            
             record_data = {
                 'dealer_code': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,
-                'invoice_number': invoice.name[:20].ljust(20),
-                'item_ref_number': "LUXNCIBILL".ljust(20),
-                'wholesale_amount': str(int(invoice.amount_total_signed)).zfill(9),
+                'invoice_number': invoice.name[:6],  # K30603 in example
+                'date': invoice_date,
+                'item_code': "LUXNCIBILL",
+                'qty': qty,
+                'nci_cost': nci_cost,
+                'dnet_total': dnet_total,
+                'transport': transport,
+                'gst_tax': gst_tax,
+                'pst_tax': pst_tax,
+                'record_type': "D"  # D for Debit as shown in example
             }
             
-            line_data = ''.join(record_data.values()) + '\n'
+            # Combine all fields without spaces between them
+            line_data = ''.join([
+                record_data['dealer_code'],
+                record_data['invoice_number'],
+                record_data['date'],
+                record_data['item_code'],
+                record_data['qty'],
+                record_data['nci_cost'],
+                record_data['dnet_total'],
+                record_data['transport'],
+                record_data['gst_tax'],
+                record_data['pst_tax'],
+                record_data['record_type']
+            ]) + '\n'
+            
             file.write(line_data)
 
         return file_path
