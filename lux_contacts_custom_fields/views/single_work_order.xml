@@ -155,9 +155,6 @@
                     <div style="background-color: #f9fafb; padding: 20px; margin-bottom: 20px;">
                         <div style="border: 1px solid black;  vertical-align: middle; text-align: center;">
                             <div style="border: 1px solid black;position: relative;display: flex; justify-content: center; align-items: center;padding: 8px 15px; margin: 0;">
-                            <h4 style="position: absolute; top: 10px; right: 20px; background-color: black; color: white;">
-                                <span t-esc="doc.product_id.name"/>
-                            </h4>
                             <t t-if="doc.selected_image">
                                 <img t-att-src="image_data_uri(doc.selected_image)" style=" max-width: 85%; height: auto;"/>
                             </t>
