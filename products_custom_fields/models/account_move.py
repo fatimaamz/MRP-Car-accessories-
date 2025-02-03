@@ -174,7 +174,7 @@ class AccountMove(models.Model):
                     unit_price = int(round(line.price_unit * 100))
                     subtotal = int(round(line.price_subtotal * 100))
                     total_tax = int(round(invoice.amount_tax * 100))
-                    total = int(round(invoice.dnet_total * 100))  # Using new DNET Total field
+                    total = int(round(invoice.dnet_total * 100))
                     freight = int(round(invoice.freight_cost * 100)) if invoice.freight_cost else 0
                     weight = int(round(invoice.weight)) if invoice.weight else 0
                     
@@ -182,9 +182,12 @@ class AccountMove(models.Model):
                     pst_amount = total_tax // 2
                     gst_amount = total_tax - pst_amount
                     
+                    # Safely handle default_code
+                    default_code = line.product_id.default_code or ""
+                    
                     record_data = {
-                        'BILL': str(invoice.partner_id.dealer_code or "").zfill(5),  # Required, N(5)
-                        'PART': line.product_id.default_code[:16].ljust(16),  # Required, A(16)
+                        'BILL': str(invoice.partner_id.dealer_code or "").zfill(5),
+                        'PART': default_code[:16].ljust(16),  # Now safe even if default_code was False
                         'ORDD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # Optional, A(8)
                         'SHPD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # Required, A(8)
                         'INV': invoice.name[:12].ljust(12),  # Required, A(12)
