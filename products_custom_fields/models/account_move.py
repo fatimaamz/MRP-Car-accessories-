@@ -107,34 +107,13 @@ class AccountMove(models.Model):
             # Format quantity with leading zeros
             qty = str(int(invoice.pcs if invoice.pcs else 0)).zfill(3)
             
-            record_data = {
-                'dealer_code': invoice.partner_id.dealer_code.ljust(5) if invoice.partner_id.dealer_code else " " * 5,
-                'invoice_number': invoice.name[:6],  # K30603 in example
-                'date': invoice_date,
-                'item_code': "LUXNCIBILL",
-                'qty': qty,
-                'nci_cost': nci_cost,
-                'dnet_total': dnet_total,
-                'transport': transport,
-                'gst_tax': gst_tax,
-                'pst_tax': pst_tax,
-                'record_type': "D"  # D for Debit as shown in example
-            }
+            # Format each section with proper spacing
+            dealer_and_invoice = f"{invoice.partner_id.dealer_code}{invoice.name}"  # No padding, exact values
+            date_and_item = f"{invoice_date}LUXNCIBILL"
+            numbers_section = f"0000{qty}{nci_cost}{dnet_total}{transport}{gst_tax}{pst_tax}D"
             
-            # Combine all fields without spaces between them
-            line_data = ''.join([
-                record_data['dealer_code'],
-                record_data['invoice_number'],
-                record_data['date'],
-                record_data['item_code'],
-                record_data['qty'],
-                record_data['nci_cost'],
-                record_data['dnet_total'],
-                record_data['transport'],
-                record_data['gst_tax'],
-                record_data['pst_tax'],
-                record_data['record_type']
-            ]) + '\n'
+            # Combine sections with proper spacing
+            line_data = f"{dealer_and_invoice} {date_and_item} {numbers_section}\n"
             
             file.write(line_data)
 
