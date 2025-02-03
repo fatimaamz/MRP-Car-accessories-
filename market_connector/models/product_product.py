@@ -30,5 +30,8 @@ class ProductProduct(models.Model):
     def _compute_default_image(self):
         for product in self:
             default_image = product.product_images.filtered(lambda img: img.is_default)
-            product.default_image = default_image.image if default_image else False
+            if len(default_image) > 1:
+                # If somehow multiple default images exist, ensure only one is set as default
+                default_image[1:].write({'is_default': False})
+            product.default_image = default_image[0].image if default_image else False
             

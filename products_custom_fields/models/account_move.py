@@ -202,7 +202,6 @@ class AccountMove(models.Model):
                         'CARR': (invoice.carrier_id.name or "").ljust(30),  # Optional, A(30)
                         'ORDR': (invoice.invoice_origin or "").ljust(9),  # Optional, A(9)
                         'INVD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # Required, A(8)
-                        'DESC': line.name[:30].ljust(30),  # Optional, A(30)
                         'DPO': (invoice.partner_id.po or "").ljust(30),  # Required, A(30)
                         'DBCR': 'D' if invoice.move_type == 'out_invoice' else 'C',  # Required, A(1)
                         'WAR': ' ',  # Required, A(1)
