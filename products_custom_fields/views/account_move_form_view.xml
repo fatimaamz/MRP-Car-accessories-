@@ -72,6 +72,9 @@
                         
                     
                 </xpath>
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="dnet_total" widget="monetary"/>
+                </xpath>
             </field>
         </record>
 

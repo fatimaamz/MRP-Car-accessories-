@@ -54,6 +54,12 @@ class AccountMove(models.Model):
         string="Numéro de Pièce Unique",
         help="Numéro de pièce unique",
     )
+    dnet_total = fields.Float(
+        string='DNET Total',
+        compute='_compute_dnet_total',
+        store=True,
+        help="Total DNET incluant les taxes et les frais de transport"
+    )
 
 
     def get_details(self):
@@ -99,7 +105,7 @@ class AccountMove(models.Model):
             
             # Convert amounts to integers and pad with zeros
             nci_cost = str(int(invoice.amount_untaxed * 100)).zfill(9)  # NCI Cost Total
-            dnet_total = str(int(invoice.amount_total * 100)).zfill(9)  # DNET Total
+            dnet_total = str(int(invoice.dnet_total * 100)).zfill(9)
             transport = str(int(invoice.freight_cost * 100)).zfill(9) if invoice.freight_cost else "000000000"
             gst_tax = str(int(invoice.amount_tax * 100)).zfill(6)  # GST/FED TX
             pst_tax = "000000"  # PST/PRV TX (set to 0 in example)
@@ -168,7 +174,7 @@ class AccountMove(models.Model):
                     unit_price = int(round(line.price_unit * 100))
                     subtotal = int(round(line.price_subtotal * 100))
                     total_tax = int(round(invoice.amount_tax * 100))
-                    total = int(round(invoice.amount_total * 100))
+                    total = int(round(invoice.dnet_total * 100))  # Using new DNET Total field
                     freight = int(round(invoice.freight_cost * 100)) if invoice.freight_cost else 0
                     weight = int(round(invoice.weight)) if invoice.weight else 0
                     
@@ -223,3 +229,8 @@ class AccountMove(models.Model):
         })
 
         return attachment
+
+    @api.depends('amount_total', 'freight_cost')
+    def _compute_dnet_total(self):
+        for record in self:
+            record.dnet_total = record.amount_total + (record.freight_cost or 0.0)
