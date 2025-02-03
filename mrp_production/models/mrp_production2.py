@@ -133,9 +133,9 @@ class MrpProduction(models.Model):
     )
 
     selected_image_id = fields.Many2one(
-        'common.product.image.ept',
+        'product.image',
         string="Selected Image",
-        domain="[('template_id', '=', product_template_id)]",  # Now this works
+        domain="[('product_id', '=', product_id)]",
         help="Select an image for this production."
     )
     
