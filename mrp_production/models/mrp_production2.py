@@ -131,10 +131,10 @@ class MrpProduction(models.Model):
         store=True,
         readonly=True
     )
-
-    selected_image_id = fields.Many2one(
+    
+    product_image_id = fields.Many2one(
         'product.image',
-        string="Selected Image",
+        string="Production Image",
         domain="[('product_id', '=', product_id)]",
         ondelete='set null',
         help="Select an image for this production."
@@ -143,7 +143,7 @@ class MrpProduction(models.Model):
   
     selected_image = fields.Image(
         string="Image",
-        related='selected_image_id.image',
+        related='product_image_id.image',
         store=True,
         help="Image selected for this production."
     )

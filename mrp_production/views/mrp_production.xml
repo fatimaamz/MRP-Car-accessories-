@@ -152,7 +152,7 @@
         </xpath>
        <xpath expr="//div[hasclass('o_row', 'g-0', 'd-flex')]" position="after">
                 <field name="selected_characteristics"/>
-                <field name="selected_image_id"/>
+                <field name="product_image_id"/>
                 <field name="selected_image" widget="image"/>
 
         </xpath>
