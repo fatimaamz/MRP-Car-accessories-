@@ -208,8 +208,20 @@ class ShopifyProductDataQueueEpt(models.Model):
         by_brand = True
         reference = shopify_product.shopify_reference.strip()
         
-        # Search by default_code first
-        domain = [("default_code", "=", reference)]
+        # Get or create category from Shopify product_type
+        data_dict = json.loads(shopify_product.data)
+        product_type = data_dict.get('product_type')
+        category = False
+        if product_type:
+            category = self.env['product.category'].search([('name', '=', product_type)], limit=1)
+            if not category:
+                category = self.env['product.category'].create({'name': product_type})
+        
+        # Search by default_code first and exclude archived products
+        domain = [
+            ("default_code", "=", reference),
+            ("active", "=", True)  # Only consider active (non-archived) products
+        ]
         if by_modele:
             domain.append(("product_template_variant_value_ids.name", "=", shopify_product.model))
         if by_style:
@@ -224,6 +236,8 @@ class ShopifyProductDataQueueEpt(models.Model):
         if product_count == 1:
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
+            if category:
+                product.categ_id = category.id
         elif product_count == 0:
             _logger.info("No Product Matching")
             _logger.info(f"""
@@ -247,6 +261,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                     'name': product_name,
                     'default_code': reference,
                     'type': 'product',
+                    'categ_id': category.id if category else False,
                 })
             
             # Affecter tous les attributs existants
@@ -254,11 +269,15 @@ class ShopifyProductDataQueueEpt(models.Model):
             
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
+            if category:
+                product.categ_id = category.id
         else:
             _logger.info("Conflict")
             product = product[0]
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
+            if category:
+                product.categ_id = category.id
         
         _logger.info(f"product : {product}")
         self.import_shopify_product_image(product, shopify_product.default_image_url)
@@ -390,6 +409,6 @@ class ShopifyProductDataQueueEpt(models.Model):
 
         return order_queue_list
     
-    
+
     
         
