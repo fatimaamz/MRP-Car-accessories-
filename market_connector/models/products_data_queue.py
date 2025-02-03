@@ -152,22 +152,13 @@ class ShopifyProductDataQueueEpt(models.Model):
 
     def process_check_matching_in_batch(self):
         """Process check matching for multiple records"""
-        records = self.search([
-            ('is_process_queue', '=', False),  # Not already processing
-            '|',  # OR condition for the following criteria
-            ('product_id.active', '=', True),  # Product is active
-            ('product_id', '=', False)  # Or no product is linked yet
-        ])
-        
-        for record in records:
+        for record in self:
             try:
-                record.is_process_queue = True
                 record.check_matching()
                 self._cr.commit()
+
             except Exception as e:
                 _logger.error(f"Error processing record {record.name}: {str(e)}")
-            finally:
-                record.is_process_queue = False
                 self._cr.commit()
             
     
