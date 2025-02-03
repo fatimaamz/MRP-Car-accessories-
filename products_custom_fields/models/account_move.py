@@ -113,7 +113,7 @@ class AccountMove(models.Model):
             numbers_section = f"0000{qty}{nci_cost}{dnet_total}{transport}{gst_tax}{pst_tax}D"
             
             # Combine sections with proper spacing
-            line_data = f"{dealer_and_invoice} {date_and_item} {numbers_section}\n"
+            line_data = f"{dealer_and_invoice}          {date_and_item}         {numbers_section}\n"
             
             file.write(line_data)
 
