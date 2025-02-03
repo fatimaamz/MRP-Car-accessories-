@@ -97,7 +97,7 @@
                                     <span>Téléphone : <t t-esc="docs[0].partner_shipping_id.phone"/></span>
                                 </t>
                                 <br/><br/>
-                                <span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date"/></span>
+                                <span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date.date() if docs[0].picking_scheduled_date else ''"/></span>
                             </td>
 
                             <!-- Order Details -->
@@ -147,7 +147,7 @@
                                     </td>
                                     <td style="padding: 12px; border: 1px solid #f9fafb;">
                                         <strong>N° : <t t-esc="wo['name']"/></strong><br/>
-                                        Date : <t t-esc="wo['date'] or ''"/><br/>
+                                        Date : <t t-esc="wo['date'].date() if wo['date'] else ''"/><br/>
                                         Coupé : <t t-esc="wo['couper']"/><br/>
                                         Placé : <t t-esc="wo['placer']"/>
                                     </td>

@@ -103,7 +103,7 @@
                                     <span>Téléphone : <t t-esc="docs[0].partner_shipping_id.phone"/></span>
                                 </t>
                                 <br/><br/>
-                                <span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date"/></span>
+                                <span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date.date() if docs[0].picking_scheduled_date else ''"/></span>
                             </td>
 
                         </tr>
@@ -115,7 +115,7 @@
                         <tr>
                             <td style="width: 33%; padding: 10px; vertical-align: top; border: 1px solid #f9fafb;">
                                 <strong>Production</strong><br/>
-                                Date de production : <t t-esc="doc.date_start"/><br/>
+                                Date de production : <t t-esc="doc.date_start.date() if doc.date_start else ''"/><br/>
                                 Coupé : <t t-esc="'Oui' if doc.is_coped else 'Non'"/><br/>
                                 Placé : <t t-esc="'Oui' if doc.place_status=='place' else 'Non'"/>
                             </td>

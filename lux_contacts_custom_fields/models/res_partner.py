@@ -1,4 +1,3 @@
-
 from odoo import api, fields, models,_
 import re
 from datetime import datetime
@@ -58,6 +57,8 @@ class MrpProduction(models.Model):
         ('yes', 'Oui'),
         ('no', 'Non')
     ], string='Installation Required', default='no')
+
+    reflector_type = fields.Char(string="Reflector Type")
 
     #picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     #picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
