@@ -136,6 +136,7 @@ class MrpProduction(models.Model):
         'product.image',
         string="Selected Image",
         domain="[('product_id', '=', product_id)]",
+        ondelete='set null',
         help="Select an image for this production."
     )
     
