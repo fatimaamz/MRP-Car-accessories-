@@ -16,6 +16,7 @@
                 <field name="is_match_style" readonly="1"/>
                 <field name="is_match_model" readonly="1"/>
                 <field name="product_id"/>
+                <field name="is_process_queue"/>
                 <button name="check_matching_action" string="Check Matching" type="object" class="oe_highlight"/>
             </tree>
         </field>
@@ -63,5 +64,17 @@
         <field name="res_model">merket.connector.products.data.queue</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="action_shopify_queue_product_tree"/>
+    </record>
+
+    <!-- Action serveur pour le traitement en masse -->
+    <record id="action_process_check_matching_batch" model="ir.actions.server">
+        <field name="name">Process Check Matching</field>
+        <field name="model_id" ref="model_merket_connector_products_data_queue"/>
+        <field name="binding_model_id" ref="model_merket_connector_products_data_queue"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                records.process_check_matching_in_batch()
+        </field>
     </record>
 </odoo>
