@@ -153,7 +153,11 @@ class ShopifyProductDataQueueEpt(models.Model):
     
     def check_matching(self):
         produc_product = self.env['product.product']
-        products = produc_product.search([("name", "=", self.shopify_reference)])
+        # Search only by default_code and exclude archived products
+        products = produc_product.search([
+            ("default_code", "=", self.shopify_reference),
+            ("active", "=", True)
+        ])
         result = f'check ref : {len(products)}\n'
 
         if len(products) > 0:
@@ -163,7 +167,6 @@ class ShopifyProductDataQueueEpt(models.Model):
             if len(products_model) > 0:
                 self.is_match_model = True
                 products = products_model
-
 
             products_brand = products.filtered(lambda p: self.brand in p.product_template_variant_value_ids.mapped('name'))
             result += f'Brand : {len(products_brand)}/{len(products)}\n'
