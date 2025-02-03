@@ -19,5 +19,5 @@
     ],
     "installable": True,
     "application": False,
-    
+    'version': '17.0.1.0',
 }
