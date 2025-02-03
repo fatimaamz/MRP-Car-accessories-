@@ -160,7 +160,15 @@ class ShopifyProductDataQueueEpt(models.Model):
         ])
         result = f'check ref : {len(products)}\n'
 
-        if len(products) > 0:
+        if len(products) == 0:
+            # Use existing matching_product_product method if no product found
+            try:
+                product = self.matching_product_product(self)
+                result += "New product created successfully"
+            except Exception as e:
+                result += f"Error creating product: {str(e)}"
+        else:
+            # Existing matching logic for found products
             self.is_match_name = True
             products_model = products.filtered(lambda p: self.model in p.product_template_variant_value_ids.mapped('name'))
             result += f'Model : {len(products_model)}/{len(products)} \n'
@@ -183,21 +191,19 @@ class ShopifyProductDataQueueEpt(models.Model):
                 if self.is_match_brand and self.is_match_model:
                     self.product_id = products[0]
                     products[0].shopify_id = self.shopify_id
-                    if not self.default_image_url and self.data :
-                        result +=f"==> No Image \n"
+                    if not self.default_image_url and self.data:
+                        result += f"==> No Image \n"
                         data_dict = json.loads(self.data)
-                        self.default_image_url = data_dict.get('image',{'src':None}).get('src')
-                        self.add_images_from_dict(products[0],data_dict.get('images',[]))
-                        result +=f"==> Url : {self.default_image_url} \n"
+                        self.default_image_url = data_dict.get('image', {'src': None}).get('src')
+                        self.add_images_from_dict(products[0], data_dict.get('images', []))
+                        result += f"==> Url : {self.default_image_url} \n"
                     check_image = self.import_shopify_product_image(products[0], self.default_image_url)
                     if self.default_image_url:
                         return False
-                    result +=f"Sync Image : {check_image}\n"
+                    result += f"Sync Image : {check_image}\n"
                     result += "Done"
                 else:
                     result += "No matching Brand or Model"
-            elif len(products) == 0:
-                result += "Not Found"
             else:
                 result += "Conflict"
 
