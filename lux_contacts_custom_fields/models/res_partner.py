@@ -54,7 +54,19 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
   
+    picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
+    picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
+
     
+    @api.depends('origin')  
+    def _compute_picking_id(self):
+        for production in self:
+            picking = self.env['stock.picking'].search([
+                ('origin', '=', production.origin),  
+                ('state', 'not in', ['cancel'])
+            ], limit=1)
+
+            production.picking_id = picking.id if picking else False
   
     #picking_num = fields.Many2one(
         #comodel_name='stock.picking',
@@ -63,11 +75,11 @@ class MrpProduction(models.Model):
         
     #)
 
-    tracking_number = fields.Char(
-        string="Tracking Number",
-        related="picking_id.numero_suivi",
+    #tracking_number = fields.Char(
+        #string="Tracking Number",
+        #related="picking_id.numero_suivi",
        
-    )
+    #)
 
     #@api.depends('origin')
     #def _compute_picking_id(self):
@@ -88,19 +100,7 @@ class MrpProduction(models.Model):
 
     reflector_type = fields.Char(string="Reflector Type")
 
-    picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
-    picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
-
-    
-    @api.depends('origin')  
-    def _compute_picking_id(self):
-        for production in self:
-            picking = self.env['stock.picking'].search([
-                ('origin', '=', production.origin),  
-                ('state', 'not in', ['cancel'])
-            ], limit=1)
-
-            production.picking_id = picking.id if picking else False
+   
 
     work_order_multi = fields.Char(
         string="Work Order Multi",
