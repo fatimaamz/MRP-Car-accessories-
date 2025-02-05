@@ -208,6 +208,11 @@ class MrpProduction(models.Model):
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
     is_coped= fields.Boolean(string="Coupé", compute="_compute_is_coped")
 
+    product_ref = fields.Char(string="Reference", compute="_compute_product_ref", store=True)
+    product_model = fields.Char(string="Model", compute="_compute_product_ref", store=True)
+    product_brand = fields.Char(string="Brand", compute="_compute_product_ref", store=True)
+    product_style = fields.Char(string="Style", compute="_compute_product_ref", store=True)
+
     @api.depends('origin')
     def _compute_sale_order(self):
         for record in self:
@@ -278,98 +283,30 @@ class MrpProduction(models.Model):
                 production.shopify_instance_id = sale_order.shopify_instance_id
             else:
                 production.shopify_instance_id = False
-    """
-    @api.depends('selected_characteristics')
-    def _compute_color(self):
+
+    @api.depends('product_id.name')
+    def _compute_product_ref(self):
         for record in self:
-            text = record.selected_characteristics or ''
-
-            # Extract main color, ignoring "No Color"
-            main_color_match = re.search(r'MAIN COLOR: ([\w\s]+)', text)
-            main_color = main_color_match.group(1) if main_color_match and "No Color" not in main_color_match.group(1) else ''
-            
-            # Extract carbon code
-            carbon_code_match = re.search(r'CARBON CODE: ([\w\s]+)', text)
-            carbon_code = carbon_code_match.group(1) if carbon_code_match else ''
-            
-            # Extract paint code
-            paint_code_match = re.search(r'PAINT CODE: ([\w\s]+)', text)
-            paint_code = paint_code_match.group(1) if paint_code_match else ''
-            
-            # Extract insert color
-            insert_color_match = re.search(r'INSERT COLOR: ([\w\s]+)', text)
-            insert_color = insert_color_match.group(1) if insert_color_match else ''
-            
-            # Extract interior color (fixing the mistake in the provided example)
-            interior_color_match = re.search(r'INTERIOR COLOR: ([\w\s]+)', text)
-            interior_color = interior_color_match.group(1) if interior_color_match else ''
-
-            # Concatenate all colors into one field, ignoring empty values
-            color_info = []
-            if main_color:
-                color_info.append(f"Main Color: {main_color}")
-            if carbon_code:
-                color_info.append(f"Carbon Code: {carbon_code}")
-            if paint_code:
-                color_info.append(f"Paint Code: {paint_code}")
-            if insert_color:
-                color_info.append(f"Insert Color: {insert_color}")
-            if interior_color:
-                color_info.append(f"Interior Color: {interior_color}")
-
-            # Join all color information into a single string
-            record.color = ', '.join(color_info) if color_info else 'No Color Information Available'
-
-        """
-
-
-    @api.depends('selected_characteristics')
-    def _compute_year(self):
-        for record in self:
-            text = record.selected_characteristics or ''
-            match = re.search(r'Année:\s*(.+?)(?:\n|$)', text)
-            record.year = match.group(1).strip() if match else ''
-        
-    @api.depends('selected_characteristics')
-    def _compute_color(self):
-        for record in self:
-            text = record.selected_characteristics or ''
-    
-            # Extract main color, ignoring "No Color"
-            main_color_match = re.search(r'MAIN COLOR: ([\w\s]+)', text)
-            main_color = main_color_match.group(1) if main_color_match and "No Color" not in main_color_match.group(1) else ''
-            
-            # Extract carbon code, ignoring "None"
-            carbon_code_match = re.search(r'CARBON CODE: ([\w\s]+)', text)
-            carbon_code = carbon_code_match.group(1) if carbon_code_match and "None" not in carbon_code_match.group(1) else ''
-            
-            # Extract paint code, ignoring "None"
-            paint_code_match = re.search(r'PAINT CODE: ([\w\s]+)', text)
-            paint_code = paint_code_match.group(1) if paint_code_match and "None" not in paint_code_match.group(1) else ''
-            
-            # Extract insert color, ignoring "No insert"
-            insert_color_match = re.search(r'INSERT COLOR: ([\w\s]+)', text)
-            insert_color = insert_color_match.group(1) if insert_color_match and "No insert" not in insert_color_match.group(1) else ''
-            
-            # Extract interior color, ignoring "No Color"
-            interior_color_match = re.search(r'INTERIOR COLOR: ([\w\s]+)', text)
-            interior_color = interior_color_match.group(1) if interior_color_match and "No Color" not in interior_color_match.group(1) else ''
-    
-            # Concatenate all colors into one field, ignoring empty values
-            color_info = []
-            if main_color:
-                color_info.append(f"Main Color: {main_color}")
-            if carbon_code:
-                color_info.append(f"Carbon Code: {carbon_code}")
-            if paint_code:
-                color_info.append(f"Paint Code: {paint_code}")
-            if insert_color:
-                color_info.append(f"Insert Color: {insert_color}")
-            if interior_color:
-                color_info.append(f"Interior Color: {interior_color}")
-    
-            # Join all color information into a single string
-            record.color = ', '.join(color_info) if color_info else ''
+            if record.product_id and record.product_id.name:
+                # Extract the reference part (everything before the space)
+                ref_match = re.match(r'^#?([^\s]+)\s*\((.*?)\)$', record.product_id.name)
+                if ref_match:
+                    record.product_ref = ref_match.group(1)
+                    # Split the components inside parentheses
+                    components = [x.strip() for x in ref_match.group(2).split(',')]
+                    record.product_model = components[0] if len(components) > 0 else ''
+                    record.product_brand = components[1] if len(components) > 1 else ''
+                    record.product_style = components[2] if len(components) > 2 else ''
+                else:
+                    record.product_ref = ''
+                    record.product_model = ''
+                    record.product_brand = ''
+                    record.product_style = ''
+            else:
+                record.product_ref = ''
+                record.product_model = ''
+                record.product_brand = ''
+                record.product_style = ''
 
     @api.model
     def create(self, vals):
