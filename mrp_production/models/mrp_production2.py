@@ -258,7 +258,7 @@ class MrpProduction(models.Model):
                 ('state', 'not in', ['cancel'])
             ], limit=1)
 
-            production.picking_id = picking.id if picking else False
+            production.picking_id = picking if picking else False
 
 
  
