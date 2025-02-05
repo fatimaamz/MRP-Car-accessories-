@@ -102,8 +102,7 @@
                                 </t>
                                 <br/><br/>
                                 <!--<span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date.date() if docs[0].picking_scheduled_date else ''"/></span>-->
-                                <span>Must Ship By: <t t-esc="docs[0].picking_scheduled_date and docs[0].picking_scheduled_date.strftime('%Y-%m-%d') or ''"/></span>
-
+                                
                             </td>
 
                             <!-- Order Details -->
