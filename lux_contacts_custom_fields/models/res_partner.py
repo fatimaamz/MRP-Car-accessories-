@@ -54,18 +54,14 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
   
-    tracking = fields.Char(
-        string='Numéro de tracking',
-        related='picking_id.numero_suivi',
-        store=True,
-    )
+    
   
     picking_id = fields.Many2one(
         comodel_name='stock.picking',
         string="Delivery Order",
         compute='_compute_picking_id',
         store=True,
-        help="The delivery order linked to this invoice."
+        help="The delivery order linked to this FO."
     )
 
     @api.depends('origin')
@@ -82,7 +78,12 @@ class MrpProduction(models.Model):
 
 
     
-
+    tracking = fields.Char(
+        string='Numéro de tracking',
+        related='picking_id.numero_suivi',
+        store=True,
+    )
+    
     installation = fields.Selection([
         ('yes', 'Oui'),
         ('no', 'Non')
