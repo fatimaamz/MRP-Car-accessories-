@@ -188,10 +188,11 @@ class AccountMove(models.Model):
                     record_data = {
                         'BILL': str(invoice.partner_id.dealer_code or "").zfill(5),
                         'PART': default_code[:16].ljust(16),  # Now safe even if default_code was False
-                        'space': " " * 5,
-                        'ORDD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Optional, A(8)
+                        'space': " " * 3,
+                        '0' : "0" * 8,
                         'SHPD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Required, A(8)
                         'INV': invoice.name[:12].ljust(12),  # Required, A(12)
+                        'space': " " * 6,
                         'QTY': str(int(line.quantity)).zfill(7),  # Required, N(7)
                         'PRCE': str(unit_price).zfill(7),  # Required, N(7)
                         'AMNT': str(subtotal).zfill(11),  # Required, N(11)
@@ -199,8 +200,9 @@ class AccountMove(models.Model):
                         'GST': str(gst_amount).zfill(7),  # Required, N(7)
                         'TOTL': str(total).zfill(11),  # Required, N(11)
                         'WGHT': str(weight).zfill(9),  # Optional, N(9)
-                        'space': " " * 5,
-                        'FRGT$': str(freight).zfill(9),  # Optional, N(9)
+                        'space': " " * 39,
+                        # 'FRGT$': str(freight).zfill(9),  # Optional, N(9)
+                        'ORDD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Optional, A(8)
                         'CARR': "X" * 30,  # Optional, A(30)
                         'ORDR': (invoice.invoice_origin or "0").ljust(9),  # Optional, A(9)
                         'INVD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Required, A(8)
