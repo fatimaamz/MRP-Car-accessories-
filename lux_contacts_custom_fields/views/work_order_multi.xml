@@ -93,9 +93,9 @@
                                     <t t-esc="docs[0].partner_shipping_id.email"/>
                                 </t>
                                 <br/>
-                                 <t>
+                                <!-- <t>
                                     <span>Tracking number: <t t-esc="docs[0].tracking_id.numero_suivi"/></span>
-                                </t>
+                                </t>-->
                                 <br/>
                                 <t t-if="docs[0].partner_shipping_id.phone">
                                     <span>Téléphone : <t t-esc="docs[0].partner_shipping_id.phone"/></span>
