@@ -60,21 +60,20 @@ class MrpProduction(models.Model):
         comodel_name='stock.picking',
         string="Delivery Order",
         compute='_compute_picking_id',
-        store=True,
+        
     )
 
     tracking_number = fields.Char(
         string="Tracking Number",
         related="picking_num.numero_suivi",
-        store=True,
+       
     )
 
     @api.depends('origin')
     def _compute_picking_id(self):
-        """Find the delivery order (stock.picking) linked to this MO."""
         for record in self:
             if record.origin:
-                record.picking_id = self.env['stock.picking'].search([
+               record.picking_num = self.env['stock.picking'].search([
                     ('origin', '=', record.origin),
                     ('state', '!=', 'cancel')
                 ], limit=1)
