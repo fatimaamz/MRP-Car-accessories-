@@ -75,11 +75,11 @@ class MrpProduction(models.Model):
         
     #)
 
-    #tracking_number = fields.Char(
-        #string="Tracking Number",
-        #related="picking_id.numero_suivi",
+    tracking_nmr = fields.Char(
+        string="Tracking Number",
+        related="picking_id.numero_suivi",
        
-    #)
+    )
 
     #@api.depends('origin')
     #def _compute_picking_id(self):
