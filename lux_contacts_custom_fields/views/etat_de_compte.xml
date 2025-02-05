@@ -83,9 +83,9 @@
                             
                       <t t-set="min_date" t-value="min(docs.mapped('invoice_date')) if docs else False"/>
                       <t t-set="max_date" t-value="max(docs.mapped('invoice_date')) if docs else False"/>
-               
-                     <p><strong>Période : </strong>du <t t-esc="min_date or 'N/A'"/> au <t t-esc="max_date or 'N/A'"/></p>
                      <p><strong>Client :</strong> <t t-esc="docs[0].partner_id.name"/></p>
+                     <p><strong>Période : </strong>du <t t-esc="min_date or 'N/A'"/> au <t t-esc="max_date or 'N/A'"/></p>
+                     
 
 
                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 12px;">
@@ -147,7 +147,7 @@
                     </t>    
                 </table>
                     <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
-                                    <strong> Solde dû / Amount due : $<t t-esc="sum(docs.mapped('amount_total'))"/></strong>
+                                    <strong> Solde dû / Amount due : $<t t-esc="format(sum(docs.mapped('amount_total')), '.2f')"/></strong>
                    </div>
                     </main>
                 
