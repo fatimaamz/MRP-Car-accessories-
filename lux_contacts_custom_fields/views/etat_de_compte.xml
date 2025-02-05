@@ -1,4 +1,5 @@
 <odoo>
+        
 <record id="view_invoice_tree_inherit_export_etat_compte" model="ir.ui.view">
         <field name="name">account.invoice.tree.inherit.export</field>
         <field name="model">account.move</field>
