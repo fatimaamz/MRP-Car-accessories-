@@ -94,7 +94,7 @@
                                 </t>
                                 <br/>
                                  <t>
-                                    <span>Tracking number : <t t-esc="docs[0].tracking"/></span>
+                                    <span>Tracking number :<t t-esc="docs[0].picking_id"/> <t t-esc="docs[0].tracking"/></span>
                                 </t>
                                 <br/>
                                 <t t-if="docs[0].partner_shipping_id.phone">
