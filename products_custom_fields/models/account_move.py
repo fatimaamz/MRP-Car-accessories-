@@ -188,6 +188,7 @@ class AccountMove(models.Model):
                     record_data = {
                         'BILL': str(invoice.partner_id.dealer_code or "").zfill(5),
                         'PART': default_code[:16].ljust(16),  # Now safe even if default_code was False
+                        'space': " " * 5,
                         'ORDD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # Optional, A(8)
                         'SHPD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # Required, A(8)
                         'INV': invoice.name[:12].ljust(12),  # Required, A(12)
@@ -198,15 +199,14 @@ class AccountMove(models.Model):
                         'GST': str(gst_amount).zfill(7),  # Required, N(7)
                         'TOTL': str(total).zfill(11),  # Required, N(11)
                         'WGHT': str(weight).zfill(9),  # Optional, N(9)
+                        'space': " " * 5,
                         'FRGT$': str(freight).zfill(9),  # Optional, N(9)
-                        'CARR': (invoice.carrier_id.name or "").ljust(30),  # Optional, A(30)
-                        'ORDR': (invoice.invoice_origin or "").ljust(9),  # Optional, A(9)
+                        'CARR': ("X").ljust(30),  # Optional, A(30)
+                        'ORDR': (invoice.invoice_origin or "0").ljust(9),  # Optional, A(9)
                         'INVD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else " " * 8,  # Required, A(8)
-                        'DPO': (invoice.partner_id.po or "").ljust(30),  # Required, A(30)
                         'DBCR': 'D' if invoice.move_type == 'out_invoice' else 'C',  # Required, A(1)
-                        'WAR': ' ',  # Required, A(1)
-                        'CRDT': invoice.create_date.strftime('%Y%m%d') if invoice.create_date else " " * 8,  # Optional, A(8)
-                        'ERR': " " * 30  # Optional, A(30)
+                        'DESC': (" ").ljust(30),  # Optional, A(30)
+                        'DPO': (" ").ljust(30),  # Required, A(30)
                     }
                     
                     line_data = ''.join(record_data.values()) + '\n'

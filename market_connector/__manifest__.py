@@ -25,6 +25,7 @@
         'views/product_product.xml',
         'views/menu.xml',
         'views/order_data_queue_ept.xml',
+        'views/product_views.xml',
     ],
     'images': ['static/src/description/icon.png']
 }

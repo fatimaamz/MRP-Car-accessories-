@@ -97,33 +97,53 @@ class MrpProduction(models.Model):
     )
     interior_color = fields.Char(string="Interior Color", compute="_compute_interior_color", store=True)
     insert_color = fields.Char(string="Insert Color", compute="_compute_insert_color", store=True)
+    main_color = fields.Char(string="Main Color", compute="_compute_main_color", store=True)
+    carbon_code = fields.Char(string="Carbon Code", compute="_compute_carbon_code", store=True)
+    paint_code = fields.Char(string="Paint Code", compute="_compute_paint_code", store=True)
+    year = fields.Char(string="Year", compute="_compute_year", store=True)
     
     
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
-       
-        pattern = r"Interior Color:\s*(.+?)\s*\((\w+)\)"
         for record in self:
-            match = re.search(pattern, record.selected_characteristics or '')
-            if match:
-                # Format: Color Name (Code)
-                record.interior_color = f"{match.group(1).strip()} ({match.group(2).strip()})"
-            else:
-                record.interior_color = ""
+            text = record.selected_characteristics or ''
+            match = re.search(r'INTERIOR COLOR:\s*(.+?)(?:\n|$)', text)
+            record.interior_color = match.group(1).strip() if match else ''
 
     @api.depends('selected_characteristics')
     def _compute_insert_color(self):
-        
-        pattern = r"Insert Color:\s*(.+?)\s*\((\w+)\)"
         for record in self:
-            match = re.search(pattern, record.selected_characteristics or '')
-            if match:
-                # Format: Color Name (Code)
-                record.insert_color = f"{match.group(1).strip()} ({match.group(2).strip()})"
-            else:
-                record.insert_color = ""
+            text = record.selected_characteristics or ''
+            match = re.search(r'INSERT COLOR:\s*(.+?)(?:\n|$)', text)
+            record.insert_color = match.group(1).strip() if match else ''
 
-    
+    @api.depends('selected_characteristics')
+    def _compute_main_color(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'Couleurs:\s*(.+?)(?:\n|$)', text)
+            record.main_color = match.group(1).strip() if match else ''
+
+    @api.depends('selected_characteristics')
+    def _compute_carbon_code(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'CARBON CODE:\s*(.+?)(?:\n|$)', text)
+            record.carbon_code = match.group(1).strip() if match else ''
+
+    @api.depends('selected_characteristics')
+    def _compute_paint_code(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'PAINT CODE:\s*(.+?)(?:\n|$)', text)
+            record.paint_code = match.group(1).strip() if match else ''
+
+    @api.depends('selected_characteristics')
+    def _compute_year(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'Année:\s*(.+?)(?:\n|$)', text)
+            record.year = match.group(1).strip() if match else ''
 
     product_template_id = fields.Many2one(
         related='product_id.product_tmpl_id',
@@ -307,8 +327,8 @@ class MrpProduction(models.Model):
     def _compute_year(self):
         for record in self:
             text = record.selected_characteristics or ''
-            years_match = re.search(r'Année: ([\w\s]+)', text)
-            record.years = years_match.group(1) if years_match and "None" not in years_match.group(1) else ''
+            match = re.search(r'Année:\s*(.+?)(?:\n|$)', text)
+            record.year = match.group(1).strip() if match else ''
         
     @api.depends('selected_characteristics')
     def _compute_color(self):

@@ -69,6 +69,7 @@
 	    <field name="arch" type="xml">
 		<xpath expr="//group[@name='group_extra_info']" position="inside">
 	             <field name="installation"/>
+                 <field name="reflector_type"/>
 	      </xpath>
 	    </field>
 </record>

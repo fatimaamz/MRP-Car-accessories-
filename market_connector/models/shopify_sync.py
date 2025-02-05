@@ -28,6 +28,7 @@ class ShopifySync(models.Model):
         for product in products:
             self.process_single_product(product.id)
             self._cr.commit()
+            sleep(1)
 
     def process_single_product(self, product_id):
         _logger.info("Start processing product")
@@ -56,5 +57,55 @@ class ShopifySync(models.Model):
         except Exception as e:
             _logger.error(f"Failed to retrieve order ID {order_id}: {e}")
             return None
+            
+    @api.model
+    def sync_products_batch(self, session, limit=50, page=1):
+        """
+        Synchronize products in batches
+        :param session: Shopify session
+        :param limit: Number of products per batch (default: 50)
+        :param page: Page number to fetch (default: 1)
+        """
+        _logger.info(f"Starting batch sync - Page: {page}, Limit: {limit}")
+        shopify.ShopifyResource.activate_session(session)
+        
+        try:
+            products = shopify.Product.find(limit=limit, page=page)
+            if products:
+                self._create_jobs_for_products(products)
+                self._cr.commit()
+                return len(products)  # Return number of processed products
+            return 0
+        except Exception as e:
+            _logger.error(f"Error during batch sync: {e}")
+            return 0
+
+    @api.model
+    def cron_sync_products(self, limit=50):
+        """
+        Cron job method to sync products
+        :param limit: Number of products per batch
+        """
+        credentials = self.env['shopify.credentials'].search([], limit=1)
+        if not credentials:
+            _logger.error("No Shopify credentials found")
+            return False
+
+        session = credentials.get_session()
+        page = 1
+        total_processed = 0
+
+        while True:
+            processed_count = self.sync_products_batch(session, limit, page)
+            if processed_count == 0:  # No more products to process
+                break
+                
+            total_processed += processed_count
+            _logger.info(f"Processed {total_processed} products so far")
+            page += 1
+            sleep(60)  # Respect Shopify API rate limits
+
+        _logger.info(f"Completed sync of {total_processed} products")
+        return True
             
     

@@ -100,7 +100,7 @@ class MrpProduction(models.Model):
                 'date': line.picking_scheduled_date,
                 'placer': "Oui" if line.place_status=='place' else "Non",
                 'couper': "Oui" if line.is_coped else "Non",
-                'reflector_type': line.product_id.reflecteur_type,
+                'reflector_type': line.reflecteur_type,
                 'new_design': line.new_design,
                 'logo': line.logo_inscription,
                 'insert': line.insert_color,

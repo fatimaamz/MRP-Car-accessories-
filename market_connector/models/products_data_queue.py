@@ -310,7 +310,7 @@ class ShopifyProductDataQueueEpt(models.Model):
         
         # Récupérer tous les attributs
         attributes = self.env['product.attribute'].search([
-            ('name', 'in', ['MAIN COLOR', 'CARBON CODE', 'Année'])
+            ('id', 'in', [231, 223,201,4,11, 226])
         ])
         
         for attribute in attributes:
