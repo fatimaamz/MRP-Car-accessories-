@@ -58,7 +58,7 @@ class MrpProduction(models.Model):
   
     tracking_number = fields.Char(
         string="Tracking Number",
-        related="picking_ids[0].numero_suivi",
+        related="picking_ids.numero_suivi",
         store=True
     )
             
