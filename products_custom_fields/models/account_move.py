@@ -205,7 +205,7 @@ class AccountMove(models.Model):
                         # 'FRGT$': str(freight).zfill(9),  # Optional, N(9)
                         'ORDD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Optional, A(8)
                         'CARR': "X" * 30,  # Optional, A(30)
-                        'ORDR': (invoice.invoice_origin or "0"*9).ljust(9),  # Optional, A(9)
+                        'ORDR': str(invoice.invoice_origin or "").zjust(9),  # Optional, A(9)
                         'INVD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Required, A(8)
                         'DBCR': 'D' if invoice.move_type == 'out_invoice' else 'C',  # Required, A(1)
                         'DESC': (" ").ljust(30),  # Optional, A(30)
