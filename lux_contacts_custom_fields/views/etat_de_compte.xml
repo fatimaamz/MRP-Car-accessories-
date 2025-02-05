@@ -29,10 +29,14 @@
                                     <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                         <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
                                                  style="  width: 240px;height: 35px;" alt="Company Logo"/><br/><br/>
-                                        <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
-                                            <strong>Etat des comptes</strong>
-                                        </h2>
+                                        
                                     </td>
+                                      <h2 style=" text-align: center;display: inline-block;  vertical-align: middle; margin-bottom: 0;">
+                                            <strong>Etat des comptes</strong>
+                                        </h2>  
+                                        <span style="text-align: right;float: right;">
+                                                Montréal,<t t-esc="docs[0].date_today"/>
+                                        </span>
                                     <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;">
                                         <div style="text-align: justify; width: 100%; border: 1px solid white;">
                                             <strong style="font-size: 16px;">
@@ -71,23 +75,27 @@
                                 </tr>
                             </table>
                         </div>
-
-                <p>Date du jour :
-                   <t t-esc="docs[0].date_today"/>
-                </p>
-                <!-- <p>Période : du <t t-esc="doc.filter_date_from"/> au <t t-esc="doc.filter_date_to"/></p>-->
+                      <t t-set="min_date" t-value="min(docs.mapped('invoice_date')) if docs else False"/>
+                      <t t-set="max_date" t-value="max(docs.mapped('invoice_date')) if docs else False"/>
+               
+                     <p><strong>Période : </strong>du <t t-esc="min_date or 'N/A'"/> au <t t-esc="max_date or 'N/A'"/></p>
+                     <p><strong>Client :</strong> <t t-esc="doc[0].partner_id.name"/></p>
 
 
                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                     <thead>
                         <tr style=" background-color: #f7f7f7;">
 
-                            <th style="border: 1px solid #ddd; padding: 10px;">Client</th>
-                            <th style="border: 1px solid #ddd; padding: 10px;">Numéro de facture</th>
-                            <th style="border: 1px solid #ddd; padding: 10px;">Date de facture</th>
-                            <th style="border: 1px solid #ddd; padding: 10px;">Date d'échéance</th>
-                            <th style="border: 1px solid #ddd; padding: 10px;">Montant HT</th>
-                            <th style="border: 1px solid #ddd; padding: 10px;">Montant TTC</th>
+                            <!--<th style="border: 1px solid #ddd; padding: 10px;">Client</th>-->
+                            <th style="border: 1px solid #ddd; padding: 10px;">Numéro de facture<br/>Invoice</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">Commande <br/>Order</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">Date</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">Dealer</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">Ship to<br/> Expédier à</th>
+                            <th style="border: 1px solid #ddd; padding: 10px;">N° Tracking</th>
+                           <th style="border: 1px solid #ddd; padding: 10px;">Payé le <br/>Paid on</th>
+                           
+                            <th style="border: 1px solid #ddd; padding: 10px;">Total $</th>
 
                         </tr>
                     </thead>
@@ -96,21 +104,32 @@
 
                         
                         <tr>
-                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                            <!--<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                 <t t-esc="doc.partner_id.name"/>
-                            </td>
+                            </td>-->
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                 <t t-esc="doc.name"/>
+                            </td>
+                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="doc.invoice_origin"/>
                             </td>
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                 <t t-esc="doc.invoice_date"/>
                             </td>
+                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="doc.partner_id.dealer_code"/>
+                            </td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="doc.partner_shipping_id.name"/>
+                            </td>
+                           <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                <t t-esc="doc.tracking"/>
+                            </td>
+                                
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                 <t t-esc="doc.invoice_date_due"/>
                             </td>
-                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                <t t-esc="doc.amount_untaxed"/>
-                            </td>
+                          
                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                 <t t-esc="doc.amount_total"/>
                             </td>
@@ -121,7 +140,9 @@
                     </tbody>
                     </t>    
                 </table>
-                    
+                    <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
+                                    <strong> Solde dû / Amount due : $<t t-esc="sum(docs.mapped('amount_total'))"/></strong>
+                   </div>
                     </main>
                 
             </div>
