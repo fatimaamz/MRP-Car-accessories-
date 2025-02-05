@@ -68,10 +68,10 @@ class MrpProduction(models.Model):
         help="The delivery order linked to this invoice."
     )
 
-    @api.depends('invoice_origin')
+    @api.depends('origin')
     def _compute_picking_id(self):
         for record in self:
-            if record.invoice_origin:
+            if record.origin:
                 record.picking_id = self.env['stock.picking'].search([
                     ('origin', '=', record.origin),
                     ('state', '!=', 'cancel')  # Optional: Ensure it's not a canceled picking
