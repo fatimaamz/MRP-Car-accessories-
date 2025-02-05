@@ -32,12 +32,7 @@
                                                  style="  width: 240px;height: 35px;" alt="Company Logo"/><br/><br/>
                                         
                                     </td>
-                                      <h2 style=" text-align: center;display: inline-block;  vertical-align: middle; margin-bottom: 0;">
-                                            <strong>Etat des comptes</strong>
-                                        </h2>  
-                                        <span style="text-align: right;float: right;">
-                                                Montréal,<t t-esc="docs[0].date_today"/>
-                                        </span>
+                                     
                                     <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;">
                                         <div style="text-align: justify; width: 100%; border: 1px solid white;">
                                             <strong style="font-size: 16px;">
@@ -75,6 +70,12 @@
                                     </td>
                                 </tr>
                             </table>
+                                 <h2 style=" text-align: center;display">
+                                            <strong>Etat des comptes</strong>
+                                </h2>  
+                                <span style="text-align: right;float: right;">
+                                        Montréal,<t t-esc="docs[0].date_today"/>
+                                </span>
                         </div>
                       <t t-set="min_date" t-value="min(docs.mapped('invoice_date')) if docs else False"/>
                       <t t-set="max_date" t-value="max(docs.mapped('invoice_date')) if docs else False"/>
