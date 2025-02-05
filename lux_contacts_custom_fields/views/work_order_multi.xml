@@ -93,17 +93,17 @@
                                     <t t-esc="docs[0].partner_shipping_id.email"/>
                                 </t>
                                 <br/>
-                                <!-- <t>
-                                    <span>Tracking number: <t t-esc="docs[0].tracking_id.numero_suivi"/></span>
-                                </t>-->
+                                <t>
+                                    <span>Tracking number: <t t-esc="docs[0].tracking_nmr"/></span>
+                                </t>
                                 <br/>
                                 <t t-if="docs[0].partner_shipping_id.phone">
                                     <span>Téléphone : <t t-esc="docs[0].partner_shipping_id.phone"/></span>
                                 </t>
                                 <br/><br/>
                                 
-                               <!-- <span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date.date() if docs[0].picking_scheduled_date else ''"/></span>
-                                <span>Must Ship By : <t t-esc="docs[0].date_start if docs[0].date_start else ''"/></span>-->
+                               <span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date.date() if docs[0].picking_scheduled_date else ''"/></span>
+                              <!--   <span>Must Ship By : <t t-esc="docs[0].date_start if docs[0].date_start else ''"/></span>-->
                                 
                             </td>
 
