@@ -56,33 +56,17 @@ class MrpProduction(models.Model):
   
     
   
-    picking_id = fields.Many2one(
-        comodel_name='stock.picking',
-        string="Delivery Order",
-        compute='_compute_picking_id',
-        store=True,
-        help="The delivery order linked to this FO."
-    )
-
-    @api.depends('origin')
-    def _compute_picking_id(self):
-        for record in self:
-            if record.origin:
-                record.picking_id = self.env['stock.picking'].search([
-                    ('origin', '=', record.origin),
-                    ('state', '!=', 'cancel')  # Optional: Ensure it's not a canceled picking
-                ], limit=1)
-            else:
-                record.picking_id = False
-
-
-
-    
     tracking = fields.Char(
         string='Numéro de tracking',
-        related='picking_id.numero_suivi',
-        store=True,
+        compute='_compute_tracking',
+        store=True
     )
+
+    @api.depends('picking_ids')
+    def _compute_tracking(self):
+        for record in self:
+            record.tracking = record.picking_ids[:1].numero_suivi if record.picking_ids else False
+            
     
     installation = fields.Selection([
         ('yes', 'Oui'),
