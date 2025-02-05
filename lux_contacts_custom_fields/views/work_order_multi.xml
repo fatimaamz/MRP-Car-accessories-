@@ -101,7 +101,7 @@
                                     <span>Téléphone : <t t-esc="docs[0].partner_shipping_id.phone"/></span>
                                 </t>
                                 <br/><br/>
-                                Must Ship By : <t t-esc="docs[0].picking_scheduled_date"/></span>
+                                <span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date"/></span>
                                 <!--<span>Must Ship By : <t t-esc="docs[0].picking_scheduled_date.date() if docs[0].picking_scheduled_date else ''"/></span>-->
                                 
                             </td>
