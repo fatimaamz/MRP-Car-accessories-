@@ -88,7 +88,7 @@
                      <p><strong>Client :</strong> <t t-esc="docs[0].partner_id.name"/></p>
 
 
-                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 12px;">
                     <thead>
                         <tr style=" background-color: #f7f7f7;">
 
