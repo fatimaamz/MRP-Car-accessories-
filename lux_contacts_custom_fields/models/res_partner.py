@@ -56,16 +56,23 @@ class MrpProduction(models.Model):
   
     
   
+    first_picking_id = fields.Many2one(
+        comodel_name='stock.picking',
+        string="First Delivery Order",
+        compute='_compute_first_picking_id',
+        store=True
+    )
+
     tracking = fields.Char(
         string='Numéro de tracking',
-        compute='_compute_tracking',
+        related='first_picking_id.numero_suivi',
         store=True
     )
 
     @api.depends('picking_ids')
-    def _compute_tracking(self):
+    def _compute_first_picking_id(self):
         for record in self:
-            record.tracking = record.picking_ids[:1].numero_suivi if record.picking_ids else False
+            record.first_picking_id = record.picking_ids[:1] if record.picking_ids else False
             
     
     installation = fields.Selection([
