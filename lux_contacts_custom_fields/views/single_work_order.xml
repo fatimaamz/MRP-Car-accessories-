@@ -125,7 +125,7 @@
                                 Color : <t t-esc="doc.interior_color"/><br/>
                                 Insert : <t t-esc="doc.insert_color"/><br/>
                                 Logo : <t t-esc="doc.logo_inscription"/><br/>
-                                Reflector type : <t t-esc="doc.product_id.reflecteur_type"/>
+                                Reflector type : <t t-esc="doc.reflector_type"/>
                             </td>
                             <td style="width: 33%; padding: 10px; vertical-align: top; border: 1px solid #f9fafb;">
                                 <strong>New design :</strong><br/>

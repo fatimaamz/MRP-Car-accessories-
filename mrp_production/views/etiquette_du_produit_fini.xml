@@ -40,9 +40,7 @@
                                 <!-- Bottom Left: Marque -->
                                 <div style="text-align: left;">
                                     <strong>
-                                    <t t-if="docs.product_variant_ids and len(docs.product_variant_ids) &gt; 0">
-                                        <t t-esc="docs.product_variant_ids[0].name"/>
-                                    </t>
+                                      <t t-esc="docs.product_model or 'Type'"/>
                                     </strong>
                                 </div>
                                 
@@ -70,7 +68,7 @@
                 <!-- Part and Barcode Section -->
                 <div style="text-align: center; height: 15mm;">
                     <p style="font-size: 12px; border: 1px solid black; margin: 2mm; text-align: center;">
-                        <strong>Part: <span t-esc="docs.product_id.default_code + '-' + docs.interior_color + (('-' + docs.insert_color.split('(')[-1].strip(')')) if docs.insert_color and '(' in docs.insert_color else '') or ''"/></strong>
+                        <strong>Part: <span t-esc="docs.product_id.default_code + '-' + (docs.interior_color.split('(')[-1].strip(')') if docs.interior_color and '(' in docs.interior_color else docs.interior_color) + (('-' + docs.insert_color.split('(')[-1].strip(')')) if docs.insert_color and '(' in docs.insert_color else '') or ''"/></strong>
                     </p>
 
                     <div style="margin-top: 2mm;">
