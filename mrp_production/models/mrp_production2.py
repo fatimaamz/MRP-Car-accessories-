@@ -250,15 +250,20 @@ class MrpProduction(models.Model):
             
   
 
-    @api.depends('origin')  
+    @api.depends('origin')
     def _compute_picking_id(self):
         for production in self:
+            if not production.origin:
+                production.picking_id = False
+                continue  # On évite d'exécuter une recherche inutile
+
             picking = self.env['stock.picking'].search([
-                ('origin', '=', production.origin),  
+                ('origin', '=', production.origin),
                 ('state', 'not in', ['cancel'])
             ], limit=1)
 
             production.picking_id = picking if picking else False
+
 
 
  
