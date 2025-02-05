@@ -54,35 +54,33 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
   
-    tracking = fields.Char(
-        string='Numéro de tracking',
-        related='picking_id.numero_suivi',
-        store=True,
-    )
+    
   
-    picking_id = fields.Many2one(
+    picking_num = fields.Many2one(
         comodel_name='stock.picking',
         string="Delivery Order",
         compute='_compute_picking_id',
-        store=True,
-        help="The delivery order linked to this invoice."
+        
     )
 
-    @api.depends('invoice_origin')
+    tracking_number = fields.Char(
+        string="Tracking Number",
+        related="picking_num.numero_suivi",
+       
+    )
+
+    @api.depends('origin')
     def _compute_picking_id(self):
         for record in self:
-            if record.invoice_origin:
-                record.picking_id = self.env['stock.picking'].search([
+            if record.origin:
+               record.picking_num = self.env['stock.picking'].search([
                     ('origin', '=', record.origin),
-                    ('state', '!=', 'cancel')  # Optional: Ensure it's not a canceled picking
+                    ('state', '!=', 'cancel')
                 ], limit=1)
             else:
                 record.picking_id = False
-
-
-
+            
     
-
     installation = fields.Selection([
         ('yes', 'Oui'),
         ('no', 'Non')
