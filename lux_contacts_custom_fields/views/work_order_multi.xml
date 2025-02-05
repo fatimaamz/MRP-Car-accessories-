@@ -31,7 +31,7 @@
                         </tr>
                     </table>
                 </div>
-
+                <strong> <t t-esc="docs[0].work_order_multi"/>  </strong>
                 <!-- Customer, Ship To, and Order Details -->
                 <div style="margin-top: 30px;">
                     <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
