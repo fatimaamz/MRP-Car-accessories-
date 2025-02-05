@@ -65,11 +65,11 @@ class MrpProduction(models.Model):
 
     tracking_number = fields.Char(
         string="Tracking Number",
-        related=" picking_id.numero_suivi",
+        related="picking_id.numero_suivi",
        
     )
 
-     #@api.depends('origin')
+    #@api.depends('origin')
     #def _compute_picking_id(self):
         #for record in self:
             #if record.origin:
