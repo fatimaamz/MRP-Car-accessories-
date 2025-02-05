@@ -75,10 +75,11 @@
 
                        <h2 style=" text-align: center;display">
                                             <strong>Etat des comptes</strong>
-                                </h2>  
-                                <span style="text-align: right;float: right;">
+                        </h2>  <br/><br/>
+                        <span style="text-align: right;float: right;">
                                         Montréal,<t t-esc="docs[0].date_today"/>
-                                </span>
+                        </span>
+                        <br/><br/>
                             
                       <t t-set="min_date" t-value="min(docs.mapped('invoice_date')) if docs else False"/>
                       <t t-set="max_date" t-value="max(docs.mapped('invoice_date')) if docs else False"/>
