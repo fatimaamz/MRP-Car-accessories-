@@ -72,7 +72,7 @@ class MrpProduction(models.Model):
     @api.depends('picking_ids')
     def _compute_first_picking_id(self):
         for record in self:
-            record.first_picking_id = record.picking_ids[:1] if record.picking_ids else False
+            record.first_picking_id = record.picking_ids[:1].id if record.picking_ids else False
             
     
     installation = fields.Selection([
