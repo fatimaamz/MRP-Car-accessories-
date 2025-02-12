@@ -85,7 +85,7 @@ class StockMove(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-
+    
     new_design = fields.Selection(
         [
             ('requis', 'Requis'),
@@ -159,6 +159,19 @@ class MrpProduction(models.Model):
         ondelete='set null',
         help="Select an image for this production."
     )
+    
+    @api.model
+    def default_get(self, fields_list):
+        """Set the default image as the first image of the selected product."""
+        defaults = super(MrpProduction, self).default_get(fields_list)
+        if 'product_id' in defaults:
+            product_id = defaults['product_id']
+            first_image = self.env['product.image'].search(
+                [('product_id', '=', product_id)], limit=1, order="id asc"
+            )
+            if first_image:
+                defaults['product_image_id'] = first_image.id
+        return defaults
     
   
     selected_image = fields.Image(
