@@ -159,7 +159,7 @@ class MrpProduction(models.Model):
         ondelete='set null',
         compute='_compute_product_image_id',  # Computed field
         inverse='_inverse_product_image_id',
-       
+        store=True,
         help="Select an image for this production."
     )
     
@@ -169,9 +169,9 @@ class MrpProduction(models.Model):
         for record in self:
             if record.product_id:
                 first_image = self.env['product.image'].search(
-                    [('product_id', '=', record.product_id.id)], limit=1
+                    [('product_id', '=', record.product_id.id)]
                 )
-                record.product_image_id = first_image.id if first_image else False
+                record.product_image_id = first_image[0].id if first_image else False
                 
                
     def _inverse_product_image_id(self):
