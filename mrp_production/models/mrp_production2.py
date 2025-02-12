@@ -160,18 +160,38 @@ class MrpProduction(models.Model):
         help="Select an image for this production."
     )
     
+    @api.onchange('product_id')
+    def _onchange_product_id_set_image(self):
+        """Set the first product image automatically when product_id changes."""
+        if self.product_id:
+            self.product_image_id = self._get_first_product_image()
+
+    def _get_first_product_image(self):
+        """Fetch the first image of the product, if available."""
+        return self.env['product.image'].search(
+            [('product_id', '=', self.product_id.id)], limit=1, order="id asc"
+        ).id
+
     @api.model
-    def default_get(self, fields_list):
-        """Set the default image as the first image of the selected product."""
-        defaults = super(MrpProduction, self).default_get(fields_list)
-        if 'product_id' in defaults:
-            product_id = defaults['product_id']
-            first_image = self.env['product.image'].search(
-                [('product_id', '=', product_id)], limit=1, order="id asc"
-            )
-            if first_image:
-                defaults['product_image_id'] = first_image.id
-        return defaults
+    def create(self, vals):
+        """Ensure product_image_id is set when creating a record."""
+        if 'product_id' in vals and 'product_image_id' not in vals:
+            product = self.env['product.product'].browse(vals['product_id'])
+            vals['product_image_id'] = self.env['product.image'].search(
+                [('product_id', '=', product.id)], limit=1, order="id asc"
+            ).id or False
+        return super(MrpProduction, self).create(vals)
+
+    def write(self, vals):
+        """Ensure product_image_id updates when product_id changes."""
+        for record in self:
+            if 'product_id' in vals and 'product_image_id' not in vals:
+                product = self.env['product.product'].browse(vals['product_id'])
+                vals['product_image_id'] = self.env['product.image'].search(
+                    [('product_id', '=', product.id)], limit=1, order="id asc"
+                ).id or False
+        return super(MrpProduction, self).write(vals)
+        
     
   
     selected_image = fields.Image(
