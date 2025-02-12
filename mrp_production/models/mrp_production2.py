@@ -175,12 +175,13 @@ class MrpProduction(models.Model):
     @api.model
     def create(self, vals):
         """Ensure product_image_id is set when creating a record."""
-        if 'product_id' in vals and 'product_image_id' not in vals:
-            product = self.env['product.product'].browse(vals['product_id'])
-            vals['product_image_id'] = self.env['product.image'].search(
-                [('product_id', '=', product.id)], limit=1, order="id asc"
-            ).id or False
-        return super(MrpProduction, self).create(vals)
+        res = super(MrpProduction, self).create(vals)
+
+        # Ensure product_image_id is set after creation (for cases like SO -> MO)
+        for record in res:
+            if record.product_id and not record.product_image_id:
+                record.product_image_id = record._get_first_product_image(record.product_id.id)
+        return res
 
     def write(self, vals):
         """Ensure product_image_id updates when product_id changes."""
