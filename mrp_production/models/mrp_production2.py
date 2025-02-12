@@ -177,8 +177,7 @@ class MrpProduction(models.Model):
         """Inverse method to set the product image manually."""
         for record in self:
             if record.product_image_id:
-                # Here we don't need to do anything extra, as the user manually selects the image
-                pass
+                continue
             else:
                 # If no image is selected, clear the product_image_id
                 record.product_image_id = False
