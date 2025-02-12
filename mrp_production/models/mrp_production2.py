@@ -183,27 +183,7 @@ class MrpProduction(models.Model):
                 # If no image is selected, clear the product_image_id
                 record.product_image_id = False
 
-    @api.model
-    def create(self, vals):
-        """Ensure product_image_id is set when creating a record."""
-        if 'product_id' in vals and 'product_image_id' not in vals:
-            product_id = vals.get('product_id')
-            first_image = self.env['product.image'].search(
-                [('product_id', '=', product_id)], limit=1
-            )
-            vals['product_image_id'] = first_image.id if first_image else False
-        return super(MrpProduction, self).create(vals)
-
-    def write(self, vals):
-        """Ensure product_image_id is updated when product_id changes."""
-        for record in self:
-            if 'product_id' in vals and not vals.get('product_image_id'):
-                product_id = vals['product_id']
-                first_image = self.env['product.image'].search(
-                    [('product_id', '=', product_id)], limit=1
-                )
-                vals['product_image_id'] = first_image.id if first_image else False
-        return super(MrpProduction, self).write(vals)
+    
         
     
   
