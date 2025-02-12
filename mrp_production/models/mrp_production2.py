@@ -186,10 +186,18 @@ class MrpProduction(models.Model):
   
     selected_image = fields.Image(
         string="Image",
-        related='product_image_id.image',
+        compute="_onchange_product_image_id",
         
         help="Image selected for this production."
     )
+
+    @api.onchange('product_image_id')
+    def _onchange_product_image_id(self):
+        """Trigger UI refresh when product_image_id is changed."""
+        for record in self:
+            # Log the selected image to ensure the change is captured
+            if record.product_image_id:
+                record.selected_image = record.product_image_id.image
 
     product_qty = fields.Float(string='Quantité', digits=(16, 0))
     note_interne = fields.Text(string="Note")
