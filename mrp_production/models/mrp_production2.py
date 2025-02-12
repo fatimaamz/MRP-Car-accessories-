@@ -159,7 +159,7 @@ class MrpProduction(models.Model):
         ondelete='set null',
         compute='_compute_product_image_id',  # Computed field
         inverse='_inverse_product_image_id',
-        store=True ,
+       
         help="Select an image for this production."
     )
     
