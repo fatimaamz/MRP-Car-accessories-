@@ -173,10 +173,11 @@ class MrpProduction(models.Model):
                 )
                 record.product_image_id = first_image.id if first_image else False
                 
+               
     def _inverse_product_image_id(self):
         """Inverse method to set the product image manually."""
         for sale in self:
-            if not(sale.product_id):
+            if sale.product_id:
                 continue
 
     
@@ -186,7 +187,7 @@ class MrpProduction(models.Model):
     selected_image = fields.Image(
         string="Image",
         related='product_image_id.image',
-        store=True,
+        
         help="Image selected for this production."
     )
 
