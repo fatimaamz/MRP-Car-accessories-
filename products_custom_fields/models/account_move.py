@@ -187,9 +187,10 @@ class AccountMove(models.Model):
                     
                     record_data = {
                         'BILL': str(invoice.partner_id.dealer_code or "0").zfill(5),
-                        'PART': default_code[:13].ljust(13),  # Now safe even if default_code was False
+                        'PART': default_code.replace("#", "")[:13].ljust(13),  # Now safe even if default_code was False
                         'space_3': " " * 3,
-                        '0' : "0" * 8,
+                        
+                        '0_8' : "0" * 8,
                         'SHPD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Required, A(8)
                         'INV': invoice.name[:12].ljust(12),  # Required, A(12)
                         'space_6': " " * 6,
@@ -201,22 +202,24 @@ class AccountMove(models.Model):
                         'GST': str(gst_amount).zfill(7),  # Required, N(7)
                         'TOTL': str(total).zfill(11),  # Required, N(11)
                         'WGHT': str(weight).zfill(9),  # Optional, N(9)
+                        '0_9' : "0" * 8,
                         'space_39': " " * 39,
                         # 'FRGT$': str(freight).zfill(9),  # Optional, N(9)
                         'ORDD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Optional, A(8)
                         'CARR': "X" * 30,  # Optional, A(30)
-                        'ORDR': str(invoice.invoice_origin or "").zfill(9),  # Optional, A(9)
+                        'ORDR': str(invoice.invoice_origin or "").zfill(11),  # Optional, A(9)
                         'INVD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Required, A(8)
+                        '0_13' : "0" * 13,
                         'DBCR': 'D' if invoice.move_type == 'out_invoice' else 'C',  # Required, A(1)
                         'DESC': (" ").ljust(30),  # Optional, A(30)
                         'DPO': (" ").ljust(30),  # Required, A(30)
                     }
                     
-                    record_string = f"{record_data['BILL']}{record_data['PART']}{record_data['space_3']}{record_data['0']}" \
+                    record_string = f"{record_data['BILL']}{record_data['PART']}{record_data['space_3']}{record_data['0_8']}" \
                                     f"{record_data['SHPD']}{record_data['INV']}{record_data['space_6']}{record_data['QTY']}" \
                                     f"{record_data['PRCE']}{record_data['AMNT']}{record_data['PSTQST']}{record_data['GST']}" \
-                                    f"{record_data['TOTL']}{record_data['WGHT']}{record_data['space_39']}{record_data['ORDD']}" \
-                                    f"{record_data['CARR']}{record_data['ORDR']}{record_data['INVD']}{record_data['DBCR']}" \
+                                    f"{record_data['TOTL']}{record_data['WGHT']}{record_data['0_9']}{record_data['space_39']}{record_data['ORDD']}" \
+                                    f"{record_data['CARR']}{record_data['ORDR']}{record_data['INVD']}{record_data['0_13']}{record_data['DBCR']}" \
                                     f"{record_data['DESC']}{record_data['DPO']}\n"
 
                     file.write(record_string)

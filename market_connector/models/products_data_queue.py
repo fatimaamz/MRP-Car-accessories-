@@ -271,8 +271,8 @@ class ShopifyProductDataQueueEpt(models.Model):
                 attributes.append(shopify_product.model)
             if shopify_product.brand:
                 attributes.append(shopify_product.brand)
-            if shopify_product.style:
-                attributes.append(shopify_product.style)
+            if shopify_product.shopify_attribute:
+                attributes.append(shopify_product.shopify_attribute)
             
             product_name = f"{reference} ({','.join(attributes) if attributes else ''})"
 
