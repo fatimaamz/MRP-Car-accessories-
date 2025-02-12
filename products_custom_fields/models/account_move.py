@@ -192,7 +192,7 @@ class AccountMove(models.Model):
                         
                         '0_8' : "0" * 8,
                         'SHPD': invoice.invoice_date.strftime('%Y%m%d') if invoice.invoice_date else "0" * 8,  # Required, A(8)
-                        'INV': invoice.name[:12].ljust(12),  # Required, A(12)
+                        'INV': 'H' + invoice.name[-5:].ljust(5),  # Required, A(12)
                         'space_6': " " * 6,
                         'QTY': str(int(line.quantity)).zfill(7),  # Required, N(7)
                         'PRCE': str(unit_price).zfill(7),  # Required, N(7)
