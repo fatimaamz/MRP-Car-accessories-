@@ -157,57 +157,42 @@ class MrpProduction(models.Model):
         string="Production Image",
         domain="[('product_id', '=', product_id)]",
         ondelete='set null',
+        compute='_compute_product_image_id',  # Computed field
+        store=True ,
         help="Select an image for this production."
     )
     
-    @api.onchange('product_id')
-    def _onchange_product_id_set_image(self):
-        """Set the first product image automatically when product_id changes."""
-        if self.product_id:
-            self.product_image_id = self._get_first_product_image()
-
-    def _get_first_product_image(self):
-        """Fetch the first image of the product, if available."""
-        return self.env['product.image'].search(
-            [('product_id', '=', self.product_id.id)], limit=1, order="id asc"
-        ).id
+    @api.depends('product_id')
+    def _compute_product_image_id(self):
+        """Compute the first product image based on product_id."""
+        for record in self:
+            if record.product_id:
+                first_image = self.env['product.image'].search(
+                    [('product_id', '=', record.product_id.id)], limit=1
+                )
+                record.product_image_id = first_image.id if first_image else False
 
     @api.model
     def create(self, vals):
         """Ensure product_image_id is set when creating a record."""
-        res = super(MrpProduction, self).create(vals)
-
-        # Ensure product_image_id is set after creation (for cases like SO -> MO)
-        for record in res:
-            if record.product_id and not record.product_image_id:
-                record.product_image_id = record._get_first_product_image(record.product_id.id)
-        return res
+        if 'product_id' in vals and 'product_image_id' not in vals:
+            product_id = vals.get('product_id')
+            first_image = self.env['product.image'].search(
+                [('product_id', '=', product_id)], limit=1
+            )
+            vals['product_image_id'] = first_image.id if first_image else False
+        return super(MrpProduction, self).create(vals)
 
     def write(self, vals):
-        """Ensure product_image_id updates when product_id changes."""
+        """Ensure product_image_id is updated when product_id changes."""
         for record in self:
-            if 'product_id' in vals and 'product_image_id' not in vals:
-                product = self.env['product.product'].browse(vals['product_id'])
-                vals['product_image_id'] = self.env['product.image'].search(
-                    [('product_id', '=', product.id)], limit=1, order="id asc"
-                ).id or False
+            if 'product_id' in vals and not vals.get('product_image_id'):
+                product_id = vals['product_id']
+                first_image = self.env['product.image'].search(
+                    [('product_id', '=', product_id)], limit=1
+                )
+                vals['product_image_id'] = first_image.id if first_image else False
         return super(MrpProduction, self).write(vals)
-
-    @api.model
-    def default_get(self, default_fields):
-        """Override default_get to automatically set the first product image."""
-        defaults = super(MrpProduction, self).default_get(default_fields)
-
-        # Check if 'product_id' is in the context (needed when MO is created from SO)
-        product_id = self._context.get('default_product_id')
-        if product_id:
-            # Get the first product image related to the product_id
-            first_image = self.env['product.image'].search([('product_id', '=', product_id)], limit=1)
-            if first_image:
-                defaults['product_image_id'] = first_image.id
-
-        return defaults
-        
         
     
   
