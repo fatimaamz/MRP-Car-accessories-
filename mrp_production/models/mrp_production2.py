@@ -158,6 +158,7 @@ class MrpProduction(models.Model):
         domain="[('product_id', '=', product_id)]",
         ondelete='set null',
         compute='_compute_product_image_id',  # Computed field
+        inverse='_inverse_product_image_id',
         store=True ,
         help="Select an image for this production."
     )
@@ -171,6 +172,16 @@ class MrpProduction(models.Model):
                     [('product_id', '=', record.product_id.id)], limit=1
                 )
                 record.product_image_id = first_image.id if first_image else False
+                
+    def _inverse_product_image_id(self):
+        """Inverse method to set the product image manually."""
+        for record in self:
+            if record.product_image_id:
+                # Here we don't need to do anything extra, as the user manually selects the image
+                pass
+            else:
+                # If no image is selected, clear the product_image_id
+                record.product_image_id = False
 
     @api.model
     def create(self, vals):
