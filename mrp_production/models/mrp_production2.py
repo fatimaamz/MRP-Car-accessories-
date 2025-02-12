@@ -192,6 +192,22 @@ class MrpProduction(models.Model):
                     [('product_id', '=', product.id)], limit=1, order="id asc"
                 ).id or False
         return super(MrpProduction, self).write(vals)
+
+    @api.model
+    def default_get(self, default_fields):
+        """Override default_get to automatically set the first product image."""
+        defaults = super(MrpProduction, self).default_get(default_fields)
+
+        # Check if 'product_id' is in the context (needed when MO is created from SO)
+        product_id = self._context.get('default_product_id')
+        if product_id:
+            # Get the first product image related to the product_id
+            first_image = self.env['product.image'].search([('product_id', '=', product_id)], limit=1)
+            if first_image:
+                defaults['product_image_id'] = first_image.id
+
+        return defaults
+        
         
     
   
