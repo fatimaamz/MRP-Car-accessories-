@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-   <record id="action_account_invoice_report_wizard" model="ir.actions.act_window">
-        <field name="name">Etat des comptes</field>
-        <field name="res_model">account.invoice.report.wizard</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
-
-    <!-- Menu item under Accounting -->
-    <menuitem id="menu_account_invoice_report_root" name="Etat des comptes" parent="account_accountant.menu_accounting" 
-              action="action_account_invoice_report_wizard"/>
+  
   
     <record id="view_account_invoice_report_wizard_form" model="ir.ui.view">
         <field name="name">account.invoice.report.wizard.form</field>
@@ -30,7 +21,16 @@
             </form>
         </field>
     </record>
+     <record id="action_account_invoice_report_wizard" model="ir.actions.act_window">
+        <field name="name">Etat des comptes</field>
+        <field name="res_model">account.invoice.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 
+    <!-- Menu item under Accounting -->
+    <menuitem id="menu_account_invoice_report_root" name="Etat des comptes" parent="account_accountant.menu_accounting" 
+              action="action_account_invoice_report_wizard"/>
 
    <!--Etat de compte pdf template -->
 
