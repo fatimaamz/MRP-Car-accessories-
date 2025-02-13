@@ -57,7 +57,7 @@
                                 <th>Total $</th>
                             </tr>
                         </thead>
-                        <t t-foreach="docs" t-as="doc">
+                          <t t-foreach="data['invoices']" t-as="doc">
                             <tbody>
                                 <tr>
                                     <td><t t-esc="doc.name"/></td>
