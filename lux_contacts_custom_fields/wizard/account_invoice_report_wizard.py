@@ -11,9 +11,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
     date_start = fields.Date(string="Date De Début", required=True)
     date_end = fields.Date(string="Date De Fin", required=True)
     
-    @property
-    def date_today(self):
-        return datetime.today().strftime('%d/%m/%Y')
+   
 
     def action_print_report(self):
         if self.date_start > self.date_end:
@@ -39,6 +37,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
             'date_start': self.date_start,
             'date_end': self.date_end,
             'invoices': invoices,
+            'date_today': datetime.today().strftime('%d/%m/%Y'),
         }
         
    
