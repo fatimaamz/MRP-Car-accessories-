@@ -1,0 +1,32 @@
+<odoo>
+
+   <record id="action_account_invoice_report_wizard" model="ir.actions.act_window">
+        <field name="name">Etat des comptes</field>
+        <field name="res_model">account.invoice.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu item under Accounting -->
+    <menuitem id="menu_account_invoice_report_root" name="Etat des comptes" parent="account_accountant.menu_accounting" 
+              action="action_account_invoice_report_wizard"/>
+  
+    <record id="view_account_invoice_report_wizard_form" model="ir.ui.view">
+        <field name="name">account.invoice.report.wizard.form</field>
+        <field name="model">account.invoice.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Etat des comptes">
+                <group>
+                    <field name="company_id"/>
+                    <field name="partner_id"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" type="object" string="Print Report" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
