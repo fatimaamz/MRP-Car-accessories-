@@ -1,2 +1,2 @@
-from . import account_invoice_report_wizard.py
+from . import account_invoice_report_wizard
 
