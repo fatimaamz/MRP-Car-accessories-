@@ -38,6 +38,8 @@ class AccountInvoiceReport(models.AbstractModel):
             'data': {  # Add the wizard dates to data
                     'date_start': wizard.date_start,
                     'date_end': wizard.date_end,
+                    'partner_id':wizard.partner_id.name,
+                    'company_id':wizard.company_id.name,
                 },
             'docs': invoices,
         }
