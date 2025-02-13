@@ -16,13 +16,11 @@ class AccountInvoiceReportWizard(models.TransientModel):
     def action_print_report(self):
         if self.date_start > self.date_end:
             raise UserError("The start date must be before the end date.")
-        data = self.get_invoice_report_data()
-        return self.env.ref('lux_contacts_custom_fields.action_invoice_report').report_action(self, data=data)
-
+        #data = self.get_invoice_report_data()
+        return self.env.ref('lux_contacts_custom_fields.action_invoice_report').report_action(self)
+    """
     def get_invoice_report_data(self):
-        """
-        This method returns the data needed for the invoice report
-        """
+       
         invoices = self.env['account.move'].search([
             ('partner_id', '=', self.partner_id.id),
             ('move_type', '=', 'out_invoice'),
@@ -40,9 +38,9 @@ class AccountInvoiceReportWizard(models.TransientModel):
             'date_today': datetime.today().strftime('%d/%m/%Y'),
         }
         
-   
+   """
 
-"""
+
 class AccountInvoiceReport(models.AbstractModel):
     _name = 'report.lux_contacts_custom_fields.invoice_report_template'
     _description = "Customer Invoice Report"
@@ -69,4 +67,4 @@ class AccountInvoiceReport(models.AbstractModel):
                 },
             'docs': invoices,
         }
-"""
+
