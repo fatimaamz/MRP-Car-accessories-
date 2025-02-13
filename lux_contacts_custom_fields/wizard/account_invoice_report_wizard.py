@@ -14,7 +14,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
         if self.date_start > self.date_end:
             raise UserError("The start date must be before the end date.")
 
-        return self.env.ref('your_module_name.action_invoice_report').report_action(self)
+        return self.env.ref('lux_contacts_custom_fields.action_invoice_report').report_action(self)
 
 
 class AccountInvoiceReport(models.AbstractModel):
