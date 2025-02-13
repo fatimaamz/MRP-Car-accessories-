@@ -15,3 +15,26 @@ class AccountInvoiceReportWizard(models.TransientModel):
             raise UserError("The start date must be before the end date.")
 
         return self.env.ref('your_module_name.action_invoice_report').report_action(self)
+
+
+class AccountInvoiceReport(models.AbstractModel):
+    _name = 'report.lux_contacts_custom_fields.invoice_report_template'
+    _description = "Customer Invoice Report"
+
+    @api.model
+    def _get_report_values(self, docids, data=None):
+        wizard = self.env['account.invoice.report.wizard'].browse(docids)
+        invoices = self.env['account.move'].search([
+            ('partner_id', '=', wizard.partner_id.id),
+            ('move_type', '=', 'out_invoice'),
+            ('invoice_date', '>=', wizard.date_start),
+            ('invoice_date', '<=', wizard.date_end),
+            ('company_id', '=', wizard.company_id.id),
+            ('state', '=', 'posted')
+        ])
+        return {
+            'doc_ids': docids,
+            'doc_model': 'account.invoice.report.wizard',
+            'data': data,
+            'docs': invoices,
+        }
