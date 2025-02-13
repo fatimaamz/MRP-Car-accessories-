@@ -77,14 +77,16 @@
                                             <strong>Etat des comptes</strong>
                         </h2>  <br/><br/>
                         <span style="text-align: right;float: right;">
-                                        Montréal,<t t-esc="docs[0].date_today"/>
+                                        Montréal,<t t-if="docs">
+                                            <t t-esc="docs[0].invoice_date"/>
+                                        </t>
+                                        <t t-else></t>
                         </span>
                         <br/><br/>
                             
-                      <t t-set="min_date" t-value="min(docs.mapped('invoice_date')) if docs else False"/>
-                      <t t-set="max_date" t-value="max(docs.mapped('invoice_date')) if docs else False"/>
+                      
                      <p><strong>Client :</strong> <t t-esc="docs[0].partner_id.name"/></p>
-                     <p><strong>Période : </strong>du <t t-esc="min_date or 'N/A'"/> au <t t-esc="max_date or 'N/A'"/></p>
+                     <p><strong>Période : </strong>du <t t-esc="data['date_start'] or 'N/A'"/> au <t t-esc="data['date_end'] or 'N/A'"/></p>
                      
 
 
