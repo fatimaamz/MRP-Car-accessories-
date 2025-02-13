@@ -82,7 +82,7 @@
 
   <record id="action_invoice_report" model="ir.actions.report">
     <field name="name">Customer Invoice Report</field>
-    <field name="model">account.move</field>
+    <field name="model">ccount.invoice.report.wizard</field>
     <field name="report_type">qweb-pdf</field>
     <field name="report_name">lux_contacts_custom_fields.invoice_report_template</field>
     <field name="print_report_name">'Etat de compte' + object.partner_id.name</field>
