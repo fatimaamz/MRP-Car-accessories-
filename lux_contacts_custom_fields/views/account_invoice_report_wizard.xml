@@ -219,8 +219,8 @@
                     </div>
                 </main>
             </div>
-        </t>-->
-    </template>
+        </t>
+    </template>-->
 
   <record id="action_invoice_report" model="ir.actions.report">
     <field name="name">Customer Invoice Report</field>
