@@ -35,6 +35,9 @@ class AccountInvoiceReport(models.AbstractModel):
         return {
             'doc_ids': docids,
             'doc_model': 'account.invoice.report.wizard',
-            'data': data,
+            'data': {  # Add the wizard dates to data
+                    'date_start': wizard.date_start,
+                    'date_end': wizard.date_end,
+                },
             'docs': invoices,
         }
