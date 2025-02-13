@@ -14,8 +14,8 @@
              "views/invoice_new_template.xml",
              "views/work_order_multi.xml",
              "views/single_work_order.xml",
-             "views/etat_de_compte.xml",
-             
+             #"views/etat_de_compte.xml",
+             "views/account_invoice_report_wizard.xml",
              "views/sequence.xml",
             ],
     "installable": True,
