@@ -64,7 +64,7 @@ class AccountInvoiceReport(models.AbstractModel):
                     'date_end': wizard.date_end,
                     'partner_id':wizard.partner_id.name,
                     'company_id':wizard.company_id.name,
-                    'docs': invoices,
+                    'invoices': invoices,
                 },
             
         }
