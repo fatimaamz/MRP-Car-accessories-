@@ -97,10 +97,8 @@
                                             <strong>Etat des comptes</strong>
                         </h2>  <br/><br/>
                         <span style="text-align: right;float: right;">
-                                        Montréal,<t t-if="docs">
-                                            <t t-esc="data['date_today']"/>
-                                        </t>
-                                        <t t-else></t>
+                                        Montréal,<t t-esc="data['date_today']"/>
+                                        
                         </span>
                         <br/><br/>
                             
