@@ -16,7 +16,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
 
         return self.env.ref('lux_contacts_custom_fields.action_invoice_report').report_action(self)
 
-
+"""
 class AccountInvoiceReport(models.AbstractModel):
     _name = 'report.lux_contacts_custom_fields.invoice_report_template'
     _description = "Customer Invoice Report"
@@ -43,3 +43,4 @@ class AccountInvoiceReport(models.AbstractModel):
                 },
             'docs': invoices,
         }
+"""
