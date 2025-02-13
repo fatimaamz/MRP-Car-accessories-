@@ -40,10 +40,10 @@
                 <main>
                     <h2 style="text-align: center;"><strong>Etat des comptes</strong></h2>
                     <span style="text-align: right; float: right;">Date: <t t-esc="docs[0].date_today"/></span>
-                    <p><strong>Client :</strong> <t t-esc="docs[0].partner_id.name"/></p>
-                    <p><strong>Company :</strong> <t t-esc="docs[0].company_id.name"/></p>
-                    <p><strong>Période :</strong> du <t t-esc="min(docs.mapped('invoice_date')) or 'N/A'"/> 
-                        au <t t-esc="max(docs.mapped('invoice_date')) or 'N/A'"/></p>
+                    <p><strong>Client :</strong> <t t-esc="data['partner_id']"/></p>
+                    <p><strong>Company :</strong> <t t-esc="data['company_id']"/></p>
+                    <p><strong>Période : </strong>du <t t-esc="data['date_start'] or 'N/A'"/> au <t t-esc="data['date_end'] or 'N/A'"/></p>
+
                     <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
                         <thead>
                             <tr>
