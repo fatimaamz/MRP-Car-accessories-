@@ -16,6 +16,28 @@ class AccountInvoiceReportWizard(models.TransientModel):
 
         return self.env.ref('lux_contacts_custom_fields.action_invoice_report').report_action(self)
 
+    def get_invoice_report_data(self):
+        """
+        This method returns the data needed for the invoice report
+        """
+        invoices = self.env['account.move'].search([
+            ('partner_id', '=', self.partner_id.id),
+            ('move_type', '=', 'out_invoice'),
+            ('invoice_date', '>=', self.date_start),
+            ('invoice_date', '<=', self.date_end),
+            ('company_id', '=', self.company_id.id),
+            ('state', '=', 'posted')
+        ])
+        return {
+            'partner_id': self.partner_id.name,
+            'company_id': self.company_id.name,
+            'date_start': self.date_start,
+            'date_end': self.date_end,
+            'invoices': invoices,
+        }
+        
+   
+
 """
 class AccountInvoiceReport(models.AbstractModel):
     _name = 'report.lux_contacts_custom_fields.invoice_report_template'
