@@ -9,6 +9,10 @@ class AccountInvoiceReportWizard(models.TransientModel):
     partner_id = fields.Many2one('res.partner', string="Client", domain=[('customer_rank', '>', 0)], required=True)
     date_start = fields.Date(string="Date De Début", required=True)
     date_end = fields.Date(string="Date De Fin", required=True)
+    
+    @property
+    def date_today(self):
+        return datetime.today().strftime('%d/%m/%Y')
 
     def action_print_report(self):
         if self.date_start > self.date_end:
