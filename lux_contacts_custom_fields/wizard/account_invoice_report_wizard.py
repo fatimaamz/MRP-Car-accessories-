@@ -65,6 +65,7 @@ class AccountInvoiceReport(models.AbstractModel):
                     'partner_id':wizard.partner_id.name,
                     'company_id':wizard.company_id.name,
                     'invoices': invoices,
+                    'date_today':datetime.today().strftime('%d/%m/%Y'),
                 },
             
         }
