@@ -27,7 +27,7 @@
                         <!-- Product Details Section <t t-esc="docs.product_id.detailed_type"/>  -->
                         <div style="padding: 5mm;">
                             <!-- Top Left: Year -->
-                            <div style="text-align: left; font-size: 12px; margin-bottom: 5mm;">
+                            <div style="text-align: left; font-size: 14px; margin-bottom: 5mm;">
                                 <strong>
                                     <t t-esc="docs.product_brand or 'No Brand'"/>
                                     <t t-esc="docs.year or 'XXXX'"/>
@@ -36,7 +36,7 @@
                         
 
                             <!-- Content Area -->
-                            <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 14px;">
                                 <!-- Bottom Left: Marque -->
                                 <div style="text-align: left;">
                                     <strong>
@@ -67,7 +67,7 @@
 
                 <!-- Part and Barcode Section -->
                 <div style="text-align: center; height: 15mm;">
-                    <p style="font-size: 12px; border: 1px solid black; margin: 2mm; text-align: center;">
+                    <p style="font-size: 14px; border: 1px solid black; margin: 2mm; text-align: center;">
                         <strong>Part: <span t-esc="docs.product_id.default_code + '-' + (docs.interior_color.split('(')[-1].strip(')') if docs.interior_color and '(' in docs.interior_color else docs.interior_color) + (('-' + docs.insert_color.split('(')[-1].strip(')')) if docs.insert_color and '(' in docs.insert_color else '') or ''"/></strong>
                     </p>
 
@@ -83,7 +83,7 @@
                         </t>
                     </div>
 
-                    <div style="text-align: center; margin-top: 2mm; font-size: 12px; font-weight: bold;">
+                    <div style="text-align: center; margin-top: 2mm; font-size: 14px; font-weight: bold;">
                         <t t-esc="docs.product_id.barcode or ''"/>
                     </div>
                 </div>
