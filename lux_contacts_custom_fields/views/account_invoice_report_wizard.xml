@@ -128,7 +128,7 @@
                                             <t t-esc="doc.invoice_date"/>
                                         </td>
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                            <t t-esc="doc.dealer_code or ''"/>
+                                            <t t-esc="doc.partner_id.dealer_code or ''"/>
                                         </td>
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="doc.partner_shipping_id.name"/>
