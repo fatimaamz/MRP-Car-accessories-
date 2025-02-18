@@ -96,9 +96,9 @@
 
                     <p><strong>Période : </strong>du <t t-esc="data['date_start'] or 'N/A'"/> au <t t-esc="data['date_end'] or 'N/A'"/></p>
 
-                    <t t-foreach="data['grouped_invoices'].items()" t-as="partner, invoices">
+                   <t t-foreach="data['grouped_invoices'].items()" t-as="group">
                         <h3 style="text-align: left; margin-top: 20px;">
-                            <strong>Client: <t t-esc="partner.name"/></strong>
+                            <strong>Client: <t t-esc="group[0].name"/></strong>
                         </h3>
                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px;">
                             <thead>
@@ -113,8 +113,8 @@
                                     <th style="border: 1px solid #ddd; padding: 10px;">Total $</th>
                                 </tr>
                             </thead>
-
-                            <t t-foreach="invoices" t-as="doc">
+                    
+                            <t t-foreach="group[1]" t-as="doc">
                                 <tbody>
                                     <tr>
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
@@ -145,10 +145,11 @@
                                 </tbody>
                             </t>
                         </table>
-                       <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
-                                    <strong>Solde dû / Amount due: $<t t-esc="'%.2f' % sum(data['invoices'].mapped('amount_total'))"/></strong>
-                      </div>
-                    </t>
+                        <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
+                            <strong>Solde dû / Amount due: $<t t-esc="'%.2f' % sum(group[1].mapped('amount_total'))"/></strong>
+                        </div>
+</t>
+                  
                 </main>
             </div>
         </t>
