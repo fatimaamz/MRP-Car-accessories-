@@ -134,7 +134,7 @@
                                             <t t-esc="doc.partner_shipping_id.name"/>
                                         </td>
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                            <t t-esc="doc.carrier_tracking_ref or ''"/>
+                                            <t t-esc="doc.tracking or ''"/>
                                         </td>
                                         <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                             <t t-esc="doc.invoice_date_due"/>
