@@ -88,9 +88,10 @@
                     </h2>
 
                     <span style="text-align: right; float: right;">
-                        Montréal,
+                       <t t-if="user.company_id.street">
                             <t t-esc="docs[0].invoice_date"/>
-                        
+                        </t>
+                     
                       
                     </span>
 
