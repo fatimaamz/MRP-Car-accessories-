@@ -7,7 +7,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
     _description = "Wizard to generate customer invoice reports"
 
     company_id = fields.Many2one('res.company', string="Société", required=True, default=lambda self: self.env.company)
-    partner_id = fields.Many2one('res.partner', string="Client", domain=[('customer_rank', '>', 0)], required=True)
+    partner_id = fields.Many2one('res.partner', string="Client")
     date_start = fields.Date(string="Date De Début", required=True)
     date_end = fields.Date(string="Date De Fin", required=True)
     all_partners = fields.Boolean(string="Toutes", help="Sélectionner pour inclure tous les clients")
