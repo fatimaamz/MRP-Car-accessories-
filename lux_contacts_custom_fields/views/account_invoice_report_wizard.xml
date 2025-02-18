@@ -11,7 +11,7 @@
                 <group>
                     <field name="company_id"/>
                     <field name="all_partners"/>
-                    <field name="partner_id" invisible="1 if all_partners else 0"/>
+                    <field name="partner_id" invisible="all_partner == True"/>
                     <field name="date_start"/>
                     <field name="date_end"/>
                 </group>
