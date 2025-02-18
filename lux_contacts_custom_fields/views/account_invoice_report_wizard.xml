@@ -152,9 +152,9 @@
                 </main>
             </div>
           <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
-                            <strong>Solde dû / Amount due: $<t t-foreach="data['grouped_invoices'].items()" t-as="group">
+                            <strong>Solde dû / Amount due: $
                                     <t t-esc="'%.2f' % sum([invoice.amount_total for invoice in group[1]])"/>
-                                </t>
+                              
                             </strong>
                         </div>
         </t>
