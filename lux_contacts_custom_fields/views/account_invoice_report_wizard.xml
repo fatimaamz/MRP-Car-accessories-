@@ -98,9 +98,9 @@
                     <p><strong>Période : </strong>du <t t-esc="data['date_start'] or 'N/A'"/> au <t t-esc="data['date_end'] or 'N/A'"/></p>
 
                    <t t-foreach="data['grouped_invoices'].items()" t-as="group">
-                        <h3 style="text-align: left; margin-top: 20px;">
+                        <p style="text-align: left; margin-top: 20px;">
                             <strong>Client: <t t-esc="group[0].name"/></strong>
-                        </h3>
+                        </p>
                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px;">
                             <thead>
                                 <tr style="background-color: #f7f7f7;">
@@ -146,17 +146,19 @@
                                 </tbody>
                             </t>
                         </table>
-                        <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
+                        
+</t>
+                  
+                </main>
+            </div>
+          <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
                             <strong>Solde dû / Amount due: $<t t-foreach="data['grouped_invoices'].items()" t-as="group">
                                     <t t-esc="'%.2f' % sum([invoice.amount_total for invoice in group[1]])"/>
                                 </t>
                             </strong>
                         </div>
-</t>
-                  
-                </main>
-            </div>
         </t>
+      
     </template>
 
 
