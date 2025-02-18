@@ -19,27 +19,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
             raise UserError("The start date must be before the end date.")
         #data = self.get_invoice_report_data()
         return self.env.ref('lux_contacts_custom_fields.action_invoice_report').report_action(self)
-    """
-    def get_invoice_report_data(self):
-       
-        invoices = self.env['account.move'].search([
-            ('partner_id', '=', self.partner_id.id),
-            ('move_type', '=', 'out_invoice'),
-            ('invoice_date', '>=', self.date_start),
-            ('invoice_date', '<=', self.date_end),
-            ('company_id', '=', self.company_id.id),
-            ('state', '=', 'posted')
-        ])
-        return {
-            'partner_id': self.partner_id.name,
-            'company_id': self.company_id.name,
-            'date_start': self.date_start,
-            'date_end': self.date_end,
-            'invoices': invoices,
-            'date_today': datetime.today().strftime('%d/%m/%Y'),
-        }
-        
-   """
+
 
 
 class AccountInvoiceReport(models.AbstractModel):
@@ -49,25 +29,38 @@ class AccountInvoiceReport(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         wizard = self.env['account.invoice.report.wizard'].browse(docids)
-        invoices = self.env['account.move'].search([
-            ('partner_id', '=', wizard.partner_id.id),
+        domain = [
             ('move_type', '=', 'out_invoice'),
             ('invoice_date', '>=', wizard.date_start),
             ('invoice_date', '<=', wizard.date_end),
             ('company_id', '=', wizard.company_id.id),
             ('state', '=', 'posted')
-        ])
+        ]
+
+        if wizard.all_partners:
+            # Include all partners when "Toutes" is selected
+            invoices = self.env['account.move'].search(domain)
+        else:
+            # Filter by the selected partner
+            invoices = self.env['account.move'].search(domain + [('partner_id', '=', wizard.partner_id.id)])
+
+        # Group invoices by partner (client)
+        grouped_invoices = {}
+        for invoice in invoices:
+            if invoice.partner_id not in grouped_invoices:
+                grouped_invoices[invoice.partner_id] = []
+            grouped_invoices[invoice.partner_id].append(invoice)
+
         return {
             'doc_ids': docids,
             'doc_model': 'account.invoice.report.wizard',
-            'data': {  # Add the wizard dates to data
-                    'date_start': wizard.date_start,
-                    'date_end': wizard.date_end,
-                    'partner_id':wizard.partner_id.name,
-                    'company_id':wizard.company_id.name,
-                    'invoices': invoices,
-                    'date_today':datetime.today().strftime('%d/%m/%Y'),
-                },
-            
+            'data': {
+                'date_start': wizard.date_start,
+                'date_end': wizard.date_end,
+                'partner_id': wizard.partner_id.name if not wizard.all_partners else 'All Customers',
+                'company_id': wizard.company_id.name,
+                'grouped_invoices': grouped_invoices,
+                'date_today': datetime.today().strftime('%d/%m/%Y'),
+            },
         }
 
