@@ -9,15 +9,19 @@
         <field name="arch" type="xml">
             <form string="Etat des comptes">
                 <group>
+                  <group>
                     <field name="company_id"/>
                     <field name="all_partners"/>
                     <field name="partner_id" invisible="all_partners == True"/>
-                    <group colspan="2"  string="Facture">
+                  </group>
+                    <group  string="Facture">
                       <field name="paid_only"/>
                       <field name="unpaid_only"/>
                     </group>
+                  <group string="Période">
                     <field name="date_start"/>
                     <field name="date_end"/>
+                  </group>
                 </group>
                 <footer>
                     <button name="action_print_report" type="object" string="Print Report" class="btn-primary"/>
