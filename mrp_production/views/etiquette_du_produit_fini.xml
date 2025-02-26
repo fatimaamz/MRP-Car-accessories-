@@ -31,19 +31,20 @@
                                 <strong>
                                     <t t-esc="docs.product_brand or 'No Brand'"/>
                                     <t t-esc="docs.year or 'XXXX'"/>
-                                </strong>
+                                </strong><br/>
+                                <!--<div style="text-align: left;">-->
+                                    <strong>
+                                    <t t-esc="docs.product_style"/>
+                                    <t t-esc="docs.product_model or 'Type'"/>
+                                    </strong>
+                                <!--</div>--
                             </div>
                         
 
                             <!-- Content Area -->
                             <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 14px;">
                                 <!-- Bottom Left: Marque -->
-                                <div style="text-align: left;">
-                                    <strong>
-                                    <t t-esc="docs.product_style"/>
-                                    <t t-esc="docs.product_model or 'Type'"/>
-                                    </strong>
-                                </div>
+                                
 
                                  
                                       
