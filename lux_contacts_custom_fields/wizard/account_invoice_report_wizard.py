@@ -19,12 +19,12 @@ class AccountInvoiceReportWizard(models.TransientModel):
         """ Vérifie que les options 'Factures Payées' et 'Factures Non Payées' ne sont pas cochées ensemble. """
         for record in self:
             if record.paid_only and record.unpaid_only:
-                raise ValueError("Vous ne pouvez pas sélectionner à la fois 'Factures Payées' et 'Factures Non Payées'.")
+                raise UserError("Vous ne pouvez pas sélectionner à la fois 'Factures Payées' et 'Factures Non Payées'.")
    
 
     def action_print_report(self):
         if self.date_start > self.date_end:
-            raise UserError("The start date must be before the end date.")
+            raise UserError("La date de début doit être antérieure à la date de fin.")
         #data = self.get_invoice_report_data()
         return self.env.ref('lux_contacts_custom_fields.action_invoice_report').report_action(self)
 
