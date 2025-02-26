@@ -4,6 +4,12 @@ from odoo.exceptions import UserError
 from datetime import datetime
 from ..libs.pyactiveresource.connection import ForbiddenAccess
 from ..libs  import shopify
+import qrcode
+import base64
+import io
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class ShopifyCredentials(models.Model):
     _name = 'shopify.credentials'
@@ -98,3 +104,68 @@ class ShopifyCredentials(models.Model):
     def _default_shipping_product(self):
         shipping_product = self.env.ref('market_connector.shopify_shipping_product') or False
         return shipping_product
+
+    def generate_shopify_product_qr_codes(self):
+        product_data_queue = self.env['merket.connector.products.data.queue']
+        
+        product_records = product_data_queue.search([
+            ('shopify_instance_id', '=', self.id)
+        ])
+        
+        if not product_records:
+            _logger.info(f"No product records found for Shopify instance: {self.name}")
+            return False
+        
+        try:
+            for record in product_records:
+                if not record.data:
+                    continue
+                
+                try:
+                    data_dict = json.loads(record.data)
+                    
+                    product_handle = data_dict.get('handle')
+                    
+                    if not product_handle:
+                        continue
+                    
+                    shop_url = self.shop_url.rstrip('/')
+                    product_url = f"{shop_url}/products/{product_handle}"
+                    
+                    qr = qrcode.QRCode(
+                        version=1, 
+                        box_size=10, 
+                        border=5
+                    )
+                    qr.add_data(product_url)
+                    qr.make(fit=True)
+                    
+                    qr_image = qr.make_image(fill_color="black", back_color="white")
+                    
+                    buffer = io.BytesIO()
+                    qr_image.save(buffer, format="PNG")
+                    
+                    qr_code_base64 = base64.b64encode(buffer.getvalue())
+                    
+                    if record.product_id:
+                        record.product_id.write({
+                            'qr_code_uploaded': qr_code_base64
+                        })
+                    
+                    _logger.info(f"Generated QR Code for product: {product_url}")
+                
+                except Exception as e:
+                    _logger.error(f"Error generating QR code for record {record.id}: {str(e)}")
+            
+            return True
+        
+        except Exception as main_error:
+            _logger.error(f"Error in generating QR codes for Shopify instance {self.name}: {str(main_error)}")
+            return False
+
+    def action_generate_product_qr_codes(self):
+        self.generate_shopify_product_qr_codes()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }

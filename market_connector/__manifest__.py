@@ -27,5 +27,8 @@
         'views/order_data_queue_ept.xml',
         'views/product_views.xml',
     ],
-    'images': ['static/src/description/icon.png']
+    'images': ['static/src/description/icon.png'],
+    'external_dependencies': {
+        'python': ['qrcode'],
+    },
 }
