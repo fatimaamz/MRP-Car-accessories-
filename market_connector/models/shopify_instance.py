@@ -109,7 +109,7 @@ class ShopifyCredentials(models.Model):
         product_data_queue = self.env['merket.connector.products.data.queue']
         
         product_records = product_data_queue.search([
-            ('shopify_instance_id', '=', self.id)
+            ('product_id', '!=', False)
         ])
         
         if not product_records:
@@ -124,12 +124,14 @@ class ShopifyCredentials(models.Model):
                 try:
                     data_dict = json.loads(record.data)
                     
+                    shop_url = self._extract_shop_url(data_dict.get('vendor',''))
+                    
                     product_handle = data_dict.get('handle')
                     
                     if not product_handle:
                         continue
                     
-                    shop_url = self.shop_url.rstrip('/')
+                    shop_url = shop_url.rstrip('/')
                     product_url = f"{shop_url}/products/{product_handle}"
                     
                     qr = qrcode.QRCode(
@@ -169,3 +171,11 @@ class ShopifyCredentials(models.Model):
             'type': 'ir.actions.client',
             'tag': 'reload',
         }
+
+    def _extract_shop_url(self, vendor):
+        vendor = vendor.lower().replace(' ', '')
+        
+        if vendor == 'designertrim':
+            return 'https://designertrim.com'
+        
+        return 'https://retailer.luxwoodtrim.com'
