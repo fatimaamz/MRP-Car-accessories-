@@ -8,13 +8,14 @@
         <field name="model">account.invoice.report.wizard</field>
         <field name="arch" type="xml">
             <form string="Etat des comptes">
-                <group>
+                <group> 
+                  <field name="company_id"/>
                   <group>
-                    <field name="company_id"/>
+                   
                     <field name="all_partners"/>
                     <field name="partner_id" invisible="all_partners == True"/>
                   </group>
-                    <group  string="Facture">
+                    <group  string="Facture" colspan="2">
                       <field name="paid_only"/>
                       <field name="unpaid_only"/>
                     </group>
