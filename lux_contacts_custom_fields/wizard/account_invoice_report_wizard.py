@@ -11,6 +11,8 @@ class AccountInvoiceReportWizard(models.TransientModel):
     date_start = fields.Date(string="Date De Début", required=True)
     date_end = fields.Date(string="Date De Fin", required=True)
     all_partners = fields.Boolean(string="Toutes", help="Sélectionner pour inclure tous les clients")
+    paid_only = fields.Boolean(string="Factures Payées Seulement", help="Inclure uniquement les factures entièrement payées")
+
     
    
 
