@@ -40,15 +40,14 @@
                                 <!-- Bottom Left: Marque -->
                                 <div style="text-align: left;">
                                     <strong>
-                                      <t t-esc="docs.product_model or 'Type'"/>
+                                    <t t-esc="docs.product_style"/>
+                                    <t t-esc="docs.product_model or 'Type'"/>
                                     </strong>
                                 </div>
 
-                                 <div style="text-align: left;">
-                                    <strong>
-                                      <t t-esc="docs.product_style"/>
-                                    </strong>
-                                </div>
+                                 
+                                      
+                                    
                                 
                                 
                                 <!-- Bottom Right: Color -->
