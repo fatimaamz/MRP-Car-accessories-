@@ -12,6 +12,7 @@
                     <field name="company_id"/>
                     <field name="all_partners"/>
                     <field name="partner_id" invisible="all_partners == True"/>
+                    <field name="paid_only"/>
                     <field name="date_start"/>
                     <field name="date_end"/>
                 </group>
