@@ -30,7 +30,6 @@
                             <div style="text-align: left; font-size: 14px; margin-bottom: 5mm;">
                                 <strong>
                                     <t t-esc="docs.product_brand or 'No Brand'"/>
-                                    <t t-esc="docs.product_style or 'No Style'"/>
                                     <t t-esc="docs.year or 'XXXX'"/>
                                 </strong>
                             </div>
@@ -44,6 +43,13 @@
                                       <t t-esc="docs.product_model or 'Type'"/>
                                     </strong>
                                 </div>
+
+                                 <div style="text-align: left;">
+                                    <strong>
+                                      <t t-esc="docs.product_style"/>
+                                    </strong>
+                                </div>
+                                
                                 
                                 <!-- Bottom Right: Color -->
                                 <div style="text-align: right;">
