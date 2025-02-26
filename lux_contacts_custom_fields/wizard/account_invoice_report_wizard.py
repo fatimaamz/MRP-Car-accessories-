@@ -28,6 +28,47 @@ class AccountInvoiceReport(models.AbstractModel):
 
     @api.model
     def _get_report_values(self, docids, data=None):
+        if not docids:
+            return {}
+
+        wizard = self.env['account.invoice.report.wizard'].browse(docids[0])  # Use the first wizard record
+        domain = [
+            ('move_type', '=', 'out_invoice'),
+            ('invoice_date', '>=', wizard.date_start),
+            ('invoice_date', '<=', wizard.date_end),
+            ('company_id', '=', wizard.company_id.id),
+            ('state', '=', 'posted')
+        ]
+
+        if wizard.paid_only:
+            domain.append(('payment_state', 'in', ['paid', 'in_payment']))  # Factures payées ou en paiement
+
+        if not wizard.all_partners and wizard.partner_id:
+            domain.append(('partner_id', '=', wizard.partner_id.id))
+
+        invoices = self.env['account.move'].search(domain)
+
+        # Group invoices by partner (client)
+        grouped_invoices = {}
+        for invoice in invoices:
+            grouped_invoices.setdefault(invoice.partner_id, []).append(invoice)
+
+        return {
+            'doc_ids': docids,
+            'doc_model': 'account.invoice.report.wizard',
+            'data': {
+                'date_start': wizard.date_start,
+                'date_end': wizard.date_end,
+                'partner_id': wizard.partner_id.name if not wizard.all_partners else 'All Customers',
+                'company_id': wizard.company_id.name,
+                'grouped_invoices': grouped_invoices,
+                'date_today': datetime.today().strftime('%d/%m/%Y'),
+            },
+        }
+    
+    """
+    @api.model
+    def _get_report_values(self, docids, data=None):
         wizard = self.env['account.invoice.report.wizard'].browse(docids)
         domain = [
             ('move_type', '=', 'out_invoice'),
@@ -63,4 +104,4 @@ class AccountInvoiceReport(models.AbstractModel):
                 'date_today': datetime.today().strftime('%d/%m/%Y'),
             },
         }
-
+"""
