@@ -11,9 +11,15 @@ class AccountInvoiceReportWizard(models.TransientModel):
     date_start = fields.Date(string="Date De Début", required=True)
     date_end = fields.Date(string="Date De Fin", required=True)
     all_partners = fields.Boolean(string="Toutes", help="Sélectionner pour inclure tous les clients")
-    paid_only = fields.Boolean(string="Factures Payées Seulement", help="Inclure uniquement les factures entièrement payées")
+    paid_only = fields.Boolean(string="Payées", help="Inclure uniquement les factures entièrement payées")
+    unpaid_only = fields.Boolean(string="Impayées", help="Inclure uniquement les factures non payées")
 
-    
+    @api.constrains('paid_only', 'unpaid_only')
+    def _check_payment_filters(self):
+        """ Vérifie que les options 'Factures Payées' et 'Factures Non Payées' ne sont pas cochées ensemble. """
+        for record in self:
+            if record.paid_only and record.unpaid_only:
+                raise ValueError("Vous ne pouvez pas sélectionner à la fois 'Factures Payées' et 'Factures Non Payées'.")
    
 
     def action_print_report(self):
@@ -44,6 +50,8 @@ class AccountInvoiceReport(models.AbstractModel):
 
         if wizard.paid_only:
             domain.append(('payment_state', 'in', ['paid', 'in_payment']))  # Factures payées ou en paiement
+        elif wizard.unpaid_only:
+            domain.append(('payment_state', '=', 'not_paid'))
 
         if not wizard.all_partners and wizard.partner_id:
             domain.append(('partner_id', '=', wizard.partner_id.id))
