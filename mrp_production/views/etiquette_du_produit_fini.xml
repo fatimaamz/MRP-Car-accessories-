@@ -45,30 +45,22 @@
                             <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 14px;">
                                 <!-- Bottom Left: Marque -->
                                 
-
-                                 
-                                      
-                                    
-                                
-                                
                                 <!-- Bottom Right: Color -->
                                 <div style="text-align: right;">
                                     <t t-if="docs.interior_color">
-                                        <strong >Interior Color:</strong>
-                                        
+                                        <strong>Interior Color:</strong>
                                         <t t-esc="docs.interior_color or ''"/>
-                                     </t>
+                                    </t>
                                     <br/>
-                                    <t t-if="docs.insert_color!='Not Applicable'">
-                                         <strong>Insert Color:</strong>
+                                    <t t-if="docs.insert_color and docs.insert_color != 'Not Applicable'">
+                                        <strong>Insert Color:</strong>
                                         <t t-esc="docs.insert_color or ''"/>
                                     </t>
                                     <br/>
                                     <t t-if="docs.paint_code">
-                                         <strong>Paint Code:</strong>
+                                        <strong>Paint Code:</strong>
                                         <t t-esc="docs.paint_code or ''"/>
                                     </t>
-                 
                                 </div>
                             </div>
                         </div>
