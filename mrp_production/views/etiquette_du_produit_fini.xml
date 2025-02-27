@@ -57,10 +57,10 @@
                                         <t t-esc="docs.insert_color"/>
                                     </t>
                                     <br/>
-                                    <t t-if="docs.paint_code">
+                                   <!-- <t t-if="docs.paint_code">
                                         <strong>Paint Code:</strong>
                                         <t t-esc="docs.paint_code"/>
-                                    </t>
+                                    </t>-->
                                 </div>
                             </div>
                         </div>
