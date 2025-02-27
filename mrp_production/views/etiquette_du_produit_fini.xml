@@ -49,17 +49,17 @@
                                 <div style="text-align: right;">
                                     <t t-if="docs.interior_color">
                                         <strong>Interior Color:</strong>
-                                        <t t-esc="docs.interior_color or ''"/>
+                                        <t t-esc="docs.interior_color"/>
                                     </t>
                                     <br/>
                                     <t t-if="docs.insert_color">
                                         <strong>Insert Color:</strong>
-                                        <t t-esc="docs.insert_color or ''"/>
+                                        <t t-esc="docs.insert_color"/>
                                     </t>
                                     <br/>
                                     <t t-if="docs.paint_code">
                                         <strong>Paint Code:</strong>
-                                        <t t-esc="docs.paint_code or ''"/>
+                                        <t t-esc="docs.paint_code"/>
                                     </t>
                                 </div>
                             </div>
