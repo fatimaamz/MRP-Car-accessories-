@@ -52,7 +52,7 @@
                                         <t t-esc="docs.interior_color or ''"/>
                                     </t>
                                     <br/>
-                                    <t t-if="docs.insert_color and docs.insert_color != 'Not Applicable'">
+                                    <t t-if="docs.insert_color">
                                         <strong>Insert Color:</strong>
                                         <t t-esc="docs.insert_color or ''"/>
                                     </t>
