@@ -130,13 +130,21 @@ class MrpProduction(models.Model):
             text = record.selected_characteristics or ''
             match = re.search(r'CARBON CODE:\s*(.+?)(?:\n|$)', text)
             record.carbon_code = match.group(1).strip() if match else ''
-
+    """
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
         for record in self:
             text = record.selected_characteristics or ''
             match = re.search(r'PAINT CODE:\s*(.+?)(?:\n|$)', text)
             record.paint_code = match.group(1).strip() if match else ''
+    """
+    @api.depends('selected_characteristics')
+    def _compute_paint_code(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'PAINT CODE:\s*(.*)', text)
+            record.paint_code = match.group(1).strip() if match else ''
+            
 
     @api.depends('selected_characteristics')
     def _compute_year(self):
