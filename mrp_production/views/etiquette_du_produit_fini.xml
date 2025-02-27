@@ -53,8 +53,11 @@
                                 
                                 <!-- Bottom Right: Color -->
                                 <div style="text-align: right;">
-                                    <strong>Color:</strong>
-                                    <t t-esc="docs.interior_color or ''"/>
+                                    <strong>Interior Color:</strong>
+                                    <t t-esc="docs.interior_color or ''"/><br/>
+                                     <strong>Insert Color:</strong>
+                                    <t t-esc="docs.insert_color or ''"/>
+                 
                                 </div>
                             </div>
                         </div>
