@@ -53,10 +53,21 @@
                                 
                                 <!-- Bottom Right: Color -->
                                 <div style="text-align: right;">
-                                    <strong>Interior Color:</strong>
-                                    <t t-esc="docs.interior_color or ''"/><br/>
-                                     <strong>Insert Color:</strong>
-                                    <t t-esc="docs.insert_color or ''"/>
+                                    <t t-if="docs.interior_color">
+                                        <strong >Interior Color:</strong>
+                                        
+                                        <t t-esc="docs.interior_color or ''"/>
+                                     </t>
+                                    <br/>
+                                    <t t-if="docs.insert_color!='Not Applicable'">
+                                         <strong>Insert Color:</strong>
+                                        <t t-esc="docs.insert_color or ''"/>
+                                    </t>
+                                    <br/>
+                                    <t t-if="docs.paint_code">
+                                         <strong>Paint Code:</strong>
+                                        <t t-esc="docs.paint_code or ''"/>
+                                    </t>
                  
                                 </div>
                             </div>
