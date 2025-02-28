@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="oe_structure"/>
-                    <table  t-if="o.state!='done'" name="stock_move_table" style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;border: 1px solid #f7f7f7;">
+                    <table  t-if="o.state!='done'" name="stock_move_table" style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                         <thead>
                             <tr style=" background-color: #f7f7f7;">
                                 <th  style="border: 1px solid #ddd; padding: 10px;" name="th_sm_product"><strong>Product</strong></th>
@@ -145,7 +145,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table t-elif="o.move_line_ids and o.state=='done'" name="stock_move_line_table">
+                    <table t-elif="o.move_line_ids and o.state=='done'" name="stock_move_line_table" style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                         <t t-set="has_serial_number" t-value="False"/>
                         <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_lot_on_delivery_slip"/>
                         <thead>
@@ -221,7 +221,7 @@
                         <p class="mt-5">
                             <span>Remaining quantities not yet delivered:</span>
                         </p>
-                        <table class="table table-sm" name="stock_backorder_table" style="table-layout: fixed;">
+                        <table class="table table-sm" name="stock_backorder_table" style="table-layout: fixed;width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                             <thead>
                                 <tr>
                                     <th name="th_sb_product"><strong>Product</strong></th>
