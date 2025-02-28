@@ -101,6 +101,21 @@ class MrpProduction(models.Model):
     carbon_code = fields.Char(string="Carbon Code", compute="_compute_carbon_code", store=True)
     paint_code = fields.Char(string="Paint Code", compute="_compute_paint_code", store=True)
     year = fields.Char(string="Year", compute="_compute_year", store=True)
+    full_characteristics = fields.Char(string="Characteristics", compute="_compute_full_characteristics", store=True)
+
+    @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code', 'year')
+    def _compute_full_characteristics(self):
+        for record in self:
+            values = [
+                record.interior_color,
+                record.insert_color,
+                record.main_color,
+                record.carbon_code,
+                record.paint_code,
+                record.year,
+            ]
+            # Join non-empty values with " | " as separator
+            record.full_characteristics = " | ".join(filter(None, values))
 
     def _extract_value(self, text, field_name):
         """
@@ -133,7 +148,13 @@ class MrpProduction(models.Model):
     def _compute_main_color(self):
         for record in self:
             record.main_color = self._extract_value(record.selected_characteristics or '', "Couleurs")
-    
+            
+    @api.depends('selected_characteristics')
+    def _compute_carbon_code(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'CARBON CODE:\s*(.+?)(?:\n|$)', text)
+            record.carbon_code = match.group(1).strip() if match else ''
     
     """
     @api.depends('selected_characteristics')
