@@ -11,7 +11,7 @@
                     
 
                     <t t-if="o._name == 'stock.picking'">
-                        <t t-if="o and o.sale_order_partner_id and o.sale_order_partner_id.name in ['DESIGNER TRIM', 'MYCAR TRIM', 'DYNA PERFORMANCE']">
+                        <!--<t t-if="o and o.sale_order_partner_id and o.sale_order_partner_id.name in ['DESIGNER TRIM', 'MYCAR TRIM', 'DYNA PERFORMANCE']">-->
                         <div class="row">
                             <div class="col-6">
                                 
@@ -81,7 +81,7 @@
                         
                     </div>
                     </t>
-                    </t>
+                   <!-- </t>-->
 
                 <t t-else="">
                 <div class="row">
