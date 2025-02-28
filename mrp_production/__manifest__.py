@@ -12,7 +12,7 @@
         
         "views/mrp_production.xml",
         "views/etiquette_du_produit_fini.xml",
-        #"views/mrp_order_report.xml",
+        "views/mrp_order_report.xml",
         "views/custom_report_delivery_document.xml",
         'security/ir.model.access.csv',
       
