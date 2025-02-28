@@ -127,7 +127,7 @@ class MrpProduction(models.Model):
         pattern = rf'^{field_name}:\s*(.*)$'  # Matches the field followed by any text on the same line
         match = re.search(pattern, text, re.MULTILINE)
         value = match.group(1).strip() if match else ""  # Extract value or return empty string
-        return "" if value.lower() == "not applicable" else value  # Ensure "Not Applicable" is replaced with empty
+        return "" if value == "Not Applicable" else value  # Ensure "Not Applicable" is replaced with empty
 
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
