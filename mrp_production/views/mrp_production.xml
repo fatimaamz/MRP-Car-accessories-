@@ -127,18 +127,22 @@
       </xpath>
        <xpath expr="//group[1]" position="after" >
          <group name="product_icontrol_group" string="Progression de la production" >
-            <field name="is_coped"/>
-            <field name="product_place"/>
-            <field name="product_finalized"/>
-            <field name="is_conforme" class="o_inline"/>
-            <button name="action_view_delivery_order" 
-                                        type="object" 
-                                        class="oe_highlight"
-                                        string="Bon de livraison"
-                                        invisible="is_conforme == False" />
-             <field name="remarque_controle_qualite"/>
-             <field name="product_template_id" invisible="1"/>    
-                <field name="logo_inscription" />
+             <group>
+                <field name="is_coped"/>
+                <field name="product_place"/>
+                <field name="product_finalized"/>
+             </group>
+             <group>
+                <field name="is_conforme" class="o_inline"/>
+                <button name="action_view_delivery_order" 
+                                            type="object" 
+                                            class="oe_highlight"
+                                            string="Bon de livraison"
+                                            invisible="is_conforme == False" />
+                 <field name="remarque_controle_qualite"/>
+                 <field name="product_template_id" invisible="1"/>    
+                    <field name="logo_inscription" />
+             </group>
             
          </group>
         <!-- <group>
