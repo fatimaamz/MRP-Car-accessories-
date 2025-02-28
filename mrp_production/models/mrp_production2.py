@@ -101,13 +101,12 @@ class MrpProduction(models.Model):
     carbon_code = fields.Char(string="Carbon Code", compute="_compute_carbon_code", store=True)
     paint_code = fields.Char(string="Paint Code", compute="_compute_paint_code", store=True)
     year = fields.Char(string="Year", compute="_compute_year", store=True)
-    
-    
+
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
         for record in self:
             text = record.selected_characteristics or ''
-            match = re.search(r'INTERIOR COLOR:\s*(.+?)(?:\n|$)', text)
+            match = re.search(r'^INTERIOR COLOR:\s*(.*)', text, re.MULTILINE)
             record.interior_color = match.group(1).strip() if match else ''
 
     @api.depends('selected_characteristics')
@@ -126,15 +125,33 @@ class MrpProduction(models.Model):
             match = re.search(r'^PAINT CODE:\s*(.*)', text, re.MULTILINE)
             value = match.group(1).strip() if match else ''
             record.paint_code = value
-            
+
+    @api.depends('selected_characteristics')
+    def _compute_main_color(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'^Couleurs:\s*(.*)', text, re.MULTILINE)
+            record.main_color = match.group(1).strip() if match else ''
+    
+    
     """
+    @api.depends('selected_characteristics')
+    def _compute_interior_color(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'INTERIOR COLOR:\s*(.+?)(?:\n|$)', text)
+            record.interior_color = match.group(1).strip() if match else ''
+
+   
+            
+    
     @api.depends('selected_characteristics')
     def _compute_insert_color(self):
         for record in self:
             text = record.selected_characteristics or ''
             match = re.search(r'INSERT COLOR:\s*(.+?)(?:\n|$)', text)
             record.insert_color = match.group(1).strip() if match else ''
-    """
+
     @api.depends('selected_characteristics')
     def _compute_main_color(self):
         for record in self:
@@ -148,7 +165,7 @@ class MrpProduction(models.Model):
             text = record.selected_characteristics or ''
             match = re.search(r'CARBON CODE:\s*(.+?)(?:\n|$)', text)
             record.carbon_code = match.group(1).strip() if match else ''
-    """
+    
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
         for record in self:
@@ -156,15 +173,7 @@ class MrpProduction(models.Model):
             match = re.search(r'PAINT CODE:\s*(.+?)(?:\n|$)', text)
             record.paint_code = match.group(1).strip() if match else ''
     """
-    """
-    @api.depends('selected_characteristics')
-    def _compute_paint_code(self):
-        for record in self:
-            text = record.selected_characteristics or ''
-            match = re.search(r'PAINT CODE:\s*(.*)', text)
-            record.paint_code = match.group(1).strip() if match else ''
-            
-    """
+  
     @api.depends('selected_characteristics')
     def _compute_year(self):
         for record in self:
