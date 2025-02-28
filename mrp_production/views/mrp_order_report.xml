@@ -4,26 +4,14 @@
 
     <template id="report_picking_custom_external_layout" inherit_id="web.external_layout_bold">
         <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']" position="replace">
-            <style>
-                        /* Set header/footer background to black */
-                        .header, .footer {
-                            background-color: black !important;
-                            color: white !important; /* Ensure text is readable */
-                        }
-                        /* Change table borders and text */
-                        table, th, td {
-                            border-color: black !important;
-                            color: black !important;
-                        }
-                        /* Set general text color to black */
-                        body, .page {
-                            color: black !important;
-                        }
-                    </style>
+           
             
             <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
                 <div class="o_clean_header"> 
+                    
+
                     <t t-if="o._name == 'stock.picking'">
+                        <t t-if="o and o.sale_order_partner_id and o.sale_order_partner_id.name in ['DESIGNER TRIM', 'MYCAR TRIM', 'DYNA PERFORMANCE']"/>
                     <div class="row">
                         <div class="col-6">
                             
@@ -53,6 +41,7 @@
                                              <t t-esc="o.sale_order_partner_id.website" />
                                         </li>
                                     </ul>
+                                </t>
                                 </t>
                                 <t t-else="">
                                     <div class="row">
