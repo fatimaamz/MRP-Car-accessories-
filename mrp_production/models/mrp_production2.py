@@ -102,35 +102,34 @@ class MrpProduction(models.Model):
     paint_code = fields.Char(string="Paint Code", compute="_compute_paint_code", store=True)
     year = fields.Char(string="Year", compute="_compute_year", store=True)
 
+    def _extract_value(self, text, field_name):
+        """
+        Extrait la valeur correspondant au champ donné en s'assurant qu'il ne récupère
+        que le contenu présent sur sa propre ligne.
+        """
+        match = re.search(rf'^{field_name}:\s*(\S.*)?$', text, re.MULTILINE)
+        return match.group(1).strip() if match and match.group(1) else ""
+
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
         for record in self:
-            text = record.selected_characteristics or ''
-            match = re.search(r'^\s*INTERIOR COLOR:\s*(.+)', text, re.MULTILINE)
-            record.interior_color = match.group(1).strip() if match else ''
+            record.interior_color = self._extract_value(record.selected_characteristics or '', "INTERIOR COLOR")
 
     @api.depends('selected_characteristics')
     def _compute_insert_color(self):
         for record in self:
-            text = record.selected_characteristics or ''
-            match = re.search(r'^\s*INSERT COLOR:\s*(.+)', text, re.MULTILINE)
-            value = match.group(1).strip() if match else ''
-            record.insert_color = '' if value.lower() == "not applicable" else value
+            value = self._extract_value(record.selected_characteristics or '', "INSERT COLOR")
+            record.insert_color = "" if value.lower() == "not applicable" else value
 
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
         for record in self:
-            text = record.selected_characteristics or ''
-            match = re.search(r'^\s*PAINT CODE:\s*(.+)', text, re.MULTILINE)
-            value = match.group(1).strip() if match else ''
-            record.paint_code = value if value.lower() != "insert color: not applicable" else ''
+            record.paint_code = self._extract_value(record.selected_characteristics or '', "PAINT CODE")
 
     @api.depends('selected_characteristics')
     def _compute_main_color(self):
         for record in self:
-            text = record.selected_characteristics or ''
-            match = re.search(r'^\s*Couleurs:\s*(.+)', text, re.MULTILINE)
-            record.main_color = match.group(1).strip() if match else ''
+            record.main_color = self._extract_value(record.selected_characteristics or '', "Couleurs")
     
     
     """
