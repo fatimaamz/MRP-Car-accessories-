@@ -104,11 +104,13 @@ class MrpProduction(models.Model):
 
     def _extract_value(self, text, field_name):
         """
-        Extrait la valeur correspondant au champ donné en s'assurant qu'il ne récupère
-        que le contenu présent sur sa propre ligne.
+        Extracts the value of a field from 'selected_characteristics', ensuring:
+        1. If empty, it remains empty (doesn't capture the next line).
+        2. Only the exact line where the field appears is used.
         """
-        match = re.search(rf'^{field_name}:\s*(\S.*)?$', text, re.MULTILINE)
-        return match.group(1).strip() if match and match.group(1) else ""
+        pattern = rf'^{field_name}:\s*(.*)$'  # Matches the field followed by any text on the same line
+        match = re.search(pattern, text, re.MULTILINE)
+        return match.group(1).strip() if match else ""  # Ensures empty values remain empty
 
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
@@ -119,7 +121,7 @@ class MrpProduction(models.Model):
     def _compute_insert_color(self):
         for record in self:
             value = self._extract_value(record.selected_characteristics or '', "INSERT COLOR")
-            record.insert_color = "" if value.lower() == "not applicable" else value
+            record.insert_color = "" if value.lower().strip() == "not applicable" else value
 
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
