@@ -150,14 +150,14 @@
                         <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_lot_on_delivery_slip"/>
                         <thead>
                             <tr>
-                                <th name="th_sml_product"><strong>Product</strong></th>
-                                <th name="th_sml_qty_ordered" class="text-center" t-if="not has_serial_number">
+                                <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_product"><strong>Product</strong></th>
+                                <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_qty_ordered" class="text-center" t-if="not has_serial_number">
                                     <strong>Ordered</strong>
                                 </th>
                                 <th name="lot_serial" t-else="">
                                     Lot/Serial Number
                                 </th>
-                                <th name="th_sml_quantity" class="text-center"><strong>Delivered</strong></th>
+                                <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_quantity" class="text-center"><strong>Delivered</strong></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -173,7 +173,7 @@
                                     <t t-set="package_move_lines" t-value="o.move_line_ids.filtered(lambda l: l.result_package_id == package)"/>
                                     <!-- If printing lots/serial numbers => keep products in original lines -->
                                     <t t-if="has_serial_number">
-                                        <tr t-foreach="package_move_lines" t-as="move_line">
+                                        <tr t-foreach="package_move_lines" t-as="move_line" style="border: 1px solid #ddd; padding: 10px;">
                                             <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
                                         </tr>
                                     </t>
@@ -202,7 +202,7 @@
                             <t t-else="">
                                 <!-- If printing lots/serial numbers => keep products in original lines -->
                                 <t t-if="has_serial_number">
-                                    <tr t-foreach="o.move_line_ids" t-as="move_line">
+                                    <tr t-foreach="o.move_line_ids" t-as="move_line" style="border: 1px solid #ddd; padding: 10px;">
                                         <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
                                     </tr>
                                 </t>
@@ -231,14 +231,14 @@
                             </thead>
                             <tbody>
                                 <tr t-foreach="backorders.mapped('move_ids').filtered(lambda x: x.product_uom_qty)" t-as="bo_line">
-                                    <td class="w-auto">
+                                    <td class="w-auto" style="border: 1px solid #ddd; padding: 10px;">
                                         <span t-field="bo_line.product_id">Office Chair</span>
                                         <p t-if="bo_line.description_picking and bo_line.description_picking != bo_line.product_id.name and bo_line.description_picking != bo_line.product_id.display_name">
                                             <span t-field="bo_line.description_picking">Description on transfer</span>
                                         </p>
                                     </td>
                                     <td/>
-                                    <td class="text-center w-auto">
+                                    <td class="text-center w-auto" style="border: 1px solid #ddd; padding: 10px;">
                                         <span t-field="bo_line.product_uom_qty">3.00</span>
                                         <span t-field="bo_line.product_uom" groups="uom.group_uom">units</span>
                                     </td>
