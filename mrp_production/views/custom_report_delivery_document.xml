@@ -110,31 +110,31 @@
                         </div>
                     </div>
                     <div class="oe_structure"/>
-                    <table class="table table-sm" t-if="o.state!='done'" name="stock_move_table">
+                    <table class="table table-sm" t-if="o.state!='done'" name="stock_move_table" style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                         <thead>
-                            <tr>
-                                <th name="th_sm_product"><strong>Product</strong></th>
-                                <th name="th_sm_ordered"><strong>Ordered</strong></th>
-                                <th name="th_sm_quantity"><strong>Delivered</strong></th>
+                            <tr style=" background-color: #f7f7f7;">
+                                <th  style="border: 1px solid #ddd; padding: 10px;" name="th_sm_product"><strong>Product</strong></th>
+                                <th  style="border: 1px solid #ddd; padding: 10px;" name="th_sm_ordered"><strong>Ordered</strong></th>
+                                <th  style="border: 1px solid #ddd; padding: 10px;" name="th_sm_quantity"><strong>Delivered</strong></th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"/>
                             <tr t-foreach="lines" t-as="move">
-                                <td>
+                                <td style="border: 1px solid #ddd; padding: 10px;">
                                     <span t-field="move.product_id">Customizable Desk</span>
                                     <p t-if="move.description_picking and move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
                                         <span t-field="move.description_picking">Description on transfer</span>
                                     </p>
                                 </td>
-                                <td>
+                                <td style="border: 1px solid #ddd; padding: 10px;">
                                     <span t-field="move.product_uom_qty">3.00</span>
                                     <span t-field="move.product_uom" groups="uom.group_uom">units</span>
                                     <span t-if="move.product_packaging_id">
                                         (<span t-field="move.product_packaging_qty" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/> <span t-field="move.product_packaging_id"/>)
                                     </span>
                                 </td>
-                                <td>
+                                <td style="border: 1px solid #ddd; padding: 10px;">
                                     <span t-field="move.quantity">3.00</span>
                                     <span t-field="move.product_uom" groups="uom.group_uom">units</span>
                                     <span t-if="move.product_packaging_id">
