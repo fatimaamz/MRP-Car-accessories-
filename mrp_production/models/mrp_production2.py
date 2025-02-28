@@ -107,10 +107,12 @@ class MrpProduction(models.Model):
         Extracts the value of a field from 'selected_characteristics', ensuring:
         1. If empty, it remains empty (doesn't capture the next line).
         2. Only the exact line where the field appears is used.
+        3. "Not Applicable" is removed and replaced with an empty string.
         """
         pattern = rf'^{field_name}:\s*(.*)$'  # Matches the field followed by any text on the same line
         match = re.search(pattern, text, re.MULTILINE)
-        return match.group(1).strip() if match else ""  # Ensures empty values remain empty
+        value = match.group(1).strip() if match else ""  # Extract value or return empty string
+        return "" if value.lower() == "not applicable" else value  # Ensure "Not Applicable" is replaced with empty
 
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
