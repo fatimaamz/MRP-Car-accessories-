@@ -196,11 +196,11 @@
                     <field name="product_qty" sum="Total Qty" widget="float"  string="Quantité" readonly="1" optional="show"/>
                     <field name="is_coped"/>
 
-                    <field name="place_status" string="Placed" invisible="state !='done'"  widget="badge" decoration-success="place_status == 'place'"  decoration-danger="place_status== 'non_place'" />
+                    <field name="place_status" string="Placed"   widget="badge" decoration-success="place_status == 'place'"  decoration-danger="place_status== 'non_place'" />
 
-                    <field name="finalization_status" invisible="state !='done'"  widget="badge" decoration-success="finalization_status == 'finalise'"  decoration-danger="finalization_status== 'non_finalise'" />
+                    <field name="finalization_status"   widget="badge" decoration-success="finalization_status == 'finalise'"  decoration-danger="finalization_status== 'non_finalise'" />
           
-                    <field name="conform_status"  invisible="state !='done'"  widget="badge" decoration-success="conform_status == 'conforme'"  decoration-danger="conform_status == 'non_conforme'" />
+                    <field name="conform_status"  widget="badge" decoration-success="conform_status == 'conforme'"  decoration-danger="conform_status == 'non_conforme'" />
 
                     <field name="lot_producing_id" optional="hide"/>
                     <field name="bom_id" readonly="1" optional="hide"/>
