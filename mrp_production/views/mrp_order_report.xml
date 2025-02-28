@@ -42,7 +42,7 @@
                                         </li>
                                     </ul>
                                 </t>
-                                </t>
+                                
                                 <t t-else="">
                                     <div class="row">
                                     <div class="col-6">
