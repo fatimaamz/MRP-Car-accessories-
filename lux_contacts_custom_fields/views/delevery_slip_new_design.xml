@@ -9,7 +9,7 @@
         <field name="report_name">lux_contacts_custom_fields.report_deliveryslip_new_template</field>
         <field name="report_file">lux_contacts_custom_fields.report_deliveryslip_new_template</field>
         <field name="print_report_name">"Bon de livraison- %s" % (object.name)</field>
-        <field name="binding_model_id" ref="account.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
     </record>
     <template id="report_deliveryslip_new_template">
 
