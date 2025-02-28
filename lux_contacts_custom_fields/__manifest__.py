@@ -15,6 +15,7 @@
              "views/work_order_multi.xml",
              "views/single_work_order.xml",
              #"views/etat_de_compte.xml",
+             "views/delevery_slip_new_design.xml",
              "views/account_invoice_report_wizard.xml",
              "security/ir.model.access.csv",
              "views/sequence.xml",
