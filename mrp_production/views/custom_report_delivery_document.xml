@@ -41,13 +41,13 @@
         </xpath>-->
         <xpath expr="//t[@t-set='address']" position="replace">
                 <t t-set="address">
-                    <div name="div_outgoing_address" style="padding: 10px; border-radius: 15px; background: white;
+                    <div style="padding: 10px; border-radius: 15px; background: white;
                                               background-color: #f6f8fc;
                                               border: 1px solid white;
                                               height: 200px;
                                               display: flex;
                                               flex-direction: column;
-                                            
+                                              color: black;
                                               box-sizing: border-box;
                                              
                                               font-size: 16px;">
@@ -64,11 +64,12 @@
         </xpath>
         <xpath expr="//t[@t-set='information_block']" position="replace">
                 <t t-set="information_block">
-                    <div class="row" style="padding: 10px; border-radius: 15px;
+                    <div  style="padding: 10px; border-radius: 15px;
                                               background-color: #f6f8fc;
                                               border: 1px solid white;
                                               height: 200px;
                                               display: flex;
+                                              color: black;
                                               flex-direction: column;
                                               background: white;
                                               box-sizing: border-box;
@@ -93,8 +94,8 @@
         </xpath>
         <xpath expr="//div[@class='page']" position="replace">
 
-                <div class="page" style="background: white;">
-                    <h2>
+                <div class="page" style="background: white;color: black;">
+                    <h2 >
                         <span t-field="o.name">WH/OUT/0001</span>
                     </h2>
                     <div class="oe_structure"/>
