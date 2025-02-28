@@ -106,14 +106,14 @@ class MrpProduction(models.Model):
     def _compute_interior_color(self):
         for record in self:
             text = record.selected_characteristics or ''
-            match = re.search(r'^INTERIOR COLOR:\s*(.*)', text, re.MULTILINE)
+            match = re.search(r'^\s*INTERIOR COLOR:\s*(.+)', text, re.MULTILINE)
             record.interior_color = match.group(1).strip() if match else ''
 
     @api.depends('selected_characteristics')
     def _compute_insert_color(self):
         for record in self:
             text = record.selected_characteristics or ''
-            match = re.search(r'^INSERT COLOR:\s*(.*)', text, re.MULTILINE)
+            match = re.search(r'^\s*INSERT COLOR:\s*(.+)', text, re.MULTILINE)
             value = match.group(1).strip() if match else ''
             record.insert_color = '' if value.lower() == "not applicable" else value
 
@@ -121,16 +121,15 @@ class MrpProduction(models.Model):
     def _compute_paint_code(self):
         for record in self:
             text = record.selected_characteristics or ''
-            # Recherche strictement sur la ligne "PAINT CODE:" pour éviter les erreurs
-            match = re.search(r'^PAINT CODE:\s*(.*)', text, re.MULTILINE)
+            match = re.search(r'^\s*PAINT CODE:\s*(.+)', text, re.MULTILINE)
             value = match.group(1).strip() if match else ''
-            record.paint_code = value
+            record.paint_code = value if value.lower() != "insert color: not applicable" else ''
 
     @api.depends('selected_characteristics')
     def _compute_main_color(self):
         for record in self:
             text = record.selected_characteristics or ''
-            match = re.search(r'^Couleurs:\s*(.*)', text, re.MULTILINE)
+            match = re.search(r'^\s*Couleurs:\s*(.+)', text, re.MULTILINE)
             record.main_color = match.group(1).strip() if match else ''
     
     
