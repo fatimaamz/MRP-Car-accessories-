@@ -115,8 +115,28 @@ class MrpProduction(models.Model):
         for record in self:
             text = record.selected_characteristics or ''
             match = re.search(r'INSERT COLOR:\s*(.+?)(?:\n|$)', text)
-            record.insert_color = match.group(1).strip() if match else ''
+            value = match.group(1).strip() if match else ''
+            record.insert_color = value if value.lower() != "not applicable" else ''
 
+    @api.depends('selected_characteristics')
+    def _compute_paint_code(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'PAINT CODE:\s*(.+?)(?:\n|$)', text)
+            value = match.group(1).strip() if match else ''
+            # Vérifier si PAINT CODE contient "INSERT COLOR: Not Applicable"
+            if "INSERT COLOR: Not Applicable" in value:
+                value = ''
+            record.paint_code = value
+            
+    """
+    @api.depends('selected_characteristics')
+    def _compute_insert_color(self):
+        for record in self:
+            text = record.selected_characteristics or ''
+            match = re.search(r'INSERT COLOR:\s*(.+?)(?:\n|$)', text)
+            record.insert_color = match.group(1).strip() if match else ''
+    """
     @api.depends('selected_characteristics')
     def _compute_main_color(self):
         for record in self:
@@ -138,6 +158,7 @@ class MrpProduction(models.Model):
             match = re.search(r'PAINT CODE:\s*(.+?)(?:\n|$)', text)
             record.paint_code = match.group(1).strip() if match else ''
     """
+    """
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
         for record in self:
@@ -145,7 +166,7 @@ class MrpProduction(models.Model):
             match = re.search(r'PAINT CODE:\s*(.*)', text)
             record.paint_code = match.group(1).strip() if match else ''
             
-
+    """
     @api.depends('selected_characteristics')
     def _compute_year(self):
         for record in self:
