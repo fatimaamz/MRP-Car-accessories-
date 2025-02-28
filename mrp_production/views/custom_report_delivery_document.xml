@@ -94,24 +94,24 @@
         </xpath>
         <xpath expr="//div[@class='page']" position="replace">
 
-                <div class="page" style="background: white;color: black;">
+                <div class="page"  style="color: #2f374f;font-family: Inter;line-height: 1.3;">
                     <h2 >
                         <span t-field="o.name">WH/OUT/0001</span>
                     </h2>
                     <div class="oe_structure"/>
-                    <div class="row mt32 mb32" style="background: white;color: black;">
+                    <div class="row mt32 mb32" >
                         <div t-if="o.origin" class="col-auto" name="div_origin">
                             <strong>Order:</strong>
                             <p t-field="o.origin">S0001</p>
                         </div>
-                        <div t-if="o.state" class="col-auto" name="div_sched_date" style="background: white;color: black;">
+                        <div t-if="o.state" class="col-auto" name="div_sched_date" >
                             <strong>Shipping Date:</strong>
                                 <p t-if="o.state == 'done'" t-field="o.date_done"/>
                                 <p t-else="" t-field="o.scheduled_date"/>
                         </div>
                     </div>
                     <div class="oe_structure"/>
-                    <table  t-if="o.state!='done'" name="stock_move_table" style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;border: 1px solid #f7f7f7;color: black;">
+                    <table  t-if="o.state!='done'" name="stock_move_table" style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;border: 1px solid #f7f7f7;">
                         <thead>
                             <tr style=" background-color: #f7f7f7;">
                                 <th  style="border: 1px solid #ddd; padding: 10px;" name="th_sm_product"><strong>Product</strong></th>
