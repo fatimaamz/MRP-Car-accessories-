@@ -41,7 +41,7 @@
         </xpath>-->
         <xpath expr="//t[@t-set='address']" position="replace">
                 <t t-set="address">
-                    <div name="div_outgoing_address" style="padding: 10px; border-radius: 15px;
+                    <div name="div_outgoing_address" style="padding: 10px; border-radius: 15px; background: white;
                                               background-color: #f6f8fc;
                                               border: 1px solid white;
                                               height: 200px;
@@ -70,7 +70,7 @@
                                               height: 200px;
                                               display: flex;
                                               flex-direction: column;
-                                            
+                                              background: white;
                                               box-sizing: border-box;
                                              
                                               font-size: 16px;">
@@ -93,7 +93,7 @@
         </xpath>
         <xpath expr="//div[@class='page']" position="replace">
 
-                <div class="page">
+                <div class="page" style="background: white;">
                     <h2>
                         <span t-field="o.name">WH/OUT/0001</span>
                     </h2>
