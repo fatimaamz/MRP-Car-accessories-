@@ -116,7 +116,10 @@ class MrpProduction(models.Model):
             text = record.selected_characteristics or ''
             match = re.search(r'INSERT COLOR:\s*(.+?)(?:\n|$)', text)
             value = match.group(1).strip() if match else ''
-            record.insert_color = value if value.lower() != "not applicable" else ''
+            # Remplacer "Not Applicable" par une valeur vide
+            if "INSERT COLOR: Not Applicable" in value:
+                value = ''
+            record.insert_color = value
 
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
