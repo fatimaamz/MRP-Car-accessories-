@@ -27,7 +27,7 @@
                         <!-- Product Details Section <t t-esc="docs.product_id.detailed_type"/>  -->
                         <div style="padding: 5mm;">
                             <!-- Top Left: Year -->
-                            <div style="text-align: left; font-size: 14px; margin-bottom: 5mm;">
+                            <div style="text-align: left; font-size: 14px; margin-bottom: 5mm;width: 150px;">
                                 <strong>
                                     <t t-esc="docs.product_brand or 'No Brand'"/>
                                     <t t-esc="docs.year or 'XXXX'"/>
