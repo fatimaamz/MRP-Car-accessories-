@@ -74,14 +74,14 @@
                                             </ul>
                                         </div>
                                     </t>
-                                </t>
+                                
                           
                         </div>
 
                         
                     </div>
                     </t>
-
+                    </t>
 
                 <t t-else="">
                 <div class="row">
