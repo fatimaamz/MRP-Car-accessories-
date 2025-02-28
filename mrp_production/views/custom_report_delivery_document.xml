@@ -90,7 +90,7 @@
                         </div>
                     </div>
                 </t>
-        </t>
+        </xpath>
         <xpath expr="//div[@class='page']" position="replace">
 
                 <div class="page">
