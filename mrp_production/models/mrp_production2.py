@@ -112,7 +112,7 @@ class MrpProduction(models.Model):
                 record.main_color,
                 record.carbon_code,
                 record.paint_code,
-                record.year,
+              
             ]
             # Join non-empty values with " | " as separator
             record.full_characteristics = " | ".join(filter(None, values))
