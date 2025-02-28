@@ -122,8 +122,7 @@ class MrpProduction(models.Model):
     @api.depends('selected_characteristics')
     def _compute_insert_color(self):
         for record in self:
-            value = self._extract_value(record.selected_characteristics or '', "INSERT COLOR")
-            record.insert_color = "" if value.lower().strip() == "not applicable" else value
+            record.insert_color = self._extract_value(record.selected_characteristics or '', "INSERT COLOR")
 
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
