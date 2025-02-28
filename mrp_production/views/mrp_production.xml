@@ -190,7 +190,7 @@
                     <field name="state" decoration-success="state in ('done', 'to_close')" decoration-warning="state == 'progress'" decoration-info="state == 'confirmed'" decoration-danger="state == 'cancel'" decoration-muted="state == 'draft'" optional="show" widget="badge" class="text-dark"/>
                     <field name="product_id" readonly="1" optional="show"/>
                    <!-- <field name="color"/>-->
-                    <field name="full_characteristics"-->
+                    <field name="full_characteristics"/>
                     <field name="partner_id"/>
                     <field name="ship_to_id"/>
                     <field name="po_client"/>
