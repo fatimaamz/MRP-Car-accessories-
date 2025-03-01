@@ -32,7 +32,7 @@
                                                 <t t-if="o.sale_order_partner_id.image_1920">
                                                     <img t-att-src="image_data_uri(o.sale_order_partner_id.image_1920)"
                                                          alt="Client Logo"
-                                                         style=" width: 500px;height: 35px;"/>
+                                                         style=" width: 50px;height: 35px;"/>
                                                 </t>
                                             </div>
                                         </div>
@@ -208,7 +208,7 @@
                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sm_product">
                                             <strong>Product</strong>
                                         </th>
-                                         <th name="th_sm_image">
+                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sm_image">
                                             <strong>Image</strong>
                                         </th>
                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sm_ordered">
@@ -230,7 +230,7 @@
                                         </td>
                                         
                                         
-                                        <td class="text-right">
+                                        <td style="border: 1px solid #ddd; padding: 10px;" class="text-right">
                                             <img t-if="move.image_128" t-att-src="image_data_uri(move.image_128)" style="width: 90%"/>
                                         </td>
                                         <td style="border: 1px solid #ddd; padding: 10px;">
