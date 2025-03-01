@@ -43,6 +43,16 @@ class AccountMoveLine(models.Model):
         
 class StockPicking(models.Model):
     _inherit = "stock.picking"
+    
+    week_number = fields.Char(string="Week Number", compute="_compute_week_number", store=True)
+
+    @api.depends('scheduled_date')
+    def _compute_week_number(self):
+        for picking in self:
+            if picking.scheduled_date:
+                picking.week_number = 'S' + datetime.strftime(picking.scheduled_date, "%U")
+            else:
+                picking.week_number = ''
 
     po = fields.Char(
         string="Po client",
