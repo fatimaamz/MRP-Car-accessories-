@@ -3,7 +3,7 @@
 <odoo>
 
     <record id="action_report_deliveryslip_new_template" model="ir.actions.report">
-        <field name="name">Bon de livraison /BL</field>
+        <field name="name">Bon de livraison</field>
         <field name="model">stock.picking</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">lux_contacts_custom_fields.report_deliveryslip_new_template</field>
