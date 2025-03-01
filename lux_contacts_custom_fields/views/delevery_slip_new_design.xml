@@ -32,7 +32,7 @@
                                                 <t t-if="o.sale_order_partner_id.image_1920">
                                                     <img t-att-src="image_data_uri(o.sale_order_partner_id.image_1920)"
                                                          alt="Client Logo"
-                                                         style=" width: 240px;height: 35px;"/>
+                                                         style=" width: 500px;height: 35px;"/>
                                                 </t>
                                             </div>
                                         </div>
@@ -181,7 +181,7 @@
                             </h2>
                             <div class="oe_structure"/>
                             <div class="row mt32 mb32">
-                                <div ct-if="o.numero_commande" class="col-auto">
+                                <div t-if="o.numero_commande" class="col-auto">
                                     <strong>Numéro de commande :</strong>
                                     <p t-field="o.numero_commande"/>
                                 </div>
@@ -208,6 +208,9 @@
                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sm_product">
                                             <strong>Product</strong>
                                         </th>
+                                         <th name="th_sm_image">
+                                            <strong>Image</strong>
+                                        </th>
                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sm_ordered">
                                             <strong>Ordered</strong>
                                         </th>
@@ -225,6 +228,8 @@
                                                 <span t-field="move.description_picking">Description on transfer</span>
                                             </p>
                                         </td>
+                                        
+                                        
                                         <td class="text-right">
                                             <img t-if="move.image_128" t-att-src="image_data_uri(move.image_128)" style="width: 90%"/>
                                         </td>
@@ -261,9 +266,7 @@
                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_product">
                                             <strong>Product</strong>
                                         </th>
-                                        <th name="th_sm_image">
-                                            <strong>Image</strong>
-                                        </th>
+                                       
                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_qty_ordered"
                                             class="text-center"
                                             t-if="not has_serial_number">
