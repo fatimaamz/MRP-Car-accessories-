@@ -16,7 +16,7 @@
 
         <t t-call="web.basic_layout">
             <div class="page" style="color: #2f374f;font-family: Inter;line-height: 1.3;">
-                <t t-foreach="docs" t-as="doc">
+                <t t-foreach="docs" t-as="o">
                     <main>
                         <div class="header"
                              style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
