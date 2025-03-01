@@ -32,7 +32,7 @@
                                                 <t t-if="o.sale_order_partner_id.image_1920">
                                                     <img t-att-src="image_data_uri(o.sale_order_partner_id.image_1920)"
                                                          alt="Client Logo"
-                                                         style="max-height: 100px;"/>
+                                                         style=" width: 240px;height: 35px;"/>
                                                 </t>
                                             </div>
                                         </div>
