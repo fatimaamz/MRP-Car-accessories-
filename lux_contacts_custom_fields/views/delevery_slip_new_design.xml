@@ -96,7 +96,7 @@
 
                             <!-- </t>-->
 
-                            <t t-else="">
+                           <!-- <t t-else="">
                                 <div class="row">
                                     <div class="col-6">
                                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
@@ -104,7 +104,7 @@
 
                                 </div>
 
-                            </t>
+                            </t>-->
                         </div>
                         <t t-set="address">
                             <div style="padding: 10px; border-radius: 15px; background: white;
