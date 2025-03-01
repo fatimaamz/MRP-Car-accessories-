@@ -53,7 +53,7 @@
                                     </t>
 
                                     <t t-else="">
-                                        <div class="row">
+                                        <!--div class="row">
                                             <div class="col-6">
                                                 <img t-if="user.company_id.logo" t-att-src="image_data_uri(user.company_id.logo)"
                                                      alt="Logo" style="width: 240px;height: 40px;"/>
@@ -85,7 +85,56 @@
                                                     <span t-esc="forced_vat">US12345671</span>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div>-->
+
+
+
+                                        <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
+                            <tr style="border: 1px solid white;">
+                                <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
+                                    <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
+                                         style="  width: 240px;height: 35px;" alt="Company Logo"/><br/><br/>
+                                    <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
+                                        Sales Order
+                                    </h2>
+                                </td>
+                                 <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;">
+                                    <div style="text-align: justify; width: 100%; border: 1px solid white;">
+                                        <strong style="font-size: 16px;">
+                                            <t t-esc="user.company_id.name"/>
+                                        </strong>
+                                        <br/>
+                                        <span>
+                                               <t t-if="user.company_id.street">
+                                            <t t-esc="user.company_id.street"/>
+                                            <t t-if="user.company_id.city or user.company_id.state_id or user.company_id.country_id">, </t>
+                                        </t>
+                                        <t t-if="user.company_id.city">
+                                            <t t-esc="user.company_id.city"/>
+                                            <t t-if="user.company_id.state_id or user.company_id.country_id">, </t>
+                                        </t>
+                                        <t t-if="user.company_id.state_id">
+                                            <t t-esc="user.company_id.state_id.name"/>
+                                            <t t-if="user.company_id.country_id">, </t>
+                                        </t>
+                                        <br/>
+                                        <t t-if="user.company_id.zip">
+                                            <t t-esc="user.company_id.zip"/>
+                                        </t>
+                                        <t t-if="user.company_id.country_id">
+                                            <t t-esc="user.company_id.country_id.name"/>
+                                        </t>
+                                        </span><br/>
+                                        <span style="font-size: 14px;">
+                                            
+                                            <t t-esc="user.company_id.email or ''"/>
+                                            /
+                                            <t t-esc="user.company_id.phone or ''"/>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                                     </t>
 
                                 </div>
@@ -201,6 +250,45 @@
                                 </div>
                             </div>
                             <div class="oe_structure"/>
+
+                            <!-- delivery details -->
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+
+
+                                <thead>
+                                    <tr style="background-color: #f7f7f7;">
+                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
+                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
+                                            Number
+                                        </th>
+                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship
+                                            By
+                                        </th>
+                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <t t-foreach="delivery_details" t-as="delivery">
+                                        <tr>
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="o.week_number"/>
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="o.numero_suivi"/>
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="o.scheduled_date']"/>
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="o.carrier_id.name"/>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            
+                            
+                            <div class="oe_structure"/>
+
+                            
                             <table t-if="o.state!='done'" name="stock_move_table"
                                    style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                                 <thead>
