@@ -167,6 +167,10 @@
                                              t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;vat&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                                     </div>
                                 </div>
+
+
+
+                                
                             </div>
                         </t>
 
@@ -177,6 +181,15 @@
                             </h2>
                             <div class="oe_structure"/>
                             <div class="row mt32 mb32">
+                                <div ct-if="o.numero_commande" class="col-auto">
+                                    <strong>Numéro de commande :</strong>
+                                    <p t-field="o.numero_commande"/>
+                                </div>
+                                <div t-if="o.numero_suivi" class="col-auto">
+                                    <strong>Numéro de suivi :</strong>
+                                    <p t-field="o.numero_suivi"/>
+                                </div>
+                                
                                 <div t-if="o.origin" class="col-auto" name="div_origin">
                                     <strong>Order:</strong>
                                     <p t-field="o.origin">S0001</p>
@@ -212,8 +225,11 @@
                                                 <span t-field="move.description_picking">Description on transfer</span>
                                             </p>
                                         </td>
+                                        <td class="text-right">
+                                            <img t-if="move.image_128" t-att-src="image_data_uri(move.image_128)" style="width: 90%"/>
+                                        </td>
                                         <td style="border: 1px solid #ddd; padding: 10px;">
-                                            <span t-field="move.product_uom_qty">3.00</span>
+                                             <span t-field="move.product_uom_qty" t-options='{"widget": "float", "precision": 0}'/>
                                             <span t-field="move.product_uom" groups="uom.group_uom">units</span>
                                             <span t-if="move.product_packaging_id">
                                                 (
@@ -223,7 +239,7 @@
                                             </span>
                                         </td>
                                         <td style="border: 1px solid #ddd; padding: 10px;">
-                                            <span t-field="move.quantity">3.00</span>
+                                            <span t-field="move.quantity" t-options='{"widget": "float", "precision": 0}'/>
                                             <span t-field="move.product_uom" groups="uom.group_uom">units</span>
                                             <span t-if="move.product_packaging_id">
                                                 (
@@ -244,6 +260,9 @@
                                     <tr>
                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_product">
                                             <strong>Product</strong>
+                                        </th>
+                                        <th name="th_sm_image">
+                                            <strong>Image</strong>
                                         </th>
                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_qty_ordered"
                                             class="text-center"
