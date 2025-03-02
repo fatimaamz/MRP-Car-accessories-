@@ -37,7 +37,7 @@
                 <t t-foreach="docs" t-as="o">
                     <main>
                         <div class="header"
-                             style=" align-items: center;">
+                             style=" display: flex; justify-content: space-between;align-items: center;">
 
                             <div class="row">
                                 <div class="col-6">
@@ -179,7 +179,7 @@
                                     <span>
                                         <strong>Delivery Address:</strong>
                                     </span>
-                                    <div t-field="o.move_ids[0].partner_id"
+                                    <div t-field="o.partner_id"
                                          t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                                 </div>
                                 <div name="outgoing_warehouse_address"
