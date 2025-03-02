@@ -167,7 +167,7 @@
                         </div>
 
 
-                        <div style="margin-top: 30px;">
+                        <div style="margin-top: 40px;">
                             <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
                                 <tr>
                                     <!-- Left Block: Customer Information -->
@@ -183,25 +183,25 @@
                                               height: 200px;
                                               display: flex;
                                               flex-direction: column;
-                                            
+                                              width: 30%;
                                               box-sizing: border-box;
                                              
                                               font-size: 16px;">
-                                        <div name="outgoing_delivery_address" t-if="o.should_print_delivery_address()">
+                                        <t t-if="o.should_print_delivery_address()">
                                             <span>
                                                 <strong>Delivery Address:</strong>
                                             </span>
                                             <div t-field="o.move_ids[0].partner_id"
                                                  t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-                                        </div>
-                                        <div name="outgoing_warehouse_address"
+                                        </t>
+                                        <t
                                              t-elif="o.picking_type_id.code != 'internal' and o.picking_type_id.warehouse_id.partner_id">
                                             <span>
                                                 <strong>Warehouse Address:</strong>
                                             </span>
                                             <div t-field="o.picking_type_id.warehouse_id.partner_id"
                                                  t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-                                        </div>
+                                        </t>
                                     </td>
                                 </tr>
                             </table>
