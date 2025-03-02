@@ -84,33 +84,48 @@ class MrpProduction(models.Model):
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
 
-
     def get_delivery_details(self):
-        delivery_data = []
+        self.ensure_one()  # Assure qu'on traite un seul OF
 
-        # Récupérer les bons de livraison (stock.picking) ayant la même origine que l'OF
+        delivery_data = {}
+        
+        if not self.name:
+            return {}  # Retourne un dictionnaire vide si pas d'OF
+
+        # Récupérer les livraisons liées à cet OF
         pickings = self.env['stock.picking'].search([
-            ('origin', '=', self.name),  # Filtrer par l'origine de l'OF
+            ('origin', '=', self.name),
             ('state', '!=', 'cancel')
         ])
 
         for picking in pickings:
             for move in picking.move_lines.filtered(lambda m: m.product_id in self.move_finished_ids.mapped('product_id')):
-                if picking.scheduled_date:
-                    week_number = picking.scheduled_date.strftime("%U")  # Calcul du numéro de semaine
-                    shipping_week = f"S{week_number}"
-                else:
-                    shipping_week = " "
+                product_id = move.product_id.id  # Clé unique par produit
 
-                delivery_data.append({
-                    'Product': move.product_id.name,  # Nom du produit
-                    'N° semaine': shipping_week,
-                    'Tracking number': move.tracking_number or ' ',
-                    'Must ship by': move.must_ship_by.strftime("%Y-%m-%d") if move.must_ship_by else ' ',
-                    'Ship via': move.ship_via.name if move.ship_via else ' ',
-                })
+                if product_id in delivery_data:
+                    # Vérifier si cette ligne est plus récente
+                    if move.picking_id.scheduled_date > delivery_data[product_id]['scheduled_date']:
+                        continue  # On garde la plus récente, donc on ignore cette ligne
+
+                # Calcul de la semaine de livraison
+                week_number = picking.scheduled_date.strftime("%U") if picking.scheduled_date else " "
+                shipping_week = f"S{week_number}" if week_number.strip() else " "
+
+                # Stocker les données sous forme de dictionnaire
+                delivery_data[product_id] = {
+                    'product_id': move.product_id.id,
+                    'product_name': move.product_id.name,
+                    'shipping_week': shipping_week,
+                    'tracking_number': move.tracking_number or '',
+                    'must_ship_by': move.must_ship_by.strftime("%Y-%m-%d") if move.must_ship_by else '',
+                    'ship_via': move.ship_via.name if move.ship_via else '',
+                    'scheduled_date': move.picking_id.scheduled_date,  # Stocker la date pour comparaison
+                }
 
         return delivery_data
+
+
+ 
 
     
     @api.depends('origin')  
