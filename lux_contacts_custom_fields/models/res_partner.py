@@ -9,6 +9,23 @@ import io
 import base64
 from odoo.exceptions import UserError
 
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    tracking_number = fields.Char(string="Tracking Number")
+    must_ship_by = fields.Date(string="Must Ship By")
+    ship_via = fields.Many2one('delivery.carrier', string="Ship Via")
+    shipping_week = fields.Char(string="Shipping Week", compute="_compute_shipping_week", store=True)
+
+    @api.depends('must_ship_by')
+    def _compute_shipping_week(self):
+        for record in self:
+            if record.must_ship_by:
+                week_number = record.must_ship_by.isocalendar()[1]
+                record.shipping_week = f"S{week_number}"
+            else:
+                record.shipping_week = False
+
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
