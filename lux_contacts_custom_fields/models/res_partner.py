@@ -94,7 +94,7 @@ class MrpProduction(models.Model):
 
         # Récupérer les livraisons liées à cet OF
         pickings = self.env['stock.picking'].search([
-            ('origin', '=', self.name),
+            ('name', '=', self.origin),
             ('state', '!=', 'cancel')
         ],limit=1)
 
@@ -102,24 +102,15 @@ class MrpProduction(models.Model):
             for move in picking.move_lines.filtered(lambda m: m.product_id in self.move_finished_ids.mapped('product_id')):
                 product_id = move.product_id.id  # Clé unique par produit
 
-                if product_id in delivery_data:
-                    # Vérifier si cette ligne est plus récente
-                    if move.picking_id.scheduled_date > delivery_data[product_id]['scheduled_date']:
-                        continue  # On garde la plus récente, donc on ignore cette ligne
-
-                # Calcul de la semaine de livraison
-                week_number = picking.scheduled_date.strftime("%U") if picking.scheduled_date else " "
-                shipping_week = f"S{week_number}" if week_number.strip() else " "
-
+              
                 # Stocker les données sous forme de dictionnaire
                 delivery_data[product_id] = {
                     'product_id': move.product_id.id,
                     'product_name': move.product_id.name,
-                    'shipping_week': shipping_week,
+                    'shipping_week': move.shipping_week,
                     'tracking_number': move.tracking_number or '',
-                    'must_ship_by': move.must_ship_by.strftime("%Y-%m-%d") if move.must_ship_by else '',
+                    'must_ship_by': move.must_ship_by if move.must_ship_by else '',
                     'ship_via': move.ship_via.name if move.ship_via else '',
-                    'scheduled_date': move.picking_id.scheduled_date,  # Stocker la date pour comparaison
                 }
 
         return delivery_data
