@@ -105,7 +105,7 @@ class MrpProduction(models.Model):
                 delivery_data = {
                     'product_id': move.product_id.id,
                     'product_name': move.product_id.name,
-                    'shipping_week': move.shipping_week,
+                    'shipping_week': move.shipping_week or '',
                     'tracking_number': move.tracking_number or '',
                     'must_ship_by': move.must_ship_by if move.must_ship_by else '',
                     'ship_via': move.ship_via.name if move.ship_via else '',
