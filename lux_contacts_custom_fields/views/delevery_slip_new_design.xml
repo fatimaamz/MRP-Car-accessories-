@@ -152,19 +152,8 @@
                             </div>
 
 
-                            <!-- </t>-->
-
-                           <!-- <t t-else="">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
-                                    </div>
-
-                                </div>
-
-                            </t>-->
                         </div>
-                        <t t-set="address">
+                      
                             <div style="padding: 10px; border-radius: 15px; background: white;
                                               background-color: #f6f8fc;
                                               border: 1px solid white;
@@ -191,45 +180,9 @@
                                          t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                                 </div>
                             </div>
-                        </t>
+                     
 
-                      
-                            <div style="padding: 10px; border-radius: 15px;
-                                              background-color: #f6f8fc;
-                                              border: 1px solid white;
-                                              height: 200px;
-                                              display: flex;
-                                              color: black;
-                                              flex-direction: column;
-                                              box-sizing: border-box;
-
-                                              font-size: 16px;">
-                                <div class="col-7" name="div_incoming_address">
-                                    <t t-set="show_partner" t-value="False"/>
-                                    <div name="vendor_address" t-if="o.picking_type_id.code=='incoming' and partner">
-                                        <span>
-                                            <strong>Vendor Address:</strong>
-                                        </span>
-                                        <t t-set="show_partner" t-value="True"/>
-                                    </div>
-                                    <div name="customer_address"
-                                         t-if="o.picking_type_id.code=='outgoing' and partner and partner != partner.commercial_partner_id">
-                                        <span>
-                                            <strong>Customer Address:</strong>
-                                        </span>
-                                        <t t-set="show_partner" t-value="True"/>
-                                    </div>
-                                    <div t-if="show_partner" name="partner_header">
-                                        <div t-field="partner.commercial_partner_id"
-                                             t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;vat&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-                                    </div>
-                                </div>
-
-
-
-                                
-                            </div>
-                        
+                    
 
 
                         <div class="page" style="color: #2f374f;font-family: Inter;line-height: 1.3;">
