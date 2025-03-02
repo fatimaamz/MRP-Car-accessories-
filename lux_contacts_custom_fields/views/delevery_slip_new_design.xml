@@ -479,6 +479,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
+                                    <strong>  Total de la commande: <t t-esc="sum(line.product_uom_qty for line in doc.move_ids)"/></strong>
+                                  </div>
                             </div>
 
                             <div t-if="not o.signature" class="oe_structure"/>
