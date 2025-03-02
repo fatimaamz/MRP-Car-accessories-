@@ -350,10 +350,11 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
-                            <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
+                                  <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
                                     <strong>  Total de la commande: <t t-esc="sum(line.product_uom_qty for line in doc.move_ids)"/></strong>
                                   </div>
+                            </table>
+                          
                             <table t-elif="o.move_line_ids and o.state=='done'" name="stock_move_line_table"
                                    style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                                 <t t-set="has_serial_number" t-value="False"/>
