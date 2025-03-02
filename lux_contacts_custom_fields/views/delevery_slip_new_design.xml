@@ -48,16 +48,16 @@
                                         <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
                                             <tr style="border: 1px solid white;">
                                                 <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
-                                                    <img t-att-src="'/web/image/res.partner/%s/logo' % (o.sale_order_partner_id.id)"
-                                                         style="  width: 240px;height: 36px;" alt="Company Logo"/>
+                                                    <img t-att-src="image_data_uri(o.sale_order_partner_id.image_1920)"
+                                                         style=" width: 240px;height: 36px;" alt="Company Logo"/>
                                                     <br/>
                                                     <br/>
                                                     <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
                                                         Bon de livraison
                                                     </h2>
                                                 </td>
-                                                <td style="text-align: right; vertical-align: right; border: 1px solid white;float: right;padding-left: 270px;">
-                                                    <div style="text-align: justify; width: 100%; border: 1px solid white;">
+                                                <td style= "width: 50%;text-align: right; vertical-align: right; border: 1px solid white;float: right;padding-left: 270px;">
+                                                    <div style="text-align: justify; border: 1px solid white;">
                                                         <strong style="font-size: 16px;">
                                                             <t t-esc="o.sale_order_partner_id.name"/>
                                                         </strong>
