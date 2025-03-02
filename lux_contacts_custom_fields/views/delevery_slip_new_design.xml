@@ -164,7 +164,7 @@
                                                                    Bon de livraison
                                                                </h2>
                                                            </td>
-                                                            <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;padding-left: 100px;">
+                                                            <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;padding-left: 180px;">
                                                                <div style="text-align: justify; width: 100%; border: 1px solid white;">
                                                                    <strong style="font-size: 16px;">
                                                                        <t t-esc="user.company_id.name"/>
@@ -336,7 +336,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                     <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.must_ship_by)"/>
+                                     <t t-set="lines" t-value="o.move_ids"/> <!-- .filtered(lambda x: x.must_ship_by)-->
                                      <tr t-foreach="lines" t-as="move">
                                        
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
