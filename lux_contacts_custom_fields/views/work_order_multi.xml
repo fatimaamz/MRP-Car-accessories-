@@ -120,7 +120,7 @@
                 </div>
 
                 <t t-set="delivery_details" t-value="docs.get_delivery_details()"/>
-                        <t t-if="delivery_details">
+                        <!--<t t-if="delivery_details">-->
                             <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
 
 
@@ -142,18 +142,18 @@
                                     <t t-foreach="delivery_details" t-as="delivery">
                                         <tr>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="delivery['N° semaine']"/>
+                                                t-esc="delivery['shipping_week']"/>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="delivery['Tracking number']"/>
+                                                t-esc="delivery['tracking_number']"/>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="delivery['Must ship by']"/>
+                                                t-esc="delivery['must_ship_by']"/>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="delivery['Ship via']"/>
+                                                t-esc="delivery['ship_via']"/>
                                         </tr>
                                     </t>
                                 </tbody>
                             </table>
-                        </t>
+                      <!--  </t>-->
 
                 
                 <!-- Product Details Table (Table 2) -->
