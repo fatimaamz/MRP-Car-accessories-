@@ -56,7 +56,7 @@
                                                         Bon de livraison
                                                     </h2>
                                                 </td>
-                                                <td style= "width: 50%;text-align: right; vertical-align: right; border: 1px solid white;float: right;padding-left: 270px;">
+                                                <td style= "text-align: right; vertical-align: right; border: 1px solid white;float: right;padding-left: 270px;">
                                                     <div style="text-align: justify; border: 1px solid white;">
                                                         <strong style="font-size: 16px;">
                                                             <t t-esc="o.sale_order_partner_id.name"/>
