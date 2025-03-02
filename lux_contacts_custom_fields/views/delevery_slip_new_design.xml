@@ -107,7 +107,7 @@
                                                                    Bon de livraison
                                                                </h2>
                                                            </td>
-                                                            <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;padding-left: 270px;">
+                                                            <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;padding-left: 240px;">
                                                                <div style="text-align: justify;  border: 1px solid white;">
                                                                    <strong style="font-size: 16px;">
                                                                        <t t-esc="user.company_id.name"/>
@@ -154,7 +154,26 @@
 
                         </div>
                       
-                            <div style="padding: 10px; border-radius: 15px;
+                            
+                             
+                         
+                            
+
+
+
+
+              <div style="margin-top: 30px;">
+                            <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
+                                <tr>
+                                    <!-- Left Block: Customer Information -->
+                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;  border: 1px solid white;">
+                                          
+                               
+                                         
+                                    </td>
+
+                                    <!-- Center Block: Ship To -->
+                                    <td style="padding: 10px; border-radius: 15px;
                                               background-color: #f6f8fc;
                                               border: 1px solid white;
                                               height: 200px;
@@ -164,8 +183,7 @@
                                               box-sizing: border-box;
                                              
                                               font-size: 16px;">
-                               
-                               <div name="outgoing_delivery_address" t-if="o.should_print_delivery_address()">
+                                        <div name="outgoing_delivery_address" t-if="o.should_print_delivery_address()">
                                       <span><strong>Delivery Address:</strong></span>
                                       <div t-field="o.move_ids[0].partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                                   </div>
@@ -173,9 +191,11 @@
                                       <span><strong>Warehouse Address:</strong></span>
                                       <div t-field="o.picking_type_id.warehouse_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                                   </div>
-                         
-                            </div>
-                     
+                                    </td>
+                                </table>
+              </div>
+
+                                     
 
                     
 
