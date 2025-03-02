@@ -119,6 +119,43 @@
                     </table>
                 </div>
 
+                <t t-set="delivery_details" t-value="doc.get_delivery_details()"/>
+                        <t t-if="delivery_details">
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+
+
+                                <thead>
+                                    <tr style="background-color: #f7f7f7;">
+                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
+                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
+                                            Number
+                                        </th>
+                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship
+                                            By
+                                        </th>
+                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <t t-foreach="delivery_details" t-as="delivery">
+                                        <tr>
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="delivery['N° semaine']"/>
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="delivery['Tracking number']"/>
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="delivery['Must ship by']"/>
+                                            <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="delivery['Ship via']"/>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                
                 <!-- Product Details Table (Table 2) -->
                 <table style="width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; border: 1px solid #f9fafb; border-radius: 8px; overflow: hidden;">
                     <thead>
