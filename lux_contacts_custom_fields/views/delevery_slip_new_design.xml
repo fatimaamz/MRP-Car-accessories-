@@ -380,7 +380,7 @@
                                     <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"/>
                                     <tr t-foreach="lines" t-as="move">
                                          <td style="width: 320px;border: 1px solid #ddd;">
-                                               <t t-if="line.image_128">
+                                               <t t-if="move.image_128">
                                                    <div style=" text-align: center; padding: 10px;">
                                                        <img t-att-src="image_data_uri(move.image_128)"
                                                             style="width: 200px;"/>
