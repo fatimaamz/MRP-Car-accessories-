@@ -85,34 +85,34 @@ class MrpProduction(models.Model):
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
 
     def get_delivery_details(self):
-        
-
         delivery_data = {}
-        
+    
         # Récupérer les livraisons liées à cet OF
         pickings = self.env['stock.picking'].search([
             ('origin', '=', self.origin),
             ('state', '!=', 'cancel')
-        ],limit=1)
-
-        if  pickings:
+        ], limit=1)
+    
+        if pickings:
             for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == self.product_id):
-
                 product_id = move.product_id.id  # Clé unique par produit
-
-              
+    
+                # Vérifier si shipping_week est un nombre
+                shipping_week = move.shipping_week if move.shipping_week and move.shipping_week.isdigit() else move.shipping_week
+                tracking_number = move.tracking_number if move.tracking_number and move.tracking_number.isdigit() else move.tracking_number
+    
                 # Stocker les données sous forme de dictionnaire
                 delivery_data = {
                     'product_id': move.product_id.id,
                     'product_name': move.product_id.name,
-                    'shipping_week': int(move.shipping_week) or '',
-                    'tracking_number': int(move.tracking_number) or '',
-                    'must_ship_by': int(move.must_ship_by) if move.must_ship_by else '',
+                    'shipping_week': shipping_week or '',  # Garde les chaînes intactes
+                    'tracking_number': tracking_number or '',
+                    'must_ship_by': move.must_ship_by if move.must_ship_by else '',
                     'ship_via': move.ship_via.name if move.ship_via else '',
                 }
-
+    
         return delivery_data
-
+    
 
  
 
