@@ -351,7 +351,7 @@
                                     </tr>
                                 </tbody>
                                   <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
-                                    <strong>  Total de la commande: <t t-esc="sum(line.product_uom_qty for line in doc.move_ids)"/></strong>
+                                    <strong>  Total de la commande: <t t-esc="sum(line.product_uom_qty for line in o.move_ids)"/></strong>
                                   </div>
                             </table>
                           
