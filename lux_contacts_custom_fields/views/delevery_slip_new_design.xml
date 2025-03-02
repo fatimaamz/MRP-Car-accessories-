@@ -58,7 +58,7 @@
                                                 </td>
                                                 <td style= "text-align: right; vertical-align: right; border: 1px solid white;float: right;padding-left: 270px;">
                                                     <div style="text-align: justify; border: 1px solid white;">
-                                                        <strong style="font-size: 16px;">
+                                                        <strong style="font-size: 14px;">
                                                             <t t-esc="o.sale_order_partner_id.name"/>
                                                         </strong>
                                                         <br/>
@@ -115,7 +115,7 @@
                                                 </td>
                                                 <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;padding-left: 240px;">
                                                     <div style="text-align: justify;  border: 1px solid white;">
-                                                        <strong style="font-size: 16px;">
+                                                        <strong style="font-size: 14px;">
                                                             <t t-esc="user.company_id.name"/>
                                                         </strong>
                                                         <br/>
@@ -145,7 +145,7 @@
                                                             </t>
                                                         </span>
                                                         <br/>
-                                                        <span style="font-size: 14px;white-space: nowrap;">
+                                                        <span style="font-size: 12px;white-space: nowrap;">
 
                                                             <t t-esc="user.company_id.email or ''"/>
                                                             /
@@ -170,14 +170,14 @@
                             <table style="width: 100%; border-spacing: 5; margin-bottom: 10px;">
                                 <tr>
                                     <!-- Left Block: Customer Information -->
-                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 14px;  border: 1px solid white;">
+                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 12px;  border: 1px solid white;">
 
 
                                     </td>
 
                                     <!-- Center Block: Ship To -->
                                     <td style="padding: 10px; border-radius: 15px;
-                                              background-color: #f6f8fc;
+                                             
                                               border: 1px solid white;
                                               height: 200px;
                                               display: flex;
@@ -185,7 +185,26 @@
                                               width: 30%;
                                               box-sizing: border-box;
                                              
-                                              font-size: 16px;">
+                                              font-size: 14px;">
+                                       <!-- <t t-if="o.should_print_delivery_address()">
+                                            <span>
+                                                <strong>Delivery Address:</strong>
+                                            </span>
+                                            <div t-field="o.move_ids[0].partner_id"
+                                                 t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                                        </t>
+                                        <t
+                                             t-elif="o.picking_type_id.code != 'internal' and o.picking_type_id.warehouse_id.partner_id">
+                                            <span>
+                                                <strong>Warehouse Address:</strong>
+                                            </span>
+                                            <div t-field="o.picking_type_id.warehouse_id.partner_id"
+                                                 t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                                        </t>-->
+                                    </td>
+
+
+                                    <td style="padding: 10px; vertical-align: top; width: 30%; font-size: 16px; border: 1px solid white; background-color: #f6f8fc;">
                                         <t t-if="o.should_print_delivery_address()">
                                             <span>
                                                 <strong>Delivery Address:</strong>
@@ -201,6 +220,7 @@
                                             <div t-field="o.picking_type_id.warehouse_id.partner_id"
                                                  t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                                         </t>
+                                        
                                     </td>
                                 </tr>
                             </table>
@@ -240,7 +260,7 @@
                             <div class="oe_structure"/>
 
                             <!-- delivery details -->
-                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 14px;">
 
 
                                 <thead>
@@ -279,7 +299,7 @@
 
 
                             <table t-if="o.state!='done'" name="stock_move_table"
-                                   style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                                   style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 14px;">
                                 <thead>
                                     <tr style=" background-color: #f7f7f7;">
                                         <th style="border: 1px solid #ddd; padding: 10px;">
@@ -359,7 +379,7 @@
                             </table>
                           
                             <table t-elif="o.move_line_ids and o.state=='done'" name="stock_move_line_table"
-                                   style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                                   style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 14px;">
                                 <t t-set="has_serial_number" t-value="False"/>
                                 <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')"
                                    groups="stock.group_lot_on_delivery_slip"/>
