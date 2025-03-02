@@ -2,6 +2,24 @@
 
 <odoo>
 
+     <record id="view_stock_move_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_ids_without_package']//tree" position="inside">
+               
+                    <field name="tracking_number"/>
+                    <field name="must_ship_by"/>
+                    <field name="ship_via"/>
+                    <field name="shipping_week"/>
+               
+            </xpath>
+        </field>
+    </record>
+    
+
+    
     <record id="action_report_deliveryslip_new_template" model="ir.actions.report">
         <field name="name">Bon de livraison</field>
         <field name="model">stock.picking</field>
