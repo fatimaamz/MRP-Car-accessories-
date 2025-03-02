@@ -154,15 +154,15 @@
 
                         </div>
                       
-                            <div style="padding: 10px; border-radius: 15px; background: white;
+                            <div style="padding: 10px; border-radius: 15px;
                                               background-color: #f6f8fc;
                                               border: 1px solid white;
                                               height: 200px;
                                               display: flex;
                                               flex-direction: column;
-                                              color: black;
+                                            
                                               box-sizing: border-box;
-
+                                             
                                               font-size: 16px;">
                                
                                <div name="outgoing_delivery_address" t-if="o.should_print_delivery_address()">
