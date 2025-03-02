@@ -84,6 +84,34 @@ class MrpProduction(models.Model):
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
 
+
+    def get_delivery_details(self):
+        delivery_data = []
+
+        # Récupérer les bons de livraison (stock.picking) ayant la même origine que l'OF
+        pickings = self.env['stock.picking'].search([
+            ('origin', '=', self.name),  # Filtrer par l'origine de l'OF
+            ('state', '!=', 'cancel')
+        ])
+
+        for picking in pickings:
+            for move in picking.move_lines.filtered(lambda m: m.product_id in self.move_finished_ids.mapped('product_id')):
+                if picking.scheduled_date:
+                    week_number = picking.scheduled_date.strftime("%U")  # Calcul du numéro de semaine
+                    shipping_week = f"S{week_number}"
+                else:
+                    shipping_week = " "
+
+                delivery_data.append({
+                    'Product': move.product_id.name,  # Nom du produit
+                    'N° semaine': shipping_week,
+                    'Tracking number': move.tracking_number or ' ',
+                    'Must ship by': move.must_ship_by.strftime("%Y-%m-%d") if move.must_ship_by else ' ',
+                    'Ship via': move.ship_via.name if move.ship_via else ' ',
+                })
+
+        return delivery_data
+
     
     @api.depends('origin')  
     def _compute_picking_id(self):
