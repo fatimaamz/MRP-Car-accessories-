@@ -85,27 +85,24 @@ class MrpProduction(models.Model):
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
 
     def get_delivery_details(self):
-        self.ensure_one()  # Assure qu'on traite un seul OF
+        
 
         delivery_data = {}
         
-        if not self.name:
-            return {}  # Retourne un dictionnaire vide si pas d'OF
-
         # Récupérer les livraisons liées à cet OF
         pickings = self.env['stock.picking'].search([
             ('name', '=', self.origin),
             ('state', '!=', 'cancel')
         ],limit=1)
 
-        for picking in pickings:
-            for move in picking.move_ids_without_package.filtered(lambda m: m.product_id == self.product_id):
+        if  pickings:
+            for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == self.product_id):
 
                 product_id = move.product_id.id  # Clé unique par produit
 
               
                 # Stocker les données sous forme de dictionnaire
-                delivery_data[product_id] = {
+                delivery_data = {
                     'product_id': move.product_id.id,
                     'product_name': move.product_id.name,
                     'shipping_week': move.shipping_week,
