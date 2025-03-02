@@ -37,7 +37,7 @@
                 <t t-foreach="docs" t-as="o">
                     <main>
                         <div class="header"
-                             style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                             style=" align-items: center;">
 
                             <div class="row">
                                 <div class="col-6">
@@ -193,7 +193,7 @@
                             </div>
                         </t>
 
-                        <t t-set="information_block">
+                      
                             <div style="padding: 10px; border-radius: 15px;
                                               background-color: #f6f8fc;
                                               border: 1px solid white;
@@ -201,7 +201,6 @@
                                               display: flex;
                                               color: black;
                                               flex-direction: column;
-                                              background: white;
                                               box-sizing: border-box;
 
                                               font-size: 16px;">
@@ -230,7 +229,7 @@
 
                                 
                             </div>
-                        </t>
+                        
 
 
                         <div class="page" style="color: #2f374f;font-family: Inter;line-height: 1.3;">
