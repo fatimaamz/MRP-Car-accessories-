@@ -91,7 +91,7 @@ class MrpProduction(models.Model):
         
         # Récupérer les livraisons liées à cet OF
         pickings = self.env['stock.picking'].search([
-            ('name', '=', self.origin),
+            ('origin', '=', self.origin),
             ('state', '!=', 'cancel')
         ],limit=1)
 
