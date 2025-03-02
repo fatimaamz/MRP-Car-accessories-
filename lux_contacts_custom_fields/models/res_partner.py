@@ -96,7 +96,7 @@ class MrpProduction(models.Model):
         pickings = self.env['stock.picking'].search([
             ('origin', '=', self.name),
             ('state', '!=', 'cancel')
-        ])
+        ],limit=1)
 
         for picking in pickings:
             for move in picking.move_lines.filtered(lambda m: m.product_id in self.move_finished_ids.mapped('product_id')):
