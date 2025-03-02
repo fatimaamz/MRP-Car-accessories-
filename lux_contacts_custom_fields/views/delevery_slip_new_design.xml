@@ -45,7 +45,7 @@
 
                                     <t t-if="o.sale_order_partner_id and (o.sale_order_partner_id.name == 'DESIGNER TRIM' or o.sale_order_partner_id.name == 'MYCAR TRIM' or o.sale_order_partner_id.name == 'DYNA PERFORMANCE')">
 
-                                        <div class="row">
+                                        <!--<div class="row">
                                             <div class="col-6">
                                                 <t t-if="o.sale_order_partner_id.image_1920">
                                                     <img t-att-src="image_data_uri(o.sale_order_partner_id.image_1920)"
@@ -67,7 +67,55 @@
                                             <li>
                                                 <t t-esc="o.sale_order_partner_id.website"/>
                                             </li>
-                                        </ul>
+                                        </ul>-->
+
+                                          <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
+                                                       <tr style="border: 1px solid white;">
+                                                           <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
+                                                               <img t-att-src="image_data_uri(o.sale_order_partner_id.image_1920)"
+                                                                   alt="Client Logo"
+                                                                   style=" width: 240px;height: 40px;"/><br/><br/>
+                                                               <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
+                                                                   Bon de livraison
+                                                               </h2>
+                                                           </td>
+                                                            <td style="text-align: right; vertical-align: right; border: 1px solid white;float: right;">
+                                                               <div style="text-align: justify; width: 100%; border: 1px solid white;">
+                                                                   <strong style="font-size: 16px;">
+                                                                       <t t-esc="o.sale_order_partner_id.name"/>
+                                                                   </strong>
+                                                                   <br/>
+                                                                   <span>
+                                                                          <t t-if="o.sale_order_partner_id.street">
+                                                                       <t t-esc="o.sale_order_partner_id.street"/>
+                                                                       <t t-if="o.sale_order_partner_id.city or o.sale_order_partner_id.state_id or o.sale_order_partner_id.country_id">, </t>
+                                                                   </t>
+                                                                   <t t-if="o.sale_order_partner_id.city">
+                                                                       <t t-esc="o.sale_order_partner_id.city"/>
+                                                                       <t t-if="o.sale_order_partner_id.state_id or o.sale_order_partner_id.country_id">, </t>
+                                                                   </t>
+                                                                   <t t-if="o.sale_order_partner_id.state_id">
+                                                                       <t t-esc="o.sale_order_partner_id.state_id.name"/>
+                                                                       <t t-if="o.sale_order_partner_id.country_id">, </t>
+                                                                   </t>
+                                                                   <br/>
+                                                                   <t t-if="o.sale_order_partner_id.zip">
+                                                                       <t t-esc="o.sale_order_partner_id.zip"/>
+                                                                   </t>
+                                                                   <t t-if="o.sale_order_partner_id.country_id">
+                                                                       <t t-esc="o.sale_order_partner_id.country_id.name"/>
+                                                                   </t>
+                                                                   </span><br/>
+                                                                   <span style="font-size: 14px;">
+                                                                       
+                                                                       <t t-esc="o.sale_order_partner_id.email or ''"/>
+                                                                       /
+                                                                       <t t-esc="o.sale_order_partner_id.phone or ''"/>
+                                                                   </span>
+                                                               </div>
+                                                           </td>
+                                                       </tr>
+                                       </table>
                                     </t>
 
                                     <t t-else="">
@@ -108,51 +156,51 @@
 
 
                                         <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
-                                        <tr style="border: 1px solid white;">
-                                            <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
-                                                <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                                     style="  width: 240px;height: 35px;" alt="Company Logo"/><br/><br/>
-                                                <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
-                                                    Bon de livraison
-                                                </h2>
-                                            </td>
-                                             <td style="text-align: right; vertical-align: right; border: 1px solid white;float: right;">
-                                                <div style="text-align: justify; width: 100%; border: 1px solid white;">
-                                                    <strong style="font-size: 16px;">
-                                                        <t t-esc="user.company_id.name"/>
-                                                    </strong>
-                                                    <br/>
-                                                    <span>
-                                                           <t t-if="user.company_id.street">
-                                                        <t t-esc="user.company_id.street"/>
-                                                        <t t-if="user.company_id.city or user.company_id.state_id or user.company_id.country_id">, </t>
-                                                    </t>
-                                                    <t t-if="user.company_id.city">
-                                                        <t t-esc="user.company_id.city"/>
-                                                        <t t-if="user.company_id.state_id or user.company_id.country_id">, </t>
-                                                    </t>
-                                                    <t t-if="user.company_id.state_id">
-                                                        <t t-esc="user.company_id.state_id.name"/>
-                                                        <t t-if="user.company_id.country_id">, </t>
-                                                    </t>
-                                                    <br/>
-                                                    <t t-if="user.company_id.zip">
-                                                        <t t-esc="user.company_id.zip"/>
-                                                    </t>
-                                                    <t t-if="user.company_id.country_id">
-                                                        <t t-esc="user.company_id.country_id.name"/>
-                                                    </t>
-                                                    </span><br/>
-                                                    <span style="font-size: 14px;">
-                                                        
-                                                        <t t-esc="user.company_id.email or ''"/>
-                                                        /
-                                                        <t t-esc="user.company_id.phone or ''"/>
-                                                    </span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                        </table>
+                                                       <tr style="border: 1px solid white;">
+                                                           <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
+                                                               <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
+                                                                    style="  width: 240px;height: 40px;" alt="Company Logo"/><br/><br/>
+                                                               <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
+                                                                   Bon de livraison
+                                                               </h2>
+                                                           </td>
+                                                            <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;padding-left: 20px;">
+                                                               <div style="text-align: justify; width: 100%; border: 1px solid white;">
+                                                                   <strong style="font-size: 16px;">
+                                                                       <t t-esc="user.company_id.name"/>
+                                                                   </strong>
+                                                                   <br/>
+                                                                   <span>
+                                                                       <t t-if="user.company_id.street">
+                                                                       <t t-esc="user.company_id.street"/>
+                                                                       <t t-if="user.company_id.city or user.company_id.state_id or user.company_id.country_id">, </t>
+                                                                   </t>
+                                                                   <t t-if="user.company_id.city">
+                                                                       <t t-esc="user.company_id.city"/>
+                                                                       <t t-if="user.company_id.state_id or user.company_id.country_id">, </t>
+                                                                   </t>
+                                                                   <t t-if="user.company_id.state_id">
+                                                                       <t t-esc="user.company_id.state_id.name"/>
+                                                                       <t t-if="user.company_id.country_id">, </t>
+                                                                   </t>
+                                                                   <br/>
+                                                                   <t t-if="user.company_id.zip">
+                                                                       <t t-esc="user.company_id.zip"/>
+                                                                   </t>
+                                                                   <t t-if="user.company_id.country_id">
+                                                                       <t t-esc="user.company_id.country_id.name"/>
+                                                                   </t>
+                                                                   </span><br/>
+                                                                   <span style="font-size: 14px;">
+                                                                       
+                                                                       <t t-esc="user.company_id.email or ''"/>
+                                                                       /
+                                                                       <t t-esc="user.company_id.phone or ''"/>
+                                                                   </span>
+                                                               </div>
+                                                           </td>
+                                                       </tr>
+                                       </table>
                                     </t>
 
                                 </div>
