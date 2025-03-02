@@ -62,7 +62,7 @@
                                                             <t t-esc="o.sale_order_partner_id.name"/>
                                                         </strong>
                                                         <br/>
-                                                        <span>
+                                                        <span style="white-space: nowrap;">
                                                             <t t-if="o.sale_order_partner_id.street">
                                                                 <t t-esc="o.sale_order_partner_id.street"/>
                                                                 <t t-if="o.sale_order_partner_id.city or o.sale_order_partner_id.state_id or o.sale_order_partner_id.country_id">
