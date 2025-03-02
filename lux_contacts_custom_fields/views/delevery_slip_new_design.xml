@@ -232,7 +232,7 @@
                                               box-sizing: border-box;
 
                                               font-size: 16px;">
-                                <div name="outgoing_delivery_address" t-if="o.should_print_delivery_address()">
+                                <div name="outgoing_delivery_address">
                                     <span>
                                         <strong>Delivery Address:</strong>
                                     </span>
@@ -240,7 +240,7 @@
                                          t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                                 </div>
                                 <div name="outgoing_warehouse_address"
-                                     t-elif="o.picking_type_id.code != 'internal' and o.picking_type_id.warehouse_id.partner_id">
+                                     t-if="o.picking_type_id.code != 'internal' and o.picking_type_id.warehouse_id.partner_id">
                                     <span>
                                         <strong>Warehouse Address:</strong>
                                     </span>
@@ -291,11 +291,16 @@
 
 
                         <div class="page" style="color: #2f374f;font-family: Inter;line-height: 1.3;">
-                            <h2>
+                            <!--<h2>
                                 <span t-field="o.name">WH/OUT/0001</span>
-                            </h2>
+                            </h2>-->
                             <div class="oe_structure"/>
                             <div class="row mt32 mb32">
+                                 <div t-if="o.name" class="col-auto">
+                                    <strong>Delivery N° :</strong>
+                                    <p t-field="o.name"/>
+                                </div>
+                                 
                                 <div t-if="o.numero_commande" class="col-auto">
                                     <strong>Numéro de commande :</strong>
                                     <p t-field="o.numero_commande"/>
