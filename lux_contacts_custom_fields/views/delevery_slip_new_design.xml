@@ -159,7 +159,7 @@
                                                        <tr style="border: 1px solid white;">
                                                            <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
                                                                <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)"
-                                                                    style="  width: 240px;height: 40px;" alt="Company Logo"/><br/><br/>
+                                                                    style="  width: 240px;height: 36px;" alt="Company Logo"/><br/><br/>
                                                                <h2 style="display: inline-block; margin-left: 6px; vertical-align: middle; margin-bottom: 0;">
                                                                    Bon de livraison
                                                                </h2>
@@ -191,7 +191,7 @@
                                                                        <t t-esc="user.company_id.country_id.name"/>
                                                                    </t>
                                                                    </span><br/>
-                                                                   <span style="font-size: 14px; width: 100%;">
+                                                                   <span style="font-size: 14px;white-space: nowrap;">
                                                                        
                                                                        <t t-esc="user.company_id.email or ''"/>
                                                                        /
