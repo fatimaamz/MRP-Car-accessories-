@@ -164,7 +164,7 @@
                                                                    Bon de livraison
                                                                </h2>
                                                            </td>
-                                                            <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;padding-left: 20px;">
+                                                            <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;padding-left: 50px;">
                                                                <div style="text-align: justify; width: 100%; border: 1px solid white;">
                                                                    <strong style="font-size: 16px;">
                                                                        <t t-esc="user.company_id.name"/>
@@ -322,6 +322,7 @@
 
 
                                 <thead>
+                                     
                                     <tr style="background-color: #f7f7f7;">
                                         <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
                                         <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
@@ -336,16 +337,16 @@
                                 </thead>
                                 <tbody>
 
-                                    
-                                        <tr>
+                                     <tr t-foreach="lines" t-as="move">
+                                       
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="o.week_number"/>
+                                                t-esc="move.shipping_week"/>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="o.numero_suivi"/>
+                                                t-esc="move.tracking_number"/>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="o.scheduled_date"/>
+                                                t-esc="move.must_ship_by"/>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="o.carrier_id.name"/>
+                                                t-esc="move.ship_via.name"/>
                                         </tr>
                                     
                                 </tbody>
