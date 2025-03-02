@@ -99,7 +99,7 @@ class MrpProduction(models.Model):
         ],limit=1)
 
         for picking in pickings:
-            for move in picking.move_lines.filtered(lambda m: m.product_id == self.product_id):
+            for move in picking.move_ids_without_package.filtered(lambda m: m.product_id == self.product_id):
 
                 product_id = move.product_id.id  # Clé unique par produit
 
