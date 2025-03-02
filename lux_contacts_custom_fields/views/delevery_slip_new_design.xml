@@ -360,12 +360,12 @@
                                    style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                                 <thead>
                                     <tr style=" background-color: #f7f7f7;">
-                                        <th style="border: 1px solid #ddd; padding: 10px;" name="th_sm_product">
-                                            <strong>Product</strong>
-                                        </th>
-                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sm_image">
+                                         </th>
                                             <strong>Image</strong>
                                         </th>
+                                        <th style="border: 1px solid #ddd; padding: 10px;" name="th_sm_product">
+                                            <strong>Product</strong>
+                                        
                                         <th style="border: 1px solid #ddd; padding: 10px;" name="th_sm_ordered">
                                             <strong>Ordered</strong>
                                         </th>
@@ -375,19 +375,36 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
+                                     
                                     <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"/>
                                     <tr t-foreach="lines" t-as="move">
+                                         <td style="width: 320px;border: 1px solid #ddd;">
+                                               <t t-if="line.image_128">
+                                                   <div style=" text-align: center; padding: 10px;">
+                                                       <img t-att-src="image_data_uri(move.image_128)"
+                                                            style="width: 200px;"/>
+                                                   </div>
+                                               </t>
+                                           </td>
+                                         
                                         <td style="border: 1px solid #ddd; padding: 10px;">
-                                            <span t-field="move.product_id">Customizable Desk</span>
-                                            <p t-if="move.description_picking and move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
-                                                <span t-field="move.description_picking">Description on transfer</span>
-                                            </p>
+                                           <!-- <span t-field="move.product_id">Customizable Desk</span>
+                                                 <p t-if="move.description_picking and move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
+                                                     <span t-field="move.description_picking">Description on transfer</span>
+                                                 </p>-->
+
+                                              <strong>
+                                                    <t t-esc="move.description_picking.split(' ', 1)[0]"/> <!-- Extracts the first word or token -->
+                                                </strong>
+                                                <span>
+                                                    <t t-esc="' '.join(move.description_picking.split(' ')[1:])"/> <!-- Extracts the rest of the text -->
+                                                </span>
+                                        
                                         </td>
                                         
-                                        
-                                        <td style="border: 1px solid #ddd; padding: 10px;" class="text-right">
-                                            <img t-if="move.image_128" t-att-src="image_data_uri(move.image_128)" style="width: 90%"/>
-                                        </td>
+                                         
+                                     
                                         <td style="border: 1px solid #ddd; padding: 10px;">
                                              <span t-field="move.product_uom_qty" t-options='{"widget": "float", "precision": 0}'/>
                                             <span t-field="move.product_uom" groups="uom.group_uom">units</span>
