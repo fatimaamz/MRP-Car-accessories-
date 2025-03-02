@@ -164,8 +164,8 @@
                                                                    Bon de livraison
                                                                </h2>
                                                            </td>
-                                                            <td style="text-align: right; vertical-align: middle; border: 1px solid white;float: right;padding-left: 180px;">
-                                                               <div style="text-align: justify; width: 100%; border: 1px solid white;">
+                                                            <td style="text-align: right;width: 100%; vertical-align: middle; border: 1px solid white;float: right;padding-left: 210px;">
+                                                               <div style="text-align: justify;  border: 1px solid white;">
                                                                    <strong style="font-size: 16px;">
                                                                        <t t-esc="user.company_id.name"/>
                                                                    </strong>
