@@ -119,23 +119,24 @@ class MrpProduction(models.Model):
 
     def _extract_value(self, text, field_name):
         """
-        Extrait la valeur d'un champ à partir de `selected_characteristics` en respectant ces règles :
-        1. Si le champ est vide, il reste vide et ne capture pas la ligne suivante.
-        2. Si la valeur est dans la liste des valeurs interdites, elle est remplacée par une chaîne vide.
-        3. Seule la ligne exacte du champ est utilisée.
+        Extracts the value of a field from `selected_characteristics`, ensuring:
+        1. If empty, it remains empty (does not capture the next line).
+        2. Only the exact line where the field appears is used.
+        3. Values in `ignored_values` are replaced with an empty string.
+        4. Handles edge cases where regex might match incorrectly.
         """
-        # Liste des valeurs à ignorer
-        ignored_values = {"Not Applicable", "None", "No Color", "No insert"}
+        # Define the values to ignore
+        ignored_values = {"Not Applicable", "None", "No Color", "No insert", ""}
 
-        # Regex pour capturer la valeur après "field_name:"
-        pattern = rf'^{field_name}:\s*(.*)$'  
+        # Define regex to find the exact value
+        pattern = rf'^{field_name}:\s*(.*)$'  # Matches field name and any text on the same line
         match = re.search(pattern, text, re.MULTILINE)
         
         if match:
             value = match.group(1).strip()
-            return "" if value in ignored_values else value  # Remplace les valeurs interdites par une chaîne vide
+            return "" if value in ignored_values else value  # Ignore invalid values
         
-        return ""  # Retourne une chaîne vide si aucune correspondance n'est trouvée
+        return ""  # Return empty string if no match
 
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
