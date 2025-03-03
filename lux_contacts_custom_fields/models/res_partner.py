@@ -198,10 +198,13 @@ class MrpProduction(models.Model):
             #total_quantity += line.product_qty  # Sum quantities
         
         #return filtered_lines
+        delivery_details = self.get_delivery_details(work_orders) or {}
+    
+
         return {
             "filtered_lines": filtered_lines,
             "docs": work_orders,
-            "delivery_details": self.get_delivery_details(work_orders),  # Ajout des détails de livraison
+            "delivery_details": delivery_details,
         }
 
  
