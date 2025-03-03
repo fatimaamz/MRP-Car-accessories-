@@ -152,7 +152,7 @@
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery.get('ship_via', 'Unknown')"/>
                                         </tr>
-                                    <t t-foreach="delivery_details.values()" t-as="delivery">
+                                    </t>
                                 </tbody>
                             </table>
                       </t>
