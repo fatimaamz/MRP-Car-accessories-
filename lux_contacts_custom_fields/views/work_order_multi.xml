@@ -121,44 +121,36 @@
 
                       
                         <t t-set="report_data" t-value="docs.get_report_values()"/>
-                       <t t-set="delivery_details" t-value="report_data['delivery_details']"/>
-                        <t t-if="delivery_details">
-                            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
-
-
-                                <thead>
-                                    <tr style="background-color: #f7f7f7;">
-                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
-                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
-                                            Number
-                                        </th>
-                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship
-                                            By
-                                        </th>
-                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    
-                                   <t t-foreach="delivery_details.values()" t-as="delivery">
-                                        <tr>
-                                              
-                                            
-                                          <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="delivery.get('shipping_week', 'N/A')"/>
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="delivery.get('tracking_number', 'No Tracking')"/>
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="delivery.get('must_ship_by', 'Not Available')"/>
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="delivery.get('ship_via', 'Unknown')"/>
+                            <t t-set="delivery_details" t-value="report_data.get('delivery_details', {})"/>
+                            
+                            <t t-debug="1"/>  <!-- 🔍 This will show all available variables in the template -->
+                            
+                            <t t-if="delivery_details">
+                                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                                    <thead>
+                                        <tr style="background-color: #f7f7f7;">
+                                            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
+                                            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking Number</th>
+                                            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship By</th>
+                                            <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via</th>
                                         </tr>
-                                    </t>
-                                </tbody>
-                            </table>
-                      </t>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="delivery_details.values()" t-as="delivery">
+                                            <tr>
+                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                    t-esc="delivery.get('shipping_week', 'N/A')"/>
+                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                    t-esc="delivery.get('tracking_number', 'No Tracking')"/>
+                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                    t-esc="delivery.get('must_ship_by', 'Not Available')"/>
+                                                <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                    t-esc="delivery.get('ship_via', 'Unknown')"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
 
                 
                 <!-- Product Details Table (Table 2) -->
