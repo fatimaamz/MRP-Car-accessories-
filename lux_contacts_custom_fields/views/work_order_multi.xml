@@ -142,11 +142,11 @@
                                     
                                     <t t-foreach="delivery_details.values()" t-as="delivery">
                                         <tr>
-                                              <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="delivery.get('shipping_week', 'N/A')"/>
+                                              
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery.get('tracking_number', 'No Tracking')"/>
-                                          
+                                          <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="delivery.get('shipping_week', 'N/A')"/>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery.get('must_ship_by', 'Not Available')"/>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
