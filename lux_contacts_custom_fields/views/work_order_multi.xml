@@ -131,7 +131,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <t t-foreach="delivery_details.values()" t-as="delivery">
+                                        <t t-set="report_deli" t-value="docs.get_report_values()"/>
+                    <t t-set="delivery_details" t-value="report_deli['filtered_lines']"/>
+                                        <t t-foreach="delivery_details" t-as="delivery">
                                             <tr>
                                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                     t-esc="delivery.get('shipping_week', 'N/A')"/>
