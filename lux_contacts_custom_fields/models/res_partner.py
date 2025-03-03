@@ -85,29 +85,29 @@ class MrpProduction(models.Model):
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
 
     def get_delivery_details(self, work_orders):
-    delivery_data = {}  # Always store data in a dictionary
+        delivery_data = {}  # Always store data in a dictionary
+        
+        for work_order in work_orders:  # ✅ Loop over work_orders
+            pickings = self.env['stock.picking'].search([
+                ('origin', '=', work_order.origin),  
+                ('state', '!=', 'cancel')
+            ])
     
-    for work_order in work_orders:  # ✅ Loop over work_orders
-        pickings = self.env['stock.picking'].search([
-            ('origin', '=', work_order.origin),  
-            ('state', '!=', 'cancel')
-        ])
-
-        if pickings:
-            for move in pickings.mapped('move_ids_without_package').filtered(lambda m: m.product_id == work_order.product_id):
-                product_id = move.product_id.id  # Unique key per product
-                
-                # Ensure values exist, otherwise use defaults
-                delivery_data[product_id] = {
-                    'product_id': product_id,
-                    'product_name': move.product_id.name,
-                    'shipping_week': move.shipping_week or 'N/A',
-                    'tracking_number': move.tracking_number or 'No Tracking',
-                    'must_ship_by': move.must_ship_by or 'Not Available',
-                    'ship_via': move.ship_via.name if move.ship_via else 'Unknown',
-                }
-    
-    return delivery_data 
+            if pickings:
+                for move in pickings.mapped('move_ids_without_package').filtered(lambda m: m.product_id == work_order.product_id):
+                    product_id = move.product_id.id  # Unique key per product
+                    
+                    # Ensure values exist, otherwise use defaults
+                    delivery_data[product_id] = {
+                        'product_id': product_id,
+                        'product_name': move.product_id.name,
+                        'shipping_week': move.shipping_week or 'N/A',
+                        'tracking_number': move.tracking_number or 'No Tracking',
+                        'must_ship_by': move.must_ship_by or 'Not Available',
+                        'ship_via': move.ship_via.name if move.ship_via else 'Unknown',
+                    }
+        
+        return delivery_data 
 
  
 
