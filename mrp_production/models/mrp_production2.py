@@ -112,31 +112,33 @@ class MrpProduction(models.Model):
                 record.main_color,
                 record.carbon_code,
                 record.paint_code,
-              
             ]
-            # Join non-empty values with " | " as separator
-            record.full_characteristics = " | ".join(filter(None, values))
+            # Liste des valeurs invalides à exclure
+            invalid_values = {"None", "No insert", "Not Applicable", "No Color", ""}
+    
+            # Filtrer uniquement les valeurs valides
+            valid_values = [val for val in values if val not in invalid_values]
+    
+            # Joindre avec " | " seulement si des valeurs existent
+            record.full_characteristics = " | ".join(valid_values) if valid_values else ""
 
     def _extract_value(self, text, field_name):
         """
-        Extracts the value of a field from `selected_characteristics`, ensuring:
-        1. If empty, it remains empty (does not capture the next line).
-        2. Only the exact line where the field appears is used.
-        3. Values in `ignored_values` are replaced with an empty string.
-        4. Handles edge cases where regex might match incorrectly.
+        Extrait la valeur d'un champ dans 'selected_characteristics'.
+        - Si le champ est vide, il reste vide (ne prend pas la ligne suivante).
+        - Si la valeur est 'None', 'No insert', 'Not Applicable' ou 'No Color', retourne vide.
         """
-        # Define the values to ignore
-        ignored_values = {"Not Applicable", "None", "No Color", "No insert", ""}
-
-        # Define regex to find the exact value
-        pattern = rf'^{field_name}:\s*(.*)$'  # Matches field name and any text on the same line
+        pattern = rf'^{field_name}:\s*(.*)$'  # Capture uniquement la ligne du champ
         match = re.search(pattern, text, re.MULTILINE)
         
         if match:
             value = match.group(1).strip()
-            return "" if value in ignored_values else value  # Ignore invalid values
+            # Vérifie si la valeur est invalide
+            if value in ["None", "No insert", "Not Applicable", "No Color", ""]:
+                return ""  # Retourne vide si la valeur est invalide
+            return value  # Retourne la vraie valeur si elle est valide
         
-        return ""  # Return empty string if no match
+        return ""  # Si aucune correspondance trouvée, retourne vide
 
     def _clean_value(value):
         """Nettoie la valeur en supprimant les espaces et en normalisant la casse"""
