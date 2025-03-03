@@ -122,7 +122,7 @@ class MrpProduction(models.Model):
             ], limit=1)
     
             if pickings:
-                for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == record.product_id):
+                for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == work_order.product_id):
                     product_id = move.product_id.id  # Unique key per product
     
                     # Handle potential string values
