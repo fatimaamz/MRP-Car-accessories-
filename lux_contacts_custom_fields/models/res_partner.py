@@ -104,7 +104,7 @@ class MrpProduction(models.Model):
                 ship_via = move.ship_via.name if move.ship_via else ''
     
                 # Store data per product
-                delivery_data[product_id] = {
+                delivery_data = {
                     'product_id': product_id,
                     'product_name': move.product_id.name,
                     'shipping_week': shipping_week,
@@ -178,6 +178,7 @@ class MrpProduction(models.Model):
     
     def get_report_values(self):
         work_orders =  self.browse(self.env.context.get('active_ids', []))
+        delivery_details = self.get_delivery_details(work_orders)
         filtered_lines = []
         total_quantity = 0  # Initialize total quantity
         for line in work_orders:
@@ -198,7 +199,7 @@ class MrpProduction(models.Model):
             #total_quantity += line.product_qty  # Sum quantities
         
         #return filtered_lines
-        delivery_details = self.get_delivery_details(work_orders)
+        
     
 
         return {
