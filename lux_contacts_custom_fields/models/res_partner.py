@@ -200,7 +200,7 @@ class MrpProduction(models.Model):
         #return filtered_lines
         return {
             "filtered_lines": filtered_lines,
-            
+            "docs": work_orders,
             "delivery_details": self.get_delivery_details(work_orders),  # Ajout des détails de livraison
         }
 
