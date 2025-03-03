@@ -113,7 +113,10 @@ class MrpProduction(models.Model):
                     'ship_via': ship_via,
                 }
     
-        return delivery_data  # Ensure dictionary format
+        return {
+            'docs': records,
+            'delivery_details': delivery_details
+        }
         
 
  
