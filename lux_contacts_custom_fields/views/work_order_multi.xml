@@ -132,7 +132,7 @@
                                     </thead>
                                     <tbody>
                                         <t t-set="report_deli" t-value="docs.get_report_values()"/>
-                    <t t-set="delivery_details" t-value="report_deli['filtered_lines']"/>
+                    <t t-set="delivery_details" t-value="report_deli['delivery_details']"/>
                                         <t t-foreach="delivery_details" t-as="delivery">
                                             <tr>
                                                 <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
