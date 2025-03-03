@@ -120,11 +120,7 @@
                 </div>
 
                       
-                        <t t-set="delivery_details" t-value="delivery_details or {}"/>
-                            
-                           
-                            
-                            <t t-if="delivery_details">
+                        <t t-if="delivery_details and delivery_details.values()">
                                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                                     <thead>
                                         <tr style="background-color: #f7f7f7;">
