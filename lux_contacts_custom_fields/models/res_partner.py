@@ -84,7 +84,7 @@ class MrpProduction(models.Model):
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
 
-    def get_delivery_details(self):
+    def get_delivery_details(self, work_orders):
         delivery_data = {}  # Always a dictionary
     
         # Find related pickings
@@ -198,7 +198,7 @@ class MrpProduction(models.Model):
         #return filtered_lines
         return {
             "filtered_lines": filtered_lines,
-            "total_quantity": total_quantity,
+            
             "delivery_details": self.get_delivery_details(work_orders),  # Ajout des détails de livraison
         }
 
