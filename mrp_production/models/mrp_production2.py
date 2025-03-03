@@ -121,15 +121,19 @@ class MrpProduction(models.Model):
         """
         Extrait la valeur d'un champ à partir de `selected_characteristics` en respectant ces règles :
         1. Si le champ est vide, il reste vide et ne capture pas la ligne suivante.
-        2. Si la valeur est "Not Applicable", elle est remplacée par une chaîne vide.
+        2. Si la valeur est dans la liste des valeurs interdites, elle est remplacée par une chaîne vide.
         3. Seule la ligne exacte du champ est utilisée.
         """
-        pattern = rf'^{field_name}:\s*(.*)$'  # Capture la valeur après "field_name: "
+        # Liste des valeurs à ignorer
+        ignored_values = {"Not Applicable", "None", "No Color", "No insert"}
+
+        # Regex pour capturer la valeur après "field_name:"
+        pattern = rf'^{field_name}:\s*(.*)$'  
         match = re.search(pattern, text, re.MULTILINE)
         
         if match:
             value = match.group(1).strip()
-            return "" if value == "Not Applicable" else value  # Remplace "Not Applicable" par une chaîne vide
+            return "" if value in ignored_values else value  # Remplace les valeurs interdites par une chaîne vide
         
         return ""  # Retourne une chaîne vide si aucune correspondance n'est trouvée
 
