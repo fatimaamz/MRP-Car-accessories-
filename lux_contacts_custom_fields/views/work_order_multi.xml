@@ -169,7 +169,9 @@
                             <th style="padding: 12px; text-align: left; border: 1px solid #f9fafb;">Production</th>
                         </tr>
                     </thead>
-                    <t t-set="work_orders" t-value="docs.get_report_values()"/>
+                 <!--   <t t-set="work_orders" t-value="docs.get_report_values()"/>-->
+                    <t t-set="report_data" t-value="docs.get_report_values()"/>
+                    <t t-set="work_orders" t-value="report_data['filtered_lines']"/>
                     <t t-if="work_orders">
                         <t t-foreach="work_orders" t-as="wo">
                             <tbody>
