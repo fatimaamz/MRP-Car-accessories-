@@ -120,7 +120,7 @@
                 </div>
 
                       
-                        <t t-if="delivery_details and delivery_details.values()">
+                        
                                 <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
                                     <thead>
                                         <tr style="background-color: #f7f7f7;">
@@ -145,7 +145,7 @@
                                         </t>
                                     </tbody>
                                 </table>
-                            </t>
+                            
 
                 
                 <!-- Product Details Table (Table 2) -->
