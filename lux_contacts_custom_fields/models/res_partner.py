@@ -96,7 +96,8 @@ class MrpProduction(models.Model):
             if pickings:
                 for move in pickings.mapped('move_ids_without_package').filtered(lambda m: m.product_id == work_order.product_id):
                     product_id = move.product_id.id  # Unique key per product
-                    
+                    if product_id not in delivery_data:
+                        delivery_data[product_id] = []
                     # Ensure values exist, otherwise use defaults
                     delivery_data[product_id] = {
                         'product_id': product_id,
