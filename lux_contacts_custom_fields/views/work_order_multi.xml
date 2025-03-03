@@ -119,8 +119,8 @@
                     </table>
                 </div>
 
-               <t t-set="delivery_details" t-value="delivery_details"/>
-                        <!--<t t-if="delivery_details">-->
+              
+                        <t t-if="delivery_details">
                             <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
 
 
@@ -140,7 +140,7 @@
                                 <tbody>
 
                                     
-                                    <t t-foreach="delivery_details.values()" t-as="delivery">
+                                    <t t-foreach="delivery_details" t-as="delivery">
                                         <tr>
                                               
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
@@ -152,10 +152,10 @@
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery.get('ship_via', 'Unknown')"/>
                                         </tr>
-                                    </t>
+                                    <t t-foreach="delivery_details.values()" t-as="delivery">
                                 </tbody>
                             </table>
-                      <!--  </t>-->
+                      </t>
 
                 
                 <!-- Product Details Table (Table 2) -->
