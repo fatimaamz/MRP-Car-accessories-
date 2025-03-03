@@ -111,37 +111,31 @@ class MrpProduction(models.Model):
         return delivery_data 
 
  """
-    def get_delivery_details(self,work_orders):
-        delivery_data = {}
-    
+    def get_delivery_details(self, work_orders):
+        delivery_data = []
+        
         for work_order in work_orders:
-            # Find related pickings for each record
             pickings = self.env['stock.picking'].search([
-                ('origin', '=', work_order.origin),  # Use 'record' instead of 'self'
+                ('origin', '=', work_order.origin),
                 ('state', '!=', 'cancel')
             ], limit=1)
     
             if pickings:
                 for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == work_order.product_id):
-                    product_id = move.product_id.id  # Unique key per product
-    
-                    # Handle potential string values
                     shipping_week = move.shipping_week if move.shipping_week and move.shipping_week.isdigit() else move.shipping_week
                     tracking_number = move.tracking_number if move.tracking_number and move.tracking_number.isdigit() else move.tracking_number
     
-                    # Store data per product
-                    delivery_data[product_id] = {
+                    delivery_data.append({
                         'product_id': move.product_id.id,
                         'product_name': move.product_id.name,
                         'shipping_week': shipping_week or '',
                         'tracking_number': tracking_number or '',
                         'must_ship_by': move.must_ship_by if move.must_ship_by else '',
                         'ship_via': move.ship_via.name if move.ship_via else '',
-                    }
+                    })
     
-        return delivery_data 
-
-    
+        return delivery_data
+        
     @api.depends('origin')  
     def _compute_picking_id(self):
         for production in self:
