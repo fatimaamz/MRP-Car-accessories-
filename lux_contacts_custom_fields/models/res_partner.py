@@ -89,7 +89,7 @@ class MrpProduction(models.Model):
     
         # Get all related pickings for the work orders
         pickings = self.env['stock.picking'].search([
-            ('origin', 'in', work_orders.mapped('name')),  # Get all pickings related to work orders
+            ('origin', 'in', work_orders.mapped('origin')),  # Get all pickings related to work orders
             ('state', '!=', 'cancel')
         ])
     
