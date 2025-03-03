@@ -139,7 +139,8 @@
                                 </thead>
                                 <tbody>
 
-                                    <t t-foreach="delivery_details" t-as="delivery">
+                                    
+                                    <t t-foreach="delivery_details.values()" t-as="delivery">
                                         <tr>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery.get('tracking_number', 'No Tracking')"/>
