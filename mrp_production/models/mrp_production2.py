@@ -103,9 +103,9 @@ class MrpProduction(models.Model):
     year = fields.Char(string="Year", compute="_compute_year", store=True)
     full_characteristics = fields.Char(string="Couleur", compute="_compute_full_characteristics", store=True)
 
-    @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')
+    @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')      
     def _compute_full_characteristics(self):
-        invalid_values = {"None", "No insert", "Not Applicable", "No Color", ""}
+        invalid_values = {"none", "no insert", "not applicable", "no color", ""}  # ✅ Mises en minuscules
     
         for record in self:
             values = [
@@ -116,10 +116,10 @@ class MrpProduction(models.Model):
                 record.paint_code,
             ]
     
-            # Filtrer uniquement les valeurs valides
-            valid_values = [val for val in values if val and val.strip() not in invalid_values]
+            # ✅ Filtrer en s'assurant que les valeurs sont bien nettoyées
+            valid_values = [val.strip() for val in values if val and val.strip().lower() not in invalid_values]
     
-            # Joindre avec " | " seulement si des valeurs existent
+            # ✅ Joindre avec " | " uniquement si des valeurs existent
             record.full_characteristics = " | ".join(valid_values) if valid_values else ""
 
     
