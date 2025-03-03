@@ -105,7 +105,7 @@ class MrpProduction(models.Model):
 
     @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')      
     def _compute_full_characteristics(self):
-        invalid_values = {"none", "no insert", "not applicable", "no color", "", None}  # ✅ Ajout de None (valeur Python)
+        invalid_values = {"none", "no insert", "not applicable", "no color", "", None}  # Liste des valeurs à supprimer
 
         for record in self:
             values = [
@@ -116,8 +116,11 @@ class MrpProduction(models.Model):
                 (record.paint_code or "").strip(),
             ]
 
-            # ✅ Vérification plus stricte pour supprimer toutes les valeurs invalides
-            valid_values = [val for val in values if val.lower() not in invalid_values]
+            # ✅ Remplace les valeurs invalides par ""
+            cleaned_values = ["" if val.lower() in invalid_values else val for val in values]
+
+            # ✅ Supprime les valeurs vides avant de concaténer
+            valid_values = [val for val in cleaned_values if val]
 
             # ✅ Joindre avec " | " uniquement si des valeurs existent
             record.full_characteristics = " | ".join(valid_values) if valid_values else ""
