@@ -117,7 +117,7 @@ class MrpProduction(models.Model):
         for work_order in work_orders:
             # Find related pickings for each record
             pickings = self.env['stock.picking'].search([
-                ('origin', '=', record.origin),  # Use 'record' instead of 'self'
+                ('origin', '=', work_order.origin),  # Use 'record' instead of 'self'
                 ('state', '!=', 'cancel')
             ], limit=1)
     
