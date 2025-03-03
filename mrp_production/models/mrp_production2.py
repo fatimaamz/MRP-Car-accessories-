@@ -141,7 +141,7 @@ class MrpProduction(models.Model):
             return "" if value in invalid_values else value  # Remplace les valeurs invalides par vide
     
         return "" 
-
+    @staticmethod
     def _clean_value(value):
         """Nettoie la valeur en supprimant les espaces et en normalisant la casse"""
         if value:
