@@ -113,7 +113,8 @@ class MrpProduction(models.Model):
  """
     def get_delivery_details(self, work_orders):
         delivery_data = []
-        
+        processed_moves = set()
+    
         for work_order in work_orders:
             pickings = self.env['stock.picking'].search([
                 ('origin', '=', work_order.origin),
@@ -122,6 +123,11 @@ class MrpProduction(models.Model):
     
             if pickings:
                 for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == work_order.product_id):
+                    if move.id in processed_moves:
+                        continue  # Skip duplicate move records
+                    
+                    processed_moves.add(move.id)
+    
                     shipping_week = move.shipping_week if move.shipping_week and move.shipping_week.isdigit() else move.shipping_week
                     tracking_number = move.tracking_number if move.tracking_number and move.tracking_number.isdigit() else move.tracking_number
     
@@ -134,7 +140,7 @@ class MrpProduction(models.Model):
                         'ship_via': move.ship_via.name if move.ship_via else '',
                     })
     
-        return delivery_data
+        return delivery_data  # List of unique shipping details
         
     @api.depends('origin')  
     def _compute_picking_id(self):
