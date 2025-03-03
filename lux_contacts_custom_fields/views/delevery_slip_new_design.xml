@@ -271,7 +271,7 @@
                             <div class="oe_structure"/>
 
 
-                            <table t-if="o.state!='done'" name="stock_move_table"
+                            <table  name="stock_move_table"
                                    style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 14px;">
                                 <thead>
                                     <tr style=" background-color: #f7f7f7;">
