@@ -122,23 +122,23 @@ class MrpProduction(models.Model):
             # Joindre avec " | " seulement si des valeurs existent
             record.full_characteristics = " | ".join(valid_values) if valid_values else ""
 
+    
     def _extract_value(self, text, field_name):
         """
-        Extrait la valeur d'un champ dans 'selected_characteristics'.
-        - Si le champ est vide, il reste vide (ne prend pas la ligne suivante).
-        - Si la valeur est 'None', 'No insert', 'Not Applicable' ou 'No Color', retourne vide.
+        Extrait la valeur du champ à partir de 'selected_characteristics' en respectant les règles :
+        1. Si la valeur est vide, elle reste vide (n'évite pas la ligne suivante).
+        2. Ne prend que la ligne où le champ apparaît.
+        3. Remplace les valeurs invalides par une chaîne vide.
         """
-        pattern = rf'^{field_name}:\s*(.*)$'  # Capture uniquement la ligne du champ
+        pattern = rf'^{field_name}:\s*(.+)$'  # Capture uniquement la ligne du champ spécifié
         match = re.search(pattern, text, re.MULTILINE)
-        
+    
         if match:
             value = match.group(1).strip()
-            # Vérifie si la valeur est invalide
-            if value in ["None", "No insert", "Not Applicable", "No Color", ""]:
-                return ""  # Retourne vide si la valeur est invalide
-            return value  # Retourne la vraie valeur si elle est valide
-        
-        return ""  # Si aucune correspondance trouvée, retourne vide
+            invalid_values = {"None", "No insert", "Not Applicable", "No Color", ""}
+            return "" if value in invalid_values else value  # Remplace les valeurs invalides par vide
+    
+        return ""  # Retourne vide si aucune correspondance trouvée
 
     def _clean_value(value):
         """Nettoie la valeur en supprimant les espaces et en normalisant la casse"""
