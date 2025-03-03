@@ -138,25 +138,32 @@ class MrpProduction(models.Model):
         
         return ""  # Return empty string if no match
 
+    def _clean_value(value):
+        """Nettoie la valeur en supprimant les espaces et en normalisant la casse"""
+        if value:
+            cleaned_value = value.strip().lower()
+            return "" if cleaned_value in ["none", "no insert", "not applicable", "no color"] else value
+        return ""
+    
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
         for record in self:
-            record.interior_color = self._extract_value(record.selected_characteristics or '', "INTERIOR COLOR")
-
+            record.interior_color = self._clean_value(self._extract_value(record.selected_characteristics or '', "INTERIOR COLOR"))
+    
     @api.depends('selected_characteristics')
     def _compute_insert_color(self):
         for record in self:
-            record.insert_color = self._extract_value(record.selected_characteristics or '', "INSERT COLOR")
-
+            record.insert_color = self._clean_value(self._extract_value(record.selected_characteristics or '', "INSERT COLOR"))
+    
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
         for record in self:
-            record.paint_code = self._extract_value(record.selected_characteristics or '', "PAINT CODE")
-
+            record.paint_code = self._clean_value(self._extract_value(record.selected_characteristics or '', "PAINT CODE"))
+    
     @api.depends('selected_characteristics')
     def _compute_main_color(self):
         for record in self:
-            record.main_color = self._extract_value(record.selected_characteristics or '', "Couleurs")
+            record.main_color = self._clean_value(self._extract_value(record.selected_characteristics or '', "Couleurs"))
             
     @api.depends('selected_characteristics')
     def _compute_carbon_code(self):
