@@ -114,8 +114,9 @@ class MrpProduction(models.Model):
                 }
     
         return {
-            'docs': records,
-            'delivery_details': delivery_details
+            "filtered_lines": filtered_lines,
+            "docs": work_orders,
+            "delivery_details": delivery_details.get('delivery_details', {}),
         }
         
 
