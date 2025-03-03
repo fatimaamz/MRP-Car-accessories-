@@ -105,20 +105,20 @@ class MrpProduction(models.Model):
 
     @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')      
     def _compute_full_characteristics(self):
-        invalid_values = {"none", "no insert", "not applicable", "no color", ""}  # ✅ Mises en minuscules
-    
+        invalid_values = {"none", "no insert", "not applicable", "no color", ""}  # ✅ Normalisation
+
         for record in self:
             values = [
-                record.interior_color,
-                record.insert_color,
-                record.main_color,
-                record.carbon_code,
-                record.paint_code,
+                str(record.interior_color or "").strip(),  # ✅ Convertir en str et nettoyer
+                str(record.insert_color or "").strip(),
+                str(record.main_color or "").strip(),
+                str(record.carbon_code or "").strip(),
+                str(record.paint_code or "").strip(),
             ]
-    
-            # ✅ Filtrer en s'assurant que les valeurs sont bien nettoyées
-            valid_values = [val.strip() for val in values if val and val.strip().lower() not in invalid_values]
-    
+
+            # ✅ Vérification en minuscules et filtrage des valeurs invalides
+            valid_values = [val for val in values if val.lower() not in invalid_values]
+
             # ✅ Joindre avec " | " uniquement si des valeurs existent
             record.full_characteristics = " | ".join(valid_values) if valid_values else ""
 
