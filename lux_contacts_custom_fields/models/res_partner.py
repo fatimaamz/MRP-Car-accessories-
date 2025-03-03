@@ -87,32 +87,34 @@ class MrpProduction(models.Model):
     def get_delivery_details(self, work_orders):
         delivery_data = {}  # Always a dictionary
     
-        # Find related pickings
+        # Get all related pickings for the work orders
         pickings = self.env['stock.picking'].search([
-            ('origin', '=', self.origin),
+            ('origin', 'in', work_orders.mapped('name')),  # Get all pickings related to work orders
             ('state', '!=', 'cancel')
-        ], limit=1)
+        ])
     
         if pickings:
-            for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == self.product_id):
+            for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id in work_orders.mapped('product_id')):
                 product_id = move.product_id.id  # Unique key per product
     
-                # Ensure proper handling of non-integer values
-                shipping_week = move.shipping_week if move.shipping_week and move.shipping_week.isdigit() else move.shipping_week
-                tracking_number = move.tracking_number if move.tracking_number and move.tracking_number.isdigit() else move.tracking_number
+                # Ensure proper handling of empty values
+                shipping_week = move.shipping_week if move.shipping_week else ''
+                tracking_number = move.tracking_number if move.tracking_number else ''
+                must_ship_by = move.must_ship_by if move.must_ship_by else ''
+                ship_via = move.ship_via.name if move.ship_via else ''
     
                 # Store data per product
                 delivery_data[product_id] = {
-                    'product_id': move.product_id.id,
+                    'product_id': product_id,
                     'product_name': move.product_id.name,
-                    'shipping_week': shipping_week or '',
-                    'tracking_number': tracking_number or '',
-                    'must_ship_by': move.must_ship_by if move.must_ship_by else '',
-                    'ship_via': move.ship_via.name if move.ship_via else '',
+                    'shipping_week': shipping_week,
+                    'tracking_number': tracking_number,
+                    'must_ship_by': must_ship_by,
+                    'ship_via': ship_via,
                 }
     
         return delivery_data  # Ensure dictionary format
-    
+        
 
  
 
