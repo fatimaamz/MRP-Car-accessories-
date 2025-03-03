@@ -126,11 +126,11 @@ class MrpProduction(models.Model):
     def _extract_value(self, text, field_name):
         """
         Extrait la valeur du champ à partir de 'selected_characteristics' en respectant les règles :
-        1. Si la valeur est vide, elle reste vide (n'évite pas la ligne suivante).
+        1. Si la valeur est vide, elle reste vide.
         2. Ne prend que la ligne où le champ apparaît.
         3. Remplace les valeurs invalides par une chaîne vide.
         """
-        pattern = rf'^{field_name}:\s*(.+)$'  # Capture uniquement la ligne du champ spécifié
+        pattern = rf'^{field_name}:\s*(.*?)\s*$'  # Capture uniquement la valeur présente sur la même ligne
         match = re.search(pattern, text, re.MULTILINE)
     
         if match:
@@ -138,7 +138,7 @@ class MrpProduction(models.Model):
             invalid_values = {"None", "No insert", "Not Applicable", "No Color", ""}
             return "" if value in invalid_values else value  # Remplace les valeurs invalides par vide
     
-        return ""  # Retourne vide si aucune correspondance trouvée
+        return "" 
 
     def _clean_value(value):
         """Nettoie la valeur en supprimant les espaces et en normalisant la casse"""
