@@ -120,7 +120,7 @@
                 </div>
 
                       
-                        <t t-set="delivery_details" t-value="doc.get_report_values().get('delivery_details', {})"/>
+                        <t t-set="delivery_details" t-value="docs.get_report_values().get('delivery_details', {})"/>
                             
                            
                             
