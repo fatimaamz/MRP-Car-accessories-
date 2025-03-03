@@ -119,8 +119,9 @@
                     </table>
                 </div>
 
+                      
                         <t t-set="report_data" t-value="docs.get_report_values()"/>
-                        <t t-set="delivery_details" t-value="report_data.get('delivery_details', {})"/>
+                       <t t-set="delivery_details" t-value="report_data['delivery_details']"/>
                         <t t-if="delivery_details">
                             <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
 
