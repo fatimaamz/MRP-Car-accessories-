@@ -103,24 +103,23 @@ class MrpProduction(models.Model):
     year = fields.Char(string="Year", compute="_compute_year", store=True)
     full_characteristics = fields.Char(string="Couleur", compute="_compute_full_characteristics", store=True)
 
-    @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')      
+    @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')
     def _compute_full_characteristics(self):
-        invalid_values = {"none", "no insert", "not applicable", "no color", "", None}  # Liste des valeurs à supprimer
+        invalid_values = {"none", "no insert", "not applicable", "no color", "", None}  # Liste des valeurs à ignorer
 
         for record in self:
             values = [
-                (record.interior_color or "").strip(),  
-                (record.insert_color or "").strip(),
-                (record.main_color or "").strip(),
-                (record.carbon_code or "").strip(),
-                (record.paint_code or "").strip(),
+                record.interior_color,
+                record.insert_color,
+                record.main_color,
+                record.carbon_code,
+                record.paint_code,
             ]
 
-            # ✅ Remplace les valeurs invalides par ""
-            cleaned_values = ["" if val.lower() in invalid_values else val for val in values]
-
-            # ✅ Supprime les valeurs vides avant de concaténer
-            valid_values = [val for val in cleaned_values if val]
+            # ✅ Nettoyage et suppression des valeurs invalides
+            valid_values = [
+                val.strip() for val in values if val and val.strip().lower() not in invalid_values
+            ]
 
             # ✅ Joindre avec " | " uniquement si des valeurs existent
             record.full_characteristics = " | ".join(valid_values) if valid_values else ""
