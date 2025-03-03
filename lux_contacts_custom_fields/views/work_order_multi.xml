@@ -142,7 +142,7 @@
                                 <tbody>
 
                                     
-                                    <t t-foreach="delivery_details" t-as="delivery">
+                                   <t t-foreach="delivery_details.values()" t-as="delivery">
                                         <tr>
                                               
                                             
