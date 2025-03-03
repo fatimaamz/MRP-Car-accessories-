@@ -113,11 +113,7 @@ class MrpProduction(models.Model):
                     'ship_via': ship_via,
                 }
     
-        return {
-            "filtered_lines": filtered_lines,
-            "docs": work_orders,
-            "delivery_details": delivery_details.get('delivery_details', {}),
-        }
+            return delivery_data 
         
 
  
@@ -202,13 +198,13 @@ class MrpProduction(models.Model):
             #total_quantity += line.product_qty  # Sum quantities
         
         #return filtered_lines
-        delivery_details = self.get_delivery_details(work_orders) or {}
+        delivery_details = self.get_delivery_details(work_orders)
     
 
         return {
             "filtered_lines": filtered_lines,
             "docs": work_orders,
-            "delivery_details": delivery_details,
+            "delivery_details": delivery_details or {},
         }
 
  
