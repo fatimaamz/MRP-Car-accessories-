@@ -83,6 +83,15 @@ class MrpProduction(models.Model):
   
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
+
+    def action_preview_mrp_report(self):
+        return {
+            'type': 'ir.actions.report',
+            'report_type': 'qweb-html',  # Opens in popup instead of downloading
+            'report_name': 'mrp.report_mrporder',  # Default MRP report
+            'res_model': 'mrp.production',
+            'res_id': self.id,
+        }
     """
     def get_delivery_details(self, work_orders):
         delivery_data = {}  # Always store data in a dictionary
