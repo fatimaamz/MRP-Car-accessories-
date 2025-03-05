@@ -188,7 +188,8 @@ class MrpProduction(models.Model):
     
     def action_preview_mrp_report(self):
         self.ensure_one()
-        return self.env.ref('mrp.label_production_view_pdf').render_qweb_pdf(self.id)
+        report_name = 'lux_contacts_custom_fields.report_single_work_order_multi'  # The ID of your report
+        return self.env.ref(report_name).report_action(self)
                                                                           
     """
     @api.depends('selected_characteristics')
