@@ -74,7 +74,7 @@
                                             <br/>
                                         </t>
                                      <t t-if="docs.main_color and docs.main_color not in ['None', 'No insert', 'Not Applicable','No Color']">
-                                            <strong>Paint Code:</strong>
+                                            <strong>Main Code:</strong>
                                             <t t-esc="docs.main_color"/>
                                             <br/>
                                         </t>
