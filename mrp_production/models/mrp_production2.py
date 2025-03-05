@@ -175,7 +175,7 @@ class MrpProduction(models.Model):
             text = record.selected_characteristics or ''
             match = re.search(r'CARBON CODE:\s*(.+?)(?:\n|$)', text)
             record.carbon_code = match.group(1).strip() if match else ''
-            
+    """       
     def action_preview_mrp_report(self):
         return {
             'type': 'ir.actions.report',
@@ -184,7 +184,11 @@ class MrpProduction(models.Model):
             'res_model': 'mrp.production',
             'res_id': self.id,
         }
-        
+    """
+    def action_preview_mrp_report(self):
+        self.ensure_one()
+        return self.env.ref('mrp.label_production_view_pdf').report_action(self)
+                                                                          
     """
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
