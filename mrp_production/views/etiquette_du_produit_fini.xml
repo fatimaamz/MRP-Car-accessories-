@@ -9,11 +9,11 @@
                         <!-- Header Section -->
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 28px; background-color: black; color: white; border-radius: 12px 12px 0 0;">
                             <!-- DesignerTrim Logo -->
-                            <!--<div style="font-size: 14px; font-weight: bold; text-align: left;">
+                            <div style="font-size: 14px; font-weight: bold; text-align: left;">
                                 <span t-field="docs.sale_order_partner_id.name"/>
-                            </div>-->
+                            </div>
                             <!-- QR Code -->
-                            <!--<div style="display: flex; justify-content: flex-end; align-items: center; max-width: 100mm; overflow: hidden;">
+                            <div style="display: flex; justify-content: flex-end; align-items: center; max-width: 100mm; overflow: hidden;">
 
                                 <t t-if="docs.product_id.qr_code_uploaded">
                                     <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" style="width: 25mm; height: 25mm; position: absolute; right: 110mm; background-color: white;  border-radius: 5px;"/>
@@ -22,26 +22,11 @@
                                 <t t-else="">
                                     <span style="font-size: 10px;">No QR Code</span>
                                 </t>
-                            </div>-->
-
-
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 28px; background-color: black; color: white; border-radius: 12px 12px 0 0;">
-                                <!-- DesignerTrim Logo -->
-                                <div style="font-size: 14px; font-weight: bold; text-align: left;">
-                                    <span t-field="docs.sale_order_partner_id.name"/>
-                                </div>
-        
-                                <!-- QR Code Section with Absolute Positioning -->
-                                <div style="position: relative; ">
-                                    <t t-if="docs.product_id.qr_code_uploaded">
-                                        <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" style="width: 25mm; height: 25mm; position: absolute; right: 110mm; background-color: white;  border-radius: 5px;"/>
-                                    </t>
-
-                                    <t t-else="">
-                                        <span style="font-size: 10px;">No QR Code</span>
-                                    </t>
-                                </div>
                             </div>
+
+
+                            
+                            
                             
                         </div>
 
