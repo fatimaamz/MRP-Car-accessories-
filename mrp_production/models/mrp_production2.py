@@ -175,22 +175,18 @@ class MrpProduction(models.Model):
             text = record.selected_characteristics or ''
             match = re.search(r'CARBON CODE:\s*(.+?)(?:\n|$)', text)
             record.carbon_code = match.group(1).strip() if match else ''
-    """       
+
     def action_preview_mrp_report(self):
         return {
             'type': 'ir.actions.report',
             'report_type': 'qweb-html',  # Opens in popup instead of downloading
-            'report_name': 'mrp.label_production_view_pdf',  # Default MRP report
+            'report_name': 'lux_contacts_custom_fields.report_single_work_order_multi',  # Default MRP report
             'res_model': 'mrp.production',
             'res_id': self.id,
         }
-    """
+
     
-    def action_preview_mrp_report(self):
-        self.ensure_one()
-        report_name = 'lux_contacts_custom_fields.report_single_work_order_multi'  # The ID of your report
-        return self.env.ref(report_name).report_action(self)
-                                                                          
+               
     """
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
