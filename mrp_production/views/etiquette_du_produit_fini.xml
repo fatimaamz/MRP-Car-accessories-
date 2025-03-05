@@ -45,7 +45,7 @@
                             </t>
                         </div>
                     </div>
-                                 
+                    </div>             
 
                         <!-- Product Details Section <t t-esc="docs.product_id.detailed_type"/>  -->
                         <div style="padding: 5mm;">
