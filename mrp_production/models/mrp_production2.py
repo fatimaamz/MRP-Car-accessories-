@@ -180,6 +180,16 @@ class MrpProduction(models.Model):
         return {
             'type': 'ir.actions.report',
             'report_type': 'qweb-html',  # Opens in popup instead of downloading
+            'report_name': 'mrp.label_production_view_pdf',  # Default MRP report
+            'res_model': 'mrp.production',
+            'res_id': self.id,
+            'context': {'window_size': 'small'},
+        }
+
+    def action_preview_single_wo_report(self):
+        return {
+            'type': 'ir.actions.report',
+            'report_type': 'qweb-html',  # Opens in popup instead of downloading
             'report_name': 'lux_contacts_custom_fields.report_single_work_order_multi',  # Default MRP report
             'res_model': 'mrp.production',
             'res_id': self.id,
