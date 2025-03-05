@@ -119,6 +119,11 @@
                         string="Aperçu étiquette"
                         class="oe_highlight"
                         icon="fa-eye"/>
+             <button name="action_preview_single_wo_report"
+                        type="object"
+                        string="Aperçu Single work order"
+                        class="oe_highlight"
+                        icon="fa-eye"/>
             </xpath>
       <xpath expr="//header//field[@name='state']" position="replace">
         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
