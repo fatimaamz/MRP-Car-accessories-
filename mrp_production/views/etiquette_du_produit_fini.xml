@@ -13,7 +13,7 @@
                                 <span t-field="docs.sale_order_partner_id.name"/>
                             </div>
                             <!-- QR Code -->
-                            <div>
+                            <div style="display: flex; justify-content: flex-end;">
                                 <t t-if="docs.product_id.qr_code_uploaded">
                                     <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" style="width: 25mm; height: 25mm; position: absolute; right: 110mm; background-color: white;  border-radius: 5px;"/>
                                 </t>
