@@ -185,9 +185,10 @@ class MrpProduction(models.Model):
             'res_id': self.id,
         }
     """
+    
     def action_preview_mrp_report(self):
         self.ensure_one()
-        return self.env.ref('mrp.label_production_view_pdf').report_action(self)
+        return self.env.ref('mrp.label_production_view_pdf')._render_qweb_pdf(self.id)
                                                                           
     """
     @api.depends('selected_characteristics')
