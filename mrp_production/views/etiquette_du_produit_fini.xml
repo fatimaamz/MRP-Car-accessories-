@@ -35,7 +35,7 @@
                                 <div style="position: relative; ">
                                     <t t-if="docs.product_id.qr_code_uploaded">
                                         <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)"
-                                             style="position: absolute; top: 10mm; right: 10mm; max-width: 25mm; max-height: 25mm; background-color: white; border-radius: 5px;"/>
+                                              style="position: absolute;width: 25mm; height: 25mm; position: absolute; right: 110mm; background-color: white;  border-radius: 5px;"/>
                                     </t>
                                     <t t-else="">
                                         <span style="font-size: 10px;">No QR Code</span>
