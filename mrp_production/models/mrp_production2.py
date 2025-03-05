@@ -172,9 +172,7 @@ class MrpProduction(models.Model):
     @api.depends('selected_characteristics')
     def _compute_carbon_code(self):
         for record in self:
-            text = record.selected_characteristics or ''
-            match = re.search(r'CARBON CODE:\s*(.+?)(?:\n|$)', text)
-            record.carbon_code = match.group(1).strip() if match else ''
+            record.carbon_code = self._clean_value(self._extract_value(record.selected_characteristics or '', "CARBON CODE"))
 
     def action_preview_mrp_report(self):
         return {
