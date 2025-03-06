@@ -59,6 +59,7 @@
             <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
                 <button name="send_delivery_email" type="object" string="Envoyer email d'expédition" class="btn-primary"/>
+                <button name="action_preview_bl_report" type="object" string="Aperçu BL" class="oe_highlight" icon="fa-eye"/>
             </xpath>                
             <xpath expr="//field[@name='origin']" position="after">
                     <field name="numero_commande"/>
