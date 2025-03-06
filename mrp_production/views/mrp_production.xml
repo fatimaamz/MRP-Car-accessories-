@@ -61,6 +61,9 @@
                 <button name="send_delivery_email" type="object" string="Envoyer email d'expédition" class="btn-primary"/>
                 <button name="action_preview_bl_report" type="object" string="Aperçu BL" class="oe_highlight" icon="fa-eye"/>
             </xpath>                
+            <xpath expr="//field[@name='scheduled_date']" position="replace">
+                <field name="scheduled_date" readonly="state in ['cancel', 'done']" required="id" decoration-warning="state not in ('done', 'cancel') and scheduled_date &lt; now" decoration-danger="state not in ('done', 'cancel') and scheduled_date &lt; current_date" decoration-bf="state not in ('done', 'cancel') and (scheduled_date &lt; current_date or scheduled_date &lt; now)"/>
+            </xpath>
             <xpath expr="//field[@name='origin']" position="after">
                     <field name="numero_commande"/>
                     <field name="numero_suivi"/>
