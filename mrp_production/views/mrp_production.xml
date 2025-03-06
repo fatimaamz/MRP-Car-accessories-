@@ -246,6 +246,9 @@
     <field name="model">sale.order</field>
     <field name="inherit_id" ref="sale.view_order_form"/>
     <field name="arch" type="xml">
+         <xpath expr="//header" position="inside">
+            <button name="action_preview_quotation_report" type="object" string="Aperçu Devis/Commande" class="oe_highlight" icon="fa-eye"/>
+        </xpath>
         <xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']" position="after">
             <field name="has_mrp_production" invisible="1"/>
             <button name="action_view_related_mrp" 
