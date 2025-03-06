@@ -124,24 +124,38 @@ class MrpProduction(models.Model):
             ], limit=1)
     
             if pickings:
+                livraison_multiple = pickings.livraison_multiple
+    
+                # Variables globales issues du picking (bon de livraison)
+                semaine_livraison_global = pickings.week_number if pickings.week_number and pickings.week_number.isdigit() else pickings.week_number
+                num_suivi_global = pickings.tracking_number if pickings.tracking_number and pickings.tracking_number.isdigit() else pickings.tracking_number
+                must_ship_by_global = pickings.scheduled_date if pickings.scheduled_date else ''
+                ship_via_global = pickings.carrier_id.name if pickings.carrier_id else ''
+    
                 for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == work_order.product_id):
                     if move.id in processed_moves:
-                        continue  # Skip duplicate move records
+                        continue  
                     
                     processed_moves.add(move.id)
     
-                    shipping_week = move.shipping_week if move.shipping_week and move.shipping_week.isdigit() else move.shipping_week
-                    tracking_number = move.tracking_number if move.tracking_number and move.tracking_number.isdigit() else move.tracking_number
+                    # Variables spécifiques au mouvement de stock
+                    shipping_week_move = move.shipping_week if move.shipping_week and move.shipping_week.isdigit() else move.shipping_week
+                    tracking_number_move = move.tracking_number if move.tracking_number and move.tracking_number.isdigit() else move.tracking_number
+                    must_ship_by_move = move.must_ship_by if move.must_ship_by else ''
+                    ship_via_move = move.ship_via.name if move.ship_via else ''
     
+                    # Sélection des valeurs en fonction de livraison_multiple
                     delivery_data.append({
                         'product_id': move.product_id.id,
                         'product_name': move.product_id.name,
-                        'shipping_week': shipping_week or '',
-                        'tracking_number': tracking_number or '',
-                        'must_ship_by': move.must_ship_by if move.must_ship_by else '',
-                        'ship_via': move.ship_via.name if move.ship_via else '',
+                        'shipping_week': shipping_week_move if livraison_multiple else semaine_livraison_global or '',
+                        'tracking_number': tracking_number_move if livraison_multiple else num_suivi_global or '',
+                        'must_ship_by': must_ship_by_move if livraison_multiple else must_ship_by_global,
+                        'ship_via': ship_via_move if livraison_multiple else ship_via_global,
+                        'livraison_multiple': livraison_multiple,
+                       
                     })
-    
+        
         return delivery_data  # List of unique shipping details
         
     @api.depends('origin')  
