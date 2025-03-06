@@ -63,11 +63,14 @@ class StockPicking(models.Model):
     numero_suivi = fields.Char(string="Tracking number")
     sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande")
     
-    scheduled_date = fields.Datetime(
-        string="Date planifiée",
-        default=lambda self: datetime.now() + timedelta(days=3)
-    )
-
+    @api.model
+    def create(self, values):
+        # Check if the scheduled_date is provided, otherwise set it to 3 days later
+        if 'scheduled_date' not in values:
+            values['scheduled_date'] = datetime.now() + timedelta(days=3)
+        
+       
+        return super(StockPicking, self).create(values)
 
   
     def action_preview_bl_report(self):
