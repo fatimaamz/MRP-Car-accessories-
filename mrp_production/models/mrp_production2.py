@@ -19,8 +19,8 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self).action_confirm()
 
         for picking in self.picking_ids:
-            if not picking.scheduled_date:
-                picking.scheduled_date = datetime.now() + timedelta(days=3)
+           
+            picking.scheduled_date = datetime.now() + timedelta(days=3)
         
         return res
         
