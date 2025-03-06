@@ -272,7 +272,7 @@
                                          <tr>
     
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="o.semaine_livraison"/>
+                                                t-esc="o.week_number"/>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="o.numero_suivi"/>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
