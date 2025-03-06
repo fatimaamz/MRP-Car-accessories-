@@ -317,6 +317,8 @@ class MrpProduction(models.Model):
             # Log the selected image to ensure the change is captured
             if record.product_image_id:
                 record.selected_image = record.product_image_id.image
+            else:
+                record.selected_image = ""
 
     product_qty = fields.Float(string='Quantité', digits=(16, 0))
     note_interne = fields.Text(string="Note")
