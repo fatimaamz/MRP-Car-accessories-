@@ -62,6 +62,7 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
     
     week_number = fields.Char(string="Week Number", compute="_compute_week_number", store=True)
+    livraison_multiple = fields.Boolean(string="Livraison Multiple", default=False)
 
     @api.depends('scheduled_date')
     def _compute_week_number(self):
