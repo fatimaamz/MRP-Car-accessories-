@@ -15,6 +15,15 @@ class SaleOrder(models.Model):
             'res_id': self.id,
         }
         
+    def action_confirm(self):
+        res = super(SaleOrder, self).action_confirm()
+
+        for picking in self.picking_ids:
+            if not picking.scheduled_date:
+                picking.scheduled_date = datetime.now() + timedelta(days=3)
+        
+        return res
+        
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -63,14 +72,7 @@ class StockPicking(models.Model):
     numero_suivi = fields.Char(string="Tracking number")
     sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande")
     
-    @api.model
-    def create(self, values):
-        # Check if the scheduled_date is provided, otherwise set it to 3 days later
-        if 'scheduled_date' not in values:
-            values['scheduled_date'] = datetime.now() + timedelta(days=3)
-        
-       
-        return super(StockPicking, self).create(values)
+    
 
   
     def action_preview_bl_report(self):
