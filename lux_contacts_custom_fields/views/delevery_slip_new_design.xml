@@ -255,7 +255,7 @@
                                 </thead>
                                 <tbody>
                                     <t t-set="lines" t-value="o.move_ids"/> <!-- .filtered(lambda x: x.must_ship_by)-->
-                                    <t t-if="o.multiple_livraison">
+                                    <t t-if="o.livraison_multiple">
                                         <tr t-foreach="lines" t-as="move">
     
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
