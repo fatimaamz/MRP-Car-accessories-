@@ -1,5 +1,5 @@
 from odoo import fields, models, api
-
+from datetime import datetime, timedelta
 import re
 
 
@@ -62,6 +62,11 @@ class StockPicking(models.Model):
     numero_commande = fields.Char(string="Order Number")
     numero_suivi = fields.Char(string="Tracking number")
     sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande")
+    
+    scheduled_date = fields.Datetime(
+        string="Date planifiée",
+        default=lambda self: datetime.now() + timedelta(days=3)
+    )
 
 
   
