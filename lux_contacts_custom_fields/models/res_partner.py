@@ -129,7 +129,7 @@ class MrpProduction(models.Model):
     
                 # Variables globales issues du picking (bon de livraison)
                 semaine_livraison_global = pickings.week_number if pickings.week_number and pickings.week_number.isdigit() else pickings.week_number
-                num_suivi_global = pickings.tracking_number if pickings.tracking_number and pickings.tracking_number.isdigit() else pickings.tracking_number
+                num_suivi_global = pickings.numero_suivi if pickings.numero_suivi and pickings.numero_suivi.isdigit() else pickings.numero_suivi
                 must_ship_by_global = pickings.scheduled_date if pickings.scheduled_date else ''
                 ship_via_global = pickings.carrier_id.name if pickings.carrier_id else ''
     
