@@ -255,17 +255,32 @@
                                 </thead>
                                 <tbody>
                                     <t t-set="lines" t-value="o.move_ids"/> <!-- .filtered(lambda x: x.must_ship_by)-->
-                                    <tr t-foreach="lines" t-as="move">
-
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                            t-esc="move.shipping_week"/>
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                            t-esc="move.tracking_number"/>
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                            t-esc="move.must_ship_by"/>
-                                        <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                            t-esc="move.ship_via.name"/>
-                                    </tr>
+                                    <t t-if="o.multiple_livraison">
+                                        <tr t-foreach="lines" t-as="move">
+    
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="move.shipping_week"/>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="move.tracking_number"/>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="move.must_ship_by"/>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="move.ship_via.name"/>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                         <tr>
+    
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="o.semaine_livraison"/>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="o.numero_suivi"/>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="o.scheduled_date"/>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                                t-esc="o.carrier_id.name"/>
+                                        </tr>
+                                    </t>
 
                                 </tbody>
                             </table>
