@@ -2,6 +2,20 @@ from odoo import fields, models, api
 
 import re
 
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    def action_preview_quotation_report(self):
+        return {
+            'type': 'ir.actions.report',
+            'report_type': 'qweb-html',  
+            'report_name': 'lux_contacts_custom_fields.report_saleorder_new_template', 
+            'res_model': 'sale.order',
+            'res_id': self.id,
+        }
+        
+
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
@@ -56,7 +70,7 @@ class StockPicking(models.Model):
             'type': 'ir.actions.report',
             'report_type': 'qweb-html',  
             'report_name': 'lux_contacts_custom_fields.report_deliveryslip_new_template', 
-            'res_model': 'mrp.production',
+            'res_model': 'stock.picking',
             'res_id': self.id,
         }
          
