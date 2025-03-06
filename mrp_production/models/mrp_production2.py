@@ -51,7 +51,15 @@ class StockPicking(models.Model):
 
 
   
-
+    def action_preview_bl_report(self):
+        return {
+            'type': 'ir.actions.report',
+            'report_type': 'qweb-html',  
+            'report_name': 'lux_contacts_custom_fields.report_deliveryslip_new_template', 
+            'res_model': 'mrp.production',
+            'res_id': self.id,
+        }
+         
     #deactivate sending confirmation email
     def _send_confirmation_email(self):
         pass
