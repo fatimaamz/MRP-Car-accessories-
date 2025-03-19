@@ -193,12 +193,11 @@ class SaleOrder(models.Model):
 
             # Formatting the string
         formatted_description = f"""{reference_code} ({car_model.split(' ')[1]}, {car_model.split(' ')[0]})
-INTERIOR COLOR: {main_color}
-PAINT CODE: {paint_code}
-INSERT COLOR: {insert_color}
-Année: {car_year}
-Notes : {special_notes}
-"""
+        MAIN COLOR: {main_color}
+        PAINT CODE: {paint_code}
+        INSERT COLOR: {insert_color}
+        Année: {car_year}
+        Notes : {special_notes}"""
 
         print('======================>',formatted_description)
         return formatted_description
