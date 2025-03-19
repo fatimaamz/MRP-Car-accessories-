@@ -9,6 +9,23 @@ import io
 import base64
 from odoo.exceptions import UserError
 
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    tracking_number = fields.Char(string="Tracking Number")
+    must_ship_by = fields.Date(string="Must Ship By")
+    ship_via = fields.Many2one('delivery.carrier', string="Ship Via")
+    shipping_week = fields.Char(string="Shipping Week", compute="_compute_shipping_week", store=True)
+
+    @api.depends('must_ship_by')
+    def _compute_shipping_week(self):
+        for record in self:
+            if record.must_ship_by:
+                week_number = record.must_ship_by.isocalendar()[1]
+                record.shipping_week = f"S{week_number}"
+            else:
+                record.shipping_week = False
+
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
@@ -43,6 +60,17 @@ class AccountMoveLine(models.Model):
         
 class StockPicking(models.Model):
     _inherit = "stock.picking"
+    
+    week_number = fields.Char(string="Week Number", compute="_compute_week_number", store=True)
+    livraison_multiple = fields.Boolean(string="Livraison Multiple", default=False)
+
+    @api.depends('scheduled_date')
+    def _compute_week_number(self):
+        for picking in self:
+            if picking.scheduled_date:
+                picking.week_number = 'S' + datetime.strftime(picking.scheduled_date, "%U")
+            else:
+                picking.week_number = ''
 
     po = fields.Char(
         string="Po client",
@@ -58,6 +86,79 @@ class MrpProduction(models.Model):
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
 
     
+    """
+    def get_delivery_details(self, work_orders):
+        delivery_data = {}  # Always store data in a dictionary
+        
+        for work_order in work_orders:  # ✅ Loop over work_orders
+            pickings = self.env['stock.picking'].search([
+                ('origin', '=', work_order.origin),  
+                ('state', '!=', 'cancel')
+            ])
+    
+            if pickings:
+                for move in pickings.mapped('move_ids_without_package').filtered(lambda m: m.product_id == work_order.product_id):
+                    product_id = move.product_id.id  # Unique key per product
+                    if product_id not in delivery_data:
+                        delivery_data[product_id] = []
+                    # Ensure values exist, otherwise use defaults
+                    delivery_data[product_id] = {
+                        'product_id': product_id,
+                        'product_name': move.product_id.name,
+                        'shipping_week': move.shipping_week or 'N/A',
+                        'tracking_number': move.tracking_number or 'No Tracking',
+                        'must_ship_by': move.must_ship_by or 'Not Available',
+                        'ship_via': move.ship_via.name if move.ship_via else 'Unknown',
+                    }
+        
+        return delivery_data 
+
+ """
+    def get_delivery_details(self, work_orders):
+        delivery_data = []
+        processed_moves = set()
+    
+        for work_order in work_orders:
+            pickings = self.env['stock.picking'].search([
+                ('origin', '=', work_order.origin),
+                ('state', '!=', 'cancel')
+            ], limit=1)
+    
+            if pickings:
+                livraison_multiple = pickings.livraison_multiple
+    
+                # Variables globales issues du picking (bon de livraison)
+                semaine_livraison_global = pickings.week_number if pickings.week_number and pickings.week_number.isdigit() else pickings.week_number
+                num_suivi_global = pickings.numero_suivi if pickings.numero_suivi and pickings.numero_suivi.isdigit() else pickings.numero_suivi
+                must_ship_by_global = pickings.scheduled_date if pickings.scheduled_date else ''
+                ship_via_global = pickings.carrier_id.name if pickings.carrier_id else ''
+    
+                for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == work_order.product_id):
+                    if move.id in processed_moves:
+                        continue  
+                    
+                    processed_moves.add(move.id)
+    
+                    # Variables spécifiques au mouvement de stock
+                    shipping_week_move = move.shipping_week if move.shipping_week and move.shipping_week.isdigit() else move.shipping_week
+                    tracking_number_move = move.tracking_number if move.tracking_number and move.tracking_number.isdigit() else move.tracking_number
+                    must_ship_by_move = move.must_ship_by if move.must_ship_by else ''
+                    ship_via_move = move.ship_via.name if move.ship_via else ''
+    
+                    # Sélection des valeurs en fonction de livraison_multiple
+                    delivery_data.append({
+                        'product_id': move.product_id.id,
+                        'product_name': move.product_id.name,
+                        'shipping_week': shipping_week_move if livraison_multiple else semaine_livraison_global or '',
+                        'tracking_number': tracking_number_move if livraison_multiple else num_suivi_global or '',
+                        'must_ship_by': must_ship_by_move if livraison_multiple else must_ship_by_global,
+                        'ship_via': ship_via_move if livraison_multiple else ship_via_global,
+                        'livraison_multiple': livraison_multiple,
+                       
+                    })
+        
+        return delivery_data  # List of unique shipping details
+        
     @api.depends('origin')  
     def _compute_picking_id(self):
         for production in self:
@@ -117,6 +218,7 @@ class MrpProduction(models.Model):
     
     def get_report_values(self):
         work_orders =  self.browse(self.env.context.get('active_ids', []))
+        delivery_details = self.get_delivery_details(work_orders)
         filtered_lines = []
         total_quantity = 0  # Initialize total quantity
         for line in work_orders:
@@ -136,7 +238,15 @@ class MrpProduction(models.Model):
             })
             #total_quantity += line.product_qty  # Sum quantities
         
-        return filtered_lines
+        #return filtered_lines
+        
+    
+
+        return {
+            "filtered_lines": filtered_lines,
+            "docs": work_orders,
+            "delivery_details": delivery_details or {},
+        }
 
  
         

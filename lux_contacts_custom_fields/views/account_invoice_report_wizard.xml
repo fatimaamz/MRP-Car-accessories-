@@ -109,6 +109,12 @@
                    <t t-foreach="data['grouped_invoices'].items()" t-as="group">
                         <p style="text-align: left; margin-top: 20px;">
                             <strong>Client: <t t-esc="group[0].name"/></strong>
+                            <br/>
+                            <t t-if="group[0].street"><t t-esc="group[0].street"/>, </t>
+                            <t t-if="group[0].street2"><t t-esc="group[0].street2"/>, </t>
+                            <t t-if="group[0].city"><t t-esc="group[0].city"/>, </t>
+                            <t t-if="group[0].zip"><t t-esc="group[0].zip"/>, </t>
+                            <t t-if="group[0].country_id"><t t-esc="group[0].country_id.name"/></t>
                         </p>
                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px;">
                             <thead>

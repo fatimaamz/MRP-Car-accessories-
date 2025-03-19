@@ -59,7 +59,9 @@
             <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
                 <button name="send_delivery_email" type="object" string="Envoyer email d'expédition" class="btn-primary"/>
+                <button name="action_preview_bl_report" type="object" string="Aperçu BL" class="oe_highlight" icon="fa-eye"/>
             </xpath>                
+           
             <xpath expr="//field[@name='origin']" position="after">
                     <field name="numero_commande"/>
                     <field name="numero_suivi"/>
@@ -113,6 +115,18 @@
     <field name="model">mrp.production</field>
     <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
     <field name="arch" type="xml">
+        <xpath expr="//header" position="inside">
+                <button name="action_preview_mrp_report"
+                        type="object"
+                        string="Aperçu étiquette"
+                        class="oe_highlight"
+                        icon="fa-eye"/>
+             <button name="action_preview_single_wo_report"
+                        type="object"
+                        string="Aperçu ordre de travail unique"
+                        class="oe_highlight"
+                        icon="fa-eye"/>
+            </xpath>
       <xpath expr="//header//field[@name='state']" position="replace">
         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
       </xpath>
@@ -126,29 +140,33 @@
         <field name="ship_to_id"/> 
       </xpath>
        <xpath expr="//group[1]" position="after" >
-         <group name="product_icontrol_group" string="Contrôle produits" invisible="state !='done'" >
-            <field name="product_place"/>
-            <field name="product_finalized"/>
-            
-         </group>
-        <group>
-            <group>
-                <field name="product_template_id" invisible="1"/>    
-                <field name="logo_inscription" />
-                <field name="new_design"/>
+         <group name="product_icontrol_group" string="Progression de la production" >
+             <group>
+                <field name="is_coped"/>
+                <field name="product_place"/>
+                <field name="product_finalized"/>
+             </group>
+             <group>
                 <field name="is_conforme" class="o_inline"/>
                 <button name="action_view_delivery_order" 
-                                        type="object" 
-                                        class="oe_highlight"
-                                        string="Bon de livraison"
-                                        invisible="is_conforme == False" />
+                                            type="object" 
+                                            class="oe_highlight"
+                                            string="Bon de livraison"
+                                            invisible="is_conforme == False" />
+                 <field name="remarque_controle_qualite"/>
+                 <field name="product_template_id" invisible="1"/>    
+                    <field name="logo_inscription" />
+             </group>
+            
+         </group>
+        <!-- <group>
+            <group>
+                
+               <field name="new_design"/>
+               
             </group>
-        </group>
-        <group>
-            
-            <field name="remarque_controle_qualite"/>
-            
-        </group>
+        </group>-->
+      
         </xpath>
        <xpath expr="//div[hasclass('o_row', 'g-0', 'd-flex')]" position="after">
                 <field name="selected_characteristics"/>
@@ -185,18 +203,19 @@
                     <field name="date_deadline" widget="remaining_days" invisible="state in ['done', 'cancel']" optional="hide"/>
                     <field name="state" decoration-success="state in ('done', 'to_close')" decoration-warning="state == 'progress'" decoration-info="state == 'confirmed'" decoration-danger="state == 'cancel'" decoration-muted="state == 'draft'" optional="show" widget="badge" class="text-dark"/>
                     <field name="product_id" readonly="1" optional="show"/>
-                    <field name="color"/>
+                   <!-- <field name="color"/>-->
+                    <field name="full_characteristics"/>
                     <field name="partner_id"/>
                     <field name="ship_to_id"/>
                     <field name="po_client"/>
                     <field name="product_qty" sum="Total Qty" widget="float"  string="Quantité" readonly="1" optional="show"/>
                     <field name="is_coped"/>
 
-                    <field name="place_status" string="Placed" invisible="state !='done'"  widget="badge" decoration-success="place_status == 'place'"  decoration-danger="place_status== 'non_place'" />
+                    <field name="place_status" string="Placed"   widget="badge" decoration-success="place_status == 'place'"  decoration-danger="place_status== 'non_place'" />
 
-                    <field name="finalization_status" invisible="state !='done'"  widget="badge" decoration-success="finalization_status == 'finalise'"  decoration-danger="finalization_status== 'non_finalise'" />
+                    <field name="finalization_status"   widget="badge" decoration-success="finalization_status == 'finalise'"  decoration-danger="finalization_status== 'non_finalise'" />
           
-                    <field name="conform_status"  invisible="state !='done'"  widget="badge" decoration-success="conform_status == 'conforme'"  decoration-danger="conform_status == 'non_conforme'" />
+                    <field name="conform_status"  widget="badge" decoration-success="conform_status == 'conforme'"  decoration-danger="conform_status == 'non_conforme'" />
 
                     <field name="lot_producing_id" optional="hide"/>
                     <field name="bom_id" readonly="1" optional="hide"/>
@@ -228,6 +247,9 @@
     <field name="model">sale.order</field>
     <field name="inherit_id" ref="sale.view_order_form"/>
     <field name="arch" type="xml">
+         <xpath expr="//header" position="inside">
+            <button name="action_preview_quotation_report" type="object" string="Aperçu Devis/Commande" class="oe_highlight" icon="fa-eye"/>
+        </xpath>
         <xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']" position="after">
             <field name="has_mrp_production" invisible="1"/>
             <button name="action_view_related_mrp" 

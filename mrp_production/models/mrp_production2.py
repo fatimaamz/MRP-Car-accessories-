@@ -1,6 +1,29 @@
 from odoo import fields, models, api
-
+from datetime import datetime, timedelta
 import re
+
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    def action_preview_quotation_report(self):
+        return {
+            'type': 'ir.actions.report',
+            'report_type': 'qweb-html',  
+            'report_name': 'lux_contacts_custom_fields.report_saleorder_new_template', 
+            'res_model': 'sale.order',
+            'res_id': self.id,
+        }
+        
+    def action_confirm(self):
+        res = super(SaleOrder, self).action_confirm()
+
+        for picking in self.picking_ids:
+           
+            picking.scheduled_date = datetime.now() + timedelta(days=3)
+        
+        return res
+        
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -48,10 +71,19 @@ class StockPicking(models.Model):
     numero_commande = fields.Char(string="Order Number")
     numero_suivi = fields.Char(string="Tracking number")
     sale_order_partner_id = fields.Many2one(related='sale_id.partner_id', string="Client de la commande")
-
+    
+    
 
   
-
+    def action_preview_bl_report(self):
+        return {
+            'type': 'ir.actions.report',
+            'report_type': 'qweb-html',  
+            'report_name': 'lux_contacts_custom_fields.report_deliveryslip_new_template', 
+            'res_model': 'stock.picking',
+            'res_id': self.id,
+        }
+         
     #deactivate sending confirmation email
     def _send_confirmation_email(self):
         pass
@@ -101,8 +133,101 @@ class MrpProduction(models.Model):
     carbon_code = fields.Char(string="Carbon Code", compute="_compute_carbon_code", store=True)
     paint_code = fields.Char(string="Paint Code", compute="_compute_paint_code", store=True)
     year = fields.Char(string="Year", compute="_compute_year", store=True)
+    full_characteristics = fields.Char(string="Couleur", compute="_compute_full_characteristics", store=True)
+
+    @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')
+    def _compute_full_characteristics(self):
+        invalid_values = {"none", "no insert", "not applicable", "no color", "", None}  # Liste des valeurs à ignorer
+
+        for record in self:
+            values = [
+                record.interior_color,
+                record.insert_color,
+                record.main_color,
+                record.carbon_code,
+                record.paint_code,
+            ]
+
+            # ✅ Nettoyage et suppression des valeurs invalides
+            valid_values = [
+                val.strip() for val in values if val and val.strip().lower() not in invalid_values
+            ]
+
+            # ✅ Joindre avec " | " uniquement si des valeurs existent
+            record.full_characteristics = " | ".join(valid_values) if valid_values else ""
+
     
+    def _extract_value(self, text, field_name):
+        """
+        Extrait la valeur du champ à partir de 'selected_characteristics' en respectant les règles :
+        1. Si la valeur est vide, elle reste vide.
+        2. Ne prend que la ligne où le champ apparaît.
+        3. Remplace les valeurs invalides par une chaîne vide.
+        """
+        pattern = rf'^{field_name}:\s*(.*?)\s*$'  # Capture uniquement la valeur présente sur la même ligne
+        match = re.search(pattern, text, re.MULTILINE)
     
+        if match:
+            value = match.group(1).strip()
+            invalid_values = {"None", "No insert", "Not Applicable", "No Color", ""}
+            return "" if value in invalid_values else value  # Remplace les valeurs invalides par vide
+    
+        return "" 
+    @staticmethod
+    def _clean_value(value):
+        """Nettoie la valeur en supprimant les espaces et en normalisant la casse"""
+        if value:
+            cleaned_value = value.strip().lower()
+            return "" if cleaned_value in ["none", "no insert", "not applicable", "no color"] else value
+        return ""
+    
+    @api.depends('selected_characteristics')
+    def _compute_interior_color(self):
+        for record in self:
+            record.interior_color = self._clean_value(self._extract_value(record.selected_characteristics or '', "INTERIOR COLOR"))
+    
+    @api.depends('selected_characteristics')
+    def _compute_insert_color(self):
+        for record in self:
+            record.insert_color = self._clean_value(self._extract_value(record.selected_characteristics or '', "INSERT COLOR"))
+    
+    @api.depends('selected_characteristics')
+    def _compute_paint_code(self):
+        for record in self:
+            record.paint_code = self._clean_value(self._extract_value(record.selected_characteristics or '', "PAINT CODE"))
+    
+    @api.depends('selected_characteristics')
+    def _compute_main_color(self):
+        for record in self:
+            record.main_color = self._clean_value(self._extract_value(record.selected_characteristics or '', "Couleurs"))
+            
+    @api.depends('selected_characteristics')
+    def _compute_carbon_code(self):
+        for record in self:
+            record.carbon_code = self._clean_value(self._extract_value(record.selected_characteristics or '', "CARBON CODE"))
+
+    def action_preview_mrp_report(self):
+        return {
+            'type': 'ir.actions.report',
+            'report_type': 'qweb-html',  # Opens in popup instead of downloading
+            'report_name': 'mrp.label_production_view_pdf',  # Default MRP report
+            'res_model': 'mrp.production',
+            'res_id': self.id,
+            'context': {'window_size': 'small'},
+        }
+
+    def action_preview_single_wo_report(self):
+        return {
+            'type': 'ir.actions.report',
+            'report_type': 'qweb-html',  # Opens in popup instead of downloading
+            'report_name': 'lux_contacts_custom_fields.report_single_work_order_multi',  # Default MRP report
+            'res_model': 'mrp.production',
+            'res_id': self.id,
+        }
+
+    
+               
+    """
     @api.depends('selected_characteristics')
     def _compute_interior_color(self):
         for record in self:
@@ -110,6 +235,9 @@ class MrpProduction(models.Model):
             match = re.search(r'INTERIOR COLOR:\s*(.+?)(?:\n|$)', text)
             record.interior_color = match.group(1).strip() if match else ''
 
+   
+            
+    
     @api.depends('selected_characteristics')
     def _compute_insert_color(self):
         for record in self:
@@ -130,14 +258,15 @@ class MrpProduction(models.Model):
             text = record.selected_characteristics or ''
             match = re.search(r'CARBON CODE:\s*(.+?)(?:\n|$)', text)
             record.carbon_code = match.group(1).strip() if match else ''
-
+    
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
         for record in self:
             text = record.selected_characteristics or ''
             match = re.search(r'PAINT CODE:\s*(.+?)(?:\n|$)', text)
             record.paint_code = match.group(1).strip() if match else ''
-
+    """
+  
     @api.depends('selected_characteristics')
     def _compute_year(self):
         for record in self:
@@ -198,6 +327,8 @@ class MrpProduction(models.Model):
             # Log the selected image to ensure the change is captured
             if record.product_image_id:
                 record.selected_image = record.product_image_id.image
+            else:
+                record.selected_image = ""
 
     product_qty = fields.Float(string='Quantité', digits=(16, 0))
     note_interne = fields.Text(string="Note")
@@ -208,7 +339,7 @@ class MrpProduction(models.Model):
     product_variant_ids=fields.Many2many(related='product_id.product_template_variant_value_ids',string='Caractéristiques')
     product_finalized = fields.Boolean(string='Finition terminée')
     finalization_status = fields.Selection([('finalise', 'Finition terminée'), ('non_finalise', 'Non finalisé')], string='Finition' ,compute='_compute_finalization_status')
-    is_conforme = fields.Boolean('Conforme')
+    is_conforme = fields.Boolean('Conformité')
     conform_status=fields.Selection([('conforme', 'Conforme'), ('non_conforme', 'Non conforme')], string='Quality Control', compute='_compute_conforme_status')
     product_tag_ids=fields.Many2many(related='product_id.product_tag_ids' ,string='Étiquettes de modèle de produit')
     color = fields.Char(string='Color', default='No couleur')
@@ -237,7 +368,7 @@ class MrpProduction(models.Model):
     ship_to_id = fields.Many2one('res.partner', string="Ship To", compute="_compute_ship_to_id")
     picking_id = fields.Many2one('stock.picking', string="Stock Picking", compute="_compute_picking_id")
     picking_scheduled_date = fields.Datetime(related='picking_id.scheduled_date', string="Must Ship By")
-    is_coped= fields.Boolean(string="Coupé", compute="_compute_is_coped")
+    is_coped= fields.Boolean(string="Coupé") #, compute="_compute_is_coped"
 
     product_ref = fields.Char(string="Reference", compute="_compute_product_ref", store=True)
     product_model = fields.Char(string="Model", compute="_compute_product_ref", store=True)

@@ -122,12 +122,32 @@
                             <td style="width: 33%; padding: 10px; vertical-align: top; border: 1px solid #f9fafb;">
                                 <strong>Produit</strong><br/>
                                 Part Number : <t t-esc="doc.product_id.default_code"/><br/>
-                                Color : <t t-esc="doc.interior_color"/><br/>
-                                Insert : <t t-esc="doc.insert_color"/><br/>
+                                <t t-if="docs.interior_color and docs.interior_color not in ['None', 'No insert', 'Not Applicable','No Color']">
+                                            Interior Color:
+                                            <t t-esc="docs.interior_color"/>
+                                            <br/>
+                                        </t>
+                                        
+                                        <t t-if="docs.insert_color and docs.insert_color not in ['None', 'No insert', 'Not Applicable','No Color']">
+                                            Insert Color:
+                                            <t t-esc="docs.insert_color"/>
+                                            <br/>
+                                        </t>
+                                        
+                                        <t t-if="docs.paint_code and docs.paint_code not in ['None', 'No insert', 'Not Applicable','No Color']">
+                                            Paint Code:
+                                            <t t-esc="docs.paint_code"/>
+                                            <br/>
+                                        </t>
+                                     <t t-if="docs.main_color and docs.main_color not in ['None', 'No insert', 'Not Applicable','No Color']">
+                                            Main Color:
+                                            <t t-esc="docs.main_color"/>
+                                            <br/>
+                                        </t>
                                 Logo : <t t-esc="doc.logo_inscription"/><br/>
                                 Reflector type : <t t-esc="doc.reflector_type"/>
                             </td>
-                            <td style="width: 33%; padding: 10px; vertical-align: top; border: 1px solid #f9fafb;">
+                            <!--<td style="width: 33%; padding: 10px; vertical-align: top; border: 1px solid #f9fafb;">
                                 <strong>New design :</strong><br/>
                                 <div style="margin-top: 5px;">
                                     <label style="display: flex; align-items: center; margin-bottom: 4px;">
@@ -146,7 +166,7 @@
                                         <span style="font-size: 14px;">Reçu</span>
                                     </label>
                                 </div>
-                            </td>
+                            </td>-->
                         </tr>
                     </table>
                 </div>

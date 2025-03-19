@@ -2,7 +2,7 @@
 <odoo>
 
     <template id="report_deliveryslip_document_inherit" inherit_id="stock.report_delivery_document">
-        <xpath expr="//div[@class='col-auto']" position="before">
+        <!--<xpath expr="//div[@class='col-auto']" position="before">
             
                 <div ct-if="o.numero_commande" class="col-auto">
                     <strong>Numéro de commande :</strong>
@@ -38,6 +38,236 @@
           
                             <span t-field="move.quantity" t-options='{"widget": "float", "precision": 0}'/>
                     
+        </xpath>-->
+        <xpath expr="//t[@t-set='address']" position="replace">
+                <t t-set="address">
+                    <div style="padding: 10px; border-radius: 15px; background: white;
+                                              background-color: #f6f8fc;
+                                              border: 1px solid white;
+                                              height: 200px;
+                                              display: flex;
+                                              flex-direction: column;
+                                              color: black;
+                                              box-sizing: border-box;
+                                             
+                                              font-size: 16px;">
+                        <div name="outgoing_delivery_address" t-if="o.should_print_delivery_address()">
+                            <span><strong>Delivery Address:</strong></span>
+                            <div t-field="o.move_ids[0].partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                        </div>
+                        <div name="outgoing_warehouse_address" t-elif="o.picking_type_id.code != 'internal' and o.picking_type_id.warehouse_id.partner_id">
+                            <span><strong>Warehouse Address:</strong></span>
+                            <div t-field="o.picking_type_id.warehouse_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                        </div>
+                    </div>
+                </t>
+        </xpath>
+        <xpath expr="//t[@t-set='information_block']" position="replace">
+                <t t-set="information_block">
+                    <div  style="padding: 10px; border-radius: 15px;
+                                              background-color: #f6f8fc;
+                                              border: 1px solid white;
+                                              height: 200px;
+                                              display: flex;
+                                              color: black;
+                                              flex-direction: column;
+                                              background: white;
+                                              box-sizing: border-box;
+                                             
+                                              font-size: 16px;">
+                        <div class="col-7" name="div_incoming_address">
+                            <t t-set="show_partner" t-value="False"/>
+                            <div name="vendor_address" t-if="o.picking_type_id.code=='incoming' and partner">
+                                <span><strong>Vendor Address:</strong></span>
+                                <t t-set="show_partner" t-value="True"/>
+                            </div>
+                            <div name="customer_address" t-if="o.picking_type_id.code=='outgoing' and partner and partner != partner.commercial_partner_id">
+                                <span><strong>Customer Address:</strong></span>
+                                <t t-set="show_partner" t-value="True"/>
+                            </div>
+                            <div t-if="show_partner" name="partner_header">
+                                <div t-field="partner.commercial_partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;vat&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+        </xpath>
+        <xpath expr="//div[@class='page']" position="replace">
+
+                <div class="page"  style="color: #2f374f;font-family: Inter;line-height: 1.3;">
+                    <h2 >
+                        <span t-field="o.name">WH/OUT/0001</span>
+                    </h2>
+                    <div class="oe_structure"/>
+                    <div class="row mt32 mb32" >
+                        <div t-if="o.origin" class="col-auto" name="div_origin">
+                            <strong>Order:</strong>
+                            <p t-field="o.origin">S0001</p>
+                        </div>
+                        <div t-if="o.state" class="col-auto" name="div_sched_date" >
+                            <strong>Shipping Date:</strong>
+                                <p t-if="o.state == 'done'" t-field="o.date_done"/>
+                                <p t-else="" t-field="o.scheduled_date"/>
+                        </div>
+                    </div>
+                    <div class="oe_structure"/>
+                    <table  t-if="o.state!='done'" name="stock_move_table" style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                        <thead>
+                            <tr style=" background-color: #f7f7f7;">
+                                <th  style="border: 1px solid #ddd; padding: 10px;" name="th_sm_product"><strong>Product</strong></th>
+                                <th  style="border: 1px solid #ddd; padding: 10px;" name="th_sm_ordered"><strong>Ordered</strong></th>
+                                <th  style="border: 1px solid #ddd; padding: 10px;" name="th_sm_quantity"><strong>Delivered</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"/>
+                            <tr t-foreach="lines" t-as="move">
+                                <td style="border: 1px solid #ddd; padding: 10px;">
+                                    <span t-field="move.product_id">Customizable Desk</span>
+                                    <p t-if="move.description_picking and move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
+                                        <span t-field="move.description_picking">Description on transfer</span>
+                                    </p>
+                                </td>
+                                <td style="border: 1px solid #ddd; padding: 10px;">
+                                    <span t-field="move.product_uom_qty">3.00</span>
+                                    <span t-field="move.product_uom" groups="uom.group_uom">units</span>
+                                    <span t-if="move.product_packaging_id">
+                                        (<span t-field="move.product_packaging_qty" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/> <span t-field="move.product_packaging_id"/>)
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid #ddd; padding: 10px;">
+                                    <span t-field="move.quantity">3.00</span>
+                                    <span t-field="move.product_uom" groups="uom.group_uom">units</span>
+                                    <span t-if="move.product_packaging_id">
+                                        (<span t-field="move.product_packaging_quantity" t-options="{&quot;widget&quot;: &quot;integer&quot;}"/> <span t-field="move.product_packaging_id"/>)
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table t-elif="o.move_line_ids and o.state=='done'" name="stock_move_line_table" style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                        <t t-set="has_serial_number" t-value="False"/>
+                        <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_lot_on_delivery_slip"/>
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_product"><strong>Product</strong></th>
+                                <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_qty_ordered" class="text-center" t-if="not has_serial_number">
+                                    <strong>Ordered</strong>
+                                </th>
+                                <th name="lot_serial" t-else="">
+                                    Lot/Serial Number
+                                </th>
+                                <th style="border: 1px solid #ddd; padding: 10px;" name="th_sml_quantity" class="text-center"><strong>Delivered</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <!-- This part gets complicated with different use cases (additional use cases in extensions of this report):
+                                1. If serial numbers are used and set to print on delivery slip => print lines as is, otherwise group them by overlapping
+                                    product + description + uom combinations
+                                2. If any packages are assigned => split products up by package (or non-package) and then apply use case 1 -->
+                            <!-- If has destination packages => create sections of corresponding products -->
+                            <t t-if="o.has_packages" name="has_packages">
+                                <t t-set="packages" t-value="o.move_line_ids.mapped('result_package_id')"/>
+                                <t t-foreach="packages" t-as="package">
+                                    <t t-call="stock.stock_report_delivery_package_section_line"/>
+                                    <t t-set="package_move_lines" t-value="o.move_line_ids.filtered(lambda l: l.result_package_id == package)"/>
+                                    <!-- If printing lots/serial numbers => keep products in original lines -->
+                                    <t t-if="has_serial_number">
+                                        <tr t-foreach="package_move_lines" t-as="move_line" style="border: 1px solid #ddd; padding: 10px;">
+                                            <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                                        </tr>
+                                    </t>
+                                    <!-- If not printing lots/serial numbers => merge lines with same product+description+uom -->
+                                    <t t-else="">
+                                        <t t-set="aggregated_lines" t-value="package_move_lines._get_aggregated_product_quantities(strict=True)"/>
+                                        <t t-call="stock.stock_report_delivery_aggregated_move_lines"/>
+                                    </t>
+                                </t>
+                                <!-- Make sure we do another section for package-less products if they exist -->
+                                <t t-set="move_lines" t-value="o.move_line_ids.filtered(lambda l: not l.result_package_id)"/>
+                                <t t-set="aggregated_lines" t-value="o.move_line_ids._get_aggregated_product_quantities(except_package=True)"/>
+                                <t t-if="move_lines or aggregated_lines" name="no_package_move_lines">
+                                    <t t-call="stock.stock_report_delivery_no_package_section_line" name="no_package_section"/>
+                                    <t t-if="has_serial_number">
+                                        <tr t-foreach="move_lines" t-as="move_line">
+                                            <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                                        </tr>
+                                    </t>
+                                    <t t-elif="aggregated_lines">
+                                        <t t-call="stock.stock_report_delivery_aggregated_move_lines"/>
+                                    </t>
+                                </t>
+                            </t>
+                            <!-- No destination packages -->
+                            <t t-else="">
+                                <!-- If printing lots/serial numbers => keep products in original lines -->
+                                <t t-if="has_serial_number">
+                                    <tr t-foreach="o.move_line_ids" t-as="move_line" style="border: 1px solid #ddd; padding: 10px;">
+                                        <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                                    </tr>
+                                </t>
+                                <!-- If not printing lots/serial numbers => merge lines with same product -->
+                                <t t-else="" name="aggregated_move_lines">
+                                    <t t-set="aggregated_lines" t-value="o.move_line_ids._get_aggregated_product_quantities()"/>
+                                    <t t-call="stock.stock_report_delivery_aggregated_move_lines"/>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="oe_structure"/>
+                    <t t-set="backorders" t-value="o.backorder_ids.filtered(lambda x: x.state not in ('done', 'cancel'))"/>
+                    <div t-if="not (o.backorder_ids and backorders)" class="oe_structure"/>
+                    <div t-else="">
+                        <p class="mt-5">
+                            <span>Remaining quantities not yet delivered:</span>
+                        </p>
+                        <table class="table table-sm" name="stock_backorder_table" style="table-layout: fixed;width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
+                            <thead>
+                                <tr>
+                                    <th name="th_sb_product"><strong>Product</strong></th>
+                                    <th/>
+                                    <th name="th_sb_quantity" class="text-center"><strong>Quantity</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="backorders.mapped('move_ids').filtered(lambda x: x.product_uom_qty)" t-as="bo_line">
+                                    <td class="w-auto" style="border: 1px solid #ddd; padding: 10px;">
+                                        <span t-field="bo_line.product_id">Office Chair</span>
+                                        <p t-if="bo_line.description_picking and bo_line.description_picking != bo_line.product_id.name and bo_line.description_picking != bo_line.product_id.display_name">
+                                            <span t-field="bo_line.description_picking">Description on transfer</span>
+                                        </p>
+                                    </td>
+                                    <td/>
+                                    <td class="text-center w-auto" style="border: 1px solid #ddd; padding: 10px;">
+                                        <span t-field="bo_line.product_uom_qty">3.00</span>
+                                        <span t-field="bo_line.product_uom" groups="uom.group_uom">units</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div t-if="not o.signature" class="oe_structure"/>
+                    <div t-else="" class="mt32 ml64 mr4" name="signature">
+                        <div class="offset-8">
+                            <strong>Signature</strong>
+                        </div>
+                        <div class="offset-8">
+                            <img t-att-src="image_data_uri(o.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                        </div>
+                        <div t-if="o.partner_id" class="offset-8 text-center">
+                            <p t-field="o.partner_id.name">John Doe</p>
+                        </div>
+                    </div>
+                </div>
+             <div class="footer" style="text-align: center; font-size: 12px; margin-top: 20px;">
+                <strong>Payment to / payé par:</strong> Luxwood Auto Trim Design Inc
+                &#160;&#160;&#160;&#160;
+                <strong>HTS:</strong> 8708.99.8080
+                &#160;&#160;&#160;&#160;
+                <strong>Country of origin:</strong> Canada, Qc
+            </div>
+
         </xpath>
 
         
