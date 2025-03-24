@@ -515,11 +515,13 @@ class AccountMove(models.Model):
     payment_date = fields.Char(string='Payment Date', compute='_compute_payment_date', store=True)
     payment_journal = fields.Char(string='Payment Journal', compute='_compute_payment_date', store=True)
     ref_paym = fields.Char(string="Reference", compute='_compute_payment_ref', store=True)
+    lux_mode_paiement =  fields.Char(string="Mode de paiement ", compute='_compute_payment_ref', store=True)
 
     @api.depends('invoice_payments_widget')
     def _compute_payment_ref(self):
         for inv in self:
             refs = set()
+            journal_ids = set()
             if inv.invoice_payments_widget:
                 payment_data = inv.invoice_payments_widget.get('content', [])
                 for payment_info in payment_data:
@@ -529,9 +531,12 @@ class AccountMove(models.Model):
                         payment = self.env['account.payment'].browse(account_payment_id)
                         if payment:
                             refs.add(payment.ref)
+                            journal_ids.add(str(payment.journal_id.id))
+                            
     
-            # Assign the concatenated references
-            inv.ref_paym = ', '.join(sorted(refs)) if refs else False
+            
+            inv.ref_paym = ', '.join(sorted(refs)) if refs else False # Assign the concatenated references
+            inv.lux_mode_paiement = ', '.join(sorted(journal_ids)) if journal_ids else False  # Store Journal IDs
 
     @api.depends('invoice_payments_widget')
     def _compute_payment_date(self):
