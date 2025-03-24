@@ -531,7 +531,7 @@ class AccountMove(models.Model):
                         payment = self.env['account.payment'].browse(account_payment_id)
                         if payment:
                             refs.add(payment.ref)
-                            journal_ids.add(str(payment.journal_id.name))
+                            journal_ids.add(payment.journal_id.name)
                             
     
             
