@@ -23,6 +23,9 @@
                 <field name="commission_pool"/>
                <field name="individual_commissions"/>
             </xpath>
+             <xpath expr="//tree//field[@name='partner_id']" position="after">
+                 <field name="partner_shipping_id"/>
+             </xpath>
         </field>
     </record>
     
