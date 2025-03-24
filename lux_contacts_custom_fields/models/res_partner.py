@@ -529,10 +529,10 @@ class AccountMove(models.Model):
                     if account_payment_id:
                         # Fetch the payment record
                         
-                        payment = self.env['account.payment'].sudo().browse(account_payment_id)
+                        payment = self.env['account.payment'].browse(account_payment_id)
                         if payment:
                             refs.add(payment.ref)
-                            journal_ids.add(payment.journal_id.name)
+                            journal_ids.add(payment.journal_id.type)
                             
     
             
