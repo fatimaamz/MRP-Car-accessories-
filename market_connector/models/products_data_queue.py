@@ -109,7 +109,6 @@ class ShopifyProductDataQueueEpt(models.Model):
             reference = split_title[3]
             result = result.to_dict()
             data = json.dumps(result)
-            print(reference[-3:])
             product = self.create({
                     'shopify_id': result.get('id'),
                     'shopify_title': result.get('title'),
@@ -284,8 +283,11 @@ class ShopifyProductDataQueueEpt(models.Model):
                     'categ_id': category.id if category else False,
                 })
             
+
+            
             # Affecter tous les attributs existants
-            self._set_all_product_attributes(product)
+            attributes = data_dict.get('attributes', [])
+            self._set_all_product_attributes(product, attributes)
             
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
@@ -305,13 +307,94 @@ class ShopifyProductDataQueueEpt(models.Model):
         self.add_images_from_dict(product, data_dict.get('images',[]))
         return product
     
-    def _set_all_product_attributes(self, product):
+    @staticmethod
+    def get_product_colors(tags):
+        default_exterior_color = [
+            "Glossy Black (0BK)", "Chrome (0CH)", "Luxd Carbon (LCF)", "Racing Red (RED)",
+            "Orange tech (ORA)", "Paint match (0CM)", "Platinum Silver (0PS)", "Textured Carbon (WCF)",
+            "Hot Pink (BCF)", "Electric Blue (0EB)", "Brushed Chrome (0BC)", "Titanium (PWT)",
+            "African Rose (0AR)", "Cafe Burl (0CB)", "Maple Burl (0TK)", "Oxford Burl (OXB)", 
+            "Royal Cherry (0RB)", "Black Rose (0BR)"
+        ]
+
+        default_insert_colors = [
+            "No insert", "Chrome (0CH)", "Glossy Black (0BK)", "Luxd Carbon (LCF)", 
+            "Racing Red (RED)", "Orange Tech (ORA)", "Paint Match (0CM)", 
+            "Platinum Silver (0PS)", "Hot Pink (BCF)", "Electric Blue (0EB)"
+        ]
+
+        default_carbon_colors = [
+            "Black Carbon Fiber - Twill (RCF)", "Honeycomb Carbon (HCF)", 
+            "Metalic Red Carbon (MRF)", "Metalic Blue Carbon (MBF)", "Silver Carbon (CFS)"
+        ]
+
+        default_bpm_colors = ["Black Protection (WBK)", "Wrap Carbon (WCF)"]
+
+        result = {}
+
+        exterior_tags_1 = {"CRM", "CRP", "MTR", "RDS", "SMC", "SMP", "XCC", "XSC", "XRI", "XCI", "XSM", "XSP", "XSR", "CRK", "CRP"}
+        
+        exterior_tags_2 = {"DEK", "EXT", "GRI", "GRK", "GRL", "GRV", "PIK", "PIL", "RDL", "RKI", "RKK", "RKR", "BUL", "DEL", "BUM", "DEF"}
+        
+        exterior_tags_3 = {"LOG", "ACC", "WT", "WTT", "CRX"}
+        
+        interior_tags = {"CMB", "FAC", "FUL", "OEM", "RDL", "SET", "SGN"}
+        
+
+        bpm_tags = {"BPM"}
+
+        if any(tag in exterior_tags_1 for tag in tags):
+            result["main_color"] = default_exterior_color
+            result["insert_color"] = default_insert_colors
+            result["dropdown_title"] = "Main Color"
+            result["hide_pricing"] = True
+            result["show_insert"] = True
+            result["default_main_color"] = "Glossy Black (0BK)"
+            result["default_insert_color"] = "Chrome (0CH)"
+            result["carbon_colors"] = default_carbon_colors
+            result["hide_carbon"] = False
+
+        elif any(tag in exterior_tags_2 for tag in tags):
+            result["main_color"] = default_exterior_color
+            result["insert_color"] = default_insert_colors
+            result["dropdown_title"] = "Main Color"
+            result["show_insert"] = True
+            result["default_main_color"] = "Glossy Black (0BK)"
+            result["default_insert_color"] = "Chrome (0CH)"
+            result["carbon_colors"] = default_carbon_colors
+            result["hide_carbon"] = False
+
+
+        elif any(tag in interior_tags for tag in tags):
+            result["dropdown_title"] = "Interior colors"
+            result["hide_paint"] = False
+            result["hide_carbon"] = False
+
+        elif any(tag in exterior_tags_3 for tag in tags):
+            result["main_color"] = default_exterior_color
+            result["dropdown_title"] = "Exterior colors"
+            result["hide_paint"] = False
+            result["hide_carbon"] = False
+
+        if any(tag in bpm_tags for tag in tags):
+            if not result:
+                result = {}
+            result["protection_film_colors"] = default_bpm_colors
+            result["dropdown_title_protection"] = "Protection Film Colors"
+            result["hide_pricing_protection"] = True
+            result["hide_carbon_protection"] = True
+
+        return result
+
+    
+    def _set_all_product_attributes(self, product, attribute_names):
         ProductTemplateAttributeLine = self.env['product.template.attribute.line']
+        # search attribute in attributes
+        attributes = self.env['product.attribute'].search([
+            ('name', 'in', attribute_names)
+        ])
         
         # Récupérer tous les attributs
-        attributes = self.env['product.attribute'].search([
-            ('id', 'in', [231, 223,201,4,11, 226])
-        ])
         
         for attribute in attributes:
             # Récupérer toutes les valeurs pour cet attribut
