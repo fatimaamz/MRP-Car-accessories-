@@ -18,6 +18,7 @@
                 <field name="product_id"/>
                 <field name="is_process_queue"/>
                 <button name="check_matching_action" string="Check Matching" type="object" class="oe_highlight"/>
+                <button name="create_or_update" string="Create or Update" type="object" class="oe_highlight"/>
             </tree>
         </field>
     </record>
@@ -52,6 +53,7 @@
                     </group>
                     <group>
                         <button name="check_matching_action" type="object" string="Check Matching" class="oe_highlight"/>
+                        <button name="create_or_update" type="object" string="Create or Update" class="oe_highlight"/>
                     </group>
                 </sheet>
             </form>

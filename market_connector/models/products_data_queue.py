@@ -159,6 +159,9 @@ class ShopifyProductDataQueueEpt(models.Model):
             except Exception as e:
                 _logger.error(f"Error processing record {record.name}: {str(e)}")
                 self._cr.commit()
+
+
+    
             
     
     def check_matching(self):
@@ -218,6 +221,103 @@ class ShopifyProductDataQueueEpt(models.Model):
                 result += "Conflict"
 
         self.result = result
+        
+    def create_or_update(self):
+        for record in self:
+            _logger.info(f"Processing product: {record.shopify_reference}")
+            reference = record.shopify_reference.strip()
+            
+            # Get product data from Shopify
+            data_dict = {}
+            if record.data:
+                data_dict = json.loads(record.data)
+            
+            # Get or create category from product_type
+            category = False
+            product_type = data_dict.get('product_type')
+            if product_type:
+                category = self.env['product.category'].search([('name', '=', product_type)], limit=1)
+                if not category:
+                    category = self.env['product.category'].create({'name': product_type})
+            
+            # Search for existing product template by default_code
+            product_tmpl = self.env['product.template'].search([
+                ('default_code', '=', reference),
+                ('active', '=', True)
+            ], limit=1)
+
+            # Prepare attribute values for name
+            attr_for_name = []
+            if record.model:
+                attr_for_name.append(record.model)
+                
+            if record.brand:
+                attr_for_name.append(record.brand)
+            if record.shopify_attribute:
+                attr_for_name.append(record.shopify_attribute)
+                
+            product_name = f"{reference} ({','.join(attr_for_name) if attr_for_name else ''})"
+
+            attributes = self.get_attributes(record)
+
+            print(attributes)
+            
+            if not product_tmpl:
+                _logger.info(f"No product template found for reference: {reference}, creating new one")
+                
+                
+                
+                # Create new product template
+                product_tmpl = self.env['product.template'].create({
+                    'name': product_name,
+                    'default_code': reference,
+                    'type': 'product',
+                    'categ_id': category.id if category else False,
+                    'shopify_id': record.shopify_id
+                })
+                
+                # Create variant if needed
+                product_product = product_tmpl.product_variant_id
+                
+                # Import images
+                if record.default_image_url:
+                    self.import_shopify_product_image(product_product, record.default_image_url)
+                
+                # Add additional images
+                self.add_images_from_dict(product_product, data_dict.get('images', []))
+                
+                # Link the product to the queue record
+                record.product_id = product_product.id
+                
+                _logger.info(f"Created new product: {product_tmpl.name}")
+                return product_product
+            else:
+                _logger.info(f"Product template found: {product_tmpl.name}, updating")
+                
+                # Update existing product
+                product_product = product_tmpl.product_variant_id
+                product_tmpl.shopify_id = record.shopify_id
+                
+                # Update category if needed
+                if category:
+                    product_tmpl.categ_id = category.id
+                
+                # Apply all attributes
+                
+                # Update images if needed
+                if record.default_image_url and not product_product.image_1920:
+                    self.import_shopify_product_image(product_product, record.default_image_url)
+                
+                # TODO : Add additional images if needed
+                # Add additional images if needed
+                # if not self.env['product.image'].search([('product_tmpl_id', '=', product_tmpl.id)]):
+                #     self.add_images_from_dict(product_product, data_dict.get('images', []))
+                
+                # Link the product to the queue record
+                record.product_id = product_product.id
+                
+                _logger.info(f"Updated product: {product_tmpl.name}")
+                return product_product
 
     
     def matching_product_product(self, shopify_product):
@@ -285,9 +385,8 @@ class ShopifyProductDataQueueEpt(models.Model):
             
 
             
-            # Affecter tous les attributs existants
-            attributes = data_dict.get('attributes', [])
-            self._set_all_product_attributes(product, attributes)
+            # Apply attributes
+            self.apply_record_attributes(product.product_tmpl_id, shopify_product)
             
             shopify_product.product_id = product
             product.shopify_id = shopify_product.shopify_id
@@ -342,73 +441,30 @@ class ShopifyProductDataQueueEpt(models.Model):
         
 
         bpm_tags = {"BPM"}
+        if any(tag.strip() in exterior_tags_1 for tag in tags):
+            result["MAIN COLOR"] = default_exterior_color
+            result["INSERT COLOR"] = default_insert_colors
+            result["CARBON COLOR"] = default_carbon_colors
 
-        if any(tag in exterior_tags_1 for tag in tags):
-            result["main_color"] = default_exterior_color
-            result["insert_color"] = default_insert_colors
-            result["dropdown_title"] = "Main Color"
-            result["hide_pricing"] = True
-            result["show_insert"] = True
-            result["default_main_color"] = "Glossy Black (0BK)"
-            result["default_insert_color"] = "Chrome (0CH)"
-            result["carbon_colors"] = default_carbon_colors
-            result["hide_carbon"] = False
-
-        elif any(tag in exterior_tags_2 for tag in tags):
-            result["main_color"] = default_exterior_color
-            result["insert_color"] = default_insert_colors
-            result["dropdown_title"] = "Main Color"
-            result["show_insert"] = True
-            result["default_main_color"] = "Glossy Black (0BK)"
-            result["default_insert_color"] = "Chrome (0CH)"
-            result["carbon_colors"] = default_carbon_colors
-            result["hide_carbon"] = False
+        elif any(tag.strip() in exterior_tags_2 for tag in tags):
+            result["MAIN COLOR"] = default_exterior_color
+            result["INSERT COLOR"] = default_insert_colors
+            result["CARBON COLOR"] = default_carbon_colors
 
 
-        elif any(tag in interior_tags for tag in tags):
-            result["dropdown_title"] = "Interior colors"
-            result["hide_paint"] = False
-            result["hide_carbon"] = False
+        elif any(tag.strip() in interior_tags for tag in tags):
+            pass
+        elif any(tag.strip() in exterior_tags_3 for tag in tags):
+            result["MAIN COLOR"] = default_exterior_color
 
-        elif any(tag in exterior_tags_3 for tag in tags):
-            result["main_color"] = default_exterior_color
-            result["dropdown_title"] = "Exterior colors"
-            result["hide_paint"] = False
-            result["hide_carbon"] = False
-
-        if any(tag in bpm_tags for tag in tags):
+        if any(tag.strip() in bpm_tags for tag in tags):
             if not result:
                 result = {}
-            result["protection_film_colors"] = default_bpm_colors
-            result["dropdown_title_protection"] = "Protection Film Colors"
-            result["hide_pricing_protection"] = True
-            result["hide_carbon_protection"] = True
+            result["PROTECTION FILM COLORS"] = default_bpm_colors
 
         return result
 
-    
-    def _set_all_product_attributes(self, product, attribute_names):
-        ProductTemplateAttributeLine = self.env['product.template.attribute.line']
-        # search attribute in attributes
-        attributes = self.env['product.attribute'].search([
-            ('name', 'in', attribute_names)
-        ])
-        
-        # Récupérer tous les attributs
-        
-        for attribute in attributes:
-            # Récupérer toutes les valeurs pour cet attribut
-            values = self.env['product.attribute.value'].search([
-                ('attribute_id', '=', attribute.id)
-            ])
-            
-            if values:
-                # Créer la ligne d'attribut sur le template du produit avec toutes les valeurs
-                ProductTemplateAttributeLine.create({
-                    'product_tmpl_id': product.product_tmpl_id.id,
-                    'attribute_id': attribute.id,
-                    'value_ids': [(6, 0, values.ids)]
-                })
+
     
     def matching_product_template(self, shopify_product):
         product_template = self.env['product.template'].search([("name","=",shopify_product.shopify_reference)])
@@ -511,7 +567,43 @@ class ShopifyProductDataQueueEpt(models.Model):
             order_queue_list.remove(order_queue.id)
 
         return order_queue_list
-    
 
+
+    def get_attributes(self, record):
+        attributes = []
+        
+        # Only add attributes that have values
+        if hasattr(record, 'model') and record.model:
+            attributes.append({
+                'name': 'Model',
+                'value': record.model
+            })
+            
+        if hasattr(record, 'brand') and record.brand:
+            attributes.append({
+                'name': 'Brand',
+                'value': record.brand
+            })
+            
+        if hasattr(record, 'style') and record.style:
+            attributes.append({
+                'name': 'Style',
+                'value': record.style
+            })
+            
+        if hasattr(record, 'shopify_years') and record.shopify_years:
+            attributes.append({
+                'name': 'Year',
+                'value': record.shopify_years
+            })
+
+        if hasattr(record, 'data') and record.data:
+            data_dict = json.loads(record.data)
+            tags_str = data_dict.get('tags', [])
+            tags = tags_str.split(",")
+            colors_attributes = self.get_product_colors(tags)
+            colors_attributes = [{"name": key, "value": value} for key, value in colors_attributes.items()]
+            attributes.extend(colors_attributes)
+        return attributes
     
         
