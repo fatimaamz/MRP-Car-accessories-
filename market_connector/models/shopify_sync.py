@@ -34,11 +34,7 @@ class ShopifySync(models.Model):
             return False
             
         session = credentials.get_session()
-        
-        # Get current page from parameters
-        ir_config_param = self.env['ir.config_parameter'].sudo()
-        current_page = int(ir_config_param.get_param('shopify_sync.current_page', '1'))
-        print("current_page",current_page)
+        current_page = credentials.current_page
         # Sync products for the current page
         shopify.ShopifyResource.activate_session(session)
         try:
@@ -50,11 +46,12 @@ class ShopifySync(models.Model):
                 
                 # Increment page number for next run
                 next_page = current_page + 1
-                ir_config_param.set_param('shopify_sync.current_page', str(next_page))
+                credentials.current_page = next_page
             else:
                 # If no products found, reset to page 1
-                ir_config_param.set_param('shopify_sync.current_page', '1')
+                credentials.current_page = 1
                 _logger.info("No products found, resetting to page 1")
+            credentials._cr.commit()
         except Exception as e:
             _logger.error(f"Error during scheduled sync: {e}")
             
