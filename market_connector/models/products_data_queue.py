@@ -321,7 +321,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                 record.product_id = product_product.id
                 
                 _logger.info(f"Updated product: {product_tmpl.name}")
-                return product_product
+            self._cr.commit()
 
     
     def matching_product_product(self, shopify_product):
