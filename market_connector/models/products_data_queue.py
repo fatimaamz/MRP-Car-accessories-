@@ -124,7 +124,11 @@ class ShopifyProductDataQueueEpt(models.Model):
                 })
             self._cr.commit()
             if to_odoo:
-                product.create_or_update()
+                # search product in product queue
+                product_queue = self.search([('shopify_id', '=', result.get('id'))], limit=1)
+                if product_queue:
+                    product_queue.create_or_update()
+            
             return product
         except IndexError:
             print(split_title)
@@ -225,6 +229,7 @@ class ShopifyProductDataQueueEpt(models.Model):
         self.result = result
         
     def create_or_update(self):
+        print("create_or_update",self)
         for record in self:
             _logger.info(f"Processing product: {record.shopify_reference}")
             reference = record.shopify_reference.strip()

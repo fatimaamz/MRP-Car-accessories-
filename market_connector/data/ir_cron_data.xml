@@ -5,7 +5,7 @@
             <field name="name">Shopify: Sync Products Every 2 Minutes</field>
             <field name="model_id" ref="model_shopify_credentials"/>
             <field name="state">code</field>
-            <field name="code">records = model.search([('name', '=', 'Shopify')]); records.action_sync_products_to_odoo()</field>
+            <field name="code">records = model.search([('name', '=', 'designer-trim')]); records.action_sync_products_to_odoo()</field>
             <field name="interval_number">2</field>
             <field name="interval_type">minutes</field>
             <field name="numbercall">-1</field>
