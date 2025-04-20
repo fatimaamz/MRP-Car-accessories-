@@ -276,6 +276,9 @@ class ShopifyProductDataQueueEpt(models.Model):
                     'shopify_id': record.shopify_id
                 })
                 
+                # Apply attributes
+                self.apply_record_attributes(product_tmpl, record)
+                
                 # Create variant if needed
                 product_product = product_tmpl.product_variant_id
                 
@@ -303,6 +306,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                     product_tmpl.categ_id = category.id
                 
                 # Apply all attributes
+                self.apply_record_attributes(product_tmpl, record)
                 
                 # Update images if needed
                 if record.default_image_url and not product_product.image_1920:
@@ -573,28 +577,36 @@ class ShopifyProductDataQueueEpt(models.Model):
         attributes = []
         
         # Only add attributes that have values
-        if hasattr(record, 'model') and record.model:
-            attributes.append({
-                'name': 'Model',
-                'value': record.model
-            })
+        # if hasattr(record, 'model') and record.model:
+        #     attributes.append({
+        #         'name': 'Model',
+        #         'value': record.model
+        #     })
             
-        if hasattr(record, 'brand') and record.brand:
-            attributes.append({
-                'name': 'Brand',
-                'value': record.brand
-            })
+        # if hasattr(record, 'brand') and record.brand:
+        #     attributes.append({
+        #         'name': 'Brand',
+        #         'value': record.brand
+        #     })
             
-        if hasattr(record, 'style') and record.style:
-            attributes.append({
-                'name': 'Style',
-                'value': record.style
-            })
+        # if hasattr(record, 'style') and record.style:
+        #     attributes.append({
+        #         'name': 'Style',
+        #         'value': record.style
+        #     })
             
         if hasattr(record, 'shopify_years') and record.shopify_years:
+            years_str = record.shopify_years.strip()
+            if "-" in years_str:
+                start_year, end_year = years_str.split("-")
+                start_year = int(start_year.strip())
+                end_year = int(end_year.strip())
+                years = [str(year) for year in range(start_year, end_year + 1)]
+            else:
+                years = [years_str]
             attributes.append({
-                'name': 'Year',
-                'value': record.shopify_years
+                'name': 'Année',
+                'value': years
             })
 
         if hasattr(record, 'data') and record.data:
@@ -606,4 +618,72 @@ class ShopifyProductDataQueueEpt(models.Model):
             attributes.extend(colors_attributes)
         return attributes
     
+
+    def apply_attributes(self, product_template, attributes):
+        attribute_obj = self.env['product.attribute']
+        attribute_value_obj = self.env['product.attribute.value']
+        attribute_line_obj = self.env['product.template.attribute.line']
+        
+        for attr in attributes:
+            attr_name = attr.get('name')
+            attr_value = attr.get('value')
+            
+            if not attr_name or not attr_value:
+                continue
+                
+            # Find or create product attribute
+            attribute = attribute_obj.search([('name', '=', attr_name)], limit=1)
+            if not attribute:
+                attribute = attribute_obj.create({'name': attr_name, 'create_variant': 'no_variant'})
+                
+            # Handle both single value and list of values
+            values = attr_value if isinstance(attr_value, list) else [attr_value]
+            
+            # Find or create attribute values
+            attr_values = []
+            for value in values:
+                if not value:
+                    continue
+                    
+                attr_value_record = attribute_value_obj.search([
+                    ('name', '=', value),
+                    ('attribute_id', '=', attribute.id)
+                ], limit=1)
+                
+                if not attr_value_record:
+                    attr_value_record = attribute_value_obj.create({
+                        'name': value,
+                        'attribute_id': attribute.id
+                    })
+                
+                attr_values.append(attr_value_record.id)
+            
+            if not attr_values:
+                continue
+                
+            # Find or create attribute line
+            attr_line = attribute_line_obj.search([
+                ('product_tmpl_id', '=', product_template.id),
+                ('attribute_id', '=', attribute.id)
+            ], limit=1)
+            
+            if attr_line:
+                # Update existing attribute line
+                existing_values = attr_line.value_ids.ids
+                new_values = list(set(existing_values + attr_values))
+                attr_line.write({'value_ids': [(6, 0, new_values)]})
+            else:
+                # Create new attribute line
+                attribute_line_obj.create({
+                    'product_tmpl_id': product_template.id,
+                    'attribute_id': attribute.id,
+                    'value_ids': [(6, 0, attr_values)]
+                })
+        
+        
+
+    def apply_record_attributes(self, product_template, record):
+        attributes = self.get_attributes(record)
+        self.apply_attributes(product_template, attributes)
+        
         
