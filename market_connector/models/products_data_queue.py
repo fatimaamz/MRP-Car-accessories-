@@ -88,7 +88,7 @@ class ShopifyProductDataQueueEpt(models.Model):
         print(self.browse(result[0]) if result else None)
         return self.browse(result[0]) if result else None
     
-    def shopify_product_data_queue_create(self, result):
+    def shopify_product_data_queue_create(self, result, to_odoo=False):
         title = result.title
         split_title = [part.strip() for part in title.split('|')]
         try:
@@ -123,6 +123,8 @@ class ShopifyProductDataQueueEpt(models.Model):
                     'data' : data
                 })
             self._cr.commit()
+            if to_odoo:
+                product.create_or_update()
             return product
         except IndexError:
             print(split_title)

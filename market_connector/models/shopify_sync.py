@@ -27,30 +27,37 @@ class ShopifySync(models.Model):
             sleep(60)
 
     @api.model
-    def scheduled_sync_products(self, name, to_odoo=False):
-        credentials = self.env['shopify.credentials'].search([('name', '=', name)], limit=1)
-        if not credentials:
-            _logger.error("No Shopify credentials found")
-            return False
-            
+    def scheduled_sync_products(self, credentials, to_odoo=False):
         session = credentials.get_session()
-        current_page = credentials.current_page
-        # Sync products for the current page
         shopify.ShopifyResource.activate_session(session)
+        
         try:
-            products = shopify.Product.find(limit=50, page=current_page)
+            # Use next_page_url if available, otherwise start from beginning
+            if credentials.next_page_url:
+                _logger.info(f"Continuing pagination from saved URL")
+                products = shopify.Product.find(from_=credentials.next_page_url)
+            else:
+                # Use limit parameter without page parameter for first page
+                products = shopify.Product.find(limit=50)
+            
             if products:
                 self._create_jobs_for_products(products, to_odoo)
                 self._cr.commit()
-                _logger.info(f"Synced page {current_page} with {len(products)} products")
+                _logger.info(f"Synced batch with {len(products)} products")
                 
-                # Increment page number for next run
-                next_page = current_page + 1
-                credentials.current_page = next_page
+                # Store pagination URL for next run if available
+                if products.has_next_page():
+                    credentials.next_page_url = products.next_page_url
+                    _logger.info("Stored next page URL for subsequent sync")
+                else:
+                    # If no next page, reset the pagination
+                    credentials.next_page_url = False
+                    _logger.info("No more pages, reset pagination")
             else:
-                # If no products found, reset to page 1
-                credentials.current_page = 1
-                _logger.info("No products found, resetting to page 1")
+                # If no products found, reset pagination
+                credentials.next_page_url = False
+                _logger.info("No products found, reset pagination")
+                
             credentials._cr.commit()
         except Exception as e:
             _logger.error(f"Error during scheduled sync: {e}")
@@ -69,9 +76,7 @@ class ShopifySync(models.Model):
         existing_product = self.env['merket.connector.products.data.queue'].search([('shopify_id', '=', product.id)], limit=1)
         if not existing_product:
             _logger.debug(existing_product)
-            product_queue = self.env['merket.connector.products.data.queue'].shopify_product_data_queue_create(product)
-            if to_odoo:
-                product_queue.create_or_update()
+            return self.env['merket.connector.products.data.queue'].shopify_product_data_queue_create(product, to_odoo)
         else:
             _logger.info(f"Product with ID {product.id} already exists in the queue, skipping.{existing_product}")
             return existing_product

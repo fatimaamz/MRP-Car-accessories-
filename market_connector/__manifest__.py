@@ -17,6 +17,7 @@
     'data':[
         'security/group.xml',
         'security/ir.model.access.csv',
+        'data/ir_cron_data.xml',
         'views/shopify_credentials_view.xml',
         'views/sale_order_view.xml',
         'views/product_template_view.xml',

@@ -45,7 +45,8 @@ class ShopifyCredentials(models.Model):
                                                 "orders.", required=False)
     domain_name = fields.Char(string='Domain', required=True, help="Example: example.com")
     gift_card_product_id = fields.Many2one("product.product", domain=[('type', '=', 'service')])
-    current_page = fields.Integer(string='Current Page', default=1)
+    next_page_url = fields.Char(string='Next Page URL', help="URL for the next page of Shopify products")
+    to_odoo = fields.Boolean(string='To Odoo', default=True)
     
     def get_session(self):
         shopify.Session.setup(api_key=self.api_key, secret=self.api_secret)
@@ -132,7 +133,7 @@ class ShopifyCredentials(models.Model):
                         continue
                     
                     shop_url = shop_url.rstrip('/')
-                    product_url = f"{shop_url}/products/{product_handle}"
+                    product_url = f"https://designertrim.com/products/{product_handle}"
                     
                     qr = qrcode.QRCode(
                         version=1, 
@@ -179,3 +180,7 @@ class ShopifyCredentials(models.Model):
             return 'https://designertrim.com'
         
         return 'https://retailer.luxwoodtrim.com'
+    
+    def action_sync_products_to_odoo(self):
+        self.env['shopify.sync'].scheduled_sync_products(self, self.to_odoo)
+
