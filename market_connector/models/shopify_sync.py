@@ -78,6 +78,8 @@ class ShopifySync(models.Model):
             _logger.debug(existing_product)
             return self.env['merket.connector.products.data.queue'].shopify_product_data_queue_create(product, to_odoo)
         else:
+            if to_odoo:
+                existing_product.create_or_update()
             _logger.info(f"Product with ID {product.id} already exists in the queue, skipping.{existing_product}")
             return existing_product
         
