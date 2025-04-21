@@ -32,6 +32,7 @@ class ShopifyProductDataQueueEpt(models.Model):
     default_image_url = fields.Char()
     data = fields.Char()
     product_id = fields.Many2one('product.product', string="Product", required=False)
+    product_template_id = fields.Many2one('product.template', string="Product Template", required=False)
     shopify_instance_id = fields.Many2one("shopify.credentials", "Compte", copy=False)
     is_match_name = fields.Boolean("Is Match Name", default=False)
     is_match_brand = fields.Boolean("Is Match Brand", default=False)
@@ -235,48 +236,31 @@ class ShopifyProductDataQueueEpt(models.Model):
         for record in self:
             _logger.info(f"Processing product: {record.shopify_reference}")
             reference = record.shopify_reference.strip()
-            
-            # Get product data from Shopify
             data_dict = {}
             if record.data:
                 data_dict = json.loads(record.data)
-            
-            # Get or create category from product_type
             category = False
             product_type = data_dict.get('product_type')
             if product_type:
                 category = self.env['product.category'].search([('name', '=', product_type)], limit=1)
                 if not category:
                     category = self.env['product.category'].create({'name': product_type})
-            
-            # Search for existing product template by default_code
             product_tmpl = self.env['product.template'].search([
                 ('default_code', '=', reference),
                 ('active', '=', True)
             ], limit=1)
-
-            # Prepare attribute values for name
             attr_for_name = []
             if record.model:
                 attr_for_name.append(record.model)
-                
             if record.brand:
                 attr_for_name.append(record.brand)
             if record.shopify_attribute:
                 attr_for_name.append(record.shopify_attribute)
-                
             product_name = f"{reference} ({','.join(attr_for_name) if attr_for_name else ''})"
-
             attributes = self.get_attributes(record)
-
             print(attributes)
-            
             if not product_tmpl:
                 _logger.info(f"No product template found for reference: {reference}, creating new one")
-                
-                
-                
-                # Create new product template
                 product_tmpl = self.env['product.template'].create({
                     'name': product_name,
                     'default_code': reference,
@@ -284,40 +268,22 @@ class ShopifyProductDataQueueEpt(models.Model):
                     'categ_id': category.id if category else False,
                     'shopify_id': record.shopify_id
                 })
-                
-                # Apply attributes
                 self.apply_record_attributes(product_tmpl, record)
-                
-                # Create variant if needed
                 product_product = product_tmpl.product_variant_id
-                
-                # Import images
                 if record.default_image_url:
                     self.import_shopify_product_image(product_product, record.default_image_url)
-                
-                # Add additional images
                 self.add_images_from_dict(product_product, data_dict.get('images', []))
-                
-                # Link the product to the queue record
                 record.product_id = product_product.id
-                
+                record.product_template_id = product_tmpl.id
                 _logger.info(f"Created new product: {product_tmpl.name}")
                 return product_product
             else:
                 _logger.info(f"Product template found: {product_tmpl.name}, updating")
-                
-                # Update existing product
                 product_product = product_tmpl.product_variant_id
                 product_tmpl.shopify_id = record.shopify_id
-                
-                # Update category if needed
                 if category:
                     product_tmpl.categ_id = category.id
-                
-                # Apply all attributes
                 self.apply_record_attributes(product_tmpl, record)
-                
-                # Update images if needed
                 if record.default_image_url and not product_product.image_1920:
                     self.import_shopify_product_image(product_product, record.default_image_url)
                 
@@ -328,7 +294,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                 
                 # Link the product to the queue record
                 record.product_id = product_product.id
-                
+                record.product_template_id = product_tmpl.id
                 _logger.info(f"Updated product: {product_tmpl.name}")
             self._cr.commit()
 
@@ -701,4 +667,21 @@ class ShopifyProductDataQueueEpt(models.Model):
 
     def create_or_update_batch(self):
         for record in self:
+            existing_product = self.env['product.template'].search([
+                ('default_code', '=', record.shopify_reference),
+                ('active', '=', True)
+            ], limit=1)
+            if existing_product:
+                continue
+            record.create_or_update()
+
+    def create_or_update_cron(self):
+        records = self.search([('product_template_id', '=', False)], limit=50)
+        for record in records:
+            existing_product = self.env['product.template'].search([
+                ('default_code', '=', record.shopify_reference),
+                ('active', '=', True)
+            ], limit=1)
+            if existing_product:
+                continue
             record.create_or_update()
