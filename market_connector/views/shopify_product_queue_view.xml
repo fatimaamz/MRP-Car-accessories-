@@ -84,6 +84,7 @@
         <field name="name">Batch Create or Update</field>
         <field name="model_id" ref="model_merket_connector_products_data_queue"/>
         <field name="binding_model_id" ref="model_merket_connector_products_data_queue"/>
+        <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">
             if records:
