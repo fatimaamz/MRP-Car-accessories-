@@ -88,6 +88,8 @@ class ShopifyProductDataQueueEpt(models.Model):
         print(self.browse(result[0]) if result else None)
         return self.browse(result[0]) if result else None
     
+    
+    
     def shopify_product_data_queue_create(self, result, to_odoo=False):
         title = result.title
         split_title = [part.strip() for part in title.split('|')]
@@ -694,3 +696,7 @@ class ShopifyProductDataQueueEpt(models.Model):
         self.apply_attributes(product_template, attributes)
         
         
+
+    def create_or_update_batch(self):
+        for record in self:
+            record.create_or_update()

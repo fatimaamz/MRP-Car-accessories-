@@ -79,4 +79,15 @@
                 records.process_check_matching_in_batch()
         </field>
     </record>
+
+    <record id="action_create_or_update_batch" model="ir.actions.server">
+        <field name="name">Batch Create or Update</field>
+        <field name="model_id" ref="model_merket_connector_products_data_queue"/>
+        <field name="binding_model_id" ref="model_merket_connector_products_data_queue"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                records.create_or_update_batch()
+        </field>
+    </record>
 </odoo>
