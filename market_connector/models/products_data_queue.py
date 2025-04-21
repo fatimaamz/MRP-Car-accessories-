@@ -516,23 +516,25 @@ class ShopifyProductDataQueueEpt(models.Model):
             _logger.info(f"No image URL found for Shopify Product ID: {product_product}")
             return False
 
-        # Download the image
         try:
             response = requests.get(image_url)
-            response.raise_for_status()  # Ensure we got the image
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            if response.status_code == 404:
+                _logger.warning(f"Image not found (404) for URL: {image_url}")
+                return False
+            else:
+                raise UserError(f"Error downloading image from Shopify: {e}")
         except requests.exceptions.RequestException as e:
             raise UserError(f"Error downloading image from Shopify: {e}")
 
-        # Convert the image to base64 to store in Odoo
         image_base64 = base64.b64encode(response.content)
 
-        # Get the Odoo product template
         if not product_product:
             raise UserError(f"No product found with Shopify reference {product_product}")
 
-        # Update the product template with the image
         product_product.write({
-            'image_1920': image_base64  # Use the appropriate field for the image size
+            'image_1920': image_base64
         })
 
         _logger.info(f"Successfully imported image for product: {product_product}")
