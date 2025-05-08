@@ -260,8 +260,46 @@
                                                     
                                     </tr>
                                 </thead>
+
                                 <tbody>
-                                    <t t-set="lines" t-value="o.move_ids"/> <!-- .filtered(lambda x: x.must_ship_by)-->
+                                    <t t-set="lines" t-value="o.move_ids"/>
+                                    <t t-if="o.livraison_multiple">
+                                        <tr t-foreach="lines" t-as="move">
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="move.shipping_week or ''"/>
+                                            </td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="move.tracking_number or ''"/>
+                                            </td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="move.must_ship_by.strftime('%Y-%m-%d') if move.must_ship_by else ''"/>
+                                            </td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="move.ship_via.name or ''"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="o.week_number or ''"/>
+                                            </td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="o.numero_suivi or ''"/>
+                                            </td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="o.scheduled_date.strftime('%Y-%m-%d') if o.scheduled_date else ''"/>
+                                            </td>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+                                                <t t-esc="o.carrier_id.name or ''"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+
+                                
+                                <!--<tbody>
+                                    <t t-set="lines" t-value="o.move_ids"/> 
                                     <t t-if="o.livraison_multiple">
                                         <tr t-foreach="lines" t-as="move">
     
@@ -290,7 +328,7 @@
                                         </tr>
                                     </t>
 
-                                </tbody>
+                                </tbody>-->
                             </table>
 
 
