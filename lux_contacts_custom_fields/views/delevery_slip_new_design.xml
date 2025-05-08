@@ -244,14 +244,14 @@
                                     <tr style="background-color: #f7f7f7;">
                                            
                 
-                                                        <th  t-if="move.shipping_week" style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
-                                                        <th t-if="move.tracking_number" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
+                                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
+                                                        <th  style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
                                                             Number
                                                         </th>
-                                                        <th t-if="move.must_ship_by" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship
+                                                        <th  style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship
                                                             By
                                                         </th>
-                                                        <th t-if="move.ship_via.name" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via
+                                                        <th  style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via
                                                         </th>
                                         
                                             
