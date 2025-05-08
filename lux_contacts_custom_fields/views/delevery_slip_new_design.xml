@@ -263,7 +263,7 @@
                                             <td t-if="move.tracking_number" style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="move.tracking_number"/>
                                             <td t-if="move.must_ship_by" style="border: 1px solid #ddd; padding: 10px; text-align: center;"
-                                                t-esc="move.must_ship_by.strftime('%Y-%m-%d')" t-if="move.must_ship_by"/>
+                                                t-esc="move.must_ship_by.strftime('%Y-%m-%d')" />
 
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="move.ship_via.name"/>
