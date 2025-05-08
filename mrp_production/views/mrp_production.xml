@@ -77,7 +77,7 @@
         <field name="arch" type="xml">
     
             <xpath expr="//group[@name='carrier_data']//label[1]" position="replace">
-                <label for="carrier_tracking_ref" style="display:None"/>
+                <label for="carrier_tracking_ref" invisible="1" style="display:None"/>
             </xpath>
     
             <xpath expr="//group[@name='carrier_data']//div[@name='tracking']" position="replace">
