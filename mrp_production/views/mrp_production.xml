@@ -76,8 +76,8 @@
         <field name="inherit_id" ref="stock_delivery.view_picking_withcarrier_out_form"/>
         <field name="arch" type="xml">
     
-            <xpath expr="//group[@name='carrier_data']//label[1]" position="replace">
-                <label for="carrier_tracking_ref" invisible="1" style="display:None"/>
+            <xpath expr="//group[@name='carrier_data']//label[@for='carrier_tracking_ref']" position="replace">
+                <label/>
             </xpath>
     
             <xpath expr="//group[@name='carrier_data']//div[@name='tracking']" position="replace">
