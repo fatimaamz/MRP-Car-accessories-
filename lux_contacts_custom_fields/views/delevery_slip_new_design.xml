@@ -230,10 +230,10 @@
                                 <div t-if="o.state" class="col-auto" name="div_sched_date">
                                     <strong>Shipping Date:</strong>
                                    <p t-if="o.state == 'done'">
-                                        <t t-esc="o.date_done.strftime('%Y-%m-%d') if o.date_done else ''"/>
+                                        <t t-esc="o.date_done.strftime('%d-%m-%Y') if o.date_done else ''"/>
                                     </p>
                                     <p t-else="">
-                                        <t t-esc="o.scheduled_date.strftime('%Y-%m-%d') if o.scheduled_date else ''"/>
+                                        <t t-esc="o.scheduled_date.strftime('%d-%m-%Y') if o.scheduled_date else ''"/>
                                     </p>
                                 </div>
                             </div>
@@ -276,7 +276,7 @@
                                                 <t t-esc="move.tracking_number or ''"/>
                                             </td>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                                <t t-esc="move.must_ship_by.strftime('%Y-%m-%d') if move.must_ship_by else ''"/>
+                                                <t t-esc="move.must_ship_by.strftime('%d-%m-%Y') if move.must_ship_by else ''"/>
                                             </td>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="move.ship_via.name or ''"/>
