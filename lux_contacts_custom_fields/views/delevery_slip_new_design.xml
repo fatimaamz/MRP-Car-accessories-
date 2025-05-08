@@ -242,14 +242,14 @@
                                 <thead>
 
                                     <tr style="background-color: #f7f7f7;">
-                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
-                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
+                                        <th  t-if="move.shipping_week" style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
+                                        <th t-if="move.tracking_number" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
                                             Number
                                         </th>
-                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship
+                                        <th t-if="move.must_ship_by" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship
                                             By
                                         </th>
-                                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via
+                                        <th t-if="move.ship_via.name" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via
                                         </th>
                                     </tr>
                                 </thead>
@@ -265,7 +265,7 @@
                                             <td t-if="move.must_ship_by" style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="move.must_ship_by.strftime('%Y-%m-%d')" />
 
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                            <td t-if="move.ship_via.name" style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="move.ship_via.name"/>
                                         </tr>
                                     </t>
