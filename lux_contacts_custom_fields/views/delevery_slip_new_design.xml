@@ -244,7 +244,7 @@
                                     <tr style="background-color: #f7f7f7;">
                                            
                 
-                                                        <!--<th  t-if="move.shipping_week" style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
+                                                        <th  t-if="move.shipping_week" style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
                                                         <th t-if="move.tracking_number" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking
                                                             Number
                                                         </th>
@@ -252,19 +252,11 @@
                                                             By
                                                         </th>
                                                         <th t-if="move.ship_via.name" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via
-                                                        </th>-->
+                                                        </th>
                                         
-                                            <t t-set="lines" t-value="o.move_ids"/>
-                                            <t t-set="has_shipping_week" t-value="any(line.shipping_week for line in lines) or o.week_number"/>
-                                            <t t-set="has_tracking_number" t-value="any(line.tracking_number for line in lines) or o.numero_suivi"/>
-                                            <t t-set="has_must_ship_by" t-value="any(line.must_ship_by for line in lines) or o.scheduled_date"/>
-                                            <t t-set="has_ship_via" t-value="any(line.ship_via.name for line in lines) or o.carrier_id.name"/>
+                                            
                                         
-                                            <th t-if="has_shipping_week" style="padding: 10px; border: 1px solid #ddd; text-align: left;">N°</th>
-                                            <th t-if="has_tracking_number" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Tracking Number</th>
-                                            <th t-if="has_must_ship_by" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Must Ship By</th>
-                                            <th t-if="has_ship_via" style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ship Via</th>
-                                        
+                                       
                                                     
                                     </tr>
                                 </thead>
@@ -287,13 +279,13 @@
                                     <t t-else="">
                                          <tr>
     
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                            <td t-if="o.week_number" style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="o.week_number"/>
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                            <td t-if="o.numero_suivi" style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="o.numero_suivi"/>
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                            <td t-if="o.scheduled_date" style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="o.scheduled_date"/>
-                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;"
+                                            <td t-if="o.carrier_id.name" style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="o.carrier_id.name"/>
                                         </tr>
                                     </t>
