@@ -80,7 +80,9 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
     
-            <xpath expr="//group[@name='carrier_data']//div[@name='tracking']" position="replace">
+            <xpath expr="//group[@name='carrier_data']//div[@name='tracking']//field[@name='carrier_tracking_ref']" position="attributes">
+                                <attribute name="invisible">1</attribute>
+
             </xpath>
     
         </field>
