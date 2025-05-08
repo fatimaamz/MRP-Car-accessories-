@@ -70,6 +70,22 @@
             </field>
   </record>
 
+    <record id="view_picking_form_carrier_form" model="ir.ui.view">
+        <field name="name">stock.picking.form.shopify.instance</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock_delivery.view_picking_withcarrier_out_form"/>
+        <field name="arch" type="xml">
+    
+            <xpath expr="//group[@name='carrier_data']//label[1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+    
+            <xpath expr="//group[@name='carrier_data']//div[@name='tracking']" position="replace">
+            </xpath>
+    
+        </field>
+    </record>
+
   <record id="view_mrp_bom_form_inherit" model="ir.ui.view">
     <field name="name">mrp.bom.form.inherit</field>
     <field name="model">mrp.bom</field>
