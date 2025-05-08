@@ -292,7 +292,7 @@
                                                 <t t-esc="o.numero_suivi or ''"/>
                                             </td>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-                                                <t t-esc="o.scheduled_date.strftime('%Y-%m-%d') if o.scheduled_date else ''"/>
+                                                <t t-esc="o.scheduled_date.strftime('%d-%m-%Y') if o.scheduled_date else ''"/>
                                             </td>
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="o.carrier_id.name or ''"/>
