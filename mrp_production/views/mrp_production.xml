@@ -80,8 +80,11 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
     
-            <xpath expr="//group[@name='carrier_data']//div[@name='tracking']" position="attributes">
-                <attribute name="style">display: none;</attribute>
+            <xpath expr="//group[@name='carrier_data']//div[@name='tracking']" position="replace">
+                <div name="tracking" style="display:None">
+                            <field name="carrier_tracking_ref" class="oe_inline text-break" readonly="state in ('done', 'cancel')"/>
+                            <button type="object" class="oi oi-arrow-right oe_link" confirm="Cancelling a delivery may not be undoable. Are you sure you want to continue?" name="cancel_shipment" string="Cancel" invisible="not carrier_tracking_ref or delivery_type in ['fixed', 'base_on_rule'] or not delivery_type or state != 'done'"/>
+                </div>
             </xpath>
     
         </field>
