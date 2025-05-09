@@ -335,7 +335,8 @@
                      
                         </table>
                        <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
-                                    <strong>  Total de la commande: <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/></strong>
+                                    <strong>  Total de la commande: <t t-esc="sum(line.product_uom_qty for line in doc.order_line if line.product_id.default_code != 'Delivery_007')"/></strong>
+                                     
                                   </div>
                         <t t-if="doc.note">
                             <div style="margin-top: 20px; padding: 10px; font-size: 14px;">
