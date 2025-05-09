@@ -211,7 +211,7 @@
                                 </tr>
                             </table>
                         </div>
-                        <t t-set="delivery_details" t-value="doc.get_delivery_details()"/>
+                       <t t-set="delivery_details" t-value="doc.get_delivery_details()"/>
                         <t t-if="delivery_details">
                             <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
 
@@ -266,6 +266,7 @@
                             <tbody>
                                 <!--<t t-set="counter" t-value="0"/>-->
                                 <t t-foreach="doc.order_line" t-as="line">
+                                  <t t-if="line.product_id.default_code != 'Delivery_007'">
                                    <!-- <t t-set="counter" t-value="counter + 1"/>-->
                                     <tr>
                                       <!--  <td style="border: 1px solid #ddd; padding: 10px;">
@@ -316,7 +317,7 @@
                                         <!-- Qty -->
                                         
                                     </tr>
-
+                                   </t>
                                 </t>
 
 
@@ -334,7 +335,8 @@
                      
                         </table>
                        <div style="background-color: #f7f7f7; width: 240px; float: right; text-align: right; padding: 7px;">
-                                    <strong>  Total de la commande: <t t-esc="sum(line.product_uom_qty for line in doc.order_line)"/></strong>
+                                    <strong>  Total de la commande: <t t-esc="sum(line.product_uom_qty for line in doc.order_line if line.product_id.default_code != 'Delivery_007')"/></strong>
+                                     
                                   </div>
                         <t t-if="doc.note">
                             <div style="margin-top: 20px; padding: 10px; font-size: 14px;">

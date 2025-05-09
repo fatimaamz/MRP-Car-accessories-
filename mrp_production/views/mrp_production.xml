@@ -70,6 +70,26 @@
             </field>
   </record>
 
+    <record id="view_picking_form_carrier_form" model="ir.ui.view">
+        <field name="name">stock.picking.form.shopify.instance</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock_delivery.view_picking_withcarrier_out_form"/>
+        <field name="arch" type="xml">
+    
+           <!-- <xpath expr="//group[@name='carrier_data']//label[1]" position="replace">
+                <label/>
+            </xpath>-->
+    
+            <xpath expr="//group[@name='carrier_data']//div[@name='tracking']" position="replace">
+                <div name="tracking" style="display:None">
+                            <field name="carrier_tracking_ref" class="oe_inline text-break" readonly="state in ('done', 'cancel')"  nolabel="1"/>
+                            <button type="object" class="oi oi-arrow-right oe_link" confirm="Cancelling a delivery may not be undoable. Are you sure you want to continue?" name="cancel_shipment" string="Cancel" invisible="not carrier_tracking_ref or delivery_type in ['fixed', 'base_on_rule'] or not delivery_type or state != 'done'"/>
+                </div>
+            </xpath>
+    
+        </field>
+    </record>
+
   <record id="view_mrp_bom_form_inherit" model="ir.ui.view">
     <field name="name">mrp.bom.form.inherit</field>
     <field name="model">mrp.bom</field>
@@ -139,14 +159,14 @@
         <field name="po_client"/>
         <field name="ship_to_id"/> 
       </xpath>
-       <xpath expr="//group[1]" position="after" >
+       <xpath expr="//group[@name='group_extra_info']" position="before" >
          <group name="product_icontrol_group" string="Progression de la production" >
              <group>
                 <field name="is_coped"/>
                 <field name="product_place"/>
                 <field name="product_finalized"/>
-             </group>
-             <group>
+             
+             
                 <field name="is_conforme" class="o_inline"/>
                 <button name="action_view_delivery_order" 
                                             type="object" 
@@ -156,8 +176,7 @@
                  <field name="remarque_controle_qualite"/>
                  <field name="product_template_id" invisible="1"/>    
                     <field name="logo_inscription" />
-             </group>
-            
+            </group>
          </group>
         <!-- <group>
             <group>
