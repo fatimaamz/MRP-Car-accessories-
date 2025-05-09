@@ -428,6 +428,15 @@ class ShopifyProductDataQueueEpt(models.Model):
 
         default_bpm_colors = ["Black Protection (WBK)", "Wrap Carbon (WCF)"]
 
+        # Define interior colors based on your liquid template
+        default_interior_colors = [
+            "Glossy Black (0BK)", "Chrome (0CH)", "Luxd Carbon (LCF)", "Racing Red (RED)",
+            "Orange tech (ORA)", "Paint match (0CM)", "Platinum Silver (0PS)", "Hot Pink (BCF)",
+            "Electric Blue (0EB)", "Black Rose (0BR)", "Brushed Chrome (0BC)", "Titanium (PWT)",
+            "African Rose (0AR)", "Cafe Burl (0CB)", "Maple Burl (0TK)", "Oxford Burl (OXB)",
+            "Royal Cherry (0RB)", "Textured Carbon (WCF)"
+        ]
+
         result = {}
 
         exterior_tags_1 = {"CRM", "CRP", "MTR", "RDS", "SMC", "SMP", "XCC", "XSC", "XRI", "XCI", "XSM", "XSP", "XSR", "CRK", "CRP"}
@@ -452,7 +461,8 @@ class ShopifyProductDataQueueEpt(models.Model):
 
 
         elif any(tag.strip() in interior_tags for tag in tags):
-            pass
+            result["INTERIOR COLOR"] = default_interior_colors
+
         elif any(tag.strip() in exterior_tags_3 for tag in tags):
             result["MAIN COLOR"] = default_exterior_color
 
