@@ -211,7 +211,7 @@
                                 </tr>
                             </table>
                         </div>
-                       <!-- <t t-set="delivery_details" t-value="doc.get_delivery_details()"/>
+                       <t t-set="delivery_details" t-value="doc.get_delivery_details()"/>
                         <t t-if="delivery_details">
                             <table style="width: 100%; border-collapse: collapse; margin-top: 20px;font-size: 16px;">
 
@@ -245,7 +245,7 @@
                                     </t>
                                 </tbody>
                             </table>
-                        </t>-->
+                        </t>
 
 
                         <!-- Product Details Table (Table 2) -->
