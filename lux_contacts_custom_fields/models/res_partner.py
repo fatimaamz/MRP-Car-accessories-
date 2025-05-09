@@ -131,8 +131,11 @@ class MrpProduction(models.Model):
                 # Variables globales issues du picking (bon de livraison)
                 semaine_livraison_global = pickings.week_number if pickings.week_number and pickings.week_number.isdigit() else pickings.week_number
                 num_suivi_global = pickings.numero_suivi if pickings.numero_suivi and pickings.numero_suivi.isdigit() else pickings.numero_suivi
-                must_ship_by_global = pickings.scheduled_date if pickings.scheduled_date else ''
+                #must_ship_by_global = pickings.scheduled_date if pickings.scheduled_date else ''
+                must_ship_by_global = pickings.scheduled_date.strftime("%Y-%m-%d") if pickings.scheduled_date else ''
+
                 ship_via_global = pickings.carrier_id.name if pickings.carrier_id else ''
+                
     
                 for move in pickings.move_ids_without_package.filtered(lambda m: m.product_id == work_order.product_id):
                     if move.id in processed_moves:
@@ -143,7 +146,8 @@ class MrpProduction(models.Model):
                     # Variables spécifiques au mouvement de stock
                     shipping_week_move = move.shipping_week if move.shipping_week and move.shipping_week.isdigit() else move.shipping_week
                     tracking_number_move = move.tracking_number if move.tracking_number and move.tracking_number.isdigit() else move.tracking_number
-                    must_ship_by_move = move.must_ship_by if move.must_ship_by else ''
+                    #must_ship_by_move = move.must_ship_by if move.must_ship_by else ''
+                    must_ship_by_move = move.must_ship_by.strftime("%Y-%m-%d") if move.must_ship_by else ''
                     ship_via_move = move.ship_via.name if move.ship_via else ''
     
                     # Sélection des valeurs en fonction de livraison_multiple
