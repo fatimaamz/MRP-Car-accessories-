@@ -69,7 +69,8 @@ class StockPicking(models.Model):
         for picking in self:
             if picking.scheduled_date:
                 #picking.week_number = 'S' + datetime.strftime(picking.scheduled_date, "%U")
-                picking.week_number = ''
+                week_num = picking.scheduled_date.strftime("%U")  # Numéro de semaine
+                picking.week_number = f"S{week_num}"
             else:
                 picking.week_number = ''
 
