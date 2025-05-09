@@ -62,7 +62,7 @@
 	</record>
 
 
- <record id="lux_view_mrp_production_form_inherit" model="ir.ui.view">
+ <!--<record id="lux_view_mrp_production_form_inherit" model="ir.ui.view">
 	    <field name="name">mrp.production.form.inherit</field>
 	    <field name="model">mrp.production</field>
 	    <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
@@ -72,7 +72,7 @@
                  <field name="reflector_type"/>
 	      </xpath>
 	    </field>
-</record>
+</record>-->
 
 
 
