@@ -232,7 +232,7 @@
                                 <tbody>
 
                                     <t t-foreach="delivery_details" t-as="delivery">
-                                        <tr>
+                                       <!-- <tr>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery['N° semaine']"/>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
@@ -241,7 +241,7 @@
                                                 t-esc="delivery['Must ship by']"/>
                                             <td  style="border: 1px solid #ddd; padding: 10px; text-align: center;"
                                                 t-esc="delivery['Ship via']"/>
-                                        </tr>
+                                        </tr>-->
                                     </t>
                                 </tbody>
                             </table>
