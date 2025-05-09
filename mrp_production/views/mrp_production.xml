@@ -159,8 +159,8 @@
         <field name="po_client"/>
         <field name="ship_to_id"/> 
       </xpath>
-       <xpath expr="//group[1]//group[1]" position="after" >
-         <group name="product_icontrol_group" string="Progression de la production" >
+       <xpath expr="//group[1]//group[2]//label[1]" position="before" >
+         <!--group name="product_icontrol_group" string="Progression de la production" >-->
             
                 <field name="is_coped"/>
                 <field name="product_place"/>
@@ -175,9 +175,11 @@
                                             invisible="is_conforme == False" />
                  <field name="remarque_controle_qualite"/>
                  <field name="product_template_id" invisible="1"/>    
-                    <field name="logo_inscription" />
+                 <field name="logo_inscription" />
+                 <field name="installation"/>
+                 <field name="reflector_type"/>
            
-         </group>
+        <!-- </group>-->
         <!-- <group>
             <group>
                 
