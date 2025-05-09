@@ -49,6 +49,7 @@
                         <field name="is_match_brand" readonly="1"/>
                         <field name="is_match_style" readonly="1"/>
                         <field name="is_match_model" readonly="1"/>
+                        <field name="paint_color" readonly="1"/>
                         <field name="result" readonly="1"/>
                     </group>
                     <group>

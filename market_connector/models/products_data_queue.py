@@ -38,6 +38,7 @@ class ShopifyProductDataQueueEpt(models.Model):
     is_match_brand = fields.Boolean("Is Match Brand", default=False)
     is_match_style = fields.Boolean("Is Match Style", default=False)
     is_match_model = fields.Boolean("Is Match Model", default=False)
+    paint_color = fields.Char()
     result = fields.Char()
     
     
@@ -89,9 +90,27 @@ class ShopifyProductDataQueueEpt(models.Model):
         print(self.browse(result[0]) if result else None)
         return self.browse(result[0]) if result else None
     
+    def get_metafields(self, result):
+        paint_color = []
+        metafields = result.metafields()
+        main_color_metafield = next(
+            (m for m in metafields if m.namespace == "Dtrim" and m.key == "MainColor"), None
+        )
+
+        if main_color_metafield:
+            colors = main_color_metafield.value.split('|')
+            parsed_colors = [color.split(',') for color in colors]
+            for color_parts in parsed_colors:
+                if len(color_parts) >= 2:  # At least has code and name
+                    name = color_parts[1]
+                    paint_color.append(name)
+        else:
+            return None
+        return paint_color
     
     
     def shopify_product_data_queue_create(self, result, to_odoo=False):
+        paint_color = self.get_metafields(result)
         title = result.title
         split_title = [part.strip() for part in title.split('|')]
         try:
@@ -123,6 +142,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                     'style': reference[-3:],
                     'shopify_attribute': attribute,
                     'shopify_reference': reference,
+                    'paint_color': '|'.join(paint_color) if paint_color else None,
                     'data' : data
                 })
             self._cr.commit()
@@ -258,7 +278,7 @@ class ShopifyProductDataQueueEpt(models.Model):
                 attr_for_name.append(record.shopify_attribute)
             product_name = f"{reference} ({','.join(attr_for_name) if attr_for_name else ''})"
             attributes = self.get_attributes(record)
-            print(attributes)
+            print("attributes",attributes)
             if not product_tmpl:
                 _logger.info(f"No product template found for reference: {reference}, creating new one")
                 product_tmpl = self.env['product.template'].create({
@@ -593,6 +613,12 @@ class ShopifyProductDataQueueEpt(models.Model):
             colors_attributes = self.get_product_colors(tags)
             colors_attributes = [{"name": key, "value": value} for key, value in colors_attributes.items()]
             attributes.extend(colors_attributes)
+
+        if hasattr(record, 'paint_color') and record.paint_color:
+            attributes.append({
+                'name': 'PAINT COLOR',
+                'value': record.paint_color.split('|')
+            })
         return attributes
     
 
