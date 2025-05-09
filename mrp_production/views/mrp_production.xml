@@ -159,7 +159,7 @@
         <field name="po_client"/>
         <field name="ship_to_id"/> 
       </xpath>
-       <xpath expr="//group[@name='group_extra_info']//label[1]" position="before" >
+       <xpath expr="//group[1]" position="inside" >
          <group name="product_icontrol_group" string="Progression de la production" >
             
                 <field name="is_coped"/>
