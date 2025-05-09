@@ -67,8 +67,8 @@ class SaleOrder(models.Model):
         # Parcourir tous les livraisons liées à cette commande
         for picking in self.picking_ids.filtered(lambda p: p.state != 'cancel'):
             week_number = datetime.strptime(
-                str(picking.scheduled_date), "%Y-%m-%d %H:%M"
-            ).strftime("%U")  # Calcul du numéro de semaine
+                str(picking.scheduled_date), "%Y-%m-%d %H:%M:%S.%f"
+            ).strftime("%U")
             
             delivery_data.append({
                 'N° semaine': 'S'+ week_number,
