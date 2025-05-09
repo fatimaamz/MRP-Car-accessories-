@@ -176,8 +176,7 @@
                  <field name="remarque_controle_qualite"/>
                  <field name="product_template_id" invisible="1"/>    
                  <field name="logo_inscription" />
-                 <field name="installation"/>
-                 <field name="reflector_type"/>
+                 
            
         <!-- </group>-->
         <!-- <group>
