@@ -266,6 +266,7 @@
                             <tbody>
                                 <!--<t t-set="counter" t-value="0"/>-->
                                 <t t-foreach="doc.order_line" t-as="line">
+                                  <t t-if="line.product_id.default_code != 'Delivery_007'">
                                    <!-- <t t-set="counter" t-value="counter + 1"/>-->
                                     <tr>
                                       <!--  <td style="border: 1px solid #ddd; padding: 10px;">
@@ -316,7 +317,7 @@
                                         <!-- Qty -->
                                         
                                     </tr>
-
+                                   </t>
                                 </t>
 
 
