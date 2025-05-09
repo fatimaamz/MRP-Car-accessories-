@@ -165,8 +165,8 @@
                 <field name="is_coped"/>
                 <field name="product_place"/>
                 <field name="product_finalized"/>
-             </group>
-             <group>
+             
+             
                 <field name="is_conforme" class="o_inline"/>
                 <button name="action_view_delivery_order" 
                                             type="object" 
@@ -176,7 +176,6 @@
                  <field name="remarque_controle_qualite"/>
                  <field name="product_template_id" invisible="1"/>    
                     <field name="logo_inscription" />
-             </group>
             
          </group>
         <!-- <group>
