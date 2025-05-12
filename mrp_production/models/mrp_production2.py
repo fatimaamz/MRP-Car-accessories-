@@ -164,16 +164,20 @@ class MrpProduction(models.Model):
 
     
    
-    def _extract_value(self, text, field_name):
+    def _extract_value(self, text, field_names):
         """
-        Extracts the value for a field from 'selected_characteristics', ignoring case and invalid values.
+        Try multiple field names (case insensitive) and return the first matching value.
         """
-        pattern = rf'^{re.escape(field_name)}\s*:\s*(.*?)\s*$'
-        match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
-        if match:
-            value = match.group(1).strip()
-            invalid_values = {"none", "no insert", "not applicable", "no color", ""}
-            return "" if value.strip().lower() in invalid_values else value
+        if isinstance(field_names, str):
+            field_names = [field_names]
+    
+        for field in field_names:
+            pattern = rf'^{re.escape(field)}\s*:\s*(.*?)\s*$'
+            match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
+            if match:
+                value = match.group(1).strip()
+                invalid_values = {"none", "no insert", "not applicable", "no color", ""}
+                return "" if value.strip().lower() in invalid_values else value
         return ""
 
     @staticmethod
@@ -217,7 +221,7 @@ class MrpProduction(models.Model):
     def _compute_carbon_code(self):
         for record in self:
             record.carbon_code = self._clean_value(
-                self._extract_value(record.selected_characteristics or '', "CARBON CODE")
+                self._extract_value(record.selected_characteristics or '', ["CARBON CODE", "CARBON COLOR"])
             )
 
     @api.depends('selected_characteristics')
