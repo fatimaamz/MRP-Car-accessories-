@@ -145,16 +145,16 @@ class MrpProduction(models.Model):
     @api.model
     def _get_default_date_start(self):
         if self.env.context.get('default_date_deadline'):
-            date_finished = fields.Datetime.to_datetime(self.env.context.get('default_date_deadline'))
+            date_finished = fields.Date.to_date(self.env.context.get('default_date_deadline'))
             date_start = date_finished - relativedelta(hours=1)
             return date_start
-        return fields.Datetime.now()
+        return fields.Date.now()
         
     @api.model
     def _get_default_date_finished(self):
         if self.env.context.get('default_date_deadline'):
-            return fields.Datetime.to_datetime(self.env.context.get('default_date_deadline'))
-        date_start = fields.Datetime.now()
+            return fields.Date.to_datetime(self.env.context.get('default_date_deadline'))
+        date_start = fields.Date.now()
         date_finished = date_start + relativedelta(hours=1)
         return date_finished
 
