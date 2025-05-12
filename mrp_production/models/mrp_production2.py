@@ -117,15 +117,9 @@ class StockMove(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-    date_start = fields.Date(
-        'Start', copy=False, default=lambda self: self._get_default_date_start(),
-        help="Date you plan to start production or date you actually started production.",
-        index=True, required=True)
+   
 
-    date_finished = fields.Date(
-        'End', copy=False, default=lambda self: self._get_default_date_finished(),
-        compute='_compute_date_finished', store=True,
-        help="Date you expect to finish production or actual date you finished production.")
+   
         
     new_design = fields.Selection(
         [
@@ -144,20 +138,7 @@ class MrpProduction(models.Model):
     year = fields.Char(string="Year", compute="_compute_year", store=True)
     full_characteristics = fields.Char(string="Couleur", compute="_compute_full_characteristics", store=True)
 
-    @api.model
-    def _get_default_date_start(self):
-        if self.env.context.get('default_date_deadline'):
-            date_finished = fields.Date.to_date(self.env.context['default_date_deadline'])
-            date_start = date_finished - relativedelta(days=1)  
-            return date_start
-        return fields.Date.today()  
-
-    @api.model
-    def _get_default_date_finished(self):
-        if self.env.context.get('default_date_deadline'):
-            return fields.Date.to_date(self.env.context['default_date_deadline'])
-        date_start = fields.Date.today()
-        return date_start + relativedelta(days=1) 
+    
         
 
     @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')
