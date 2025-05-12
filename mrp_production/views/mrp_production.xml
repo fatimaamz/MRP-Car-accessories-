@@ -153,7 +153,7 @@
 
        <xpath expr="//group[@name='group_extra_info']//field[@name='date_finished']" position="replace">
             <field name="date_finished" widget="date"/>
-        
+       </xpath>
       <xpath expr="//header//field[@name='state']" position="replace">
         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
       </xpath>
