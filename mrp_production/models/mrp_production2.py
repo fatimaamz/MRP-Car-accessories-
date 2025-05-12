@@ -166,20 +166,27 @@ class MrpProduction(models.Model):
    
     def _extract_value(self, text, field_names):
         """
-        Try multiple field names (case insensitive) and return the first matching value.
+        Extract the value from selected_characteristics using possible field name variations.
         """
+        if not text:
+            return ""
+        
         if isinstance(field_names, str):
             field_names = [field_names]
     
-        for field in field_names:
-            pattern = rf'^{re.escape(field)}\s*:\s*(.*?)\s*$'
+        # Try each field name
+        for name in field_names:
+            pattern = rf'^\s*{re.escape(name)}\s*:\s*(.*?)\s*$'
             match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
             if match:
                 value = match.group(1).strip()
                 invalid_values = {"none", "no insert", "not applicable", "no color", ""}
-                return "" if value.strip().lower() in invalid_values else value
+                if value.strip().lower() not in invalid_values:
+                    return value
         return ""
 
+
+    
     @staticmethod
     def _clean_value(value):
         """Cleans the value by trimming and checking for invalid terms."""
@@ -189,48 +196,40 @@ class MrpProduction(models.Model):
         return ""
 
     @api.depends('selected_characteristics')
-    def _compute_interior_color(self):
+    def _compute_main_color(self):
         for record in self:
-            record.interior_color = self._clean_value(
-                self._extract_value(record.selected_characteristics or '', "INTERIOR COLOR")
+            record.main_color = self._clean_value(
+                self._extract_value(record.selected_characteristics or '', ["MAIN COLOR", "Couleurs"])
             )
-
+    
     @api.depends('selected_characteristics')
     def _compute_insert_color(self):
         for record in self:
             record.insert_color = self._clean_value(
-                self._extract_value(record.selected_characteristics or '', "INSERT COLOR")
+                self._extract_value(record.selected_characteristics or '', ["INSERT COLOR"])
             )
-
-    @api.depends('selected_characteristics')
-    def _compute_main_color(self):
-        for record in self:
-            record.main_color = self._clean_value(
-                self._extract_value(record.selected_characteristics or '', "MAIN COLOR") or
-                self._extract_value(record.selected_characteristics or '', "Couleurs")
-            )
-
-    @api.depends('selected_characteristics')
-    def _compute_paint_code(self):
-        for record in self:
-            record.paint_code = self._clean_value(
-                self._extract_value(record.selected_characteristics or '', "PAINT CODE")
-            )
-
+    
     @api.depends('selected_characteristics')
     def _compute_carbon_code(self):
         for record in self:
             record.carbon_code = self._clean_value(
                 self._extract_value(record.selected_characteristics or '', ["CARBON CODE", "CARBON COLOR"])
             )
-
+    
+    @api.depends('selected_characteristics')
+    def _compute_paint_code(self):
+        for record in self:
+            record.paint_code = self._clean_value(
+                self._extract_value(record.selected_characteristics or '', ["PAINT CODE"])
+            )
+    
     @api.depends('selected_characteristics')
     def _compute_year(self):
         for record in self:
-            record.year = self._clean_value(
-                self._extract_value(record.selected_characteristics or '', "Année")
-            )
+            raw = self._extract_value(record.selected_characteristics or '', ["Année", "YEAR"])
+            record.year = raw.split("-")[0].strip() if "-" in raw else raw
 
+    
     def action_preview_mrp_report(self):
         return {
             'type': 'ir.actions.report',
