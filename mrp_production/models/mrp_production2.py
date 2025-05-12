@@ -1,7 +1,7 @@
 from odoo import fields, models, api
 from datetime import datetime, timedelta
 import re
-
+from dateutil.relativedelta import relativedelta
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -141,6 +141,22 @@ class MrpProduction(models.Model):
     paint_code = fields.Char(string="Paint Code", compute="_compute_paint_code", store=True)
     year = fields.Char(string="Year", compute="_compute_year", store=True)
     full_characteristics = fields.Char(string="Couleur", compute="_compute_full_characteristics", store=True)
+
+    @api.model
+    def _get_default_date_start(self):
+        if self.env.context.get('default_date_deadline'):
+            date_finished = fields.Datetime.to_datetime(self.env.context.get('default_date_deadline'))
+            date_start = date_finished - relativedelta(hours=1)
+            return date_start
+        return fields.Datetime.now()
+        
+    @api.model
+    def _get_default_date_finished(self):
+        if self.env.context.get('default_date_deadline'):
+            return fields.Datetime.to_datetime(self.env.context.get('default_date_deadline'))
+        date_start = fields.Datetime.now()
+        date_finished = date_start + relativedelta(hours=1)
+        return date_finished
 
     @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')
     def _compute_full_characteristics(self):
