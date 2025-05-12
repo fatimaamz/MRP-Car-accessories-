@@ -118,13 +118,15 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
     date_start = fields.Date(
-        'Start', copy=False, default=_get_default_date_start,
+        'Start', copy=False, default=lambda self: self._get_default_date_start(),
         help="Date you plan to start production or date you actually started production.",
         index=True, required=True)
+
     date_finished = fields.Date(
-        'End', copy=False, default=_get_default_date_finished,
+        'End', copy=False, default=lambda self: self._get_default_date_finished(),
         compute='_compute_date_finished', store=True,
-        help="Date you expect to finish production or actual date you finished production.")
+        help="Date you expect to finish production or actual date you finished production."
+        
     new_design = fields.Selection(
         [
             ('requis', 'Requis'),
