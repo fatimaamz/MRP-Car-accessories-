@@ -147,19 +147,9 @@
                         class="oe_highlight"
                         icon="fa-eye"/>
             </xpath>
-     <xpath expr="//group[@name='group_extra_info']//div[@class='o_row']//field[@name='date_start']" position="replace">
-            <!--<field name="date_start" widget="date" readonly="state in ['done', 'to_close', 'cancel']" decoration-warning="state not in ('done', 'cancel') and date_start &lt; now" decoration-danger="state not in ('done', 'cancel') and date_start &lt; current_date" decoration-bf="state not in ('done', 'cancel') and (date_start &lt; current_date or date_start &lt; now)"/>-->
-         <label for="date_start" string="Start Date"/>
-            <div class="o_input">
-                <t t-if="record.date_start.value">
-                    <t t-esc="format_date(record.date_start.value, tz=env.user.tz)"/>
-                </t>
-            </div>
-      </xpath>
+     
 
-       <xpath expr="//group[@name='group_extra_info']//field[@name='date_finished']" position="replace">
-            <field name="date_finished" widget="date"/>
-       </xpath>
+      
       <xpath expr="//header//field[@name='state']" position="replace">
         <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
       </xpath>
