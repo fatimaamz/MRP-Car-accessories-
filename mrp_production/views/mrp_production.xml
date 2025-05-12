@@ -162,6 +162,11 @@
         <field name="po_client"/>
         <field name="ship_to_id"/> 
       </xpath>
+
+        <field name="date_start" widget="qweb" readonly="1">
+        <t t-esc="format_datetime(record.date_start.raw_value, dt_format='dd-MM-yyyy')"/>
+    </field>
+        
        <xpath expr="//group[1]//group[2]//label[1]" position="before" >
          <!--group name="product_icontrol_group" string="Progression de la production" >-->
             
