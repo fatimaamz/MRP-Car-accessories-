@@ -163,22 +163,7 @@ class MrpProduction(models.Model):
             record.full_characteristics = " | ".join(valid_values) if valid_values else ""
 
     
-    def _extract_value(self, text, field_name):
-        """
-        Extrait la valeur du champ à partir de 'selected_characteristics' en respectant les règles :
-        1. Si la valeur est vide, elle reste vide.
-        2. Ne prend que la ligne où le champ apparaît.
-        3. Remplace les valeurs invalides par une chaîne vide.
-        """
-        pattern = rf'^{field_name}:\s*(.*?)\s*$'  # Capture uniquement la valeur présente sur la même ligne
-        match = re.search(pattern, text, re.MULTILINE)
-    
-        if match:
-            value = match.group(1).strip()
-            invalid_values = {"None", "No insert", "Not Applicable", "No Color", ""}
-            return "" if value in invalid_values else value  # Remplace les valeurs invalides par vide
-    
-        return "" 
+   
     def _extract_value(self, text, field_name):
         """
         Extracts the value for a field from 'selected_characteristics', ignoring case and invalid values.
