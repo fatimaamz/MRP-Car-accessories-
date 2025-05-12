@@ -145,18 +145,18 @@ class MrpProduction(models.Model):
     @api.model
     def _get_default_date_start(self):
         if self.env.context.get('default_date_deadline'):
-            date_finished = fields.Date.to_date(self.env.context.get('default_date_deadline'))
-            date_start = date_finished - relativedelta(days=1)
+            date_finished = fields.Date.to_date(self.env.context['default_date_deadline'])
+            date_start = date_finished - relativedelta(days=1)  
             return date_start
-        return fields.Date.now()
-        
+        return fields.Date.today()  
+
     @api.model
     def _get_default_date_finished(self):
         if self.env.context.get('default_date_deadline'):
-            return fields.Date.to_datetime(self.env.context.get('default_date_deadline'))
-        date_start = fields.Date.now()
-        date_finished = date_start + relativedelta(days=1)
-        return date_finished
+            return fields.Date.to_date(self.env.context['default_date_deadline'])
+        date_start = fields.Date.today()
+        return date_start + relativedelta(days=1) 
+        
 
     @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')
     def _compute_full_characteristics(self):
