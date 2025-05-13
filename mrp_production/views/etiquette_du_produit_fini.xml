@@ -110,10 +110,15 @@
                     <t t-set="default_code" t-value="docs.product_id.default_code or ''"/>
                     <t t-set="interior" t-value="(docs.interior_color.split('(')[-1].strip(')') if docs.interior_color and '(' in docs.interior_color else (docs.interior_color or ''))"/>
                     <t t-set="insert" t-value="(docs.insert_color.split('(')[-1].strip(')') if docs.insert_color and '(' in docs.insert_color else '')"/>
-                     <t t-set="main" t-value="(docs.main_color.split('(')[-1].strip(')') if docs.main_color and '(' in docs.main_color else '')"/>
+                    <t t-set="main" t-value="(docs.main_color.split('(')[-1].strip(')') if docs.main_color and '(' in docs.main_color else '')"/>
+                    
+                   
                     <p style="font-size: 14px; border: 1px solid black; margin: 2mm; text-align: center;">
-                        <strong>Part: <span t-esc="(default_code + '-') if default_code else '' + interior + (('-' + insert) if insert else '') + (('-' + main) if main else '')"/></strong>
+                            <strong>Part: 
+                                <span t-esc="(default_code + '-' if default_code else '') + interior + ('-' + insert if insert else '') + ('-' + main if main else '')"/>
+                            </strong>
                     </p>
+                    
                     
 
                     <div style="margin-top: 2mm;">
