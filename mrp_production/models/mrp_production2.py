@@ -220,7 +220,7 @@ class MrpProduction(models.Model):
     def _compute_paint_code(self):
         for record in self:
             record.paint_code = self._clean_value(
-                self._extract_value(record.selected_characteristics or '', ["PAINT CODE"])
+                self._extract_value(record.selected_characteristics or '', ["PAINT CODE","PAINT COLOR"])
             )
     
     @api.depends('selected_characteristics')
