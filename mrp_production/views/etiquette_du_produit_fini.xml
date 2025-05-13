@@ -51,11 +51,12 @@
                         
 
                             <!-- Content Area -->
-                            <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 14px; width: 100%;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; font-size: 14px; width: 100%; margin-top: 10px;">
+
                                 <!-- Bottom Left: Marque -->
                                 
                                 <!-- Bottom Right: Color -->
-                                <div style="text-align: right;">
+                                 <div style="flex: 1; text-align: right;">
                                      <t t-if="docs.interior_color and docs.interior_color not in ['None', 'No insert', 'Not Applicable','No Color','']">
                                             <strong>Interior Color:</strong>
                                             <t t-esc="docs.interior_color"/>
