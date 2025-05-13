@@ -205,7 +205,7 @@ class MrpProduction(models.Model):
         ('no', 'Non')
     ], string='Installation Required', default='no')
 
-    reflector_type = fields.Char(string="Reflector Type")
+    reflector_type = fields.Many2one('reflector.type', string="Reflector Type")
 
    
 
@@ -706,29 +706,10 @@ class ResPartner(models.Model):
         ('NC', 'NC'),
     ], string='Prov')
 
-"""
-class SaleOrder(models.Model):
-    _inherit = 'sale.order'
+class ReflectorType(models.Model):
+    _name = 'reflector.type'
+    _description = 'Reflector Type'
+    _order = 'name'
 
-    def action_confirm(self):
-        super(SaleOrder, self).action_confirm()
-        for order in self:
-            # Propager le champ installation vers les lignes de facture
-            for line in order.order_line:
-                if line.installation:
-                    invoice_lines = self.env['account.move.line'].search([
-                        ('sale_line_ids', 'in', line.ids)
-                    ])
-                    for invoice_line in invoice_lines:
-                        invoice_line.write({'installation': line.installation})
-
-                    # Propager le champ installation vers l'ordre de fabrication
-                    if line.product_id.manufacture_ok:
-                        production_order = self.env['mrp.production'].search([
-                            ('origin', '=', order.name),
-                            ('product_id', '=', line.product_id.id)
-                        ])
-                        for production in production_order:
-                            production.move_raw_ids.write({'installation': line.installation})
-
-"""
+    name = fields.Char(string='Name', required=True)
+   
