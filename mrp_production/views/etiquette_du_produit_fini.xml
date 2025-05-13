@@ -51,11 +51,8 @@
                         
 
                             <!-- Content Area -->
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; font-size: 14px; width: 100%; margin-top: 10px;">
+                       <!-- <div style="display: flex; justify-content: space-between; align-items: flex-start; font-size: 14px; width: 100%; margin-top: 10px;">
 
-                                <!-- Bottom Left: Marque -->
-                                
-                                <!-- Bottom Right: Color -->
                                  <div style="flex: 1; text-align: right;">
                                      <t t-if="docs.interior_color and docs.interior_color not in ['None', 'No insert', 'Not Applicable','No Color','']">
                                             <strong>Interior Color:</strong>
@@ -86,6 +83,44 @@
                                         </t>
                                     
                                 </div>
+                            </div>-->
+
+
+                            <div style="font-size: 14px; width: 100%; margin-top: 10px;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tbody>
+                                        <t t-if="docs.interior_color and docs.interior_color not in ['None', 'No insert', 'Not Applicable','No Color','']">
+                                            <tr>
+                                                <td style="padding: 2px 5px;"><strong>Interior Color:</strong></td>
+                                                <td style="padding: 2px 5px;"><t t-esc="docs.interior_color"/></td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="docs.insert_color and docs.insert_color not in ['None', 'No insert', 'Not Applicable','No Color','']">
+                                            <tr>
+                                                <td style="padding: 2px 5px;"><strong>Insert Color:</strong></td>
+                                                <td style="padding: 2px 5px;"><t t-esc="docs.insert_color"/></td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="docs.paint_code and docs.paint_code not in ['None', 'No insert', 'Not Applicable','No Color','']">
+                                            <tr>
+                                                <td style="padding: 2px 5px;"><strong>Paint Code:</strong></td>
+                                                <td style="padding: 2px 5px;"><t t-esc="docs.paint_code"/></td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="docs.main_color and docs.main_color not in ['None', 'No insert', 'Not Applicable','No Color','']">
+                                            <tr>
+                                                <td style="padding: 2px 5px;"><strong>Main Code:</strong></td>
+                                                <td style="padding: 2px 5px;"><t t-esc="docs.main_color"/></td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="docs.carbon_code and docs.carbon_code not in ['None', 'No insert', 'Not Applicable','No Color','']">
+                                            <tr>
+                                                <td style="padding: 2px 5px;"><strong>Carbon Code:</strong></td>
+                                                <td style="padding: 2px 5px;"><t t-esc="docs.carbon_code"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
