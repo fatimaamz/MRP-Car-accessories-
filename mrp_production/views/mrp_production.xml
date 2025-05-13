@@ -174,11 +174,7 @@
              
              
                 <field name="is_conforme" class="o_inline"/>
-                <button name="action_view_delivery_order" 
-                                            type="object" 
-                                            class="oe_highlight"
-                                            string="Bon de livraison"
-                                            invisible="is_conforme == False" />
+               
                  <field name="remarque_controle_qualite"/>
                  <field name="product_template_id" invisible="1"/>    
                  <field name="logo_inscription" />
@@ -192,6 +188,10 @@
                
             </group>
         </group>-->
+      
+        </xpath>
+        <xpath expr="//group[1]//group[2]" position="inside">
+         <button name="action_view_delivery_order" type="object" class="oe_highlight" string="Bon de livraison" invisible="is_conforme == False"/>
       
         </xpath>
        <xpath expr="//div[hasclass('o_row', 'g-0', 'd-flex')]" position="after">
