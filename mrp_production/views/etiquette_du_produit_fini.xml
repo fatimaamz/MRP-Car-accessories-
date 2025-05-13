@@ -125,10 +125,10 @@
                         </div>
 
                 <!-- Product Image Section -->
-                <div style="height: 40mm; border: 1px solid gray; margin: 2mm; display: table;">
+                <div style="height: 70mm; border: 1px solid gray; margin: 2mm; display: table;">
                     <div style="display: table-cell; vertical-align: middle; text-align: center;">
                         <t t-if="docs.selected_image">
-                            <img t-att-src="image_data_uri(docs.selected_image)" style="max-width: 90%; max-height: 90%; object-fit: contain;"/>
+                            <img t-att-src="image_data_uri(docs.selected_image)" style="max-width: 50%; max-height: 50%; object-fit: contain;"/>
                         </t>
                         <t t-else="">
                             <span style="font-size: 10px; color: gray;">No Image</span>
