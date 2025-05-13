@@ -205,8 +205,8 @@ class MrpProduction(models.Model):
         ('no', 'Non')
     ], string='Installation Required', default='no')
 
-    #reflector_type = fields.Many2one('reflector.type', string="Reflector Type")
-    reflector_type = fields.Char( string="Reflector Type")
+    reflector_type = fields.Many2one('reflector.type', string="Reflector Type")
+    
    
 
     work_order_multi = fields.Char(
