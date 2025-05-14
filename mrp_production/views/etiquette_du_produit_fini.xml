@@ -5,7 +5,7 @@
             <xpath expr="//t[@t-call='web.basic_layout']" position="replace">
                  <t t-call="web.basic_layout">
                     <!-- Outer Container -->
-                    <div style="width: 100mm; height: 200mm; border: 1px solid black; border-radius: 12px; overflow: hidden; font-family: Arial, sans-serif;">
+                    <div style="width: 100mm; height: 150mm; border: 1px solid black; border-radius: 12px; overflow: hidden; font-family: Arial, sans-serif;">
                         <!-- Header Section -->
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 28px; background-color: black; color: white; border-radius: 12px 12px 0 0;">
                             <!-- DesignerTrim Logo -->
