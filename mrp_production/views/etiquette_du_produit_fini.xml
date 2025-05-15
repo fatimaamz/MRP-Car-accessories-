@@ -15,8 +15,8 @@
                             <!-- QR Code -->
                             <div style="display: flex; justify-content: flex-end; align-items: center; max-width: 100mm; overflow: hidden;">
 
-                                <t t-if="docs.product_id.qr_code_uploaded">
-                                    <img t-att-src="image_data_uri(docs.product_id.qr_code_uploaded)" style="width: 25mm; height: 25mm; position: absolute; right: 110mm; background-color: white;  border-radius: 5px;"/>
+                                <t t-if="docs.qr_code">
+                                    <img t-att-src="image_data_uri(docs.qr_code)" style="width: 25mm; height: 25mm; position: absolute; right: 110mm; background-color: white;  border-radius: 5px;"/>
                                 </t>
 
                                 <t t-else="">
