@@ -192,7 +192,7 @@ class MrpProduction(models.Model):
         """Cleans the value by trimming and checking for invalid terms."""
         if value:
             cleaned_value = value.strip().lower()
-            return "" if cleaned_value in ["none", "no insert", "not applicable", "no color"] else value.strip()
+            return "" if cleaned_value in ["none", "no insert", "not applicable", "no color",' '] else value.strip()
         return ""
 
     @api.depends('selected_characteristics')
