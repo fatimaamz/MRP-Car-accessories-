@@ -161,20 +161,18 @@
                         <t t-if="docs.product_id.tracking != 'none' and docs.lot_name">
                             <div t-field="docs.lot_name" t-options="{'widget': 'barcode', 'img_style': 'width:80%; height:30px'}"/>
                         </t>
-                        <t t-elif="docs.product_id.barcode">
+                        <!--<t t-elif="docs.product_id.barcode">
                             <div t-field="docs.product_id.barcode" t-options="{'widget': 'barcode', 'img_style': 'width:80%; height:30px'}"/>
-                        </t>
+                        </t>-->
                         <t t-else="">
-                            <span/>
+                              <span t-field="docs.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:350px;height:60px'}">Package barcode</span>
                         </t>
                     </div>
 
-                    <div style="text-align: center; margin-top: 2mm; font-size: 14px; font-weight: bold;">
-                       <!-- <t t-esc="docs.product_id.barcode or ''"/>-->
-                        <span class="text-end">
-                                <span t-field="docs.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:350px;height:60px'}">Package barcode</span>
-                            </span>
-                    </div>
+                    <!-- <div style="text-align: center; margin-top: 2mm; font-size: 14px; font-weight: bold;">
+                       <t t-esc="docs.product_id.barcode or ''"/>
+                       
+                    </div>-->
                 </div>
 
             </div>
