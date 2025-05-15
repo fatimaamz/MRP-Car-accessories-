@@ -8,7 +8,7 @@
             <xpath expr="//notebook" position="before">
                 <group>
                     <field name="product_url" placeholder="Enter product URL"/>
-                    <field name="qr_code" widget="image" class="oe_avatar" readonly="1" attrs="{'invisible': [('qr_code', '=', False)]}"/>
+                    <field name="qr_code" widget="image" class="oe_avatar" readonly="1" invisible="not qr_code"/>
                 </group>
             </xpath>
         </field>
