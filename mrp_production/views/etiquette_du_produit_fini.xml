@@ -172,7 +172,7 @@
                     <div style="text-align: center; margin-top: 2mm; font-size: 14px; font-weight: bold;">
                        <!-- <t t-esc="docs.product_id.barcode or ''"/>-->
                         <span class="text-end">
-                                <span t-field="o.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:350px;height:60px'}">Package barcode</span>
+                                <span t-field="docs.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:350px;height:60px'}">Package barcode</span>
                             </span>
                     </div>
                 </div>
