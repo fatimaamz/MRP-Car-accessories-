@@ -163,35 +163,51 @@ class MrpProduction(models.Model):
             record.full_characteristics = " | ".join(valid_values) if valid_values else ""
 
     
-   
-    def _extract_value(self, text, field_names):
-        """
+    """
         Extract the value from selected_characteristics using possible field name variations.
-        """
+    """
+    """
+    def _extract_value(self, text, field_names):
+       
         if not text:
             return ""
         
         if isinstance(field_names, str):
             field_names = [field_names]
     
-        # Try each field name
+        
         for name in field_names:
-            pattern = rf'^\s*{re.escape(name)}\s*:\s*(.+?)\s*$'
+           
+            pattern = rf'^\s*{re.escape(name)}\s*:\s*(.*?)\s*$'
             match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
             if match:
                 value = match.group(1).strip()
-                if value.lower() not in invalid_values:
+                invalid_values = {"none", "no insert", "not applicable", "no color", ""}
+                if value.strip().lower() not in invalid_values:
                     return value
-        
-            #pattern = rf'^\s*{re.escape(name)}\s*:\s*(.*?)\s*$'
-            #match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
-            #if match:
-                #value = match.group(1).strip()
-                #invalid_values = {"none", "no insert", "not applicable", "no color", ""}
-                #if value.strip().lower() not in invalid_values:
-                    #return value
         return ""
-
+        """
+    def _extract_value(self, text, field_names):
+        """
+        Extract the value from selected_characteristics using possible field name variations.
+        """
+        if not text:
+            return ""
+    
+        if isinstance(field_names, str):
+            field_names = [field_names]
+    
+        invalid_values = {"none", "no insert", "not applicable", "no color", "", None}
+    
+        for name in field_names:
+            # Require at least one non-space character after the colon
+            pattern = rf'^\s*{re.escape(name)}\s*:\s*(.+?)\s*$'
+            match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
+            if match:
+                value = match.group(1)
+                if value and value.strip().lower() not in invalid_values:
+                    return value.strip()
+        return ""
 
     
     @staticmethod
