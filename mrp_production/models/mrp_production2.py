@@ -176,13 +176,20 @@ class MrpProduction(models.Model):
     
         # Try each field name
         for name in field_names:
-            pattern = rf'^\s*{re.escape(name)}\s*:\s*(.*?)\s*$'
+            pattern = rf'^\s*{re.escape(name)}\s*:\s*(.+?)\s*$'
             match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
             if match:
                 value = match.group(1).strip()
-                invalid_values = {"none", "no insert", "not applicable", "no color", ""}
-                if value.strip().lower() not in invalid_values:
+                if value.lower() not in invalid_values:
                     return value
+        
+            #pattern = rf'^\s*{re.escape(name)}\s*:\s*(.*?)\s*$'
+            #match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
+            #if match:
+                #value = match.group(1).strip()
+                #invalid_values = {"none", "no insert", "not applicable", "no color", ""}
+                #if value.strip().lower() not in invalid_values:
+                    #return value
         return ""
 
 
