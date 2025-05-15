@@ -1,7 +1,7 @@
 from odoo import fields, models, api
 from datetime import datetime, timedelta
 import re
-
+from dateutil.relativedelta import relativedelta
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -117,7 +117,10 @@ class StockMove(models.Model):
 class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
-    
+   
+
+   
+        
     new_design = fields.Selection(
         [
             ('requis', 'Requis'),
@@ -134,6 +137,9 @@ class MrpProduction(models.Model):
     paint_code = fields.Char(string="Paint Code", compute="_compute_paint_code", store=True)
     year = fields.Char(string="Year", compute="_compute_year", store=True)
     full_characteristics = fields.Char(string="Couleur", compute="_compute_full_characteristics", store=True)
+
+    
+        
 
     @api.depends('interior_color', 'insert_color', 'main_color', 'carbon_code', 'paint_code')
     def _compute_full_characteristics(self):
@@ -157,55 +163,96 @@ class MrpProduction(models.Model):
             record.full_characteristics = " | ".join(valid_values) if valid_values else ""
 
     
-    def _extract_value(self, text, field_name):
-        """
-        Extrait la valeur du champ à partir de 'selected_characteristics' en respectant les règles :
-        1. Si la valeur est vide, elle reste vide.
-        2. Ne prend que la ligne où le champ apparaît.
-        3. Remplace les valeurs invalides par une chaîne vide.
-        """
-        pattern = rf'^{field_name}:\s*(.*?)\s*$'  # Capture uniquement la valeur présente sur la même ligne
-        match = re.search(pattern, text, re.MULTILINE)
+    """
+        Extract the value from selected_characteristics using possible field name variations.
+    """
+    """
+    def _extract_value(self, text, field_names):
+       
+        if not text:
+            return ""
+        
+        if isinstance(field_names, str):
+            field_names = [field_names]
     
-        if match:
-            value = match.group(1).strip()
-            invalid_values = {"None", "No insert", "Not Applicable", "No Color", ""}
-            return "" if value in invalid_values else value  # Remplace les valeurs invalides par vide
+        
+        for name in field_names:
+           
+            pattern = rf'^\s*{re.escape(name)}\s*:\s*(.*?)\s*$'
+            match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
+            if match:
+                value = match.group(1).strip()
+                invalid_values = {"none", "no insert", "not applicable", "no color", ""}
+                if value.strip().lower() not in invalid_values:
+                    return value
+        return ""
+        """
+    def _extract_value(self, text, field_names):
+        """
+        Extract the value from selected_characteristics using possible field name variations.
+        """
+        if not text:
+            return ""
     
-        return "" 
+        if isinstance(field_names, str):
+            field_names = [field_names]
+    
+        invalid_values = {"none", "no insert", "not applicable", "no color", "", None}
+    
+        for name in field_names:
+            # Require at least one non-space character after the colon
+            pattern = rf'^\s*{re.escape(name)}\s*:\s*(.+?)\s*$'
+            match = re.search(pattern, text, re.MULTILINE | re.IGNORECASE)
+            if match:
+                value = match.group(1)
+                if value and value.strip().lower() not in invalid_values:
+                    return value.strip()
+        return ""
+
+    
     @staticmethod
     def _clean_value(value):
-        """Nettoie la valeur en supprimant les espaces et en normalisant la casse"""
+        """Cleans the value by trimming and checking for invalid terms."""
         if value:
             cleaned_value = value.strip().lower()
-            return "" if cleaned_value in ["none", "no insert", "not applicable", "no color"] else value
+            return "" if cleaned_value in ["none", "no insert", "not applicable", "no color",' '] else value.strip()
         return ""
-    
+
     @api.depends('selected_characteristics')
-    def _compute_interior_color(self):
+    def _compute_main_color(self):
         for record in self:
-            record.interior_color = self._clean_value(self._extract_value(record.selected_characteristics or '', "INTERIOR COLOR"))
+            record.main_color = self._clean_value(
+                self._extract_value(record.selected_characteristics or '', ["MAIN COLOR", "Couleurs"])
+            )
     
     @api.depends('selected_characteristics')
     def _compute_insert_color(self):
         for record in self:
-            record.insert_color = self._clean_value(self._extract_value(record.selected_characteristics or '', "INSERT COLOR"))
+            record.insert_color = self._clean_value(
+                self._extract_value(record.selected_characteristics or '', ["INSERT COLOR"])
+            )
+    
+    @api.depends('selected_characteristics')
+    def _compute_carbon_code(self):
+        for record in self:
+            record.carbon_code = self._clean_value(
+                self._extract_value(record.selected_characteristics or '', ["CARBON CODE", "CARBON COLOR"])
+            )
     
     @api.depends('selected_characteristics')
     def _compute_paint_code(self):
         for record in self:
-            record.paint_code = self._clean_value(self._extract_value(record.selected_characteristics or '', "PAINT CODE"))
+            record.paint_code = self._clean_value(
+                self._extract_value(record.selected_characteristics or '', ["PAINT CODE","PAINT COLOR"])
+            )
     
     @api.depends('selected_characteristics')
-    def _compute_main_color(self):
+    def _compute_year(self):
         for record in self:
-            record.main_color = self._clean_value(self._extract_value(record.selected_characteristics or '', "Couleurs"))
-            
-    @api.depends('selected_characteristics')
-    def _compute_carbon_code(self):
-        for record in self:
-            record.carbon_code = self._clean_value(self._extract_value(record.selected_characteristics or '', "CARBON CODE"))
+            raw = self._extract_value(record.selected_characteristics or '', ["Année", "YEAR"])
+            record.year = raw.split("-")[0].strip() if "-" in raw else raw
 
+    
     def action_preview_mrp_report(self):
         return {
             'type': 'ir.actions.report',

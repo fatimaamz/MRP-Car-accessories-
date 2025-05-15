@@ -19,7 +19,7 @@
                         <table style="width: 100%; border: none; padding: 10px 0; border-collapse: collapse;">
                             <tr style="border: 1px solid white;">
                                 <td style="text-align: left; vertical-align: middle; padding-right: 20px; border: 1px solid white;">
-                                   <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)" style="height: 60px;" alt="Company Logo"/>
+                                   <img t-att-src="'/web/image/res.company/%s/logo' % (user.company_id.id)" style="height: 40px;" alt="Company Logo"/>
                                     <br/>
                                 </td>
                                 <td style="text-align: right; vertical-align: middle; border: 1px solid white;">
@@ -176,13 +176,13 @@
                         <div style="border: 1px solid black;  vertical-align: middle; text-align: center;">
                             <div style="border: 1px solid black;position: relative;display: flex; justify-content: center; align-items: center;padding: 8px 15px; margin: 0;">
                             <t t-if="doc.selected_image">
-                                <img t-att-src="image_data_uri(doc.selected_image)" style=" max-width: 85%; height: auto;"/>
+                                <img t-att-src="image_data_uri(doc.selected_image)" style=" max-width: 75%; max-height: 75%;"/>
                             </t>
                             </div>
                         </div>
                     </div>
                     
-                    <div style="background-color: #f9fafb; padding: 20px; margin-bottom: 20px;">
+                    <div style="background-color: #f9fafb; padding: 15px; margin-bottom: 20px;">
                     <h6>Notes / Specifications:</h6>
                     <p>
                         <span t-esc="doc.note_interne"/>
