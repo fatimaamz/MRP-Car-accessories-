@@ -13,7 +13,7 @@
     'author': "WEELITE",
     'website': "https://weelite.co",
     'category': 'Sales',
-    'depends': ['base', 'product', 'sale_management','common_connector_library'],
+    'depends': ['base', 'product', 'sale_management', 'common_connector_library', 'mrp'],
     'data':[
         'security/group.xml',
         'security/ir.model.access.csv',
@@ -27,6 +27,7 @@
         'views/menu.xml',
         'views/order_data_queue_ept.xml',
         'views/product_views.xml',
+        'views/mrp_production_view.xml',
     ],
     'images': ['static/src/description/icon.png'],
     'external_dependencies': {

@@ -14,3 +14,4 @@ from . import res_company
 from . import res_partner
 from . import delivery_carrier
 from . import orders_shopify_queue
+from . import mrp_production
