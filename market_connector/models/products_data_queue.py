@@ -38,6 +38,7 @@ class ShopifyProductDataQueueEpt(models.Model):
     is_match_brand = fields.Boolean("Is Match Brand", default=False)
     is_match_style = fields.Boolean("Is Match Style", default=False)
     is_match_model = fields.Boolean("Is Match Model", default=False)
+    handle = fields.Char()
     paint_color = fields.Char()
     result = fields.Char()
     

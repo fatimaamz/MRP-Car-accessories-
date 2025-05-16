@@ -11,7 +11,9 @@ class MrpProduction(models.Model):
 
     product_url = fields.Char(
         string="Product URL",
-        help="URL to the product page"
+        help="URL to the product page",
+        compute="_compute_product_url",
+        store=True,
     )
     
     qr_code = fields.Binary(
@@ -40,3 +42,11 @@ class MrpProduction(models.Model):
                 record.qr_code = base64.b64encode(buffer.getvalue())
             else:
                 record.qr_code = False 
+
+    @api.depends('origin', 'product_id','shopify_instance_id')
+    def _compute_product_url(self):
+        for record in self:
+            if record.product_id:  
+                record.product_url = record.shopify_instance_id.shop_url + '/products/' + record.product_id.handle
+            else:
+                record.product_url = False

@@ -128,6 +128,7 @@ class ShopifyCredentials(models.Model):
                     shop_url = self._extract_shop_url(data_dict.get('vendor',''))
                     
                     product_handle = data_dict.get('handle')
+                    record.handle = product_handle
                     
                     if not product_handle:
                         continue
@@ -152,7 +153,8 @@ class ShopifyCredentials(models.Model):
                     
                     if record.product_id:
                         record.product_id.write({
-                            'qr_code_uploaded': qr_code_base64
+                            'qr_code_uploaded': qr_code_base64,
+                            'handle': product_handle
                         })
                     
                     _logger.info(f"Generated QR Code for product: {product_url}")

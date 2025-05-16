@@ -25,6 +25,7 @@ class ProductProduct(models.Model):
     variant_id = fields.Char(string='Shopify Variante ID', help='ID of the product in Shopify')
     product_images = fields.One2many('product.image', 'product_id', string='Product Images')
     default_image = fields.Image(string="Default Image", compute='_compute_default_image')
+    handle = fields.Char(string='Handle', help='Handle of the product in Shopify')
 
     @api.depends('product_images.is_default')
     def _compute_default_image(self):
