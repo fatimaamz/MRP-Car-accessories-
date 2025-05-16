@@ -193,9 +193,9 @@ class SaleOrder(models.Model):
 
             # Formatting the string
         formatted_description = f"""{reference_code} ({car_model.split(' ')[1]}, {car_model.split(' ')[0]})
-        MAIN COLOR: {main_color}
-        PAINT CODE: {paint_code}
-        INSERT COLOR: {insert_color}
+        MAIN COLOR: {main_color.replace('Not Applicable', 'none')}
+        PAINT CODE: {paint_code.replace('Not Applicable', 'none')}
+        INSERT COLOR: {insert_color.replace('Not Applicable', 'none')}
         Année: {car_year}
         Notes : {special_notes}"""
 
