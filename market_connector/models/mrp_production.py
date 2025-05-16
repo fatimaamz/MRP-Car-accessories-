@@ -47,6 +47,6 @@ class MrpProduction(models.Model):
     def _compute_product_url(self):
         for record in self:
             if record.product_id:  
-                record.product_url = record.shopify_instance_id.shop_url + '/products/' + record.product_id.handle
+                record.product_url = 'https://designertrim.com/products/' + record.product_id.handle
             else:
                 record.product_url = False
