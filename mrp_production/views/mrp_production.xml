@@ -69,6 +69,7 @@
                 </xpath>
             </field>
   </record>
+  
 
     <record id="view_picking_form_carrier_form" model="ir.ui.view">
         <field name="name">stock.picking.form.shopify.instance</field>
@@ -200,6 +201,12 @@
                 <field name="selected_image" widget="image"/>
 
         </xpath>
+        <xpath expr="//notebook" position="before">
+                <group>
+                    <field name="product_url" placeholder="Enter product URL"/>
+                    <field name="qr_code" widget="image" class="oe_avatar" readonly="1" invisible="not qr_code"/>
+                </group>
+            </xpath>
     </field>
 </record>
 

@@ -1,7 +1,10 @@
+import base64
+from io import BytesIO
 from odoo import fields, models, api
 from datetime import datetime, timedelta
 import re
 from dateutil.relativedelta import relativedelta
+import qrcode
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -421,6 +424,48 @@ class MrpProduction(models.Model):
     product_model = fields.Char(string="Model", compute="_compute_product_ref", store=True)
     product_brand = fields.Char(string="Brand", compute="_compute_product_ref", store=True)
     product_style = fields.Char(string="Style", compute="_compute_product_ref", store=True)
+
+    product_url = fields.Char(
+        string="Product URL",
+        help="URL to the product page",
+        compute="_compute_product_url",
+        store=True,
+    )
+    
+    qr_code = fields.Binary(
+        string="QR Code",
+        compute="_compute_qr_code",
+        store=True,
+        help="QR code generated from the product URL"
+    )
+    
+    @api.depends('product_url')
+    def _compute_qr_code(self):
+        for record in self:
+            if record.product_url:
+                qr = qrcode.QRCode(
+                    version=1,
+                    error_correction=qrcode.constants.ERROR_CORRECT_L,
+                    box_size=10,
+                    border=4,
+                )
+                qr.add_data(record.product_url)
+                qr.make(fit=True)
+                
+                img = qr.make_image(fill_color="black", back_color="white")
+                buffer = BytesIO()
+                img.save(buffer, format="PNG")
+                record.qr_code = base64.b64encode(buffer.getvalue())
+            else:
+                record.qr_code = False 
+
+    @api.depends('origin', 'product_id','shopify_instance_id')
+    def _compute_product_url(self):
+        for record in self:
+            if record.product_id:  
+                record.product_url = 'https://designertrim.com/products/' + record.product_id.handle
+            else:
+                record.product_url = False  
 
     @api.depends('origin')
     def _compute_sale_order(self):
