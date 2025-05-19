@@ -20,6 +20,16 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='journal_div']" position="after">
                       <field name="num_lx"/>
+                    <group string="Invoice" name="sale_info_group" invisible="move_type not in ('out_invoice', 'out_refund')">
+                                        <label for="ref" string="Customer Reference"/>
+                                        <field name="ref" nolabel="1"/>
+                                        <field name="user_id" invisible="1" force_save="1"/>
+                                        <field name="invoice_user_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"/>
+                                        <field name="invoice_origin" string="Source Document" force_save="1" invisible="1"/>
+                                        <field name="partner_bank_id" context="{'default_partner_id': bank_partner_id, 'display_account_trust': True}" domain="[('partner_id.ref_company_ids', 'parent_of', company_id)]" readonly="state != 'draft'"/>
+                                        <field name="qr_code_method" invisible="not display_qr_code"/>
+                                        <field name="delivery_date" readonly="state != 'draft'"/>
+                    </group>
                   </xpath>
                  <xpath expr="//label[@for='journal_id']" position="attributes">
                      <attribute name="invisible">1</attribute>
@@ -32,6 +42,9 @@
                  </xpath>
                 
                 <xpath expr="//page[@id='aml_tab']" position="attributes">
+                     <attribute name="invisible">1</attribute>
+                 </xpath>
+                <xpath expr="//page[@id='other_info']" position="attributes">
                      <attribute name="invisible">1</attribute>
                  </xpath>
                 <xpath expr="//group[@name='sale_info_group']//field[@name='partner_bank_id']" position="attributes">
