@@ -65,8 +65,12 @@
             <xpath expr="//field[@name='origin']" position="after">
                     <field name="numero_commande"/>
                     <field name="numero_suivi"/>
-                    <field name="shopify_instance_id" />
+                    <field name="shopify_instance_id"/>
+                    <field name="carrier_id"/>
+                    <field name="weight"/>
+                    <field name="shipping_weight"/>
                 </xpath>
+                 <xpath expr="//group[@name='other_infos']" position="replace"/>
             </field>
   </record>
   
