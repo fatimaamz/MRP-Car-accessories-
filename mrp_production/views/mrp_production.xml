@@ -59,7 +59,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//notebook//page[@name='extra']" position="attributes">
                     <xpath expr="//notebook//page[2]" position="attributes">
-                        <attribute name="invisible">"name" = False</attribute>
+                        <attribute name="invisible">name= False</attribute>
                     </xpath>
                 </xpath>
                 <xpath expr="//header" position="inside">
