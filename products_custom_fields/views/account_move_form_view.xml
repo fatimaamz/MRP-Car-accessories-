@@ -20,16 +20,31 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='journal_div']" position="after">
                       <field name="num_lx"/>
-                    <group string="Invoice" name="sale_info_group" invisible="move_type not in ('out_invoice', 'out_refund')">
-                                        <label for="ref" string="Customer Reference"/>
-                                        <field name="ref" nolabel="1"/>
-                                        <field name="user_id" invisible="1" force_save="1"/>
-                                        <field name="invoice_user_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"/>
-                                        <field name="invoice_origin" string="Source Document" force_save="1" invisible="1"/>
-                                        <field name="partner_bank_id" context="{'default_partner_id': bank_partner_id, 'display_account_trust': True}" domain="[('partner_id.ref_company_ids', 'parent_of', company_id)]" readonly="state != 'draft'"/>
-                                        <field name="qr_code_method" invisible="not display_qr_code"/>
-                                        <field name="delivery_date" readonly="state != 'draft'"/>
-                    </group>
+                 
+                        <label for="ref" string="Customer Reference"/>
+                        <field name="ref" nolabel="1"/>
+                        <field name="user_id" invisible="1" force_save="1"/>
+                        <field name="invoice_user_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"/>
+                        <field name="invoice_origin" string="Source Document" force_save="1" invisible="1"/>
+                        <field name="partner_bank_id" context="{'default_partner_id': bank_partner_id, 'display_account_trust': True}" domain="[('partner_id.ref_company_ids', 'parent_of', company_id)]" readonly="state != 'draft'"/>
+                        <field name="qr_code_method" invisible="not display_qr_code"/>
+                        <field name="delivery_date" readonly="state != 'draft'"/>
+
+                        <field name="num_stock"/>
+                        <field name="luxncibill_number"/>
+                        <field name="pcs"/>
+                        <field name="weight"/>
+                        <field name="tracking"/>
+                        <field name="custom_clearance"/>
+                        <!-- <field name="transport"/>-->
+                        <field name="carrier_id"/>
+                        <field name="freight_cost"/>
+                        <field name="numero_serie"/>
+                                
+                        <!--<field name = "tvp"/>-->
+                        <!--<field name = "tps"/>-->
+                        <!-- <field name="carrier"/>-->
+                   
                   </xpath>
                  <xpath expr="//label[@for='journal_id']" position="attributes">
                      <attribute name="invisible">1</attribute>
@@ -63,7 +78,7 @@
                     <attribute name="string">Commercial</attribute>
                 </xpath>
                   
-                <xpath expr="//page[@id='other_tab']//group[@id='other_tab_group']" position="inside">
+                <!--<xpath expr="//page[@id='other_tab']//group[@id='other_tab_group']" position="inside">
                    
                        
                             <group string="Détails" name="shipping_info_group">
@@ -73,18 +88,16 @@
                                 <field name="weight"/>
                                 <field name="tracking"/>
                                 <field name="custom_clearance"/>
-                               <!-- <field name="transport"/>-->
+                             
                                  <field name="carrier_id"/>
                                  <field name="freight_cost"/>
                                 <field name="numero_serie"/>
                                 
-                                <!--<field name = "tvp"/>-->
-                                <!--<field name = "tps"/>-->
-                               <!-- <field name="carrier"/>-->
+                               
                             </group>
                         
                     
-                </xpath>
+                </xpath>-->
                 <xpath expr="//field[@name='amount_total']" position="after">
                     <field name="dnet_total" widget="monetary"/>
                 </xpath>
