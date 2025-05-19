@@ -70,7 +70,8 @@
                     <field name="weight"/>
                     <field name="shipping_weight"/>
                 </xpath>
-                 <xpath expr="//page[@name='extra']" position="replace"/>
+                 <xpath expr="//notebook[1]//page[@name='extra']" position="replace">
+                 </xpath>
             </field>
   </record>
   
