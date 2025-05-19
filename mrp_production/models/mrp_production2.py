@@ -428,8 +428,6 @@ class MrpProduction(models.Model):
     product_url = fields.Char(
         string="Product URL",
         help="URL to the product page",
-        compute="_compute_product_url",
-        store=True,
     )
     
     qr_code = fields.Binary(
@@ -569,14 +567,15 @@ class MrpProduction(models.Model):
 
     @api.model
     def create(self, vals):
-        # Vérifier si l'ordre de fabrication a une origine (nom de la commande de vente)
-         
+        if not vals.get('product_url') and vals.get('product_id'):
+            product = self.env['product.product'].browse(vals['product_id'])
+            if product:
+                vals['product_url'] = 'https://designertrim.com/products/' + (product.handle or '')
         if vals.get('origin'):
             sale_order = self.env['sale.order'].search([('name', '=', vals['origin'])], limit=1)
             if sale_order:
                 vals['partner_id'] = sale_order.partner_id.id
                 vals['partner_shipping_id'] = sale_order.partner_shipping_id.id
-      
         return super(MrpProduction, self).create(vals)
         
     @api.depends('origin', 'product_id')
