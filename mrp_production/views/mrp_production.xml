@@ -305,7 +305,8 @@
          <xpath expr="//page[@name='other_information']" position="attributes">
             <attribute name="invisible">1</attribute>
          </xpath>
-        <xpath expr="//field[@name='order_source']" position="after">
+        <xpath expr="//group[1]" position="inside">
+            <group string='Ventes'>
                                 <field name="user_id" widget="many2one_avatar_user"/>
                                 <field name="team_id" context="{'kanban_view_ref': 'sales_team.crm_team_view_kanban'}" options="{'no_create': True}"/>
                                 <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
@@ -319,14 +320,15 @@
                                 <field name="reference" readonly="1" invisible="not reference"/>
                                 <field name="client_order_ref"/>
 
-
+            </group>
+            <group string='Suivi'>
             
                                 <field name="origin"/>
                                 <field name="opportunity_id"/>
                                 <field name="campaign_id" options="{'create_name_field': 'title'}"/>
                                 <field name="medium_id"/>
                                 <field name="source_id"/>
-                         
+            </group>
                 
         </xpath>
     </field>
