@@ -70,6 +70,7 @@
                     <field name="weight"/>
                     <field name="shipping_weight"/>
                 </xpath>
+                 <xpath expr="//group[@name='other_infos']" position="replace"/>
             </field>
   </record>
   
