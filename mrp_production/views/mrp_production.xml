@@ -57,6 +57,9 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//notebook/page[2]" position="attributes">
+                    <attribute name="groups">base.group_user</attribute>
+                </xpath>
             <xpath expr="//header" position="inside">
                 <button name="send_delivery_email" type="object" string="Envoyer email d'expédition" class="btn-primary"/>
                 <button name="action_preview_bl_report" type="object" string="Aperçu BL" class="oe_highlight" icon="fa-eye"/>
@@ -70,10 +73,7 @@
                     <field name="weight"/>
                     <field name="shipping_weight"/>
                 </xpath>
-                <xpath expr="//notebook[1]//page[2]//group[1]" position="replace">
-                    <group style="display:None"/>
-                   
-                 </xpath>
+               
             </field>
   </record>
   
