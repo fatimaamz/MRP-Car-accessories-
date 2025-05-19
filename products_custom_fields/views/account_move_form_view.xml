@@ -21,7 +21,7 @@
                 <xpath expr="//div[@name='journal_div']" position="after">
                       <field name="num_lx"/>
                  
-                        <label for="ref" string="Customer Reference"/>
+                        <label for="ref" string="PO Client"/>
                         <field name="ref" nolabel="1"/>
                         <field name="user_id" invisible="1" force_save="1"/>
                         <field name="invoice_user_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"/>
