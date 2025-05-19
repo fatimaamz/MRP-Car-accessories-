@@ -567,7 +567,7 @@ class MrpProduction(models.Model):
 
     @api.model
     def create(self, vals):
-        if not vals.get('product_url') and vals.get('product_id'):
+        if not vals.get('product_url') and vals.get('product_id') and vals.get('shopify_instance_id'):
             product = self.env['product.product'].browse(vals['product_id'])
             if product:
                 vals['product_url'] = 'https://designertrim.com/products/' + (product.handle or '')

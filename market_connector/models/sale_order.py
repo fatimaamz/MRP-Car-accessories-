@@ -174,28 +174,27 @@ class SaleOrder(models.Model):
         reference_code = car_info[3]  # e.g., #HOC522SPO
 
         # Extracting property values
-        insert_color = ""
-        paint_code = ""
-        main_color = ""
-        special_notes = ""
-        print(properties)
+        insert_color = "None"
+        paint_code = "None"
+        main_color = "None"
+        special_notes = "None"
         for prop in properties:
             # print("=========pprod====================>",prop)
             if prop['name'] == 'Insert Color':
-                insert_color = prop['value']
+                insert_color = prop['value'].strip()
             elif prop['name'] == 'Paint Code':
-                paint_code = prop['value']
+                paint_code = prop['value'].strip()
             elif prop['name'] == 'Main Colors':
-                main_color = prop['value']
+                main_color = prop['value'].strip()
             elif prop['name'] == 'Special Notes':
-                special_notes = prop['value']
+                special_notes = prop['value'].strip()
                 
 
             # Formatting the string
         formatted_description = f"""{reference_code} ({car_model.split(' ')[1]}, {car_model.split(' ')[0]})
-        MAIN COLOR: {main_color.replace('Not Applicable', 'none')}
-        PAINT CODE: {paint_code.replace('Not Applicable', 'none')}
-        INSERT COLOR: {insert_color.replace('Not Applicable', 'none')}
+        MAIN COLOR: {main_color.replace('Not Applicable', 'None')}
+        PAINT CODE: {paint_code.replace('Not Applicable', 'None')}
+        INSERT COLOR: {insert_color.replace('Not Applicable', 'None')}
         Année: {car_year}
         Notes : {special_notes}"""
 
