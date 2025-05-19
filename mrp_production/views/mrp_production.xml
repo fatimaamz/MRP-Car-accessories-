@@ -70,7 +70,7 @@
                     <field name="weight"/>
                     <field name="shipping_weight"/>
                 </xpath>
-                 <xpath expr="//group[@name='other_infos']" position="replace"/>
+                 <xpath expr="//page[@name='extra']" position="replace"/>
             </field>
   </record>
   
@@ -91,7 +91,7 @@
                             <button type="object" class="oi oi-arrow-right oe_link" confirm="Cancelling a delivery may not be undoable. Are you sure you want to continue?" name="cancel_shipment" string="Cancel" invisible="not carrier_tracking_ref or delivery_type in ['fixed', 'base_on_rule'] or not delivery_type or state != 'done'"/>
                 </div>
             </xpath>-->
-            <xpath expr="//group[@name='other_infos']" position="replace"/>
+           
     
         </field>
     </record>
