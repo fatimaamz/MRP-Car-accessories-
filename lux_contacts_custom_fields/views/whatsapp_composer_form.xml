@@ -5,9 +5,9 @@
         <field name="model">whatsapp.composer</field>
         <field name="inherit_id" ref="whatsapp.whatsapp_composer_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//sheet position="inside">
+           <!-- <xpath expr="//sheet position="inside">
                 <field name="contact_id" />
-            </xpath>
+            </xpath>-->
         </field>
     </record>
 </odoo>
