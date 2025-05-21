@@ -8,4 +8,4 @@ class WhatsAppComposer(models.TransientModel):
     @api.onchange('contact_id')
     def _onchange_contact_id(self):
         if self.contact_id:
-            self.number = self.contact_id.mobile or self.contact_id.phone
+            self.phone = self.contact_id.mobile or self.contact_id.phone
