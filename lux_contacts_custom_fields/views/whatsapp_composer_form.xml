@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="whatsapp.whatsapp_composer_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[1]//group[1]//field[@name='phone']" position="before">
-                <field name="contact_id" domain="[('mobile', '!=', False)]"/>
+                <field name="contact_id" />
             </xpath>
         </field>
     </record>
