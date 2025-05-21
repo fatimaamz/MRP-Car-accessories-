@@ -1,0 +1,12 @@
+<odoo>
+    <record id="whatsapp.whatsapp_composer_view_form_inherit" model="ir.ui.view">
+        <field name="name">whatsapp.composer.form.inherit.contact</field>
+        <field name="model">whatsapp.composer</field>
+        <field name="inherit_id" ref="whatsapp.whatsapp_composer_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='number']" position="before">
+                <field name="contact_id" domain="[('mobile', '!=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
