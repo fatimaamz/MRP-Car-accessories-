@@ -2,15 +2,16 @@
 
     
 	
-  <record id="whatsapp.whatsapp_composer_view_form_inherit" model="ir.ui.view">
-        <field name="model">whatsapp.composer</field>
-        <field name="inherit_id" ref="whatsapp.whatsapp_composer_view_form"/>
-        <field name="arch" type="xml">
-           <xpath expr="//sheet//group//group[1]//field[@name='phone']" position="after">
-                <field name="contact_id"/>
-            </xpath>
-        </field>
-</record>
+   <record id="view_whatsapp_composer_inherit_contact" model="ir.ui.view">
+	    <field name="name">whatsapp.composer.inherit.contact</field>
+	    <field name="model">whatsapp.composer</field>
+	    <field name="inherit_id" ref="whatsapp.whatsapp_composer_view_form"/>
+	    <field name="arch" type="xml">
+	      <xpath expr="//field[@name='wa_template_id']" position="before">
+	        <field name="contact_id"/>
+	      </xpath>
+	    </field>
+  </record>
 
    <record id="view_stock_picking_form" model="ir.ui.view">
         <field name="model">stock.picking</field>
