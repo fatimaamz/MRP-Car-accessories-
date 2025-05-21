@@ -8,7 +8,7 @@
     "website": "",
     "category": "Contacts",
     
-    "depends": ['base','mrp_production','sale','purchase','mrp','stock','account'],
+    "depends": ['base','mrp_production','sale','purchase','mrp','stock','account','whatsapp'],
     "data": ["views/res_partner.xml",
              "views/sale_order_new_template.xml",
              "views/invoice_new_template.xml",
