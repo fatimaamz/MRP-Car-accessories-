@@ -8,7 +8,7 @@
         <xpath expr="//div[@name='delivery_details']//div[1]//a[1]" position="replace">
             
         </xpath>
-        <xpath expr="//div[@name='delivery_details']//div[2]" position="replace">
+        <xpath expr="//div[@name='delivery_order']//div[2]" position="replace">
          <div class="small d-lg-inline-block" t-if="(picking.date_done or picking.scheduled_date)and not picking.livraison_multiple">
                                 Date:
                                 <span class="text-muted" t-field="picking.date_done" t-options="{'date_only': True}"/>
@@ -17,7 +17,7 @@
             </div>
             
          </xpath>
-        <xpath expr="//div[@name='delivery_details']//div[2]" position="after">
+        <xpath expr="//div[@name='delivery_order']//div[2]" position="after">
             <t t-if="picking ">
                                 <t t-foreach="picking.move_ids_without_package" t-as="p">
                                     <div t-if="p.tracking_number">
