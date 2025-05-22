@@ -60,9 +60,22 @@ class AccountMoveLine(models.Model):
         
 class StockPicking(models.Model):
     _inherit = "stock.picking"
+
+
     
     week_number = fields.Char(string="Week Number", compute="_compute_week_number", store=True)
     livraison_multiple = fields.Boolean(string="Livraison Multiple", default=False)
+
+    access_token = fields.Char('Access Token', copy=False, readonly=True)
+
+    def _generate_access_token(self):
+        return secrets.token_urlsafe(16)
+
+    def create(self, vals):
+        if 'access_token' not in vals:
+            vals['access_token'] = self._generate_access_token()
+        return super().create(vals)
+        
 
     @api.depends('scheduled_date')
     def _compute_week_number(self):
