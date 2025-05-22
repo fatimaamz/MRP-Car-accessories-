@@ -175,11 +175,11 @@
                     <div style="background-color: #f9fafb; padding: 20px; margin-bottom: 20px;">
                         <div style="border: 1px solid black;  vertical-align: middle; text-align: center;">
                             <div style="border: 1px solid black;position: relative;display: flex; justify-content: center; align-items: center;padding: 8px 15px; margin: 0;">
-                            <t t-if="doc.selected_image">
-                               <img t-att-src="image_data_uri(doc.selected_image)" style=" max-width: 100%; max-height: 100%;"/>
+                            <!--<t t-if="doc.selected_image">-->
+                               <img t-att-src="image_data_uri(doc.selected_image)"/>
                                <!-- <img t-att-src="'data:image/png;base64,%s' % doc.selected_image"  />-->
 
-                            </t>
+                            <!--</t>-->
                             </div>
                         </div>
                     </div>
