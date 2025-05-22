@@ -8,6 +8,39 @@
         <xpath expr="//div[@name='delivery_details']//div[1]//a[1]" position="replace">
             
         </xpath>
+        <xpath expr="//div[@name='delivery_details']//div[2]" position="replace">
+         <div class="small d-lg-inline-block" t-if="(picking.date_done or picking.scheduled_date)and not picking.livraison_multiple">
+                                Date:
+                                <span class="text-muted" t-field="picking.date_done" t-options="{'date_only': True}"/>
+                                <span t-if="picking.state in ['draft', 'waiting', 'confirmed', 'assigned']" class="text-muted" t-field="picking.scheduled_date" t-options="{'date_only': True}"/>
+                                
+            </div>
+            
+         </xpath>
+        <xpath expr="//div[@name='delivery_details']//div[2]" position="after">
+            <t t-if="picking ">
+                                <t t-foreach="picking.move_ids_without_package" t-as="p">
+                                    <div t-if="p.tracking_number">
+                                        Tracking Number: <span t-esc="p.tracking_number"/>
+                                    </div>
+                                    <div t-if="p.ship_via">
+                                        Transporteur: <span t-esc="p.ship_via.name"/>
+                                    </div>
+                                    <div t-if="p.must_ship_by">
+                                        Date: <span t-esc="p.must_ship_by"/>
+                                    </div>
+                                    <br/>
+                                </t>
+                            </t>
+                            <t t-else="">
+                                <div t-if="picking.numero_suivi">
+                                    Tracking Number: <span t-esc="picking.numero_suivi"/>
+                                </div>
+                                <div t-if="picking.carrier_id">
+                                    Transporteur: <span t-esc="picking.carrier_id.name"/>
+                                </div>
+                            </t>
+        </xpath>
         
     </template>
 </odoo>
