@@ -5,5 +5,9 @@
         <xpath expr="//div[@name='delivery_details']//a[1]" position="replace">
             <span t-esc="picking.name"/>
         </xpath>
+        <xpath expr="//div[@name='delivery_details']//div[1]//a[1]" position="replace">
+            
+        </xpath>
+        
     </template>
 </odoo>
