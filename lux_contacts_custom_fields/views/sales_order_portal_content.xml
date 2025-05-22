@@ -1,0 +1,5 @@
+<template id="lux_contacts_custom_fields.replace_delivery_details" inherit_id="sale_stock.sale_order_portal_content_inherit_sale_stock">
+    <xpath expr="//div[@name='delivery_details']//a[1]" position="replace">
+        <span t-esc="picking.name"/>
+    </xpath>
+</template>
