@@ -19,6 +19,7 @@
              "views/account_invoice_report_wizard.xml",
              "security/ir.model.access.csv",
              "views/sequence.xml",
+             "views/sales_order_portal_content.xml",
              
             ],
     "installable": True,
