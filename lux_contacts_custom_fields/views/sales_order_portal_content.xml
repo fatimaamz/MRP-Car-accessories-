@@ -18,7 +18,7 @@
             
          </xpath>
         <xpath expr="//div[@name='delivery_order']//div[2]" position="after">
-          
+          <t t-if="picking.livraison_multiple">
                                 <t t-foreach="picking.move_ids_without_package" t-as="p">
                                     <div t-if="p.tracking_number">
                                         Tracking Number: <span t-esc="p.tracking_number"/>
@@ -31,7 +31,7 @@
                                     </div>
                                     <br/>
                                 </t>
-                            
+          </t>
                             <t t-else="">
                                 <div t-if="picking.numero_suivi">
                                     Tracking Number: <span t-esc="picking.numero_suivi"/>
