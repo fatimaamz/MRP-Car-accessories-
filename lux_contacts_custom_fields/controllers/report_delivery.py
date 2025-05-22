@@ -3,7 +3,7 @@ from odoo.http import request
 
 class PublicPickingReportController(http.Controller):
 
-    @http.route('/my/picking/pdf/<int:picking_id>', type='http', auth='public', website=True)
+    @http.route('/report/pdf/lux_contacts_custom_fields.report_deliveryslip_new_template/<int:picking_id>', type='http', auth='public', website=True)
     def picking_pdf(self, picking_id, **kwargs):
         # Vérifier access token pour autoriser l'accès
         access_token = request.params.get('access_token') or request.httprequest.args.get('access_token')
