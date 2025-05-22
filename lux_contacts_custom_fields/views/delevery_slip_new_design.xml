@@ -9,6 +9,12 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='origin']" position="after">
                 <field name="livraison_multiple"/>
+                
+                    <field name="numero_suivi" invisible="livraison_multiple==True"/>
+                    <field name="shopify_instance_id"/>
+                    <field name="carrier_id" invisible="livraison_multiple==True"/>
+                    <field name="weight"/>
+                    <field name="shipping_weight"/>
             </xpath>
             <xpath expr="//field[@name='move_ids_without_package']//tree" position="inside">
 
