@@ -34,7 +34,7 @@
                                
 
                         <!-- Product Details Section <t t-esc="docs.product_id.detailed_type"/>  -->
-                        <div style="padding: 5mm;">
+                        <div style="padding: 10mm;">
                             <!-- Top Left: Year -->
                             <div style="text-align: left; font-size: 14px; margin-bottom: 5mm;width: 100px;">
                                 <strong>
@@ -86,7 +86,7 @@
                             </div>-->
 
 
-                            <div style="font-size: 12px; width: 100%; margin-top: 2px;">
+                            <div style="font-size: 14px; width: 100%; margin-top: 2px;">
                                 <table style="width: 100%; border-collapse: collapse;">
                                     <tbody>
                                         <t t-if="docs.interior_color and docs.interior_color not in ['None', 'No insert', 'Not Applicable','No Color','']">
