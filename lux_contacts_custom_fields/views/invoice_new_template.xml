@@ -267,6 +267,7 @@
                                     <th style="border: 1px solid #ddd; padding: 10px;">Description</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">Qty</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">Unit Cost</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Taxes</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">Disc.</th>
                                     <th style="border: 1px solid #ddd; padding: 10px;">STotal</th>
 
@@ -297,6 +298,12 @@
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="line.price_unit"/>
                                             </td>
+
+                                            <t t-set="taxes" t-value="', '.join([(tax.invoice_label or tax.name) for tax in line.tax_ids])"/>
+                                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;" name="td_taxes" t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }} {{ 'text-nowrap' if len(taxes) &lt; 10 else '' }}">
+                                                <span t-out="taxes" id="line_tax_ids">Tax 15%</span>
+                                            </td>
+                                         
                                             
                                             <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
                                                 <t t-esc="line.discount"/>
