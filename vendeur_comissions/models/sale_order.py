@@ -69,7 +69,7 @@ class SaleOrder(models.Model):
         compute='_compute_team_weekly_target',
         store=True
     )
-    commission_pool = fields.Float(
+    commission_pool = fields.Monetary(
         string="Commission Pool",
         compute='_compute_commission_pool',
         store=True
