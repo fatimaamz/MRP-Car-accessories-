@@ -1,6 +1,9 @@
 from odoo import models, fields, api,_
 from datetime import timedelta
 
+
+
+    
 class CrmTeam(models.Model):
     _inherit = 'crm.team'
 
@@ -8,6 +11,30 @@ class CrmTeam(models.Model):
         string="Objectif Hebdomadaire ($)",
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
+    dashboard_graph_data = fields.Text(compute='_compute_dashboard_graph_data', readonly=True)
+
+    def _compute_dashboard_graph_data(self):
+        for team in self:
+            date_from = fields.Datetime.to_string(datetime.now() - timedelta(days=7))
+            date_to = fields.Datetime.to_string(datetime.now())
+
+            # Par exemple, on récupère les opportunités créées dans les 7 derniers jours
+            leads = self.env['crm.lead'].search([
+                ('team_id', '=', team.id),
+                ('create_date', '>=', date_from),
+                ('create_date', '<=', date_to),
+                ('type', '=', 'opportunity'),
+            ])
+
+            # Exemple de structure de données pour le graphique
+            graph_data = {
+                'labels': [lead.name for lead in leads],
+                'datasets': [{
+                    'label': 'Opportunités sur 7 jours',
+                    'data': [1 for lead in leads],
+                }]
+            }
+            team.dashboard_graph_data = json.dumps(graph_data)
 
 class SalesRepAttendance(models.Model):
     _name = 'sales.rep.attendance'
