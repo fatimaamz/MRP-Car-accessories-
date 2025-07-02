@@ -8,7 +8,7 @@
                 <field name="type_client" invisible="1"/>
                 <field name="installation" invisible="type_client != 'concessionnaires_programme_nationaux'"/>
                     
-                <field name="commission_pool"/>
+                <field name="commission_pool" />
                <field name="individual_commissions"/>
             </xpath>
         </field>
@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//tree" position="inside">
-                <field name="commission_pool"/>
+                <field name="commission_pool" sum="Total Commission Pool"/>
                <field name="individual_commissions"/>
             </xpath>
              <xpath expr="//tree//field[@name='partner_id']" position="after">
