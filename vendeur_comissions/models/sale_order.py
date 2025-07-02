@@ -15,28 +15,39 @@ class CrmTeam(models.Model):
 
     def _compute_dashboard_graph_data(self):
         for team in self:
-            date_today = datetime.now()
-            date_7_days_ago = date_today - timedelta(days=7)
+            today = datetime.today()
+            seven_days_ago = today - timedelta(days=7)
 
-            leads = self.env['crm.lead'].read_group(
-                domain=[
-                    ('team_id', '=', team.id),
-                    ('create_date', '>=', fields.Datetime.to_string(date_7_days_ago)),
-                    ('create_date', '<=', fields.Datetime.to_string(date_today)),
-                    ('type', '=', 'opportunity'),
-                ],
+            # Regrouper les opportunités créées par jour
+            domain = [
+                ('team_id', '=', team.id),
+                ('create_date', '>=', fields.Datetime.to_string(seven_days_ago)),
+                ('create_date', '<=', fields.Datetime.to_string(today)),
+                ('type', '=', 'opportunity'),
+            ]
+
+            results = self.env['crm.lead'].read_group(
+                domain=domain,
                 fields=['id'],
                 groupby=['create_date:day'],
                 orderby='create_date:day'
             )
 
             values = []
-            for day in leads:
-                label = fields.Date.to_string(day['__domain'][0][2])[:10]  # YYYY-MM-DD
+            for res in results:
+                date_str = res.get('create_date:day')
+                if isinstance(date_str, str):
+                    label = date_str
+                else:
+                    label = fields.Date.to_string(date_str)
                 values.append({
                     'label': label,
-                    'value': day['__count']
+                    'value': res['__count']
                 })
+
+            # Si aucune donnée, retourner un tableau vide pour éviter l'erreur JS
+            if not values:
+                values = [{'label': 'Aucune donnée', 'value': 0}]
 
             graph_data = {
                 'values': values,
@@ -46,6 +57,7 @@ class CrmTeam(models.Model):
             }
 
             team.dashboard_graph_data = json.dumps(graph_data)
+    
 
 class SalesRepAttendance(models.Model):
     _name = 'sales.rep.attendance'
