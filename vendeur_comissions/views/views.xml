@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//tree" position="inside">
-                <field name="commission_pool" sum="Total Commission Pool"/>
+                <field name="commission_pool" sum="Total Commission Pool" options="{'currency_field': 'currency_id'}"/>
                <field name="individual_commissions"/>
             </xpath>
              <xpath expr="//tree//field[@name='partner_id']" position="after">
