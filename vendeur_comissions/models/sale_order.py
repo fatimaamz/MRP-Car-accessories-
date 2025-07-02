@@ -15,25 +15,36 @@ class CrmTeam(models.Model):
 
     def _compute_dashboard_graph_data(self):
         for team in self:
-            date_from = fields.Datetime.to_string(datetime.now() - timedelta(days=7))
-            date_to = fields.Datetime.to_string(datetime.now())
+            date_today = datetime.now()
+            date_7_days_ago = date_today - timedelta(days=7)
 
-            # Par exemple, on récupère les opportunités créées dans les 7 derniers jours
-            leads = self.env['crm.lead'].search([
-                ('team_id', '=', team.id),
-                ('create_date', '>=', date_from),
-                ('create_date', '<=', date_to),
-                ('type', '=', 'opportunity'),
-            ])
+            leads = self.env['crm.lead'].read_group(
+                domain=[
+                    ('team_id', '=', team.id),
+                    ('create_date', '>=', fields.Datetime.to_string(date_7_days_ago)),
+                    ('create_date', '<=', fields.Datetime.to_string(date_today)),
+                    ('type', '=', 'opportunity'),
+                ],
+                fields=['id'],
+                groupby=['create_date:day'],
+                orderby='create_date:day'
+            )
 
-            # Exemple de structure de données pour le graphique
+            values = []
+            for day in leads:
+                label = fields.Date.to_string(day['__domain'][0][2])[:10]  # YYYY-MM-DD
+                values.append({
+                    'label': label,
+                    'value': day['__count']
+                })
+
             graph_data = {
-                'labels': [lead.name for lead in leads],
-                'datasets': [{
-                    'label': 'Opportunités sur 7 jours',
-                    'data': [1 for lead in leads],
-                }]
+                'values': values,
+                'title': 'Opportunités (7 derniers jours)',
+                'key': 'Opportunités',
+                'graph_type': 'bar'
             }
+
             team.dashboard_graph_data = json.dumps(graph_data)
 
 class SalesRepAttendance(models.Model):
