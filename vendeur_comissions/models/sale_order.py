@@ -12,40 +12,45 @@ class CrmTeam(models.Model):
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
     
-    #def action_dashboard_data(self):
-        #result = super().action_dashboard_data()
+    def action_dashboard_data(self):
+        result = super().action_dashboard_data()
 
-        #today = fields.Date.today()
-        #seven_days_ago = today - timedelta(days=7)
+        # Filter data between today and 7 days ago
+        today = fields.Date.today()
+        seven_days_ago = today - timedelta(days=7)
 
-        #leads = self.env['crm.lead'].read_group(
-           # domain=[
-                #('team_id', 'in', self.ids),
-                #('create_date', '>=', fields.Date.to_string(seven_days_ago)),
-                #('type', '=', 'opportunity')
-            #],
-            #fields=['create_date'],
-            #groupby=['create_date']
-        #)
+        # Group leads by creation date
+        leads = self.env['crm.lead'].read_group(
+            domain=[
+                ('team_id', 'in', self.ids),
+                ('create_date', '>=', fields.Datetime.to_string(seven_days_ago)),
+                ('create_date', '<=', fields.Datetime.to_string(today)),
+                ('type', '=', 'opportunity'),
+            ],
+            fields=['create_date'],
+            groupby=['create_date:day'],
+            orderby='create_date:day'
+        )
 
-        #values = [{
-            #'label': fields.Date.to_string(item['create_date']),
-            #'value': item['__count']
-        #} for item in leads]
+        # Format the graph data
+        values = [{
+            'label': fields.Date.to_string(day['create_date:day']),
+            'value': day['__count']
+        } for day in leads]
 
-        #if not values:
-            #values = [{'label': 'No Data', 'value': 0}]
+        if not values:
+            values = [{'label': 'No Data', 'value': 0}]
 
-        #for team in self:
-            #result[str(team.id)]['dashboard_graph_data'] = {
-                #'values': values,
-                #'title': 'Opportunités (7 jours)',
-                #'key': 'Nombre',
-                #'graph_type': 'bar'
-            #}
+        for team in self:
+            result[str(team.id)]['dashboard_graph_data'] = {
+                'values': values,
+                'title': 'Opportunités (7 derniers jours)',
+                'key': 'Nombre',
+                'graph_type': 'bar'
+            }
 
-        #return result
-
+        return result
+    
                 
         
     
