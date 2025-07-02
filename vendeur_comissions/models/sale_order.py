@@ -11,52 +11,43 @@ class CrmTeam(models.Model):
         string="Objectif Hebdomadaire ($)",
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
-    dashboard_graph_data = fields.Text(compute='_compute_dashboard_graph_data', readonly=True)
+    
+    def action_dashboard_data(self):
+        result = super().action_dashboard_data()
 
-    def _compute_dashboard_graph_data(self):
+        today = fields.Date.today()
+        seven_days_ago = today - timedelta(days=7)
+
+        leads = self.env['crm.lead'].read_group(
+            domain=[
+                ('team_id', 'in', self.ids),
+                ('create_date', '>=', fields.Date.to_string(seven_days_ago)),
+                ('type', '=', 'opportunity')
+            ],
+            fields=['create_date'],
+            groupby=['create_date']
+        )
+
+        values = [{
+            'label': fields.Date.to_string(item['create_date']),
+            'value': item['__count']
+        } for item in leads]
+
+        if not values:
+            values = [{'label': 'No Data', 'value': 0}]
+
         for team in self:
-            today = datetime.today()
-            seven_days_ago = today - timedelta(days=7)
-
-            # Regrouper les opportunités créées par jour
-            domain = [
-                ('team_id', '=', team.id),
-                ('create_date', '>=', fields.Datetime.to_string(seven_days_ago)),
-                ('create_date', '<=', fields.Datetime.to_string(today)),
-                ('type', '=', 'opportunity'),
-            ]
-
-            results = self.env['crm.lead'].read_group(
-                domain=domain,
-                fields=['id'],
-                groupby=['create_date:day'],
-                orderby='create_date:day'
-            )
-
-            values = []
-            for res in results:
-                date_str = res.get('create_date:day')
-                if isinstance(date_str, str):
-                    label = date_str
-                else:
-                    label = fields.Date.to_string(date_str)
-                values.append({
-                    'label': label,
-                    'value': res['__count']
-                })
-
-            # Si aucune donnée, retourner un tableau vide pour éviter l'erreur JS
-            if not values:
-                values = [{'label': 'Aucune donnée', 'value': 0}]
-
-            graph_data = {
+            result[str(team.id)]['dashboard_graph_data'] = {
                 'values': values,
-                'title': 'Opportunités (7 derniers jours)',
-                'key': 'Opportunités',
+                'title': 'Opportunités (7 jours)',
+                'key': 'Nombre',
                 'graph_type': 'bar'
             }
 
-            team.dashboard_graph_data = json.dumps(graph_data)
+        return result
+
+                
+        
     
 
 class SalesRepAttendance(models.Model):
