@@ -40,14 +40,14 @@ class CrmTeam(models.Model):
                 labels.append(week_start.strftime("Semaine du %d/%m"))
                 values.append(revenue)
 
-            team.dashboard_graph_data = {
+            team.dashboard_graph_data = ({
                 'labels': labels,
                 'datasets': [{
                     'label': "Chiffre d'affaires hebdo",
                     'data': values,
                     'backgroundColor': '#36a2eb',
                 }]
-            }
+            })
     
                 
         
