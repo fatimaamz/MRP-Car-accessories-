@@ -50,8 +50,7 @@ class CrmTeam(models.Model):
                 ]
             }
 
-            # ✅ Conversion nécessaire ici
-            team.dashboard_graph_data = json.dumps(graph_data)
+            team.dashboard_graph_data = graph_data
    
     
                 
