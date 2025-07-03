@@ -11,40 +11,43 @@ class CrmTeam(models.Model):
         string="Objectif Hebdomadaire ($)",
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
+    
     dashboard_graph_data = fields.Json(compute='_compute_dashboard_graph_data')
 
     def _compute_dashboard_graph_data(self):
         for team in self:
-            # Début de la semaine en cours
             today = fields.Date.today()
-            start_date = today - timedelta(days=today.weekday())
+            start_date = today - timedelta(weeks=5)  # dernières 5 semaines
 
-            # Regroupement par semaine
-            data = self.env['crm.lead'].read_group(
-                domain=[('team_id', '=', team.id), ('create_date', '>=', start_date)],
-                fields=['create_date:week', 'expected_revenue'],
-                groupby=['create_date:week']
-            )
+            self.env.cr.execute("""
+                SELECT
+                    date_trunc('week', create_date)::date AS week_start,
+                    SUM(expected_revenue) AS total_revenue
+                FROM crm_lead
+                WHERE team_id = %s AND create_date >= %s
+                GROUP BY week_start
+                ORDER BY week_start
+            """, (team.id, start_date))
+
+            results = self.env.cr.fetchall()
 
             labels = []
             values = []
 
-            for entry in data:
-                week_number = entry.get('create_date:week')
-                expected_revenue = entry.get('expected_revenue', 0.0)
-                labels.append(f"Semaine {week_number}")
-                values.append(expected_revenue)
+            for row in results:
+                week_start = row[0]
+                revenue = row[1] or 0.0
+                labels.append(week_start.strftime("Semaine du %d/%m"))
+                values.append(revenue)
 
             team.dashboard_graph_data = {
                 'labels': labels,
                 'datasets': [{
-                    'label': 'Chiffre d’affaires estimé (par semaine)',
+                    'label': "Chiffre d'affaires hebdo",
                     'data': values,
                     'backgroundColor': '#36a2eb',
                 }]
             }
-    
-    
     
                 
         
