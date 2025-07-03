@@ -13,7 +13,6 @@ class CrmTeam(models.Model):
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
     dashboard_graph_data = fields.Json(compute='_compute_dashboard_graph_data')
-
     def _compute_dashboard_graph_data(self):
         for team in self:
             today = fields.Date.today()
@@ -38,19 +37,19 @@ class CrmTeam(models.Model):
                 week_start = row[0]
                 revenue = row[1] or 0.0
                 labels.append(week_start.strftime("Semaine du %d/%m"))
-                values.append(revenue)
+                values.append(round(revenue, 2))
 
             graph_data = {
-                'labels': labels,
-                'datasets': [{
-                    'label': "Chiffre d'affaires hebdo",
-                    'values': values,
-                    'type': 'bar',
-                }]
+                "labels": labels,
+                "datasets": [
+                    {
+                        "title": "Chiffre d'affaires hebdo",
+                        "values": values
+                    }
+                ]
             }
 
-            _logger.info("Graph JSON pour team %s : %s", team.name, json.dumps(graph_data))
-            team.dashboard_graph_data = json.dumps(graph_data)
+            team.dashboard_graph_data = graph_data  # PAS besoin de json.dumps ici
     
     
                 
