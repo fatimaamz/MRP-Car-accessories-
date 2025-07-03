@@ -12,41 +12,51 @@ class CrmTeam(models.Model):
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
     
-    #def action_dashboard_data(self):
-        #result = super().action_dashboard_data()
+    dashboard_graph_data = fields.Text(compute='_compute_dashboard_graph_data', readonly=True)
 
-        #today = fields.Date.today()
-        #seven_days_ago = today - timedelta(days=7)
+    def _compute_dashboard_graph_data(self):
+        for team in self:
+            today = datetime.today().replace(hour=23, minute=59, second=59)
+            week_ago = today - timedelta(days=6)
 
-        #leads = self.env['crm.lead'].read_group(
-            #domain=[
-                #('team_id', 'in', self.ids),
-                #('create_date', '>=', fields.Datetime.to_string(seven_days_ago)),
-                #('create_date', '<=', fields.Datetime.to_string(today)),
-                #('type', '=', 'opportunity'),
-            #],
-            #fields=['create_date'],
-            #groupby=['create_date:day'],
-            #orderby='create_date:day'
-        #)
+            # Get all 7 days as a dict with date string keys
+            last_7_days = [(week_ago + timedelta(days=i)).date() for i in range(7)]
+            values_map = {day.strftime('%Y-%m-%d'): 0 for day in last_7_days}
 
-        #values = [{
-            #'label': fields.Date.to_string(day['create_date:day']),
-            #'value': day['__count']
-        #} for day in leads]
+            # Group leads by day
+            leads = self.env['crm.lead'].read_group(
+                domain=[
+                    ('team_id', '=', team.id),
+                    ('create_date', '>=', fields.Datetime.to_string(week_ago)),
+                    ('create_date', '<=', fields.Datetime.to_string(today)),
+                    ('type', '=', 'opportunity'),
+                ],
+                fields=['id'],
+                groupby=['create_date:day'],
+            )
 
-        #if not values:
-            #values = [{'label': 'No Data', 'value': 0}]
+            for lead in leads:
+                day = lead.get('create_date:day')
+                if isinstance(day, str):
+                    day = fields.Date.from_string(day)
+                if day:
+                    key = day.strftime('%Y-%m-%d')
+                    values_map[key] = lead['__count']
 
-        #for team in self:
-            #result[str(team.id)]['dashboard_graph_data'] = {
-                #'values': values,
-                #'title': 'Opportunités (7 derniers jours)',
-                #'key': 'Nombre',
-                #'graph_type': 'bar'
-            #}
+            # Format as chart JSON
+            values = [{
+                'label': datetime.strptime(date_str, '%Y-%m-%d').strftime('%d %b'),
+                'value': count
+            } for date_str, count in values_map.items()]
 
-        #return result
+            team.dashboard_graph_data = json.dumps({
+                'values': values,
+                'title': 'Opportunités (7 derniers jours)',
+                'key': 'Opportunités',
+                'graph_type': 'bar'
+            })
+    
+    
     
                 
         
