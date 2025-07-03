@@ -1,4 +1,28 @@
 <odoo>
+
+
+    <record id="crm_team_kanban_last_7_days" model="ir.ui.view">
+        <field name="name">crm.team.kanban.last_7_days</field>
+        <field name="model">crm.team</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_card">
+                            <div class="o_kanban_card_header">
+                                <field name="name"/>
+                            </div>
+                            <div class="o_kanban_card_content">
+                                <field name="last_7_days_chart" widget="dashboard_graph" t-att-graph_type="'bar'"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    
     <record id="view_sale_order" model="ir.ui.view">
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form" />
