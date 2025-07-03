@@ -15,26 +15,34 @@ class CrmTeam(models.Model):
 
     def _compute_dashboard_graph_data(self):
         for team in self:
-            # Sample logic: get opportunities created this week
-            start_date = fields.Date.today() - timedelta(days=fields.Date.today().weekday())
+            # Début de la semaine en cours
+            today = fields.Date.today()
+            start_date = today - timedelta(days=today.weekday())
+
+            # Regroupement par semaine
             data = self.env['crm.lead'].read_group(
-                [('team_id', '=', team.id), ('create_date', '>=', start_date)],
-                ['create_date:day', 'expected_revenue'],
-                ['create_date:day'],
+                domain=[('team_id', '=', team.id), ('create_date', '>=', start_date)],
+                fields=['create_date:week', 'expected_revenue'],
+                groupby=['create_date:week']
             )
 
-            labels = [d['create_date:day'].strftime('%A') for d in data]
-            values = [d['expected_revenue'] for d in data]
+            labels = []
+            values = []
+
+            for entry in data:
+                week_number = entry.get('create_date:week')
+                expected_revenue = entry.get('expected_revenue', 0.0)
+                labels.append(f"Semaine {week_number}")
+                values.append(expected_revenue)
 
             team.dashboard_graph_data = {
                 'labels': labels,
                 'datasets': [{
-                    'label': 'Weekly Revenue',
+                    'label': 'Chiffre d’affaires estimé (par semaine)',
                     'data': values,
                     'backgroundColor': '#36a2eb',
                 }]
             }
-
     
     
     
