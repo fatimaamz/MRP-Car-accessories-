@@ -12,45 +12,37 @@ class CrmTeam(models.Model):
         string="Objectif Hebdomadaire ($)",
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
-    dashboard_graph_data = fields.Json(compute='_compute_dashboard_graph_data')
+    weekly_chart_data = fields.Text(compute='_compute_weekly_chart_data')
 
-    def _compute_dashboard_graph_data(self):
+    def _compute_weekly_chart_data(self):
         for team in self:
             today = fields.Date.today()
-            start_date = today - timedelta(weeks=5)
+            start_date = today - timedelta(weeks=4)
 
-            self.env.cr.execute("""
-                SELECT
-                    date_trunc('week', create_date)::date AS week_start,
-                    SUM(expected_revenue) AS total_revenue
-                FROM crm_lead
-                WHERE team_id = %s AND create_date >= %s
-                GROUP BY week_start
-                ORDER BY week_start
-            """, (team.id, start_date))
+            leads = self.env['crm.lead'].search([
+                ('team_id', '=', team.id),
+                ('create_date', '>=', start_date)
+            ])
 
-            results = self.env.cr.fetchall()
+            weekly = {}
+            for lead in leads:
+                week_start = lead.create_date.date() - timedelta(days=lead.create_date.weekday())
+                key = week_start.strftime("Semaine du %d/%m")
+                weekly.setdefault(key, 0.0)
+                weekly[key] += lead.expected_revenue or 0.0
 
-            labels = []
-            values = []
+            labels = sorted(weekly.keys())
+            values = [round(weekly[k], 2) for k in labels]
 
-            for row in results:
-                week_start = row[0]
-                revenue = row[1] or 0.0
-                labels.append(week_start.strftime("Semaine du %d/%m"))
-                values.append(round(revenue, 2))
-
-            graph_data = {
+            graph = {
                 "labels": labels,
-                "datasets": [
-                    {
-                        "title": "Chiffre d'affaires hebdo",
-                        "values": values
-                    }
-                ]
+                "datasets": [{
+                    "title": "Revenu hebdo",
+                    "values": values
+                }]
             }
 
-            team.dashboard_graph_data = graph_data
+            team.weekly_chart_data = json.dumps(graph)
    
     
                 
