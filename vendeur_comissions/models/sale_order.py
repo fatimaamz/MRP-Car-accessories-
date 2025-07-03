@@ -11,6 +11,30 @@ class CrmTeam(models.Model):
         string="Objectif Hebdomadaire ($)",
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
+
+    dashboard_graph_data = fields.Json(compute='_compute_dashboard_graph_data')
+
+    def _compute_dashboard_graph_data(self):
+        for team in self:
+            # Sample logic: get opportunities created this week
+            start_date = fields.Date.today() - timedelta(days=fields.Date.today().weekday())
+            data = self.env['crm.lead'].read_group(
+                [('team_id', '=', team.id), ('create_date', '>=', start_date)],
+                ['create_date:day', 'expected_revenue'],
+                ['create_date:day'],
+            )
+
+            labels = [d['create_date:day'].strftime('%A') for d in data]
+            values = [d['expected_revenue'] for d in data]
+
+            team.dashboard_graph_data = {
+                'labels': labels,
+                'datasets': [{
+                    'label': 'Weekly Revenue',
+                    'data': values,
+                    'backgroundColor': '#36a2eb',
+                }]
+            }
     
     
     
