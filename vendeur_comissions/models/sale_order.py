@@ -12,47 +12,38 @@ class CrmTeam(models.Model):
         string="Objectif Hebdomadaire ($)",
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
-    weekly_chart_data = fields.Text(compute='_compute_weekly_chart_data')
+   
+    last_7_days_chart = fields.Text(compute='_compute_last_7_days_chart')
 
-    def _compute_weekly_chart_data(self):
+    def _compute_last_7_days_chart(self):
         for team in self:
             today = fields.Date.today()
-            start_date = today - timedelta(weeks=4)
+            start_date = today - timedelta(days=6)
 
             leads = self.env['crm.lead'].search([
                 ('team_id', '=', team.id),
                 ('create_date', '>=', start_date)
             ])
 
-            weekly = {}
+            daily = { (start_date + timedelta(days=i)).strftime('%d/%m') : 0.0 for i in range(7) }
+
             for lead in leads:
-                week_start = lead.create_date.date() - timedelta(days=lead.create_date.weekday())
-                key = week_start.strftime("Semaine du %d/%m")
-                weekly.setdefault(key, 0.0)
-                weekly[key] += lead.expected_revenue or 0.0
+                day = lead.create_date.date().strftime('%d/%m')
+                if day in daily:
+                    daily[day] += lead.expected_revenue or 0.0
 
-            labels = sorted(weekly.keys())
-            values = [round(weekly[k], 2) for k in labels]
+            labels = list(daily.keys())
+            values = [round(daily[k], 2) for k in labels]
 
-          
-            target_values = [team.weekly_target] * len(labels)
-
-            graph = {
+            chart = {
                 "labels": labels,
-                "datasets": [
-                    {
-                        "title": "Revenu hebdo",
-                        "values": values
-                    },
-                    {
-                        "title": "Objectif",
-                        "values": target_values
-                    }
-                ]
+                "datasets": [{
+                    "title": "Revenu journalier (7j)",
+                    "values": values
+                }]
             }
 
-            team.weekly_chart_data = json.dumps(graph)
-
+            team.last_7_days_chart = json.dumps(chart)
    
     
                 
