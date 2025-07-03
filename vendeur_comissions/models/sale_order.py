@@ -34,15 +34,25 @@ class CrmTeam(models.Model):
             labels = sorted(weekly.keys())
             values = [round(weekly[k], 2) for k in labels]
 
+          
+            target_values = [team.weekly_target] * len(labels)
+
             graph = {
                 "labels": labels,
-                "datasets": [{
-                    "title": "Revenu hebdo",
-                    "values": values
-                }]
+                "datasets": [
+                    {
+                        "title": "Revenu hebdo",
+                        "values": values
+                    },
+                    {
+                        "title": "Objectif",
+                        "values": target_values
+                    }
+                ]
             }
 
             team.weekly_chart_data = json.dumps(graph)
+
    
     
                 
