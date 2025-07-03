@@ -11,7 +11,6 @@ class CrmTeam(models.Model):
         string="Objectif Hebdomadaire ($)",
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
-
     dashboard_graph_data = fields.Json(compute='_compute_dashboard_graph_data')
 
     def _compute_dashboard_graph_data(self):
@@ -35,8 +34,7 @@ class CrmTeam(models.Model):
                     'backgroundColor': '#36a2eb',
                 }]
             }
-    
-    
+
     
     
     
