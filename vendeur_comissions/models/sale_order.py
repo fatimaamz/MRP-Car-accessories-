@@ -13,6 +13,7 @@ class CrmTeam(models.Model):
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
     dashboard_graph_data = fields.Json(compute='_compute_dashboard_graph_data')
+
     def _compute_dashboard_graph_data(self):
         for team in self:
             today = fields.Date.today()
@@ -49,8 +50,9 @@ class CrmTeam(models.Model):
                 ]
             }
 
-            team.dashboard_graph_data = graph_data  # PAS besoin de json.dumps ici
-    
+            # ✅ Conversion nécessaire ici
+            team.dashboard_graph_data = json.dumps(graph_data)
+   
     
                 
         
