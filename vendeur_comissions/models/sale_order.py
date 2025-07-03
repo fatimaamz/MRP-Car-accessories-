@@ -44,8 +44,8 @@ class CrmTeam(models.Model):
                 'labels': labels,
                 'datasets': [{
                     'label': "Chiffre d'affaires hebdo",
-                    'data': values,
-                    'backgroundColor': '#36a2eb',
+                    'values': values,
+                    'type': 'bar',
                 }]
             }
 
