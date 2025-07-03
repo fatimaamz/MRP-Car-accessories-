@@ -11,43 +11,50 @@ class CrmTeam(models.Model):
         string="Objectif Hebdomadaire ($)",
         help="Définir l'objectif hebdomadaire pour cette équipe."
     )
-    
-    dashboard_graph_data = fields.Json(compute='_compute_dashboard_graph_data')
+    dashboard_graph_data = fields.Text(compute='_compute_dashboard_graph_data', readonly=True)
 
     def _compute_dashboard_graph_data(self):
         for team in self:
             today = fields.Date.today()
-            start_date = today - timedelta(weeks=5)  # dernières 5 semaines
+            week_ago = today - timedelta(days=6)
 
-            self.env.cr.execute("""
-                SELECT
-                    date_trunc('week', create_date)::date AS week_start,
-                    SUM(expected_revenue) AS total_revenue
-                FROM crm_lead
-                WHERE team_id = %s AND create_date >= %s
-                GROUP BY week_start
-                ORDER BY week_start
-            """, (team.id, start_date))
+            # Générer les étiquettes des 7 derniers jours (format: "02 Jul")
+            day_labels = [(week_ago + timedelta(days=i)).strftime('%d %b') for i in range(7)]
+            values_dict = {label: 0 for label in day_labels}
 
-            results = self.env.cr.fetchall()
+            # Récupérer tous les leads de la semaine
+            leads = self.env['crm.lead'].search([
+                ('team_id', '=', team.id),
+                ('create_date', '>=', fields.Datetime.to_string(week_ago)),
+                ('create_date', '<=', fields.Datetime.to_string(today)),
+                ('type', '=', 'opportunity'),
+            ])
 
-            labels = []
-            values = []
+            for lead in leads:
+                lead_date_label = lead.create_date.strftime('%d %b')
+                if lead_date_label in values_dict:
+                    values_dict[lead_date_label] += 1
 
-            for row in results:
-                week_start = row[0]
-                revenue = row[1] or 0.0
-                labels.append(week_start.strftime("Semaine du %d/%m"))
-                values.append(revenue)
+            # Construire les valeurs du graphique
+            values = [{'label': k, 'value': v} for k, v in values_dict.items()]
 
-            team.dashboard_graph_data = ({
-                'labels': labels,
-                'datasets': [{
-                    'label': "Chiffre d'affaires hebdo",
-                    'data': values,
-                    'backgroundColor': '#36a2eb',
-                }]
-            })
+            if not values:
+                values = [{'label': 'No data', 'value': 0}]
+
+            graph_data = {
+                'values': values,
+                'title': 'Opportunités (7 derniers jours)',
+                'key': 'Opportunités',
+                'graph_type': 'bar'
+            }
+
+            # DEBUG : tu peux voir ce que contient le JSON dans les logs
+            _logger.info("Graph JSON pour team %s : %s", team.name, json.dumps(graph_data))
+
+            # Affecter la chaîne JSON au champ
+            team.dashboard_graph_data = json.dumps(graph_data)
+    
+    
     
                 
         
