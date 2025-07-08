@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <record id="crm_team_kanban_view" model="ir.ui.view">
     <field name="name">crm.team.kanban.sales.dashboard</field>
@@ -10,6 +11,7 @@
               <div class="o_kanban_details">
                 <div class="o_kanban_header">
                   <strong><field name="name"/></strong><br/>
+                  <small><field name="email_user"/></small>
                 </div>
 
                 <div class="o_kanban_values" style="margin-top: 8px;">
@@ -29,11 +31,10 @@
                   </div>
                   <div style="font-size: 10px; display: flex; justify-content: space-between; margin-top: 4px;">
                     <t t-foreach="[6,5,4,3,2,1,0]" t-as="i">
-                      <span><t t-esc="(new Date(Date.now() - i * 86400000)).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })"/></span>
+                      <span><t t-esc="(new Date(Date.now() - i * 86400000)).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })"/></span>
                     </t>
                   </div>
                 </div>
-
               </div>
             </div>
           </t>
@@ -53,3 +54,9 @@
             parent="crm.crm_menu_sales"
             action="crm_team_kanban_action"/>
 </odoo>
+
+
+
+
+
+
