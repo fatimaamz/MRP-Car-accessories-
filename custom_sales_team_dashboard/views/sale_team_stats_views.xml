@@ -1,0 +1,52 @@
+<odoo>
+  <record id="action_sale_team_stats" model="ir.actions.act_window">
+    <field name="name">Statistiques Équipes Commerciales</field>
+    <field name="res_model">sale.order</field>
+    <field name="view_mode">tree,graph,pivot</field>
+    <field name="context">{'search_default_last_7_days': 1}</field>
+    <field name="domain">[]</field>
+  </record>
+
+  <menuitem id="menu_sale_team_stats"
+            name="Stats Équipes Commerciales"
+            parent="sale.sale_order_menu"
+            action="action_sale_team_stats"/>
+
+  <record id="view_sale_order_team_tree" model="ir.ui.view">
+    <field name="name">sale.order.team.tree</field>
+    <field name="model">sale.order</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="date_order"/>
+        <field name="name"/>
+        <field name="state"/>
+        <field name="team_id"/>
+        <field name="amount_total"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_sale_team_graph" model="ir.ui.view">
+    <field name="name">sale.order.team.graph</field>
+    <field name="model">sale.order</field>
+    <field name="arch" type="xml">
+      <graph string="Bons de commande - 7 derniers jours" type="bar">
+        <field name="date_order" type="row"/>
+        <field name="amount_total" type="measure"/>
+        <field name="team_id" type="col"/>
+      </graph>
+    </field>
+  </record>
+
+  <record id="view_sale_team_pivot" model="ir.ui.view">
+    <field name="name">sale.order.team.pivot</field>
+    <field name="model">sale.order</field>
+    <field name="arch" type="xml">
+      <pivot string="Totaux par équipe">
+        <field name="team_id" type="row"/>
+        <field name="amount_total" type="measure"/>
+        <field name="state" type="col"/>
+      </pivot>
+    </field>
+  </record>
+</odoo>
