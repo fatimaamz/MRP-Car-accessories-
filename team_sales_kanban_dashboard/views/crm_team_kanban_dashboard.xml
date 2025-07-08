@@ -50,6 +50,6 @@
 
   <menuitem id="crm_team_dashboard_menu"
             name="Dashboard Équipes"
-            parent="sales_team.menu_sales_team_root"
+            parent="crm.crm_menu_sales"
             action="crm_team_kanban_action"/>
 </odoo>
