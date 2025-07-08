@@ -10,7 +10,7 @@
               <div class="o_kanban_details">
                 <div class="o_kanban_header">
                   <strong><field name="name"/></strong><br/>
-                  <small><field name="email_user"/></small>
+                 
                 </div>
 
                 <div class="o_kanban_values" style="margin-top: 8px;">
