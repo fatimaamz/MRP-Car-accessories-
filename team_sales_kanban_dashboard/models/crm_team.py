@@ -8,17 +8,22 @@ class CrmTeam(models.Model):
     order_count = fields.Integer(string="Commandes confirmées (7j)", compute="_compute_sales_stats", store=False)
     total_sales = fields.Float(string="Total ventes (7j)", compute="_compute_sales_stats", store=False)
     sales_by_day = fields.Char(string="Ventes quotidiennes", compute="_compute_sales_stats", store=False)
+    email_user = fields.Char(string="Email", compute="_compute_email_user", store=False)
+
+    def _compute_email_user(self):
+        for team in self:
+            team.email_user = team.user_id.email if team.user_id else ""
 
     @api.depends()
     def _compute_sales_stats(self):
         today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-        start_date = today - timedelta(days=6)  # 7 jours en arrière
+        start_date = today - timedelta(days=6)
         end_date = today + timedelta(days=1)
 
         for team in self:
             SaleOrder = self.env['sale.order']
 
-            # 1. Devis (état = draft ou sent)
+            # Devis (brouillon ou envoyé)
             quotes = SaleOrder.search([
                 ('team_id', '=', team.id),
                 ('date_order', '>=', start_date),
@@ -26,7 +31,7 @@ class CrmTeam(models.Model):
                 ('state', 'in', ['draft', 'sent'])
             ])
 
-            # 2. Commandes confirmées (sale)
+            # Commandes confirmées
             orders = SaleOrder.search([
                 ('team_id', '=', team.id),
                 ('date_order', '>=', start_date),
@@ -38,12 +43,10 @@ class CrmTeam(models.Model):
             team.order_count = len(orders)
             team.total_sales = sum(orders.mapped('amount_total'))
 
-            # 3. Barres par jour : ventes des commandes confirmées uniquement
             bars = []
             for i in range(7):
                 day_start = today - timedelta(days=i)
                 day_end = day_start + timedelta(days=1)
-
                 day_orders = SaleOrder.search([
                     ('team_id', '=', team.id),
                     ('date_order', '>=', day_start),
