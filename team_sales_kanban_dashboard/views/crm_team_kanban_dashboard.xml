@@ -10,11 +10,11 @@
               <div class="o_kanban_details">
                 <div class="o_kanban_header">
                   <strong><field name="name"/></strong><br/>
-                 
                 </div>
 
                 <div class="o_kanban_values" style="margin-top: 8px;">
-                  <span><field name="order_count"/> Commandes</span><br/>
+                  <span><field name="quote_count"/> Devis (7j)</span><br/>
+                  <span><field name="order_count"/> Commandes (7j)</span><br/>
                   <span>Total : <field name="total_sales" widget="monetary" options="{'currency_field': 'currency_id'}"/></span>
                 </div>
 
@@ -22,7 +22,7 @@
                   <t t-set="bars" t-value="record.sales_by_day.raw_value.split(',')"/>
                   <div class="o_bar_chart" style="display:flex; gap:2px; align-items:flex-end; height:60px;">
                     <t t-foreach="bars" t-as="val">
-                      <div style="width: 10px; background: #dcdcdc;">
+                      <div style="width: 10px; background: #e0e0e0;">
                         <div t-attf-style="height:#{Math.min(parseInt(val)/10, 60)}px; background:#5a5afa;"></div>
                       </div>
                     </t>
@@ -50,6 +50,6 @@
 
   <menuitem id="crm_team_dashboard_menu"
             name="Dashboard Équipes"
-            parent="crm.crm_menu_sales"
+            parent="sales_team.menu_sales_team_root"
             action="crm_team_kanban_action"/>
 </odoo>
