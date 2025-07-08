@@ -10,30 +10,30 @@
               <div class="o_kanban_details">
                 <div class="o_kanban_header">
                   <strong><field name="name"/></strong><br/>
-                 
+                  <small><field name="email_user"/></small>
                 </div>
-                <div class="o_kanban_values">
-                  <span><field name="quote_count"/> Devis</span><br/>
-                  <span><field name="order_to_invoice_count"/> Commandes à facturer</span><br/>
-                  <span>Total: <field name="total_sales" widget="monetary" options="{'currency_field': 'currency_id'}"/></span>
+
+                <div class="o_kanban_values" style="margin-top: 8px;">
+                  <span><field name="order_count"/> Commandes</span><br/>
+                  <span>Total : <field name="total_sales" widget="monetary" options="{'currency_field': 'currency_id'}"/></span>
                 </div>
-                <div t-if="record.sales_by_day.raw_value">
+
+                <div t-if="record.sales_by_day.raw_value" style="margin-top: 12px;">
                   <t t-set="bars" t-value="record.sales_by_day.raw_value.split(',')"/>
-                  <div class="o_bar_chart" style="margin-top:10px;">
+                  <div class="o_bar_chart" style="display:flex; gap:2px; align-items:flex-end; height:60px;">
                     <t t-foreach="bars" t-as="val">
-                      <div style="display:inline-block;width:10px;height:50px;background:#ddd;margin:1px;vertical-align:bottom;">
-                        <div t-attf-style="height:#{int(val)//100}px;background-color:#5a5afa;"></div>
+                      <div style="width: 10px; background: #dcdcdc;">
+                        <div t-attf-style="height:#{Math.min(parseInt(val)/10, 60)}px; background:#5a5afa;"></div>
                       </div>
                     </t>
                   </div>
-                </div>
-                <div style="margin-top:8px;">
-                  <strong>Facturation</strong>
-                  <div class="progress" style="height: 10px;">
-                    <div class="progress-bar" role="progressbar"
-                         style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                  <div style="font-size: 10px; display: flex; justify-content: space-between; margin-top: 4px;">
+                    <t t-foreach="[6,5,4,3,2,1,0]" t-as="i">
+                      <span><t t-esc="(new Date(Date.now() - i * 86400000)).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })"/></span>
+                    </t>
                   </div>
                 </div>
+
               </div>
             </div>
           </t>
@@ -50,6 +50,6 @@
 
   <menuitem id="crm_team_dashboard_menu"
             name="Dashboard Équipes"
-            parent="crm.crm_menu_sales"
+            parent="sales_team.menu_sales_team_root"
             action="crm_team_kanban_action"/>
 </odoo>
