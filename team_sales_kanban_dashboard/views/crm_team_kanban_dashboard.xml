@@ -10,7 +10,7 @@
               <div class="o_kanban_details">
                 <div class="o_kanban_header">
                   <strong><field name="name"/></strong><br/>
-                  <small><field name="user_id.email"/></small>
+                 
                 </div>
                 <div class="o_kanban_values">
                   <span><field name="quote_count"/> Devis</span><br/>
