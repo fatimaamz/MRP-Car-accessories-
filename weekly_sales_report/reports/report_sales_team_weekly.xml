@@ -1,5 +1,5 @@
 <odoo>
- 
+ <data>
     <report
     id="action_report_sales_team_weekly"
     string="Weekly Sales Report"
@@ -48,4 +48,5 @@
             </t>
         </t>
     </template>
+ </data>
 </odoo>
