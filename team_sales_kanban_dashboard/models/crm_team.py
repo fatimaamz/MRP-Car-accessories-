@@ -5,6 +5,23 @@ from datetime import datetime, timedelta
 
 class CrmTeam(models.Model):
     _inherit = "crm.team"
+    
+    test_dashboard_data = fields.Binary(
+    compute="_compute_test_dashboard_data",
+    store=False
+    )
+
+    @api.depends()
+    def _compute_test_dashboard_data(self):
+        for team in self:
+            team.test_dashboard_data = {
+                'title': 'Test',
+                'x_axis': 'X',
+                'y_axis': 'Y',
+                'graph_type': 'bar',
+                'groups': [{'x': '1', 'y': 100}, {'x': '2', 'y': 200}],
+            }
+
 
     dashboard_graph_data_7d = fields.Binary(
         string="Dashboard Graph (7 Days)",
