@@ -34,7 +34,7 @@
   <field name="model">crm.team</field>
   <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
   <field name="arch" type="xml">
-   <xpath expr="//field[@name='name']" position="after">
+   <xpath expr="//group[1]//group[1]" position="inside">
       <button name="%(action_sales_team_report)d"
               string="Rapport PDF"
               type="action"
