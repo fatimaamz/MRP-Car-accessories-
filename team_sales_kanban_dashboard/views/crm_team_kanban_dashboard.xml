@@ -1,58 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <record id="crm_team_kanban_view" model="ir.ui.view">
-    <field name="name">crm.team.kanban.sales.dashboard</field>
-    <field name="model">crm.team</field>
-    <field name="arch" type="xml">
-      <kanban class="o_kanban_dashboard">
-        <templates>
-          <t t-name="kanban-box">
-            <div class="o_kanban_card">
-              <div class="o_kanban_details">
-                <div class="o_kanban_header">
-                  <strong><field name="name"/></strong><br/>
-                  <small><field name="email_user"/></small>
-                </div>
+ <!-- Action personnalisée -->
+<record id="action_crm_team_weekly_stats" model="ir.actions.act_window">
+    <field name="name">Statistiques commerciales (7 jours)</field>
+    <field name="res_model">sale.order</field>
+    <field name="view_mode">graph,pivot</field>
+    <field name="context">{'search_default_last_7_days': 1}</field>
+    <field name="domain">[('date_order', '>=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d'))]</field>
+</record>
 
-                <div class="o_kanban_values" style="margin-top: 8px;">
-                  <span><field name="quote_count"/> Devis (7j)</span><br/>
-                  <span><field name="order_count"/> Commandes (7j)</span><br/>
-                  <span>Total : <field name="total_sales" widget="monetary" options="{'currency_field': 'currency_id'}"/></span>
-                </div>
+<!-- Menu dans CRM -->
+<menuitem id="menu_crm_team_weekly_stats"
+          name="Stats commerciales (7j)"
+          parent="crm.crm_menu_root"
+          action="action_crm_team_weekly_stats"
+          sequence="90" />
 
-                <div t-if="record.sales_by_day.raw_value" style="margin-top: 12px;">
-                  <t t-set="bars" t-value="record.sales_by_day.raw_value.split(',')"/>
-                  <div class="o_bar_chart" style="display:flex; gap:2px; align-items:flex-end; height:60px;">
-                    <t t-foreach="bars" t-as="val">
-                      <div style="width: 10px; background: #e0e0e0;">
-                        <div t-attf-style="height:#{Math.min(parseInt(val)/10, 60)}px; background:#5a5afa;"></div>
-                      </div>
-                    </t>
-                  </div>
-                  <div style="font-size: 10px; display: flex; justify-content: space-between; margin-top: 4px;">
-                    <t t-foreach="[6,5,4,3,2,1,0]" t-as="i">
-                      <span><t t-esc="(new Date(Date.now() - i * 86400000)).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })"/></span>
-                    </t>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </t>
-        </templates>
-      </kanban>
-    </field>
-  </record>
-
-  <record id="crm_team_kanban_action" model="ir.actions.act_window">
-    <field name="name">Stats Équipes Commerciales</field>
-    <field name="res_model">crm.team</field>
-    <field name="view_mode">kanban</field>
-  </record>
-
-  <menuitem id="crm_team_dashboard_menu"
-            name="Dashboard Équipes"
-            parent="crm.crm_menu_sales"
-            action="crm_team_kanban_action"/>
 </odoo>
 
 
