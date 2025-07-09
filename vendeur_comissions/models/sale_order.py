@@ -5,45 +5,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
     
-class CrmTeam(models.Model):
-    _inherit = 'crm.team'
 
-    weekly_target = fields.Float(
-        string="Objectif Hebdomadaire ($)",
-        help="Définir l'objectif hebdomadaire pour cette équipe."
-    )
-   
-    last_7_days_chart = fields.Text(compute='_compute_last_7_days_chart')
-
-    def _compute_last_7_days_chart(self):
-        for team in self:
-            today = fields.Date.today()
-            start_date = today - timedelta(days=6)
-
-            leads = self.env['crm.lead'].search([
-                ('team_id', '=', team.id),
-                ('create_date', '>=', start_date)
-            ])
-
-            daily = { (start_date + timedelta(days=i)).strftime('%d/%m') : 0.0 for i in range(7) }
-
-            for lead in leads:
-                day = lead.create_date.date().strftime('%d/%m')
-                if day in daily:
-                    daily[day] += lead.expected_revenue or 0.0
-
-            labels = list(daily.keys())
-            values = [round(daily[k], 2) for k in labels]
-
-            chart = {
-                "labels": labels,
-                "datasets": [{
-                    "title": "Revenu journalier (7j)",
-                    "values": values
-                }]
-            }
-
-            team.last_7_days_chart = json.dumps(chart)
    
     
                 
