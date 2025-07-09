@@ -1,4 +1,22 @@
 <odoo>
+ 
+    <record id="view_crm_team_form_inherit_report" model="ir.ui.view">
+        <field name="name">crm.team.form.inherit.report</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.view_crm_team_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(action_report_sales_team_weekly)d"
+                        type="action"
+                        string="Imprimer rapport hebdo"
+                        class="btn btn-primary"
+                        context="{'lang': lang}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    
     <template id="report_sales_team_weekly">
         <t t-call="web.external_layout">
             <t t-foreach="data" t-as="line">
