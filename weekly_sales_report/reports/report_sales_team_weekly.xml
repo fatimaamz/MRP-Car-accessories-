@@ -28,21 +28,17 @@
   </t>
 </template>
 
-  <!-- reports/report_action.xml -->
-<record id="crm_team_form_view_inherit" model="ir.ui.view">
-  <field name="name">crm.team.form.inherit.report</field>
-  <field name="model">crm.team</field>
-  <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
-  <field name="arch" type="xml">
-   <xpath expr="//group[1]//group[1]" position="inside">
-      <button name="%(action_sales_team_report)d"
-              string="Rapport PDF"
-              type="action"
-              class="btn btn-primary"
-              context="{'active_ids': [active_id]}"/>
-    </xpath>
-  </field>
-</record>
+
+
+     <record id="action_rapport_hybdomadaire" model="ir.actions.report">
+        <field name="name">Rapport hybdomadaire</field>
+        <field name="model">crm.team</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weekly_sales_report.sales_team_report_template</field>
+        <field name="report_file">weekly_sales_report.sales_team_report_template</field>
+        <field name="print_report_name">"Rapport hybdomadaire"</field>
+        <field name="binding_model_id" ref="sales_team.model_crm_team"/>
+    </record>
 
 
 </odoo>
