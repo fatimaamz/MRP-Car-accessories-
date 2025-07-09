@@ -8,7 +8,13 @@ _logger = logging.getLogger(__name__)
 
    
     
-                
+class CrmTeam(models.Model):
+    _inherit = 'crm.team'
+
+    weekly_target = fields.Float(
+        string="Objectif Hebdomadaire ($)",
+        help="Définir l'objectif hebdomadaire pour cette équipe."
+    )           
         
     
 
