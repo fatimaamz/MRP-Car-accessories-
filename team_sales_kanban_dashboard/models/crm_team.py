@@ -1,59 +1,36 @@
 from odoo import models, fields, api
 from datetime import datetime, timedelta
 
+from odoo import models, fields, api
+from datetime import datetime, timedelta
+
 class CrmTeam(models.Model):
     _inherit = "crm.team"
 
-    quote_count = fields.Integer(string="Nombre de devis (7j)", compute="_compute_sales_stats", store=False)
-    order_count = fields.Integer(string="Commandes confirmées (7j)", compute="_compute_sales_stats", store=False)
-    total_sales = fields.Float(string="Total ventes (7j)", compute="_compute_sales_stats", store=False)
-    sales_by_day = fields.Char(string="Ventes quotidiennes", compute="_compute_sales_stats", store=False)
-    email_user = fields.Char(string="Email", compute="_compute_email_user", store=False)
-
-    def _compute_email_user(self):
-        for team in self:
-            team.email_user = team.user_id.email if team.user_id else ""
+    dashboard_graph_data_7d = fields.Binary(
+        string="Dashboard Graph (7d)",
+        compute="_compute_dashboard_graph_data_7d"
+    )
 
     @api.depends()
-    def _compute_sales_stats(self):
-        today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-        start_date = today - timedelta(days=6)
-        end_date = today + timedelta(days=1)
-
+    def _compute_dashboard_graph_data_7d(self):
         for team in self:
-            SaleOrder = self.env['sale.order']
-
-            # Devis (brouillon ou envoyé)
-            quotes = SaleOrder.search([
-                ('team_id', '=', team.id),
-                ('date_order', '>=', start_date),
-                ('date_order', '<', end_date),
-                ('state', 'in', ['draft', 'sent'])
-            ])
-
-            # Commandes confirmées
-            orders = SaleOrder.search([
-                ('team_id', '=', team.id),
-                ('date_order', '>=', start_date),
-                ('date_order', '<', end_date),
-                ('state', '=', 'sale')
-            ])
-
-            team.quote_count = len(quotes)
-            team.order_count = len(orders)
-            team.total_sales = sum(orders.mapped('amount_total'))
-
-            bars = []
-            for i in range(7):
-                day_start = today - timedelta(days=i)
-                day_end = day_start + timedelta(days=1)
-                day_orders = SaleOrder.search([
+            last_7_days = fields.Datetime.to_string(datetime.now() - timedelta(days=7))
+            orders = self.env['sale.order'].read_group(
+                domain=[
                     ('team_id', '=', team.id),
-                    ('date_order', '>=', day_start),
-                    ('date_order', '<', day_end),
-                    ('state', '=', 'sale')
-                ])
-                daily_total = sum(day_orders.mapped('amount_total'))
-                bars.append(str(int(daily_total)))
-
-            team.sales_by_day = ','.join(reversed(bars))
+                    ('date_order', '>=', last_7_days),
+                    ('state', 'in', ['sale', 'done'])  # pour les commandes confirmées
+                ],
+                fields=['amount_total', 'date_order:day'],
+                groupby=['date_order:day'],
+                lazy=False,
+            )
+            graph_data = {
+                'title': 'Commandes - 7 derniers jours',
+                'x_axis': 'date_order',
+                'y_axis': 'amount_total',
+                'groups': orders,
+                'graph_type': 'bar'
+            }
+            team.dashboard_graph_data_7d = graph_data
