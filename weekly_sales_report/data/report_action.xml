@@ -1,5 +1,5 @@
 <odoo>
-    <report
+    <!--<report
         id="action_report_sales_team_weekly"
         string="Weekly Sales Report"
         model="crm.team"
@@ -7,5 +7,5 @@
         name="weekly_sales_report.report_sales_team_weekly"
         file="weekly_sales_report.report_sales_team_weekly"
         print_report_name="'Weekly Sales Report - %s' % object.name"
-    />
+    />-->
 </odoo>
