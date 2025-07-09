@@ -1,47 +1,37 @@
 from odoo import models, fields, api
 from datetime import datetime, timedelta
 
-from odoo import models, fields, api
-from datetime import datetime, timedelta
 
-from odoo import models, fields, api
-from datetime import datetime, timedelta
 
 class CrmTeam(models.Model):
     _inherit = "crm.team"
 
     dashboard_graph_data_7d = fields.Binary(
-        string="Dashboard Graph (7d)",
-        compute="_compute_dashboard_graph_data_7d"
+        string="Dashboard Graph (7 Days)",
+        compute="_compute_dashboard_graph_data_7d",
+        store=False
     )
 
     @api.depends()
     def _compute_dashboard_graph_data_7d(self):
         for team in self:
             now = fields.Datetime.now()
-            date_7_days_ago = now - timedelta(days=7)
-
-            # Lecture des commandes sur les 7 derniers jours
+            last_7_days = now - timedelta(days=7)
             orders = self.env['sale.order'].search([
                 ('team_id', '=', team.id),
-                ('date_order', '>=', date_7_days_ago),
-                ('state', 'in', ['sale', 'done']),
+                ('date_order', '>=', last_7_days),
+                ('state', 'in', ['sale', 'done'])
             ])
-
-            # Groupement manuel par jour
-            data_per_day = {}
+            grouped_data = {}
             for order in orders:
-                day = order.date_order.date().strftime('%Y-%m-%d')
-                data_per_day.setdefault(day, 0)
-                data_per_day[day] += order.amount_total
-
-            # Convertir les données pour le widget graphique
+                key = order.date_order.date().strftime('%Y-%m-%d')
+                grouped_data.setdefault(key, 0)
+                grouped_data[key] += order.amount_total
             graph_data = {
-                'title': 'Commandes - 7 derniers jours',
+                'title': 'Commandes (7 derniers jours)',
                 'x_axis': 'Jour',
-                'y_axis': 'Montant',
-                'groups': [{'date_order': day, 'amount_total': total} for day, total in sorted(data_per_day.items())],
+                'y_axis': 'Montant total',
+                'groups': [{'date_order': day, 'amount_total': total} for day, total in sorted(grouped_data.items())],
                 'graph_type': 'bar'
             }
-
-            team.dashboard_graph_data_7d = graph_data
+            team.dashboard_graph_data_7d = graph_data or {}
