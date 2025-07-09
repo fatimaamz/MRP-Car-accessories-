@@ -1,0 +1,36 @@
+<odoo>
+    <template id="report_sales_team_weekly">
+        <t t-call="web.external_layout">
+            <t t-foreach="data" t-as="line">
+                <div class="page">
+                    <h2>Weekly Sales Report (<t t-esc="line['team_name']"/>)</h2>
+                    <div style="display:flex; justify-content:space-between; margin:20px 0;">
+                        <div>
+                            <strong>Target</strong><br/>
+                            $<t t-esc="line['target']"/>
+                        </div>
+                        <div>
+                            <strong>Total Sales</strong><br/>
+                            $<t t-esc="line['total']"/>
+                        </div>
+                        <div style="background:#ffe0b2; padding:10px;">
+                            <strong t-if="line['percent'] &gt;= 100" style="color:green;">Target reached! :)</strong>
+                            <strong t-if="line['percent'] &lt; 100" style="color:red;">Below target</strong><br/>
+                            <span><t t-esc="line['percent']"/>%</span><br/>
+                            <span>$<t t-esc="line['bonus']"/> Bonus</span>
+                        </div>
+                    </div>
+                    <h4>Sales</h4>
+                    <p>Weekly Total: $<t t-esc="line['total']"/></p>
+                    <p>Drop/Ship Counted: $<t t-esc="line['dropship']"/></p>
+                    <h4>Number of clients</h4>
+                    <p>Lux: <t t-esc="line['lux_clients']"/></p>
+                    <p>OEM: <t t-esc="line['oem_clients']"/></p>
+                    <h4>Same week</h4>
+                    <p>This year: $<t t-esc="line['this_year_total']"/></p>
+                    <p>Last year: $<t t-esc="line['last_year_total']"/></p>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
