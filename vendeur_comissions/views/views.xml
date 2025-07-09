@@ -1,7 +1,7 @@
 <odoo>
 
 
-    <record id="crm_team_kanban_last_7_days" model="ir.ui.view">
+    <!--<record id="crm_team_kanban_last_7_days" model="ir.ui.view">
         <field name="name">crm.team.kanban.last_7_days</field>
         <field name="model">crm.team</field>
         <field name="arch" type="xml">
@@ -20,8 +20,8 @@
                 </templates>
             </kanban>
         </field>
-    </record>
-    <record id="crm_team_action_last_7_days" model="ir.actions.act_window">
+    </record>-->
+    <!--<record id="crm_team_action_last_7_days" model="ir.actions.act_window">
     <field name="name">Stats sur 7 jours</field>
     <field name="res_model">crm.team</field>
     <field name="view_mode">kanban</field>
@@ -30,7 +30,7 @@
     <menuitem id="menu_crm_team_last_7_days"
           name="Stats Hebdo"
           parent="crm.crm_menu_sales"
-          action="crm_team_action_last_7_days"/>
+          action="crm_team_action_last_7_days"/>-->
 
     
     <record id="view_sale_order" model="ir.ui.view">
