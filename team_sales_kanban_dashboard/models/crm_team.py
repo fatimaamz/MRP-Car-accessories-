@@ -5,14 +5,14 @@ from datetime import datetime, timedelta
 class CrmTeam(models.Model):
     _inherit = "crm.team"
 
-    dashboard_graph_data_7d = fields.Json(
-        string="Graph des 7 derniers jours",
-        compute="_compute_dashboard_graph_data_7d",
-        store=False
-    )
+   from odoo import models, fields, api
+from datetime import datetime, timedelta
+
+class CrmTeam(models.Model):
+    _inherit = "crm.team"
 
     @api.depends()
-    def _compute_dashboard_graph_data_7d(self):
+    def _compute_dashboard_graph_data(self):
         for team in self:
             now = fields.Datetime.now()
             last_7_days = now - timedelta(days=7)
@@ -23,11 +23,11 @@ class CrmTeam(models.Model):
             ])
             grouped_data = {}
             for order in orders:
-                day = order.date_order.date().strftime('%Y-%m-%d')
-                grouped_data.setdefault(day, 0)
-                grouped_data[day] += order.amount_total
+                key = order.date_order.date().strftime('%Y-%m-%d')
+                grouped_data.setdefault(key, 0)
+                grouped_data[key] += order.amount_total
 
-            graph_data = {
+            team.dashboard_graph_data = {
                 'title': 'Commandes - 7 derniers jours',
                 'x_axis': 'date_order',
                 'y_axis': 'amount_total',
@@ -38,4 +38,4 @@ class CrmTeam(models.Model):
                 ]
             }
 
-            team.dashboard_graph_data_7d = graph_data or {}
+            
