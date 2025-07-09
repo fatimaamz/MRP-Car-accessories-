@@ -29,14 +29,20 @@
 </template>
 
   <!-- reports/report_action.xml -->
-<report 
-    id="action_sales_team_report"
-    string="Rapport Équipe Commerciale"
-    model="crm.team"
-    report_type="qweb-pdf"
-    name="weekly_sales_report.sales_team_report_template"
-    file="weekly_sales_report.sales_team_report_template"
-    print_report_name="'Rapport_Equipe_Commerciale'"
-/>
+<record id="crm_team_form_view_inherit" model="ir.ui.view">
+  <field name="name">crm.team.form.inherit.report</field>
+  <field name="model">crm.team</field>
+  <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+  <field name="arch" type="xml">
+   <xpath expr="//field[@name='name']" position="after">
+      <button name="%(action_sales_team_report)d"
+              string="Rapport PDF"
+              type="action"
+              class="btn btn-primary"
+              context="{'active_ids': [active_id]}"/>
+    </xpath>
+  </field>
+</record>
+
 
 </odoo>
