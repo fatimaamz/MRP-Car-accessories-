@@ -2,11 +2,7 @@ from odoo import models, fields, api
 from datetime import datetime, timedelta
 
 
-class CrmTeam(models.Model):
-    _inherit = "crm.team"
 
-   from odoo import models, fields, api
-from datetime import datetime, timedelta
 
 class CrmTeam(models.Model):
     _inherit = "crm.team"
