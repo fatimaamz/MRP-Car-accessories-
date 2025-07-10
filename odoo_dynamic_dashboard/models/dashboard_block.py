@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
-#############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
+#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Bhagyadev KP (odoo@cybrosys.com)
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU AFFERO
-#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
+#    This program is free software: you can modify
+#    it under the terms of the GNU Affero General Public License (AGPL) as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
+#    GNU Affero General Public License for more details.
 #
-#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
-#    (AGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-#############################################################################
+################################################################################
 from ast import literal_eval
 from odoo import api, fields, models
 from odoo.osv import expression
@@ -70,7 +70,7 @@ class DashboardBlock(models.Model):
                               help="y value for the style transform translate")
     data_x = fields.Char(string="Data_X", help="Data x value for resize")
     data_y = fields.Char(string="Data_Y", help="Data y value for resize")
-    group_by_id = fields.Many2one("ir.model.fields", store=True,
+    group_by_id = fields.Many2one("ir.model.fields",
                                   string="Group by(Y-Axis)",
                                   help='Field value for Y-Axis')
     tile_color = fields.Char(string="Tile Color", help='Primary Color of Tile')
@@ -83,14 +83,14 @@ class DashboardBlock(models.Model):
     model_name = fields.Char(related='model_id.model', string="Model Name",
                              help="Added model_id model")
     edit_mode = fields.Boolean(string="Edit Mode",
-                               help="Enable to edit chart and tile",
-                               default=False, invisible=True)
+                               help="Enable to edit chart and tile",)
 
     @api.onchange('model_id')
     def _onchange_model_id(self):
         if self.operation or self.measured_field_id:
             self.operation = False
             self.measured_field_id = False
+            self.group_by_id = False
 
     def get_dashboard_vals(self, action_id, start_date=None, end_date=None):
         """Fetch block values from js and create chart"""

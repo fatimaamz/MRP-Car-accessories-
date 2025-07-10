@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
-#############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
+#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Bhagyadev KP (odoo@cybrosys.com)
 #
-#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
-#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
-#
-#    You can modify it under the terms of the GNU AFFERO
-#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
+#    This program is free software: you can modify
+#    it under the terms of the GNU Affero General Public License (AGPL) as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
+#    GNU Affero General Public License for more details.
 #
-#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
-#    (AGPL v3) along with this program.
-#    If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-#############################################################################
+################################################################################
 from odoo import api, fields, models
 
 
@@ -27,7 +27,7 @@ class DashboardMenu(models.Model):
     _name = "dashboard.menu"
     _description = "Dashboard Menu"
 
-    name = fields.Char(string="Name", ondelete='cascade',
+    name = fields.Char(string="Name",
                        help="Enter a name for the dashboard menu")
     menu_id = fields.Many2one('ir.ui.menu', string="Parent Menu",
                               help="Parent Menu Location of New Dashboard",
@@ -41,19 +41,19 @@ class DashboardMenu(models.Model):
                                        help="Client action of the "
                                             "corresponding dashboard menu")
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         """Function to create new dashboard menu"""
-        action_id = self.env['ir.actions.client'].create({
+        action_id = self.env['ir.actions.client'].create([{
             'name': vals['name'],
             'tag': 'OdooDynamicDashboard',
-        })
+        }])
         vals['client_action_id'] = action_id.id
-        self.env['ir.ui.menu'].create({
+        self.env['ir.ui.menu'].create([{
             'name': vals['name'],
             'parent_id': vals['menu_id'],
             'action': 'ir.actions.client,%d' % (action_id.id,)
-        })
+        }])
         return super(DashboardMenu, self).create(vals)
 
     def write(self, vals):

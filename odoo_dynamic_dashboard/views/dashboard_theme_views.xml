@@ -30,14 +30,14 @@
         </field>
     </record>
 
-    <!--Tree view of the dashboard block theme-->
-    <record id="dashboard_theme_view_tree" model="ir.ui.view">
-        <field name="name">dashboard.theme.view.tree</field>
+    <!--List view of the dashboard block theme-->
+    <record id="dashboard_theme_view_list" model="ir.ui.view">
+        <field name="name">dashboard.theme.view.list</field>
         <field name="model">dashboard.theme</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
-            </tree>
+            </list>
         </field>
     </record>
     <!--    Action specified for the dashboard block theme -->
@@ -45,7 +45,7 @@
         <field name="name">Dashboard Theme</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">dashboard.theme</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <!--Menu Item for the model Dashboard Blocks-->
     <menuitem name="Configuration" id="odoo_dynamic_configuration"

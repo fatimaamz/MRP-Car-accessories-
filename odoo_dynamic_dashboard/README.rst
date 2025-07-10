@@ -21,8 +21,7 @@ Company
 
 Credits
 -------
-* Developers: (V17) Arjun S,
-              (V16) Robin, Afra MP
+* Developers: (V18) Bhagyadev KP,
 * Contact: odoo@cybrosys.com
 
 Contacts
