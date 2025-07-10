@@ -1,4 +1,4 @@
-<odoo>
+<!-- <odoo>
 <template id="sales_team_report_template">
   <t t-call="web.html_container">
     <t t-call="web.basic_layout">
@@ -8,13 +8,11 @@
   <div class="page">
     <h2>Weekly Sales Report — <t t-esc="team['name']"/></h2>
 
-    <!-- Résumé principal -->
     <div>
       <h3>🎯 Objectif vs Réalisé</h3>
       <p>Target : <strong>$<t t-esc="team['weekly_target']"/></strong></p>
       <p>Total Sales : <strong>$<t t-esc="team['weekly_sales']"/></strong></p>
 
-      <!-- Barre de progression -->
       <svg width="400" height="20">
         <rect x="0" y="0" width="400" height="20" fill="#f0f0f0"/>
         <rect x="0" y="0"
@@ -23,24 +21,20 @@
       </svg>
     </div>
 
-    <!-- % objectif atteint -->
     <t t-set="percent" t-value="int((team['weekly_sales'] / team['weekly_target']) * 100 if team['weekly_target'] else 0)"/>
     <p style="color:green;">
       Objectif atteint : <strong><t t-esc="percent"/>%</strong>
     </p>
 
-    <!-- Drop/Ship (Exemple statique) -->
     <h4>Drop/Ship</h4>
     <p>Actual : $940</p>
     <svg width="400" height="15">
       <rect width="940 * 0.04" height="15" fill="#0098c3"/>
     </svg>
 
-    <!-- Nombre de clients -->
     <h4>Clients</h4>
     <p>Lux : <t t-esc="team['customer_count']"/> clients</p>
 
-    <!-- Comparaison année -->
     <h4>Même semaine année précédente</h4>
     <p>This year : $<t t-esc="team['weekly_sales']"/></p>
     <p>Last year : $5023 (exemple)</p>
@@ -65,4 +59,55 @@
     </record>
 
 
+</odoo>
+-->
+
+
+<odoo>
+  <template id="sales_team_report_template">
+    <t t-call="web.html_container">
+      <t t-call="web.external_layout">
+        <div class="page">
+          <h2 style="text-align:center; color:#2c3e50;">Statistiques Équipe Commerciale (7 derniers jours)</h2>
+
+          <t t-foreach="teams" t-as="team">
+            <div style="border-bottom:1px solid #ccc; padding:15px 0;">
+              <h3 style="color:#34495e;">Equipe : <t t-esc="team['name']"/></h3>
+
+              <!-- Objectif vs Total -->
+              <div style="margin: 10px 0;">
+                <p>Objectif Hebdomadaire : <strong><t t-esc="team['weekly_target']"/> DH</strong></p>
+                <p>Total des ventes : <strong><t t-esc="team['weekly_sales']"/> DH</strong></p>
+
+                <svg width="400" height="20">
+                  <rect x="0" y="0" width="400" height="20" fill="#e0e0e0"/>
+                  <rect x="0" y="0"
+                        t-att-width="min(400, int((team['weekly_sales'] / team['weekly_target']) * 400)) if team['weekly_target'] else 0"
+                        height="20" fill="#27ae60"/>
+                </svg>
+
+                <t t-set="percent" t-value="int((team['weekly_sales'] / team['weekly_target']) * 100) if team['weekly_target'] else 0"/>
+                <p style="color:#2980b9;">% Objectif atteint : <strong><t t-esc="percent"/>%</strong></p>
+              </div>
+
+              <!-- Objectif de facturation -->
+              <p>Objectif de facturation : <strong><t t-esc="team['invoicing_target']"/> DH</strong></p>
+
+              <!-- Nombre de clients -->
+              <div style="margin-top:10px;">
+                <p>Nombre de clients : <strong><t t-esc="team['customer_count']"/></strong></p>
+                <svg width="400" height="15">
+                  <rect x="0" y="0" width="400" height="15" fill="#ecf0f1"/>
+                  <rect x="0" y="0"
+                        t-att-width="min(400, team['customer_count'] * 10)"
+                        height="15" fill="#8e44ad"/>
+                </svg>
+              </div>
+
+            </div>
+          </t>
+        </div>
+      </t>
+    </t>
+  </template>
 </odoo>
