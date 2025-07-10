@@ -110,4 +110,13 @@
       </t>
     </t>
   </template>
+     <record id="action_rapport_hybdomadaire" model="ir.actions.report">
+        <field name="name">Rapport hybdomadaire</field>
+        <field name="model">crm.team</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weekly_sales_report.sales_team_report_template</field>
+        <field name="report_file">weekly_sales_report.sales_team_report_template</field>
+        <field name="print_report_name">"Rapport hybdomadaire"</field>
+        <field name="binding_model_id" ref="sales_team.model_crm_team"/>
+    </record>
 </odoo>
