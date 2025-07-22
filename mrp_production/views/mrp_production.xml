@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <odoo>
     <!-- Filtre/Fabrication -->
-    <record id="view_mrp_production_filter_custom" model="ir.ui.view">
+    <!--<record id="view_mrp_production_filter_custom" model="ir.ui.view">
         <field name="name">mrp.production.newfilter.inherit</field>
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
@@ -19,7 +19,7 @@
                 
             </xpath>
         </field>
-    </record>
+    </record>-->
     
 
     
