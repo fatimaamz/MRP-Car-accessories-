@@ -356,5 +356,25 @@
     </field>
 </record>
 
+<record id="view_mrp_production_newfilter_custom" model="ir.ui.view">
+            <field name="name">mrp.production.newfilter.inherit</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='filter_to_close']" position="after">
+                    <separator/>
+                    <filter name="filtre_finaliser" string="Finalisé" domain="[('finalization_status','=','finalise')]"/>
+                    <filter name="filtre_non_finaliser" string="Non Finalisé" domain="[('finalization_status','=','non_finalise')]"/>
+    
+                    <filter name="filtre_placer" string="Placé" domain="[('place_status','=','place')]"/>
+                    <filter name="filtre_non_placer" string="Non Placé" domain="[('place_status','=','non_place')]"/>
+    
+                    <filter name="filtre_conforme" string="Conforme" domain="[('conform_status','=','conforme')]"/>
+                    <filter name="filtre_non_conform" string="Non Conforme" domain="[('conform_status','=','non_conforme')]"/>
+                    
+                </xpath>
+            </field>
+</record>
+
 
 </odoo>
