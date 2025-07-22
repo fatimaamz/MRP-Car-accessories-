@@ -121,6 +121,12 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
    
+    product_variant_ids = fields.Many2many(
+        comodel_name='product.template.attribute.value',
+        string='Variantes',
+        domain="[('product_template_id', '=', product_tmpl_id)]",
+        help="Permet de sélectionner les variantes du produit."
+    )
 
    
         
@@ -600,7 +606,14 @@ class MrpProduction(models.Model):
                 else:
                     break
             else:
-                break
+               
+                if production.product_variant_ids:
+                    characteristics = " | ".join([
+                        f"{val.attribute_id.name}: {val.name}" for val in production.product_variant_ids
+                    ])
+                    production.selected_characteristics = characteristics
+                else:
+                    production.selected_characteristics = "No characteristics available"
 
     
     
