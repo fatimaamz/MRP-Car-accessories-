@@ -21,7 +21,7 @@
 ################################################################################
 {
     'name': "Advanced Dynamic Dashboard Odoo18",
-    'version': '18.0.1.0.2',
+    'version': '17.0.1.0.2',
     'category': 'Productivity',
     'summary': """Odoo Dynamic Dashboard, Dynamic Dashboard, Odoo AI, Odoo18, Odoo18 Dashboards, Dashboard with AI, AI Dashboard, Odoo Dashboard,Graph View,""",
     'description': """Create Configurable Odoo Dynamic Dashboard to get the 
@@ -33,7 +33,7 @@
     'maintainer': 'Cybrosys Techno Solutions',
     'website': "https://www.cybrosys.com",
     'depends': ['web'],
-    'data': [
+    #'data': [
        # 'security/ir.model.access.csv',
        # 'data/dashboard_theme_data.xml',
        # 'views/dashboard_views.xml',
@@ -42,7 +42,7 @@
        # 'views/dashboard_theme_views.xml',
        # 'wizard/dashboard_mail_views.xml',
     ],
-    'assets': {
+    #'assets': {
         #'web.assets_backend': [
         #    'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js',
         #    'odoo_dynamic_dashboard/static/src/css/**/*.css',
