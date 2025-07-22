@@ -406,6 +406,7 @@ class MrpProduction(models.Model):
     selected_characteristics = fields.Text(
         string="Caractéristiques",
         compute="_compute_selected_characteristics",
+        inverse="_inverse_selected_characteristics",
         store=True
     )
    
@@ -583,8 +584,21 @@ class MrpProduction(models.Model):
                 vals['partner_id'] = sale_order.partner_id.id
                 vals['partner_shipping_id'] = sale_order.partner_shipping_id.id
         return super(MrpProduction, self).create(vals)
+
+    def _inverse_selected_characteristics(self):
+        # L'utilisateur peut éditer manuellement les caractéristiques
+        # donc ici on ne fait rien car la valeur est déjà stockée dans le champ.
+        # Mais tu peux logger ou valider si besoin.
+        for rec in self:
+            if not rec.origin:
+                # Si l'OF est manuel, on laisse l'utilisateur saisir
+                pass
+            else:
+                # Si l'OF vient d’un devis, on ne fait rien ici
+                # car la valeur est toujours écrasée par le compute.
+                pass
         
-    @api.depends('origin', 'product_id')
+    @api.depends('origin', 'product_id','product_variant_ids')
     def _compute_selected_characteristics(self):
         
         for production in self:
