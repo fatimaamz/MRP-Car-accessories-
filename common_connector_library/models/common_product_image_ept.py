@@ -36,17 +36,26 @@ class ProductImageEpt(models.Model):
                     return image
         raise UserError(_("Can't find image.\nPlease provide valid Image URL."))
 
-    @api.model
-    def default_get(self, fields):
+    #@api.model
+    #def default_get(self, fields):
         """
         we have inherited default_get method for setting
         default value of template_id and product_id
         in context for select variant wise images.
         @author: Hardik Dhankecha on date 02-Apr-2021.
         """
-        fields += ["template_id","product_id"]
-        return super(ProductImageEpt, self).default_get(fields)
-        
+       # fields += ["template_id","product_id"]
+       # return super(ProductImageEpt, self).default_get(fields)
+    
+    @api.model
+    def default_get(self, fields_list):
+        defaults = super(ProductImageEpt, self).default_get(fields_list)
+        if 'template_id' in fields_list and self._context.get('default_template_id'):
+            defaults['template_id'] = self._context.get('default_template_id')
+        if 'product_id' in fields_list and self._context.get('default_product_id'):
+            defaults['product_id'] = self._context.get('default_product_id')
+        return defaults
+    
     @api.model
     def create(self, vals):
         """
