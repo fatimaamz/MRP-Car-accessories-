@@ -7,13 +7,13 @@
         <field name="arch" type="xml">
             <xpath expr="//notebook" position='inside'>
                 <page string="Images">
-                    <group string="Images Info" >
+                    <!--<group string="Images Info" >-->
                         
                         <field name="ept_image_ids"
                                context="{'default_name': name,'default_template_id':id}"
-                               mode="kanban" options="{'create_text':'Add a Media'}" nolabel="1">
+                                options="{'create_text':'Add a Media'}" nolabel="1">
                         </field>
-                    </group>
+                   <!-- </group>-->
                 </page>
             </xpath>
         </field>
