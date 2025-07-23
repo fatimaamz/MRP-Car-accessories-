@@ -162,7 +162,7 @@
             </xpath>
      
        <xpath expr="//group[1]//group[1]//field[@name='product_id']" position="after">
-            <field name="select_color" domain="[('id', 'in', available_color_ids)]"/>
+            <field name="select_color" domain="[('id', 'in', available_color_ids)]"  widget="many2many_tags"/>
             <field name="available_color_ids" invisible="1"/>
        </xpath>
       
