@@ -121,12 +121,7 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
    
-    product_variant_ids = fields.Many2many(
-        comodel_name='product.template.attribute.value',
-        string='Variantes',
-        domain="[('product_template_id', '=', product_tmpl_id)]",
-        help="Permet de sélectionner les variantes du produit."
-    )
+    
 
    
         
@@ -393,6 +388,12 @@ class MrpProduction(models.Model):
     remarque_controle_qualite = fields.Text('Remarque Contrôle Qualité')
     product_image=fields.Binary(related='product_id.image_1920' ,string='Image de prouit')
     product_variant_ids=fields.Many2many(related='product_id.product_template_variant_value_ids',string='Caractéristiques')
+    select_color = fields.Many2many(
+        comodel_name='product.template.attribute.value',
+        string='Coleurs',
+        domain="[('product_template_id', '=', product_tmpl_id)]",
+        help="Permet de sélectionner les variantes du produit."
+    )
     product_finalized = fields.Boolean(string='Finition terminée')
     finalization_status = fields.Selection([('finalise', 'Finition terminée'), ('non_finalise', 'Non finalisé')], string='Finition' ,compute='_compute_finalization_status',store=True)
     is_conforme = fields.Boolean('Conformité')
@@ -406,7 +407,6 @@ class MrpProduction(models.Model):
     selected_characteristics = fields.Text(
         string="Caractéristiques",
         compute="_compute_selected_characteristics",
-        inverse="_inverse_selected_characteristics",
         store=True
     )
    
@@ -598,7 +598,7 @@ class MrpProduction(models.Model):
                 # car la valeur est toujours écrasée par le compute.
                 pass
         
-    @api.depends('origin', 'product_id','product_variant_ids')
+    @api.depends('origin', 'product_id','select_color')
     def _compute_selected_characteristics(self):
         
         for production in self:
