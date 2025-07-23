@@ -388,12 +388,8 @@ class MrpProduction(models.Model):
     remarque_controle_qualite = fields.Text('Remarque Contrôle Qualité')
     product_image=fields.Binary(related='product_id.image_1920' ,string='Image de prouit')
     product_variant_ids=fields.Many2many(related='product_id.product_template_variant_value_ids',string='Caractéristiques')
-    select_color = fields.Many2many(
-        comodel_name='product.template.attribute.value',
-        string='Coleurs',
-        domain="[('product_template_id', '=', product_tmpl_id)]",
-        help="Permet de sélectionner les variantes du produit."
-    )
+    select_color = fields.Many2many(comodel_name='product.template.attribute.value',string='Couleurs',help="Permet de sélectionner les variantes du produit.")
+    
     product_finalized = fields.Boolean(string='Finition terminée')
     finalization_status = fields.Selection([('finalise', 'Finition terminée'), ('non_finalise', 'Non finalisé')], string='Finition' ,compute='_compute_finalization_status',store=True)
     is_conforme = fields.Boolean('Conformité')
@@ -664,5 +660,12 @@ class MrpProduction(models.Model):
                 production.conform_status = 'non_conforme'
                 
         
-           
+    @api.onchange('product_id')
+    def _onchange_product_for_color(self):
+        if self.product_id:
+            # Charger les variantes liées à ce produit
+            self.select_color = self.product_id.product_template_attribute_value_ids
+        else:
+            self.select_color = [(5, 0, 0)]  # Vide
+
                 
