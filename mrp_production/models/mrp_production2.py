@@ -618,13 +618,13 @@ class MrpProduction(models.Model):
                     break
             else:
                
-                if production.product_variant_ids:
-                    characteristics = " | ".join([
-                        f"{val.attribute_id.name}: {val.name}" for val in production.product_variant_ids
-                    ])
-                    production.selected_characteristics = characteristics
-                else:
-                    production.selected_characteristics = "No characteristics available"
+                if production.select_color:
+                    lines = []
+                    for val in production.select_color:
+                        attr = val.attribute_id.name.strip().capitalize()
+                        value = val.name.strip()
+                        lines.append(f"{attr}: {value}")
+                    production.selected_characteristics = "\n".join(lines)
 
     
     
