@@ -389,6 +389,7 @@ class MrpProduction(models.Model):
     product_image=fields.Binary(related='product_id.image_1920' ,string='Image de prouit')
     product_variant_ids=fields.Many2many(related='product_id.product_template_variant_value_ids',string='Caractéristiques')
     select_color = fields.Many2many(comodel_name='product.template.attribute.value',string='Couleurs',help="Permet de sélectionner les variantes du produit.")
+    available_color_ids = fields.Many2many(comodel_name='product.template.attribute.value',compute='_compute_available_colors',string='Valeurs possibles de couleur')
     
     product_finalized = fields.Boolean(string='Finition terminée')
     finalization_status = fields.Selection([('finalise', 'Finition terminée'), ('non_finalise', 'Non finalisé')], string='Finition' ,compute='_compute_finalization_status',store=True)
@@ -668,4 +669,10 @@ class MrpProduction(models.Model):
         else:
             self.select_color = [(5, 0, 0)]  # Vide
 
-                
+    @api.depends('product_id')
+    def _compute_available_colors(self):
+        for record in self:
+            if record.product_id:
+                record.available_color_ids = record.product_id.product_template_attribute_value_ids
+            else:
+                record.available_color_ids = [(5, 0, 0)]      
