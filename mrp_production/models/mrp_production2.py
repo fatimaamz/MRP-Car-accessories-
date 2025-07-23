@@ -673,6 +673,10 @@ class MrpProduction(models.Model):
     def _compute_available_colors(self):
         for record in self:
             if record.product_id:
-                record.available_color_ids = record.product_id.product_template_attribute_value_ids
+                template = record.product_id.product_tmpl_id
+                values = self.env['product.template.attribute.value'].search([
+                    ('product_tmpl_id', '=', template.id)
+                ])
+                record.available_color_ids = values
             else:
-                record.available_color_ids = [(5, 0, 0)]      
+                record.available_color_ids = [(5, 0, 0)]    
