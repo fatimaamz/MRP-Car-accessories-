@@ -166,7 +166,7 @@
                     type="object"
                     string="Configurer le produit"
                     class="oe_highlight"
-                    attrs="{'invisible': [('product_template_id', '=', False)]}"/>
+                    invisible= "product_template_id=False"/>
             <field name="select_color" domain="[('id', 'in', available_color_ids)]"  widget="many2many_tags"/>
             <field name="available_color_ids" invisible="1"/>
        </xpath>
