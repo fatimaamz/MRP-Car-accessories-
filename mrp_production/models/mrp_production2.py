@@ -680,3 +680,21 @@ class MrpProduction(models.Model):
                 record.available_color_ids = values
             else:
                 record.available_color_ids = [(5, 0, 0)]    
+                
+    def action_open_configurator(self):
+        self.ensure_one()
+        return {
+            'name': 'Configurer le Produit',
+            'type': 'ir.actions.act_window',
+            'res_model': 'product.configurator',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_product_tmpl_id': self.product_template_id.id,
+                'default_product_id': self.product_id.id,
+                'no_variant_attributes': False,
+                'default_custom_attribute_values': [],
+                'default_mrp_production_id': self.id,  # Pour garder un lien si tu veux le récupérer
+            }
+        }
+
