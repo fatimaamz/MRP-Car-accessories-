@@ -31,60 +31,36 @@ class AccountInvoiceReportWizard(models.TransientModel):
 
 
     def action_send_report_email(self):
-        #self.ensure_one()
+        self.ensure_one()
     
-        if self.date_start > self.date_end:
-            raise UserError("La date de début doit être antérieure à la date de fin.")
-    
+        # Récupération du rapport PDF (id défini dans le XML)
         report = self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom')
-        pdf_content, _ = report._render_qweb_pdf(self.id)
-
-        filename = f"Etat_de_compte_{self.partner_id.name if self.partner_id else 'tous_les_clients'}_{self.date_start}_{self.date_end}.pdf"
     
+        # Génération du PDF à partir du rapport
+        pdf_content, _ = report._render_qweb_pdf(self.id)
+    
+        # Préparation de la pièce jointe
         attachment = self.env['ir.attachment'].create({
-            'name': filename,
+            'name': 'etat_des_comptes.pdf',
             'type': 'binary',
             'datas': base64.b64encode(pdf_content),
-            'res_model': 'account.invoice.report.wizard',
+            'res_model': self._name,
             'res_id': self.id,
-            'mimetype': 'application/pdf',
+            'mimetype': 'application/pdf'
         })
     
-        # Prépare les destinataires
-        if self.all_partners:
-            partners = self.env['res.partner'].search([
-                ('customer_rank', '>', 0),
-                ('email', '!=', False)
-            ])
-        else:
-            if not self.partner_id or not self.partner_id.email:
-                raise UserError("Veuillez sélectionner un client ayant une adresse email.")
-            partners = self.partner_id
+        # Envoi d'un mail simple avec la pièce jointe
+        template = self.env.ref('mail.email_template_default')  # tu peux créer ton propre template aussi
     
-        # Envoie un mail par partenaire
-        for partner in partners:
-            email_values = {
-                'subject': f"État de compte - {self.company_id.name}",
-                'body_html': f"""
-                    <p>Bonjour {partner.name},</p>
-                    <p>Veuillez trouver ci-joint l’état de compte pour la période du {self.date_start} au {self.date_end}.</p>
-                    <p>Cordialement,<br/>{self.env.user.name}</p>
-                """,
-                'email_to': partner.email,
-                'attachment_ids': [attachment.id],
-            }
-            self.env['mail.mail'].create(email_values).sudo().send()
+        self.env['mail.mail'].create({
+            'subject': 'État des comptes',
+            'body_html': '<p>Veuillez trouver ci-joint le rapport des comptes.</p>',
+            'email_to': self.partner_id.email,
+            'attachment_ids': [(4, attachment.id)],
+        }).send()
     
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': "Email envoyé",
-                'message': "Le rapport a été envoyé avec succès.",
-                'type': 'success',
-                'sticky': False,
-            }
-        }
+        return {'type': 'ir.actions.act_window_close'}
+
     
 
 class AccountInvoiceReport(models.AbstractModel):
