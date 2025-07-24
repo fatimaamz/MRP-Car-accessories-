@@ -27,7 +27,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
         if self.date_start > self.date_end:
             raise UserError("La date de début doit être antérieure à la date de fin.")
         #data = self.get_invoice_report_data()
-        return self.env.ref('lux_contacts_custom_fields.action_invoice_report').report_action(self)
+        return self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom').report_action(self)
 
 
     def action_send_report_email(self):
@@ -36,7 +36,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
         if self.date_start > self.date_end:
             raise UserError("La date de début doit être antérieure à la date de fin.")
     
-        report = self.env.ref('lux_contacts_custom_fields.action_invoice_report')
+        report = self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom')
         pdf_content, _ = report._render_qweb_pdf(self.id)
 
         filename = f"Etat_de_compte_{self.partner_id.name if self.partner_id else 'tous_les_clients'}_{self.date_start}_{self.date_end}.pdf"
@@ -73,7 +73,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
                 'email_to': partner.email,
                 'attachment_ids': [attachment.id],
             }
-            self.env['mail.mail'].create(email_values).send()
+            self.env['mail.mail'].create(email_values).sudo().send()
     
         return {
             'type': 'ir.actions.client',
