@@ -231,7 +231,7 @@
     <field name="name">Customer Invoice Report</field>
     <field name="model">account.invoice.report.wizard</field>
     <field name="report_type">qweb-pdf</field>
-    <field name="report_name">lux_contacts_custom_fields.invoice_report_template</field>
+    <field name="report_name">lux_contacts_custom_fields.invoice_report_template_etat</field>
     <field name="print_report_name">'Etat de compte'</field>
 </record>
   
