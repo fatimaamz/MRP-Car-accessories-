@@ -33,33 +33,48 @@ class AccountInvoiceReportWizard(models.TransientModel):
     def action_send_report_email(self):
         self.ensure_one()
     
-        # Récupération du rapport PDF (id défini dans le XML)
+        if self.date_start > self.date_end:
+            raise UserError("La date de début doit être antérieure à la date de fin.")
+    
         report = self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom')
     
-        # Génération du PDF à partir du rapport
-        #pdf_content, _ = report._render_qweb_pdf(self.id)
+        pdf_content, _ = report._render_qweb_pdf(self.id)
     
-        # Préparation de la pièce jointe
+        filename = f"etat_des_comptes_{self.partner_id.name or 'tous'}_{self.date_start}_{self.date_end}.pdf"
         attachment = self.env['ir.attachment'].create({
-            'name': 'etat_des_comptes.pdf',
+            'name': filename,
             'type': 'binary',
-            #'datas': base64.b64encode(pdf_content),
+            'datas': base64.b64encode(pdf_content),
             'res_model': self._name,
             'res_id': self.id,
             'mimetype': 'application/pdf'
         })
     
-        # Envoi d'un mail simple avec la pièce jointe
-        template = self.env.ref('mail.email_template_default')  # tu peux créer ton propre template aussi
+        if not self.partner_id or not self.partner_id.email:
+            raise UserError("Le client doit avoir une adresse email.")
     
         self.env['mail.mail'].create({
-            'subject': 'État des comptes',
-            'body_html': '<p>Veuillez trouver ci-joint le rapport des comptes.</p>',
+            'subject': f"État des comptes - {self.company_id.name}",
+            'body_html': f"""
+                <p>Bonjour {self.partner_id.name},</p>
+                <p>Veuillez trouver en pièce jointe votre état de compte pour la période du {self.date_start} au {self.date_end}.</p>
+                <p>Cordialement,<br/>{self.env.user.name}</p>
+            """,
             'email_to': self.partner_id.email,
             'attachment_ids': [(4, attachment.id)],
         }).send()
     
-        return {'type': 'ir.actions.act_window_close'}
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': "Email envoyé",
+                'message': "Le rapport a bien été envoyé par email.",
+                'type': 'success',
+                'sticky': False,
+            }
+        }
+
 
     
 
