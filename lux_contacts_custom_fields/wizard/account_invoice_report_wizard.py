@@ -37,13 +37,13 @@ class AccountInvoiceReportWizard(models.TransientModel):
         report = self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom')
     
         # Génération du PDF à partir du rapport
-        pdf_content, _ = report._render_qweb_pdf(self.id)
+        #pdf_content, _ = report._render_qweb_pdf(self.id)
     
         # Préparation de la pièce jointe
         attachment = self.env['ir.attachment'].create({
             'name': 'etat_des_comptes.pdf',
             'type': 'binary',
-            'datas': base64.b64encode(pdf_content),
+            #'datas': base64.b64encode(pdf_content),
             'res_model': self._name,
             'res_id': self.id,
             'mimetype': 'application/pdf'
