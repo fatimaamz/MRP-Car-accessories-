@@ -31,7 +31,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
 
 
     def action_send_report_email(self):
-        self.ensure_one()
+        #self.ensure_one()
     
         if self.date_start > self.date_end:
             raise UserError("La date de début doit être antérieure à la date de fin.")
