@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 from datetime import datetime
+import base64
 
 class AccountInvoiceReportWizard(models.TransientModel):
     _name = 'account.invoice.report.wizard'
