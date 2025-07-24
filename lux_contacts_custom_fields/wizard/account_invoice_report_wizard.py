@@ -29,15 +29,17 @@ class AccountInvoiceReportWizard(models.TransientModel):
         #data = self.get_invoice_report_data()
         return self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom').report_action(self)
 
-
     def action_send_report_email(self):
         self.ensure_one()
     
         if self.date_start > self.date_end:
             raise UserError("La date de début doit être antérieure à la date de fin.")
     
-        report = self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom')
+        if not self.partner_id or not self.partner_id.email:
+            raise UserError("Le client doit avoir une adresse email.")
     
+        # Générer le PDF
+        report = self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom')
         pdf_content, _ = report._render_qweb_pdf(self.id)
     
         filename = f"etat_des_comptes_{self.partner_id.name or 'tous'}_{self.date_start}_{self.date_end}.pdf"
@@ -50,32 +52,32 @@ class AccountInvoiceReportWizard(models.TransientModel):
             'mimetype': 'application/pdf'
         })
     
-        if not self.partner_id or not self.partner_id.email:
-            raise UserError("Le client doit avoir une adresse email.")
-    
-        self.env['mail.mail'].create({
-            'subject': f"État des comptes - {self.company_id.name}",
-            'body_html': f"""
+        # Préparation des valeurs de composition
+        ctx = {
+            'default_model': self._name,
+            'default_res_id': self.id,
+            'default_use_template': False,
+            'default_partner_ids': [self.partner_id.id],
+            'default_email_from': self.env.user.email_formatted,
+            'default_subject': f"État de compte - {self.company_id.name}",
+            'default_body': f"""
                 <p>Bonjour {self.partner_id.name},</p>
                 <p>Veuillez trouver en pièce jointe votre état de compte pour la période du {self.date_start} au {self.date_end}.</p>
                 <p>Cordialement,<br/>{self.env.user.name}</p>
             """,
-            'email_to': self.partner_id.email,
-            'attachment_ids': [(4, attachment.id)],
-        }).send()
+            'default_attachment_ids': [(4, attachment.id)],
+        }
     
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': "Email envoyé",
-                'message': "Le rapport a bien été envoyé par email.",
-                'type': 'success',
-                'sticky': False,
-            }
+            'type': 'ir.actions.act_window',
+            'res_model': 'mail.compose.message',
+            'view_mode': 'form',
+            'view_id': self.env.ref('mail.email_compose_message_wizard_form').id,
+            'target': 'new',
+            'context': ctx,
         }
 
-
+    
     
 
 class AccountInvoiceReport(models.AbstractModel):
