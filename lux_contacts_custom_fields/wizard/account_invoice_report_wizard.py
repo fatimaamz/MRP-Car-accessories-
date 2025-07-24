@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api,_
 from odoo.exceptions import UserError
 from datetime import datetime
 import base64
@@ -36,7 +36,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
         if self.date_start > self.date_end:
             raise UserError("La date de début doit être antérieure à la date de fin.")
     
-        report = self.env.ref('lux_contacts_custom_fields.action_account_invoice_report_wizard')
+        report = self.env.ref('lux_contacts_custom_fields.action_invoice_report')
         pdf_content, _ = report._render_qweb_pdf(self.id)
 
         filename = f"Etat_de_compte_{self.partner_id.name if self.partner_id else 'tous_les_clients'}_{self.date_start}_{self.date_end}.pdf"
