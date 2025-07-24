@@ -46,7 +46,7 @@
    <!--Etat de compte pdf template -->
 
      
-    <template id="invoice_report_template_etat">
+    <template id="invoice_report_template">
         <t t-call="web.basic_layout">
             <div class="page" style="color: #2f374f; font-family: Inter; line-height: 1.3;">
                 <main>
@@ -227,11 +227,11 @@
         </t>
     </template>-->
 
-  <record id="action_invoice_report" model="ir.actions.report">
+  <record id="action_invoice_report_custom" model="ir.actions.report">
     <field name="name">Customer Invoice Report</field>
     <field name="model">account.invoice.report.wizard</field>
     <field name="report_type">qweb-pdf</field>
-    <field name="report_name">lux_contacts_custom_fields.invoice_report_template_etat</field>
+    <field name="report_name">lux_contacts_custom_fields.invoice_report_template</field>
     <field name="print_report_name">'Etat de compte'</field>
 </record>
   
