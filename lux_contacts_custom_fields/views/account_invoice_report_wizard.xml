@@ -46,7 +46,7 @@
    <!--Etat de compte pdf template -->
 
      
-    <template id="invoice_report_template">
+    <template id="invoice_report_template_etat">
         <t t-call="web.basic_layout">
             <div class="page" style="color: #2f374f; font-family: Inter; line-height: 1.3;">
                 <main>
