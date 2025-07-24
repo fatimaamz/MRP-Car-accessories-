@@ -698,3 +698,13 @@ class MrpProduction(models.Model):
             }
         }
 
+class ProductConfigurator(models.TransientModel):
+    _inherit = 'product.configurator'
+
+    mrp_production_id = fields.Many2one('mrp.production')
+
+    def action_configure_product(self):
+        res = super().action_configure_product()
+        if self.mrp_production_id:
+            self.mrp_production_id.select_color = [(6, 0, self.product_template_attribute_value_ids.ids)]
+        return res
