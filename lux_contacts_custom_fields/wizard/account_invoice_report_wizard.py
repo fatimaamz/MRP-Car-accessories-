@@ -47,7 +47,8 @@ class AccountInvoiceReportWizard(models.TransientModel):
         if not report.exists():
             raise UserError("Le rapport PDF est introuvable.")
     
-        pdf_content, _ = report._render_qweb_pdf([self.id])
+        pdf_content, _ = self.env['ir.actions.report']._render_qweb_pdf('lux_contacts_custom_fields.invoice_report_template',self.id)
+
         filename = f"etat_des_comptes_{self.partner_id.name or 'tous'}_{self.date_start}_{self.date_end}.pdf"
     
         attachment = self.env['ir.attachment'].create({
