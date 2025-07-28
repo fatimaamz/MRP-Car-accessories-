@@ -39,7 +39,8 @@ class AccountInvoiceReportWizard(models.TransientModel):
             raise UserError("Le client doit avoir une adresse email.")
     
         # Générer le PDF
-        report = self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom')
+        #report = self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom')
+        report = self.env['ir.actions.report'].browse(1174)
         pdf_content, _ = report._render_qweb_pdf(self.id)
     
         filename = f"etat_des_comptes_{self.partner_id.name or 'tous'}_{self.date_start}_{self.date_end}.pdf"
