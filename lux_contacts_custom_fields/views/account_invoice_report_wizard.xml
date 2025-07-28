@@ -235,7 +235,7 @@
     <field name="print_report_name">'Etat de compte'</field>
 </record>
 
-  <record id="email_template_invoice_report" model="mail.template">
+  <!--<record id="email_template_invoice_report" model="mail.template">
     <field name="name">Email État de Compte</field>
     <field name="email_from">${(user.email or 'noreply@example.com')}</field>
     <field name="subject">État de compte - ${object.company_id.name}</field>
@@ -247,6 +247,22 @@
         <p>Cordialement,<br/>${user.name}</p>
         ]]>
     </field>
+</record>-->
+
+  <record id="email_template_invoice_report" model="mail.template">
+    <field name="name">Email État de Compte</field>
+    <field name="email_from">${(user.email or 'noreply@example.com')}</field>
+    <field name="subject">État de compte - ${object.company_id.name}</field>
+    <field name="model_id" ref="model_account_invoice_report_wizard"/>
+    <field name="auto_delete" eval="True"/>
+    <field name="body_html">
+        <![CDATA[
+            <p>Bonjour ${object.partner_id.name},</p>
+            <p>Veuillez trouver en pièce jointe votre état de compte pour la période du ${object.date_start} au ${object.date_end}.</p>
+            <p>Cordialement,<br/>${user.name}</p>
+        ]]>
+    </field>
 </record>
+
   
 </odoo>
