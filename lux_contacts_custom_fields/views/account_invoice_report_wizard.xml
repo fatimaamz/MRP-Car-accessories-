@@ -251,18 +251,26 @@
 
   <record id="email_template_invoice_report" model="mail.template">
     <field name="name">Email État de Compte</field>
-    <field name="email_from">${(user.email or 'noreply@example.com')}</field>
+    <field name="model_id" ref="lux_contacts_custom_fields.model_account_invoice_report_wizard"/>
+    <field name="email_from">${(user.email_formatted or 'noreply@example.com')}</field>
     <field name="subject">État de compte - ${object.company_id.name}</field>
-    <field name="model_id" ref="model_account_invoice_report_wizard"/>
     <field name="auto_delete" eval="True"/>
+    <field name="email_to">${object.partner_id.email}</field>
     <field name="body_html">
         <![CDATA[
             <p>Bonjour ${object.partner_id.name},</p>
-            <p>Veuillez trouver en pièce jointe votre état de compte pour la période du ${object.date_start} au ${object.date_end}.</p>
-            <p>Cordialement,<br/>${user.name}</p>
+
+            <p>Veuillez trouver en pièce jointe votre état de compte pour la période suivante :</p>
+            <p><strong>Du</strong> ${object.date_start} <strong>au</strong> ${object.date_end}</p>
+
+            <p>Si vous avez des questions, n’hésitez pas à nous contacter.</p>
+
+            <p>Cordialement,<br/>
+            ${user.name}</p>
         ]]>
     </field>
 </record>
+
 
   
 </odoo>
