@@ -63,7 +63,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
         # Contexte d’envoi avec template + pièce jointe + destinataire
         ctx = {
             'default_model': self._name,
-            'default_res_id': self.id,
+            'default_res_ids': [self.id],
             'default_use_template': True,
             'default_template_id': template.id,
             'default_composition_mode': 'comment',
