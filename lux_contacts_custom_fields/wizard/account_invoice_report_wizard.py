@@ -34,16 +34,22 @@ class AccountInvoiceReportWizard(models.TransientModel):
     
         if self.date_start > self.date_end:
             raise UserError("La date de début doit être antérieure à la date de fin.")
-    
         if not self.partner_id or not self.partner_id.email:
             raise UserError("Le client doit avoir une adresse email.")
     
-        # Générer le PDF
-        #report = self.env.ref('lux_contacts_custom_fields.action_invoice_report_custom')
-        report = self.env['ir.actions.report'].browse(1174)
-        pdf_content, _ = report._render_qweb_pdf(self.id)
+        # Récupération du template
+        template = self.env.ref('lux_contacts_custom_fields.email_template_invoice_report', raise_if_not_found=False)
+        if not template:
+            raise UserError("Le modèle d’email 'email_template_invoice_report' est introuvable.")
     
+        # Génération du PDF
+        report = self.env['ir.actions.report'].browse(1174)
+        if not report.exists():
+            raise UserError("Le rapport PDF est introuvable.")
+    
+        pdf_content, _ = report._render_qweb_pdf([self.id])
         filename = f"etat_des_comptes_{self.partner_id.name or 'tous'}_{self.date_start}_{self.date_end}.pdf"
+    
         attachment = self.env['ir.attachment'].create({
             'name': filename,
             'type': 'binary',
@@ -53,19 +59,14 @@ class AccountInvoiceReportWizard(models.TransientModel):
             'mimetype': 'application/pdf'
         })
     
-        # Préparation des valeurs de composition
+        # Contexte d’envoi avec template + pièce jointe + destinataire
         ctx = {
             'default_model': self._name,
             'default_res_id': self.id,
-            'default_use_template': False,
+            'default_use_template': True,
+            'default_template_id': template.id,
+            'default_composition_mode': 'comment',
             'default_partner_ids': [self.partner_id.id],
-            'default_email_from': self.env.user.email_formatted,
-            'default_subject': f"État de compte - {self.company_id.name}",
-            'default_body': f"""
-                <p>Bonjour {self.partner_id.name},</p>
-                <p>Veuillez trouver en pièce jointe votre état de compte pour la période du {self.date_start} au {self.date_end}.</p>
-                <p>Cordialement,<br/>{self.env.user.name}</p>
-            """,
             'default_attachment_ids': [(4, attachment.id)],
         }
     
@@ -77,6 +78,7 @@ class AccountInvoiceReportWizard(models.TransientModel):
             'target': 'new',
             'context': ctx,
         }
+
 
     
     
