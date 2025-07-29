@@ -681,20 +681,38 @@ class MrpProduction(models.Model):
             else:
                 record.available_color_ids = [(5, 0, 0)]    
                 
-    def action_open_configurator(self):
-        self.ensure_one()
+    def open_variant_wizard(self):
         return {
-            'name': 'Configurer le Produit',
             'type': 'ir.actions.act_window',
-            'res_model': 'product.configurator',
+            'name': 'Select Variant',
+            'res_model': 'select.variant.wizard',
             'view_mode': 'form',
             'target': 'new',
             'context': {
-                'default_product_tmpl_id': self.product_template_id.id,
-                'default_product_id': self.product_id.id,
-                'no_variant_attributes': False,
-                'default_custom_attribute_values': [],
-                'default_mrp_production_id': self.id,  # Pour garder un lien si tu veux le récupérer
-            }
+                'default_production_id': self.id,
+            },
         }
+
+
+class SelectVariantWizard(models.TransientModel):
+    _name = 'select.variant.wizard'
+    _description = 'Wizard to select a product variant'
+
+    variant_id = fields.Many2one('product.product', string='Product Variant', required=True)
+    production_id = fields.Many2one('mrp.production', string='Production Order')
+
+    @api.onchange('production_id')
+    def _onchange_production_id(self):
+        if self.production_id.product_id:
+            tmpl_id = self.production_id.product_id.product_tmpl_id.id
+            return {
+                'domain': {
+                    'variant_id': [('product_tmpl_id', '=', tmpl_id)]
+                }
+            }
+
+    def confirm_variant_selection(self):
+        if self.production_id:
+            self.production_id.product_id = self.variant_id
+
 
