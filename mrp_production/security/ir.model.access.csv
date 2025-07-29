@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_kit_design,kit.design,model_kit_design,,1,1,1,1
 access_mrp_production_controle_qualite_wizard,mrp.production.controle.qualite.wizard,model_mrp_production_controle_qualite_wizard,,1,1,1,1
+access_select_variant_wizard,select.variant.wizard,model_select_variant_wizard,,1,1,1,1
+
+
