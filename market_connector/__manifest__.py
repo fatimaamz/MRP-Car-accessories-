@@ -7,7 +7,7 @@
         """,
 
     'description': """
-        Market Connector
+        Market Connector.
     """,
     'license': 'OPL-1',
     'author': "WEELITE",
